@@ -37,3 +37,7 @@ Or to generate a specific language, run:
 ```bash
 make {go, protobuf-es}
 ```
+
+##  Contributing
+
+For now the best way to contribute is to share feedback on [Discord](https://discord.gg/T8Tpj8DBFp). This will evolve as we continue to build out the platform and open up more ways to contribute.
