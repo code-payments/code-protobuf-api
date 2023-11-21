@@ -1,6 +1,6 @@
 [![Release](https://img.shields.io/github/v/release/code-wallet/code-protobuf-api.svg)](https://github.com/code-wallet/code-protobuf-api/releases/latest)
 
-# Code Wallet Protobuf APIs
+# Code Protobuf APIs
 
 The APIs and models for communication between Code clients and server.
 
