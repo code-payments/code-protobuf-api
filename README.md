@@ -1,4 +1,5 @@
 [![Release](https://img.shields.io/github/v/release/code-wallet/code-protobuf-api.svg)](https://github.com/code-wallet/code-protobuf-api/releases/latest)
+[![GitHub License](https://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/code-wallet/code-protobuf-api/blob/main/LICENSE.md)
 
 # Code Protobuf APIs
 
