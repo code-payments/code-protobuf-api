@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package code.common.v1;
 
-option go_package = "github.com/code-wallet/code-protobuf-api/generated/go/common/v1;common";
+option go_package = "github.com/code-payments/code-protobuf-api/generated/go/common/v1;common";
 option java_package = "com.codeinc.gen.common.v1";
 option objc_class_prefix = "CPBCommonV1";
 

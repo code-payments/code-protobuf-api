@@ -36,7 +36,7 @@ generate: generate-go generate-protobuf-es
 generate-go:
 	@rm -rf $(PROTO_OUT_GO_DIR)/*
 	@docker run --rm -v $(PWD)/$(PROTO_DIR):/proto -v $(PWD)/$(PROTO_OUT_GO_DIR):/$(PROTO_OUT_GO_DIR) --user $(USER_ID):$(GROUP_ID) $(DOCKER_GO_BUILDER_IMAGE)
-	@mv $(PROTO_OUT_GO_DIR)/github.com/code-wallet/code-protobuf-api/generated/go/* $(PROTO_OUT_GO_DIR)
+	@mv $(PROTO_OUT_GO_DIR)/github.com/code-payments/code-protobuf-api/generated/go/* $(PROTO_OUT_GO_DIR)
 	@rm -rf $(PROTO_OUT_GO_DIR)/github.com
 
 generate-protobuf-es:

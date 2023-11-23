@@ -17,7 +17,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 
-	transaction "github.com/code-wallet/code-protobuf-api/generated/go/transaction/v2"
+	transaction "github.com/code-payments/code-protobuf-api/generated/go/transaction/v2"
 )
 
 // ensure the imports are used

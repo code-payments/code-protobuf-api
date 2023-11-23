@@ -1,4 +1,4 @@
-module github.com/code-wallet/code-protobuf-api
+module github.com/code-payments/code-protobuf-api
 
 go 1.21.3
 

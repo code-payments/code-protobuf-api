@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package code.messaging.v1;
 
-option go_package = "github.com/code-wallet/code-protobuf-api/generated/go/messaging/v1;messaging";
+option go_package = "github.com/code-payments/code-protobuf-api/generated/go/messaging/v1;messaging";
 option java_package = "com.codeinc.gen.messaging.v1";
 option objc_class_prefix = "CPBMessagingV1";
 
