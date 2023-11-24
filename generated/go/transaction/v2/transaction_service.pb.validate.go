@@ -17,7 +17,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 
-	common "github.com/code-wallet/code-protobuf-api/generated/go/common/v1"
+	common "github.com/code-payments/code-protobuf-api/generated/go/common/v1"
 )
 
 // ensure the imports are used

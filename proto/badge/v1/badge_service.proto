@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package code.badge.v1;
 
-option go_package = "github.com/code-wallet/code-protobuf-api/generated/go/badge/v1;badge";
+option go_package = "github.com/code-payments/code-protobuf-api/generated/go/badge/v1;badge";
 option java_package = "com.codeinc.gen.badge.v1";
 option objc_class_prefix = "CPBBadgeV1";
 

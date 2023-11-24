@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package code.transaction.v2;
 
-option go_package = "github.com/code-wallet/code-protobuf-api/generated/go/transaction/v2;transaction";
+option go_package = "github.com/code-payments/code-protobuf-api/generated/go/transaction/v2;transaction";
 option java_package = "com.codeinc.gen.transaction.v2";
 option objc_class_prefix = "APBTransactionV2";
 
