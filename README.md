@@ -1,9 +1,9 @@
 ![Code Protobuf APIs](https://repository-images.githubusercontent.com/715249140/8c5e7070-e898-4697-84fe-ea50075aa057)
 
+# Code Protobuf API
+
 [![Release](https://img.shields.io/github/v/release/code-payments/code-protobuf-api.svg)](https://github.com/code-payments/code-protobuf-api/releases/latest)
 [![GitHub License](https://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/code-payments/code-protobuf-api/blob/main/LICENSE.md)
-
-# Code Protobuf API
 
 The APIs and models for communication between Code clients and server.
 
