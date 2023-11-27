@@ -1,4 +1,4 @@
-![Code Protobuf APIs](https://repository-images.githubusercontent.com/715249140/8c5e7070-e898-4697-84fe-ea50075aa057)
+<img width="1280" alt="Code Protobuf API" src="https://github.com/code-payments/code-protobuf-api/assets/5760385/e43106cd-4c50-4dfa-954f-a936290b8b86">
 
 # Code Protobuf API
 
