@@ -11,20 +11,21 @@ import "validate/validate.proto";
 // AccountType associates a type to an account, which infers how an account is used
 // within the Code ecosystem.
 enum AccountType {
-    UNKNOWN               = 0;
-    PRIMARY               = 1;
-    TEMPORARY_INCOMING    = 2;
-    TEMPORARY_OUTGOING    = 3;
-    BUCKET_1_KIN          = 4;
-    BUCKET_10_KIN         = 5;
-    BUCKET_100_KIN        = 6;
-    BUCKET_1_000_KIN      = 7;
-    BUCKET_10_000_KIN     = 8;
-    BUCKET_100_000_KIN    = 9;
-    BUCKET_1_000_000_KIN  = 10;
-    LEGACY_PRIMARY_2022   = 11;
-    REMOTE_SEND_GIFT_CARD = 12;
-    RELATIONSHIP          = 13;
+    UNKNOWN                  = 0;
+    PRIMARY                  = 1;
+    TEMPORARY_INCOMING       = 2;
+    TEMPORARY_OUTGOING       = 3;
+    BUCKET_1_KIN             = 4;
+    BUCKET_10_KIN            = 5;
+    BUCKET_100_KIN           = 6;
+    BUCKET_1_000_KIN         = 7;
+    BUCKET_10_000_KIN        = 8;
+    BUCKET_100_000_KIN       = 9;
+    BUCKET_1_000_000_KIN     = 10;
+    LEGACY_PRIMARY_2022      = 11;
+    REMOTE_SEND_GIFT_CARD    = 12;
+    RELATIONSHIP             = 13;
+    ASSOCIATED_TOKEN_ACCOUNT = 14;
 }
 
 // SolanaAccountId is a raw binary Ed25519 public key for a Solana account

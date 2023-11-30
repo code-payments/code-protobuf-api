@@ -457,6 +457,25 @@ func (m *TokenAccountInfo) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetMint()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return TokenAccountInfoValidationError{
+				field:  "Mint",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for MintDecimals
+
+	if utf8.RuneCountInString(m.GetMintDisplayName()) > 32 {
+		return TokenAccountInfoValidationError{
+			field:  "MintDisplayName",
+			reason: "value length must be at most 32 runes",
+		}
+	}
+
 	return nil
 }
 

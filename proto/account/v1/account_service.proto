@@ -99,9 +99,9 @@ message TokenAccountInfo {
         BALANCE_SOURCE_CACHE = 2;
     }
 
-    // The Kin balance in quarks, as observed by Code. This may not reflect the
-    // value on the blockchain and could be non-zero even if the account hasn't
-    // been created. Use balance_source to determine how this value was calculated.
+    // The balance in quarks, as observed by Code. This may not reflect the value
+    // on the blockchain and could be non-zero even if the account hasn't been created.
+    // Use balance_source to determine how this value was calculated.
     uint64 balance = 7;
 
     // The state of the account as it pertains to Code's ability to manage funds.
@@ -173,4 +173,13 @@ message TokenAccountInfo {
     //  3. The balance could have been received, so the total balance can show
     //     as zero.
     transaction.v2.ExchangeData original_exchange_data = 12;
+
+    // The token account's mint
+    common.v1.SolanaAccountId mint = 13;
+
+    // The number of decimals configured for the mint
+    uint32 mint_decimals = 14;
+
+    // User-friendly display name for the mint
+    string mint_display_name = 15 [(validate.rules).string.max_len = 32];
 }
