@@ -1697,11 +1697,21 @@ export class SendPrivatePaymentMetadata extends Message<SendPrivatePaymentMetada
  *
  * Action Spec:
  *
- * actions = [NoPrivacyTransferAction(PRIMARY, destination, ExchangeData.Quarks)]
+ * source = PRIMARY or RELATIONSHIP
+ * actions = [NoPrivacyTransferAction(source, destination, ExchangeData.Quarks)]
  *
  * @generated from message code.transaction.v2.SendPublicPaymentMetadata
  */
 export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata> {
+  /**
+   * The primary or relatinship account where funds will be sent from. The primary
+   * account is assumed if this field is not set for backwards compatibility with
+   * old clients.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId source = 4;
+   */
+  source?: SolanaAccountId;
+
   /**
    * The destination token account to send funds to. This cannot be a Code
    * temporary account.
@@ -1732,6 +1742,7 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "code.transaction.v2.SendPublicPaymentMetadata";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 4, name: "source", kind: "message", T: SolanaAccountId },
     { no: 1, name: "destination", kind: "message", T: SolanaAccountId },
     { no: 2, name: "exchange_data", kind: "message", T: ExchangeData },
     { no: 3, name: "is_withdrawal", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
@@ -1781,11 +1792,12 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
  *
  * Action Spec (Deposit):
  *
+ * source = PRIMARY or RELATIONSHIP
  * actions = [
- *   TemporaryPrivacyTransferAction(PRIMARY, BUCKET_X_KIN, multiple * bucketSize),
+ *   TemporaryPrivacyTransferAction(source, BUCKET_X_KIN, multiple * bucketSize),
  *   TemporaryPrivacyExchangeAction(BUCKET_X_KIN, BUCKET_X_KIN, multiple * bucketSize),
  *   ...,
- *   TemporaryPrivacyTransferAction(PRIMARY, BUCKET_X_KIN, multiple * bucketSize),
+ *   TemporaryPrivacyTransferAction(source, BUCKET_X_KIN, multiple * bucketSize),
  *   TemporaryPrivacyExchangeAction(BUCKET_X_KIN, BUCKET_X_KIN, multiple * bucketSize),
  * ]
  *
@@ -1793,7 +1805,7 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
  */
 export class ReceivePaymentsPrivatelyMetadata extends Message<ReceivePaymentsPrivatelyMetadata> {
   /**
-   * The temporary incoming or primary account to receive funds from
+   * The temporary incoming, primary or relationship account to receive funds from
    *
    * @generated from field: code.common.v1.SolanaAccountId source = 1;
    */
@@ -1807,9 +1819,9 @@ export class ReceivePaymentsPrivatelyMetadata extends Message<ReceivePaymentsPri
   quarks = protoInt64.zero;
 
   /**
-   * Is the receipt of funds from a deposti? If true, the source account must
-   * be the primary account. Otherwise, it must be from a temporary incoming
-   * account.
+   * Is the receipt of funds from a deposit? If true, the source account must
+   * be a primary or relationship account. Otherwise, it must be from a temporary
+   * incoming account.
    *
    * @generated from field: bool is_deposit = 3;
    */

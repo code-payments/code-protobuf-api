@@ -182,4 +182,8 @@ message TokenAccountInfo {
 
     // User-friendly display name for the mint
     string mint_display_name = 15 [(validate.rules).string.max_len = 32];
+
+    // The relationship with a third party that this account has established with.
+    // This only applies to relevant account types (eg. RELATIONSHIP).
+    common.v1.Relationship relationship = 16;
 }

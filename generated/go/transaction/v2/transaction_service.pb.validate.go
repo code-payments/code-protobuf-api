@@ -1911,6 +1911,16 @@ func (m *SendPublicPaymentMetadata) Validate() error {
 		return nil
 	}
 
+	if v, ok := interface{}(m.GetSource()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SendPublicPaymentMetadataValidationError{
+				field:  "Source",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if m.GetDestination() == nil {
 		return SendPublicPaymentMetadataValidationError{
 			field:  "Destination",
