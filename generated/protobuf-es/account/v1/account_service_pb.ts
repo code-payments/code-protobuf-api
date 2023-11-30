@@ -291,9 +291,9 @@ export class TokenAccountInfo extends Message<TokenAccountInfo> {
   balanceSource = TokenAccountInfo_BalanceSource.UNKNOWN;
 
   /**
-   * The Kin balance in quarks, as observed by Code. This may not reflect the
-   * value on the blockchain and could be non-zero even if the account hasn't
-   * been created. Use balance_source to determine how this value was calculated.
+   * The balance in quarks, as observed by Code. This may not reflect the value
+   * on the blockchain and could be non-zero even if the account hasn't been created.
+   * Use balance_source to determine how this value was calculated.
    *
    * @generated from field: uint64 balance = 7;
    */
@@ -345,6 +345,27 @@ export class TokenAccountInfo extends Message<TokenAccountInfo> {
    */
   originalExchangeData?: ExchangeData;
 
+  /**
+   * The token account's mint
+   *
+   * @generated from field: code.common.v1.SolanaAccountId mint = 13;
+   */
+  mint?: SolanaAccountId;
+
+  /**
+   * The number of decimals configured for the mint
+   *
+   * @generated from field: uint32 mint_decimals = 14;
+   */
+  mintDecimals = 0;
+
+  /**
+   * User-friendly display name for the mint
+   *
+   * @generated from field: string mint_display_name = 15;
+   */
+  mintDisplayName = "";
+
   constructor(data?: PartialMessage<TokenAccountInfo>) {
     super();
     proto3.util.initPartial(data, this);
@@ -365,6 +386,9 @@ export class TokenAccountInfo extends Message<TokenAccountInfo> {
     { no: 10, name: "must_rotate", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 11, name: "claim_state", kind: "enum", T: proto3.getEnumType(TokenAccountInfo_ClaimState) },
     { no: 12, name: "original_exchange_data", kind: "message", T: ExchangeData },
+    { no: 13, name: "mint", kind: "message", T: SolanaAccountId },
+    { no: 14, name: "mint_decimals", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
+    { no: 15, name: "mint_display_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): TokenAccountInfo {
