@@ -1101,6 +1101,9 @@ message PaymentHistoryItem {
 
     // Is this a micro payment? 
     bool is_micro_payment = 11;
+
+    // The intent ID associated with this history item
+    common.v1.IntentId intent_id = 12 [(validate.rules).message.required = true];
 }
 
 // ExchangeData defines an amount of Kin with currency exchange data

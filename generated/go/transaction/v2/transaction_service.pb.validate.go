@@ -5249,6 +5249,23 @@ func (m *PaymentHistoryItem) Validate() error {
 
 	// no validation rules for IsMicroPayment
 
+	if m.GetIntentId() == nil {
+		return PaymentHistoryItemValidationError{
+			field:  "IntentId",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetIntentId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PaymentHistoryItemValidationError{
+				field:  "IntentId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 

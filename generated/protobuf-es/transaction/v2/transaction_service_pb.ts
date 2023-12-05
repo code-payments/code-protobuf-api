@@ -3765,6 +3765,13 @@ export class PaymentHistoryItem extends Message<PaymentHistoryItem> {
    */
   isMicroPayment = false;
 
+  /**
+   * The intent ID associated with this history item
+   *
+   * @generated from field: code.common.v1.IntentId intent_id = 12;
+   */
+  intentId?: IntentId;
+
   constructor(data?: PartialMessage<PaymentHistoryItem>) {
     super();
     proto3.util.initPartial(data, this);
@@ -3784,6 +3791,7 @@ export class PaymentHistoryItem extends Message<PaymentHistoryItem> {
     { no: 9, name: "is_airdrop", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 10, name: "airdrop_type", kind: "enum", T: proto3.getEnumType(AirdropType) },
     { no: 11, name: "is_micro_payment", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 12, name: "intent_id", kind: "message", T: IntentId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PaymentHistoryItem {
