@@ -504,8 +504,14 @@ message SendPrivatePaymentMetadata {
 //
 // Action Spec:
 //
-// actions = [NoPrivacyTransferAction(PRIMARY, destination, ExchangeData.Quarks)]
+// source = PRIMARY or RELATIONSHIP
+// actions = [NoPrivacyTransferAction(source, destination, ExchangeData.Quarks)]
 message SendPublicPaymentMetadata {
+    // The primary or relatinship account where funds will be sent from. The primary
+    // account is assumed if this field is not set for backwards compatibility with
+    // old clients.
+    common.v1.SolanaAccountId source = 4;
+
     // The destination token account to send funds to. This cannot be a Code
     // temporary account.
     common.v1.SolanaAccountId destination = 1 [(validate.rules).message.required = true];
@@ -514,7 +520,7 @@ message SendPublicPaymentMetadata {
     ExchangeData exchange_data = 2 [(validate.rules).message.required = true];
 
     // Is the payment a withdrawal? Currently, this is always true.
-    bool is_withdrawal = 3 [(validate.rules).bool.const = true];;
+    bool is_withdrawal = 3 [(validate.rules).bool.const = true];
 }
 
 // Receive funds into an organizer with initial temporary privacy. Clients should
@@ -543,23 +549,24 @@ message SendPublicPaymentMetadata {
 //
 // Action Spec (Deposit):
 //
+// source = PRIMARY or RELATIONSHIP
 // actions = [
-//   TemporaryPrivacyTransferAction(PRIMARY, BUCKET_X_KIN, multiple * bucketSize),
+//   TemporaryPrivacyTransferAction(source, BUCKET_X_KIN, multiple * bucketSize),
 //   TemporaryPrivacyExchangeAction(BUCKET_X_KIN, BUCKET_X_KIN, multiple * bucketSize),
 //   ...,
-//   TemporaryPrivacyTransferAction(PRIMARY, BUCKET_X_KIN, multiple * bucketSize),
+//   TemporaryPrivacyTransferAction(source, BUCKET_X_KIN, multiple * bucketSize),
 //   TemporaryPrivacyExchangeAction(BUCKET_X_KIN, BUCKET_X_KIN, multiple * bucketSize),
 // ]
 message ReceivePaymentsPrivatelyMetadata {
-    // The temporary incoming or primary account to receive funds from
+    // The temporary incoming, primary or relationship account to receive funds from
     common.v1.SolanaAccountId source = 1 [(validate.rules).message.required = true];
 
     // The exact amount of Kin in quarks being received
     uint64 quarks = 2 [(validate.rules).uint64.gt = 0];
 
-    // Is the receipt of funds from a deposti? If true, the source account must
-    // be the primary account. Otherwise, it must be from a temporary incoming
-    // account.
+    // Is the receipt of funds from a deposit? If true, the source account must
+    // be a primary or relationship account. Otherwise, it must be from a temporary
+    // incoming account.
     bool is_deposit = 3;
 }
 

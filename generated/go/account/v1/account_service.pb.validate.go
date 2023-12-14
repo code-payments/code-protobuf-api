@@ -476,6 +476,16 @@ func (m *TokenAccountInfo) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetRelationship()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return TokenAccountInfoValidationError{
+				field:  "Relationship",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 

@@ -5,7 +5,7 @@
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
 import { Message, proto3, protoInt64 } from "@bufbuild/protobuf";
-import { AccountType, Signature, SolanaAccountId } from "../../common/v1/model_pb";
+import { AccountType, Relationship, Signature, SolanaAccountId } from "../../common/v1/model_pb";
 import { ExchangeData } from "../../transaction/v2/transaction_service_pb";
 
 /**
@@ -366,6 +366,14 @@ export class TokenAccountInfo extends Message<TokenAccountInfo> {
    */
   mintDisplayName = "";
 
+  /**
+   * The relationship with a third party that this account has established with.
+   * This only applies to relevant account types (eg. RELATIONSHIP).
+   *
+   * @generated from field: code.common.v1.Relationship relationship = 16;
+   */
+  relationship?: Relationship;
+
   constructor(data?: PartialMessage<TokenAccountInfo>) {
     super();
     proto3.util.initPartial(data, this);
@@ -389,6 +397,7 @@ export class TokenAccountInfo extends Message<TokenAccountInfo> {
     { no: 13, name: "mint", kind: "message", T: SolanaAccountId },
     { no: 14, name: "mint_decimals", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
     { no: 15, name: "mint_display_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 16, name: "relationship", kind: "message", T: Relationship },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): TokenAccountInfo {
