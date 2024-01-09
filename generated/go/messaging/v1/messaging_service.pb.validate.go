@@ -1723,30 +1723,6 @@ func (m *RequestToLogin) Validate() error {
 		}
 	}
 
-	if m.GetNonce() == nil {
-		return RequestToLoginValidationError{
-			field:  "Nonce",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetNonce()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return RequestToLoginValidationError{
-				field:  "Nonce",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetTimestamp() == nil {
-		return RequestToLoginValidationError{
-			field:  "Timestamp",
-			reason: "value is required",
-		}
-	}
-
 	if m.GetVerifier() == nil {
 		return RequestToLoginValidationError{
 			field:  "Verifier",
@@ -1894,30 +1870,6 @@ func (m *LoginAttempt) Validate() error {
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
-		}
-	}
-
-	if m.GetNonce() == nil {
-		return LoginAttemptValidationError{
-			field:  "Nonce",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetNonce()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return LoginAttemptValidationError{
-				field:  "Nonce",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetTimestamp() == nil {
-		return LoginAttemptValidationError{
-			field:  "Timestamp",
-			reason: "value is required",
 		}
 	}
 

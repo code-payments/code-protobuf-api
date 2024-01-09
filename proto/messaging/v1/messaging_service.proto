@@ -317,11 +317,12 @@ message RequestToLogin {
     // use the ASCII base domain in the RELATIONSHIP account derivation strategy.
     common.v1.Domain domain = 1 [(validate.rules).message.required = true];
 
-    // Random nonce to include for signing in LoginAttempt
-    common.v1.SolanaAccountId nonce = 2 [(validate.rules).message.required = true];
+    // Deprecated nonce value, which is replaced by the rendezvous_key field which
+    // is effectively derived off a random nonce.
+    reserved 2;
 
-    // Timestamp the request was created
-    google.protobuf.Timestamp timestamp = 3 [(validate.rules).timestamp.required = true];
+    // Reserved for a timestamp field, which may be used in the future.
+    reserved 3;
 
     // Owner account owned by the third party used in domain verification.
     common.v1.SolanaAccountId verifier = 4 [(validate.rules).message.required = true];
@@ -351,11 +352,12 @@ message LoginAttempt {
     // Domain value provided in the RequestToLogin message
     common.v1.Domain domain = 3 [(validate.rules).message.required = true];
 
-    // Nonce value provided in the RequestToLogin message
-    common.v1.SolanaAccountId nonce = 4 [(validate.rules).message.required = true];
+    // Deprecated nonce value, which is replaced by the rendezvous_key field which
+    // is effectively derived off a random nonce.
+    reserved 4;
 
-    // Timestamp the attempt was created
-    google.protobuf.Timestamp timestamp = 5 [(validate.rules).timestamp.required = true];
+    // Reserved for a timestamp field, which may be used in the future.
+    reserved 5;
 
     // Signature of this message using the user_id private key, which
     // authenticates the user.

@@ -917,20 +917,6 @@ export class RequestToLogin extends Message$1<RequestToLogin> {
   domain?: Domain;
 
   /**
-   * Random nonce to include for signing in LoginAttempt
-   *
-   * @generated from field: code.common.v1.SolanaAccountId nonce = 2;
-   */
-  nonce?: SolanaAccountId;
-
-  /**
-   * Timestamp the request was created
-   *
-   * @generated from field: google.protobuf.Timestamp timestamp = 3;
-   */
-  timestamp?: Timestamp;
-
-  /**
    * Owner account owned by the third party used in domain verification.
    *
    * @generated from field: code.common.v1.SolanaAccountId verifier = 4;
@@ -961,8 +947,6 @@ export class RequestToLogin extends Message$1<RequestToLogin> {
   static readonly typeName = "code.messaging.v1.RequestToLogin";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "domain", kind: "message", T: Domain },
-    { no: 2, name: "nonce", kind: "message", T: SolanaAccountId },
-    { no: 3, name: "timestamp", kind: "message", T: Timestamp },
     { no: 4, name: "verifier", kind: "message", T: SolanaAccountId },
     { no: 5, name: "signature", kind: "message", T: Signature },
     { no: 6, name: "rendezvous_key", kind: "message", T: RendezvousKey },
@@ -1009,20 +993,6 @@ export class LoginAttempt extends Message$1<LoginAttempt> {
   domain?: Domain;
 
   /**
-   * Nonce value provided in the RequestToLogin message
-   *
-   * @generated from field: code.common.v1.SolanaAccountId nonce = 4;
-   */
-  nonce?: SolanaAccountId;
-
-  /**
-   * Timestamp the attempt was created
-   *
-   * @generated from field: google.protobuf.Timestamp timestamp = 5;
-   */
-  timestamp?: Timestamp;
-
-  /**
    * Signature of this message using the user_id private key, which
    * authenticates the user.
    *
@@ -1047,8 +1017,6 @@ export class LoginAttempt extends Message$1<LoginAttempt> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "user_id", kind: "message", T: SolanaAccountId },
     { no: 3, name: "domain", kind: "message", T: Domain },
-    { no: 4, name: "nonce", kind: "message", T: SolanaAccountId },
-    { no: 5, name: "timestamp", kind: "message", T: Timestamp },
     { no: 6, name: "signature", kind: "message", T: Signature },
     { no: 7, name: "rendezvous_key", kind: "message", T: RendezvousKey },
   ]);
