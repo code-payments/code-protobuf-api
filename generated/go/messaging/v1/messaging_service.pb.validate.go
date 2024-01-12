@@ -1964,16 +1964,16 @@ var _ interface {
 	ErrorName() string
 } = LoginAttemptValidationError{}
 
-// Validate checks the field values on LoginRejected with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *LoginRejected) Validate() error {
+// Validate checks the field values on ClientRejectedLogin with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ClientRejectedLogin) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if m.GetTimestamp() == nil {
-		return LoginRejectedValidationError{
+		return ClientRejectedLoginValidationError{
 			field:  "Timestamp",
 			reason: "value is required",
 		}
@@ -1982,9 +1982,9 @@ func (m *LoginRejected) Validate() error {
 	return nil
 }
 
-// LoginRejectedValidationError is the validation error returned by
-// LoginRejected.Validate if the designated constraints aren't met.
-type LoginRejectedValidationError struct {
+// ClientRejectedLoginValidationError is the validation error returned by
+// ClientRejectedLogin.Validate if the designated constraints aren't met.
+type ClientRejectedLoginValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1992,22 +1992,24 @@ type LoginRejectedValidationError struct {
 }
 
 // Field function returns field value.
-func (e LoginRejectedValidationError) Field() string { return e.field }
+func (e ClientRejectedLoginValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e LoginRejectedValidationError) Reason() string { return e.reason }
+func (e ClientRejectedLoginValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e LoginRejectedValidationError) Cause() error { return e.cause }
+func (e ClientRejectedLoginValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e LoginRejectedValidationError) Key() bool { return e.key }
+func (e ClientRejectedLoginValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e LoginRejectedValidationError) ErrorName() string { return "LoginRejectedValidationError" }
+func (e ClientRejectedLoginValidationError) ErrorName() string {
+	return "ClientRejectedLoginValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e LoginRejectedValidationError) Error() string {
+func (e ClientRejectedLoginValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -2019,14 +2021,14 @@ func (e LoginRejectedValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sLoginRejected.%s: %s%s",
+		"invalid %sClientRejectedLogin.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = LoginRejectedValidationError{}
+var _ error = ClientRejectedLoginValidationError{}
 
 var _ interface {
 	Field() string
@@ -2034,7 +2036,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = LoginRejectedValidationError{}
+} = ClientRejectedLoginValidationError{}
 
 // Validate checks the field values on AirdropReceived with the rules defined
 // in the proto definition for this message. If any rules are violated, an
@@ -2261,12 +2263,12 @@ func (m *Message) Validate() error {
 			}
 		}
 
-	case *Message_LoginRejected:
+	case *Message_ClientRejectedLogin:
 
-		if v, ok := interface{}(m.GetLoginRejected()).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(m.GetClientRejectedLogin()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return MessageValidationError{
-					field:  "LoginRejected",
+					field:  "ClientRejectedLogin",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}

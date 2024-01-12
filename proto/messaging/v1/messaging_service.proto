@@ -367,7 +367,10 @@ message LoginAttempt {
     RendezvousKey rendezvous_key = 7 [(validate.rules).message.required = true];
 }
 
-message LoginRejected {
+// Login is rejected by the client
+//
+// This message type is only initiated by user clients
+message ClientRejectedLogin {
     // Timestamp the login was rejected
     google.protobuf.Timestamp timestamp = 4 [(validate.rules).timestamp.required = true];
 }
@@ -426,7 +429,7 @@ message Message {
 
         RequestToLogin        request_to_login         = 10;
         LoginAttempt          login_attempt            = 11;
-        LoginRejected         login_rejected           = 12;
+        ClientRejectedLogin   client_rejected_login    = 12;
 
         //
         // Section: Airdrops
