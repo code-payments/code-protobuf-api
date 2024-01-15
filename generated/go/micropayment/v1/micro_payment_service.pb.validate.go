@@ -129,16 +129,6 @@ func (m *GetStatusResponse) Validate() error {
 
 	// no validation rules for IntentSubmitted
 
-	if v, ok := interface{}(m.GetUserId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return GetStatusResponseValidationError{
-				field:  "UserId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
 	return nil
 }
 
