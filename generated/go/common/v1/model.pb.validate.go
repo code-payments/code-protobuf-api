@@ -105,6 +105,94 @@ var _ interface {
 	ErrorName() string
 } = SolanaAccountIdValidationError{}
 
+// Validate checks the field values on InstructionAccount with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *InstructionAccount) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetAccount() == nil {
+		return InstructionAccountValidationError{
+			field:  "Account",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetAccount()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return InstructionAccountValidationError{
+				field:  "Account",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for IsSigner
+
+	// no validation rules for IsWritable
+
+	return nil
+}
+
+// InstructionAccountValidationError is the validation error returned by
+// InstructionAccount.Validate if the designated constraints aren't met.
+type InstructionAccountValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e InstructionAccountValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e InstructionAccountValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e InstructionAccountValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e InstructionAccountValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e InstructionAccountValidationError) ErrorName() string {
+	return "InstructionAccountValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e InstructionAccountValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sInstructionAccount.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = InstructionAccountValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = InstructionAccountValidationError{}
+
 // Validate checks the field values on Transaction with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
 // is returned.

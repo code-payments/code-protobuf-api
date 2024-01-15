@@ -78,6 +78,18 @@ type TransactionClient interface {
 	CanWithdrawToAccount(ctx context.Context, in *CanWithdrawToAccountRequest, opts ...grpc.CallOption) (*CanWithdrawToAccountResponse, error)
 	// Airdrop airdrops Kin to the requesting account
 	Airdrop(ctx context.Context, in *AirdropRequest, opts ...grpc.CallOption) (*AirdropResponse, error)
+	// Swap performs an on-chain swap. The high-level flow mirrors SubmitIntent
+	// closely. However, due to the time-sensitive nature and unreliability of
+	// swaps, they do not fit within the broader intent system. This results in
+	// a few key differences:
+	//   - Transactions are submitted on a best-effort basis outside of the Code
+	//     Sequencer within the RPC handler
+	//   - Balance changes are applied after the transaction has finalized
+	//   - Transactions use recent blockhashes over a nonce
+	//
+	// Note: Currently limited to swapping USDC to Kin.
+	// Note: Kin is deposited into the primary account.
+	Swap(ctx context.Context, opts ...grpc.CallOption) (Transaction_SwapClient, error)
 }
 
 type transactionClient struct {
@@ -182,6 +194,37 @@ func (c *transactionClient) Airdrop(ctx context.Context, in *AirdropRequest, opt
 	return out, nil
 }
 
+func (c *transactionClient) Swap(ctx context.Context, opts ...grpc.CallOption) (Transaction_SwapClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Transaction_ServiceDesc.Streams[1], "/code.transaction.v2.Transaction/Swap", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &transactionSwapClient{stream}
+	return x, nil
+}
+
+type Transaction_SwapClient interface {
+	Send(*SwapRequest) error
+	Recv() (*SwapResponse, error)
+	grpc.ClientStream
+}
+
+type transactionSwapClient struct {
+	grpc.ClientStream
+}
+
+func (x *transactionSwapClient) Send(m *SwapRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *transactionSwapClient) Recv() (*SwapResponse, error) {
+	m := new(SwapResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // TransactionServer is the server API for Transaction service.
 // All implementations must embed UnimplementedTransactionServer
 // for forward compatibility
@@ -242,6 +285,18 @@ type TransactionServer interface {
 	CanWithdrawToAccount(context.Context, *CanWithdrawToAccountRequest) (*CanWithdrawToAccountResponse, error)
 	// Airdrop airdrops Kin to the requesting account
 	Airdrop(context.Context, *AirdropRequest) (*AirdropResponse, error)
+	// Swap performs an on-chain swap. The high-level flow mirrors SubmitIntent
+	// closely. However, due to the time-sensitive nature and unreliability of
+	// swaps, they do not fit within the broader intent system. This results in
+	// a few key differences:
+	//   - Transactions are submitted on a best-effort basis outside of the Code
+	//     Sequencer within the RPC handler
+	//   - Balance changes are applied after the transaction has finalized
+	//   - Transactions use recent blockhashes over a nonce
+	//
+	// Note: Currently limited to swapping USDC to Kin.
+	// Note: Kin is deposited into the primary account.
+	Swap(Transaction_SwapServer) error
 	mustEmbedUnimplementedTransactionServer()
 }
 
@@ -272,6 +327,9 @@ func (UnimplementedTransactionServer) CanWithdrawToAccount(context.Context, *Can
 }
 func (UnimplementedTransactionServer) Airdrop(context.Context, *AirdropRequest) (*AirdropResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Airdrop not implemented")
+}
+func (UnimplementedTransactionServer) Swap(Transaction_SwapServer) error {
+	return status.Errorf(codes.Unimplemented, "method Swap not implemented")
 }
 func (UnimplementedTransactionServer) mustEmbedUnimplementedTransactionServer() {}
 
@@ -438,6 +496,32 @@ func _Transaction_Airdrop_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Transaction_Swap_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(TransactionServer).Swap(&transactionSwapServer{stream})
+}
+
+type Transaction_SwapServer interface {
+	Send(*SwapResponse) error
+	Recv() (*SwapRequest, error)
+	grpc.ServerStream
+}
+
+type transactionSwapServer struct {
+	grpc.ServerStream
+}
+
+func (x *transactionSwapServer) Send(m *SwapResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *transactionSwapServer) Recv() (*SwapRequest, error) {
+	m := new(SwapRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // Transaction_ServiceDesc is the grpc.ServiceDesc for Transaction service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -478,6 +562,12 @@ var Transaction_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "SubmitIntent",
 			Handler:       _Transaction_SubmitIntent_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "Swap",
+			Handler:       _Transaction_Swap_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},
