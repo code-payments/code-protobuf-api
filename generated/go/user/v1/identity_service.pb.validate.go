@@ -696,6 +696,394 @@ var _ interface {
 	ErrorName() string
 } = GetUserResponseValidationError{}
 
+// Validate checks the field values on LoginToThirdPartyAppRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *LoginToThirdPartyAppRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetIntentId() == nil {
+		return LoginToThirdPartyAppRequestValidationError{
+			field:  "IntentId",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetIntentId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return LoginToThirdPartyAppRequestValidationError{
+				field:  "IntentId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetUserId() == nil {
+		return LoginToThirdPartyAppRequestValidationError{
+			field:  "UserId",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetUserId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return LoginToThirdPartyAppRequestValidationError{
+				field:  "UserId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetSignature() == nil {
+		return LoginToThirdPartyAppRequestValidationError{
+			field:  "Signature",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return LoginToThirdPartyAppRequestValidationError{
+				field:  "Signature",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// LoginToThirdPartyAppRequestValidationError is the validation error returned
+// by LoginToThirdPartyAppRequest.Validate if the designated constraints
+// aren't met.
+type LoginToThirdPartyAppRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e LoginToThirdPartyAppRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e LoginToThirdPartyAppRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e LoginToThirdPartyAppRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e LoginToThirdPartyAppRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e LoginToThirdPartyAppRequestValidationError) ErrorName() string {
+	return "LoginToThirdPartyAppRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e LoginToThirdPartyAppRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sLoginToThirdPartyAppRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = LoginToThirdPartyAppRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = LoginToThirdPartyAppRequestValidationError{}
+
+// Validate checks the field values on LoginToThirdPartyAppResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *LoginToThirdPartyAppResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Result
+
+	return nil
+}
+
+// LoginToThirdPartyAppResponseValidationError is the validation error returned
+// by LoginToThirdPartyAppResponse.Validate if the designated constraints
+// aren't met.
+type LoginToThirdPartyAppResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e LoginToThirdPartyAppResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e LoginToThirdPartyAppResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e LoginToThirdPartyAppResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e LoginToThirdPartyAppResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e LoginToThirdPartyAppResponseValidationError) ErrorName() string {
+	return "LoginToThirdPartyAppResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e LoginToThirdPartyAppResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sLoginToThirdPartyAppResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = LoginToThirdPartyAppResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = LoginToThirdPartyAppResponseValidationError{}
+
+// Validate checks the field values on GetLoginForThirdPartyAppRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *GetLoginForThirdPartyAppRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetIntentId() == nil {
+		return GetLoginForThirdPartyAppRequestValidationError{
+			field:  "IntentId",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetIntentId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetLoginForThirdPartyAppRequestValidationError{
+				field:  "IntentId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetVerifier() == nil {
+		return GetLoginForThirdPartyAppRequestValidationError{
+			field:  "Verifier",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetVerifier()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetLoginForThirdPartyAppRequestValidationError{
+				field:  "Verifier",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetSignature() == nil {
+		return GetLoginForThirdPartyAppRequestValidationError{
+			field:  "Signature",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetLoginForThirdPartyAppRequestValidationError{
+				field:  "Signature",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// GetLoginForThirdPartyAppRequestValidationError is the validation error
+// returned by GetLoginForThirdPartyAppRequest.Validate if the designated
+// constraints aren't met.
+type GetLoginForThirdPartyAppRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetLoginForThirdPartyAppRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetLoginForThirdPartyAppRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetLoginForThirdPartyAppRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetLoginForThirdPartyAppRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetLoginForThirdPartyAppRequestValidationError) ErrorName() string {
+	return "GetLoginForThirdPartyAppRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetLoginForThirdPartyAppRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetLoginForThirdPartyAppRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetLoginForThirdPartyAppRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetLoginForThirdPartyAppRequestValidationError{}
+
+// Validate checks the field values on GetLoginForThirdPartyAppResponse with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, an error is returned.
+func (m *GetLoginForThirdPartyAppResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Result
+
+	if v, ok := interface{}(m.GetUserId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetLoginForThirdPartyAppResponseValidationError{
+				field:  "UserId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// GetLoginForThirdPartyAppResponseValidationError is the validation error
+// returned by GetLoginForThirdPartyAppResponse.Validate if the designated
+// constraints aren't met.
+type GetLoginForThirdPartyAppResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetLoginForThirdPartyAppResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetLoginForThirdPartyAppResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetLoginForThirdPartyAppResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetLoginForThirdPartyAppResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetLoginForThirdPartyAppResponseValidationError) ErrorName() string {
+	return "GetLoginForThirdPartyAppResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetLoginForThirdPartyAppResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetLoginForThirdPartyAppResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetLoginForThirdPartyAppResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetLoginForThirdPartyAppResponseValidationError{}
+
 // Validate checks the field values on User with the rules defined in the proto
 // definition for this message. If any rules are violated, an error is returned.
 func (m *User) Validate() error {

@@ -68,9 +68,10 @@ type MessagingClient interface {
 	//     required hack because we don't have the infrastructure in place to allow multiple listens
 	//     on the same stream, and the recipient needs real-time status updates.
 	//  5. The user logging in receives the message (any status messages are ignored), verifies it,
-	//     then uses SendMessage to send a login attempt.
-	//  6. The third party receives sees the login attempt message, verifies it, then accepts/denies
-	//     the login attempt. The stream is closed.
+	//     then submits a login attempt.
+	//  6. The third party observes status message (eg. IntentSubmitted, ClientRejectedLogin,
+	//     WebhookCalled) for login state.
+	//  7. The third party closes the stream once the login hits a terminal state, or times out.
 	OpenMessageStream(ctx context.Context, in *OpenMessageStreamRequest, opts ...grpc.CallOption) (Messaging_OpenMessageStreamClient, error)
 	// OpenMessageStreamWithKeepAlive is like OpenMessageStream, but enables a ping/pong
 	// keepalive to determine the health of the stream at both the client and server.
@@ -261,9 +262,10 @@ type MessagingServer interface {
 	//     required hack because we don't have the infrastructure in place to allow multiple listens
 	//     on the same stream, and the recipient needs real-time status updates.
 	//  5. The user logging in receives the message (any status messages are ignored), verifies it,
-	//     then uses SendMessage to send a login attempt.
-	//  6. The third party receives sees the login attempt message, verifies it, then accepts/denies
-	//     the login attempt. The stream is closed.
+	//     then submits a login attempt.
+	//  6. The third party observes status message (eg. IntentSubmitted, ClientRejectedLogin,
+	//     WebhookCalled) for login state.
+	//  7. The third party closes the stream once the login hits a terminal state, or times out.
 	OpenMessageStream(*OpenMessageStreamRequest, Messaging_OpenMessageStreamServer) error
 	// OpenMessageStreamWithKeepAlive is like OpenMessageStream, but enables a ping/pong
 	// keepalive to determine the health of the stream at both the client and server.

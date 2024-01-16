@@ -196,11 +196,11 @@ export enum RegisterWebhookResponse_Result {
   ALREADY_REGISTERED = 1,
 
   /**
-   * A payment request does not exist for the provided intent ID
+   * A request does not exist for the provided intent ID
    *
-   * @generated from enum value: PAYMENT_REQUEST_NOT_FOUND = 2;
+   * @generated from enum value: REQUEST_NOT_FOUND = 2;
    */
-  PAYMENT_REQUEST_NOT_FOUND = 2,
+  REQUEST_NOT_FOUND = 2,
 
   /**
    * A user has already submitted a payment
@@ -220,7 +220,7 @@ export enum RegisterWebhookResponse_Result {
 proto3.util.setEnumType(RegisterWebhookResponse_Result, "code.micropayment.v1.RegisterWebhookResponse.Result", [
   { no: 0, name: "OK" },
   { no: 1, name: "ALREADY_REGISTERED" },
-  { no: 2, name: "PAYMENT_REQUEST_NOT_FOUND" },
+  { no: 2, name: "REQUEST_NOT_FOUND" },
   { no: 3, name: "INTENT_EXISTS" },
   { no: 4, name: "INVALID_URL" },
 ]);
