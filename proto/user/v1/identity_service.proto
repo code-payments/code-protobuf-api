@@ -179,8 +179,8 @@ message LoginToThirdPartyAppRequest {
     // The relationship authority account logging in.
     common.v1.SolanaAccountId user_id = 2 [(validate.rules).message.required = true];
 
-    // Signature of this message using the user private key, authenticates the
-    // user.
+    // Signature of this message using the user private key, which authenticates
+    // the user.
     common.v1.Signature signature = 3 [(validate.rules).message.required = true];
 }
 
