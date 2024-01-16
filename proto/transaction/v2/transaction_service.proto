@@ -483,6 +483,9 @@ message SwapResponse {
         // after executing the swap. If not, the validation instruction will
         // cause the transaction to fail.
         uint64 min_to_receive = 9 [(validate.rules).uint64.gt = 0];
+
+        // Nonce to use in swap validator state account PDA
+        common.v1.SolanaAccountId nonce = 10 [(validate.rules).message.required = true];
     }
 
     message Success {

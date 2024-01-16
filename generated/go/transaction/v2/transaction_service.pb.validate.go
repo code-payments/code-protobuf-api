@@ -6820,6 +6820,23 @@ func (m *SwapResponse_ServerParameters) Validate() error {
 		}
 	}
 
+	if m.GetNonce() == nil {
+		return SwapResponse_ServerParametersValidationError{
+			field:  "Nonce",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetNonce()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SwapResponse_ServerParametersValidationError{
+				field:  "Nonce",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 

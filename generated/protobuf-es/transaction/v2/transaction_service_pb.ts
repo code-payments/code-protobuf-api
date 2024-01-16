@@ -1719,6 +1719,13 @@ export class SwapResponse_ServerParameters extends Message<SwapResponse_ServerPa
    */
   minToReceive = protoInt64.zero;
 
+  /**
+   * Nonce to use in swap validator state account PDA
+   *
+   * @generated from field: code.common.v1.SolanaAccountId nonce = 10;
+   */
+  nonce?: SolanaAccountId;
+
   constructor(data?: PartialMessage<SwapResponse_ServerParameters>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1736,6 +1743,7 @@ export class SwapResponse_ServerParameters extends Message<SwapResponse_ServerPa
     { no: 7, name: "swap_ixn_data", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
     { no: 8, name: "max_to_send", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
     { no: 9, name: "min_to_receive", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+    { no: 10, name: "nonce", kind: "message", T: SolanaAccountId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SwapResponse_ServerParameters {
