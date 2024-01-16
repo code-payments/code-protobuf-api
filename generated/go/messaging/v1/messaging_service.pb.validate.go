@@ -1552,13 +1552,6 @@ func (m *IntentSubmitted) Validate() error {
 		}
 	}
 
-	if m.GetMetadata() == nil {
-		return IntentSubmittedValidationError{
-			field:  "Metadata",
-			reason: "value is required",
-		}
-	}
-
 	if v, ok := interface{}(m.GetMetadata()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return IntentSubmittedValidationError{

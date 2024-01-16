@@ -505,8 +505,8 @@ export class LoginToThirdPartyAppRequest extends Message<LoginToThirdPartyAppReq
   userId?: SolanaAccountId;
 
   /**
-   * Signature of this message using the user private key, authenticates the
-   * user.
+   * Signature of this message using the user private key, which authenticates
+   * the user.
    *
    * @generated from field: code.common.v1.Signature signature = 3;
    */

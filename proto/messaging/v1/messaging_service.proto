@@ -295,7 +295,9 @@ message ClientRejectedPayment {
 message IntentSubmitted {
     common.v1.IntentId intent_id = 1 [(validate.rules).message.required = true];
 
-    transaction.v2.Metadata metadata = 2 [(validate.rules).message.required = true];
+    // Metadata is available for intents where it can be safely propagated publicly.
+    // Anything else requires an additional authenticated RPC call (eg. login).
+    transaction.v2.Metadata metadata = 2;
 }
 
 // Webhook was successfully called
