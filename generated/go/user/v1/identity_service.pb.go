@@ -830,8 +830,8 @@ type LoginToThirdPartyAppRequest struct {
 	IntentId *v1.IntentId `protobuf:"bytes,1,opt,name=intent_id,json=intentId,proto3" json:"intent_id,omitempty"`
 	// The relationship authority account logging in.
 	UserId *v1.SolanaAccountId `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	// Signature of this message using the user private key, authenticates the
-	// user.
+	// Signature of this message using the user private key, which authenticates
+	// the user.
 	Signature *v1.Signature `protobuf:"bytes,3,opt,name=signature,proto3" json:"signature,omitempty"`
 }
 

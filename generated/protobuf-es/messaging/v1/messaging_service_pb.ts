@@ -821,6 +821,9 @@ export class IntentSubmitted extends Message$1<IntentSubmitted> {
   intentId?: IntentId;
 
   /**
+   * Metadata is available for intents where it can be safely propagated publicly.
+   * Anything else requires an additional authenticated RPC call (eg. login).
+   *
    * @generated from field: code.transaction.v2.Metadata metadata = 2;
    */
   metadata?: Metadata;
