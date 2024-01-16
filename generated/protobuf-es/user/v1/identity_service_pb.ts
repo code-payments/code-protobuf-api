@@ -656,7 +656,7 @@ export class GetLoginForThirdPartyAppRequest extends Message<GetLoginForThirdPar
    * Signature of this message using the verifier private key, which in addition
    * to domain verification, authenticates the third party.
    *
-   * @generated from field: code.common.v1.Signature signature = 4;
+   * @generated from field: code.common.v1.Signature signature = 3;
    */
   signature?: Signature;
 
@@ -670,7 +670,7 @@ export class GetLoginForThirdPartyAppRequest extends Message<GetLoginForThirdPar
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "intent_id", kind: "message", T: IntentId },
     { no: 2, name: "verifier", kind: "message", T: SolanaAccountId },
-    { no: 4, name: "signature", kind: "message", T: Signature },
+    { no: 3, name: "signature", kind: "message", T: Signature },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetLoginForThirdPartyAppRequest {

@@ -211,7 +211,7 @@ message GetLoginForThirdPartyAppRequest {
 
     // Signature of this message using the verifier private key, which in addition
     // to domain verification, authenticates the third party.
-    common.v1.Signature signature = 4 [(validate.rules).message.required = true];
+    common.v1.Signature signature = 3 [(validate.rules).message.required = true];
 }
 
 message GetLoginForThirdPartyAppResponse {
