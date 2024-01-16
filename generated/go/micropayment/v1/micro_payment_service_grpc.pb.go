@@ -22,9 +22,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MicroPaymentClient interface {
-	// GetStatus gets basic micro payment status
+	// GetStatus gets basic request status
 	GetStatus(ctx context.Context, in *GetStatusRequest, opts ...grpc.CallOption) (*GetStatusResponse, error)
-	// RegisterWebhook registers a webhook for a micro payment
+	// RegisterWebhook registers a webhook for a request
 	//
 	// todo: Once Kik codes can encode the entire payment request details, we can
 	//
@@ -89,9 +89,9 @@ func (c *microPaymentClient) GetPathMetadata(ctx context.Context, in *GetPathMet
 // All implementations must embed UnimplementedMicroPaymentServer
 // for forward compatibility
 type MicroPaymentServer interface {
-	// GetStatus gets basic micro payment status
+	// GetStatus gets basic request status
 	GetStatus(context.Context, *GetStatusRequest) (*GetStatusResponse, error)
-	// RegisterWebhook registers a webhook for a micro payment
+	// RegisterWebhook registers a webhook for a request
 	//
 	// todo: Once Kik codes can encode the entire payment request details, we can
 	//

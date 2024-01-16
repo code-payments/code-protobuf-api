@@ -358,7 +358,9 @@ export class IntentId extends Message<IntentId> {
 }
 
 /**
- * UserId is a globally unique identifier for a user
+ * UserId is a globally unique identifier for a user within Code
+ *
+ * Note: Users outside Code are modelled as relationship accounts
  *
  * @generated from message code.common.v1.UserId
  */

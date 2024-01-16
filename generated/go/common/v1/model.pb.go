@@ -461,7 +461,9 @@ func (x *IntentId) GetValue() []byte {
 	return nil
 }
 
-// UserId is a globally unique identifier for a user
+// UserId is a globally unique identifier for a user within Code
+//
+// Note: Users outside Code are modelled as relationship accounts
 type UserId struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
