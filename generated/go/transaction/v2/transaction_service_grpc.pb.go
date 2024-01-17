@@ -87,6 +87,13 @@ type TransactionClient interface {
 	//   - Balance changes are applied after the transaction has finalized
 	//   - Transactions use recent blockhashes over a nonce
 	//
+	// The transaction will have the following instruction format:
+	//  1. ComputeBudget::SetComputeUnitLimit
+	//  2. ComputeBudget::SetComputeUnitPrice
+	//  3. SwapValidator::PreSwap
+	//  4. Dynamic swap instruction
+	//  5. SwapValidator::PostSwap
+	//
 	// Note: Currently limited to swapping USDC to Kin.
 	// Note: Kin is deposited into the primary account.
 	Swap(ctx context.Context, opts ...grpc.CallOption) (Transaction_SwapClient, error)
@@ -293,6 +300,13 @@ type TransactionServer interface {
 	//     Sequencer within the RPC handler
 	//   - Balance changes are applied after the transaction has finalized
 	//   - Transactions use recent blockhashes over a nonce
+	//
+	// The transaction will have the following instruction format:
+	//  1. ComputeBudget::SetComputeUnitLimit
+	//  2. ComputeBudget::SetComputeUnitPrice
+	//  3. SwapValidator::PreSwap
+	//  4. Dynamic swap instruction
+	//  5. SwapValidator::PostSwap
 	//
 	// Note: Currently limited to swapping USDC to Kin.
 	// Note: Kin is deposited into the primary account.
