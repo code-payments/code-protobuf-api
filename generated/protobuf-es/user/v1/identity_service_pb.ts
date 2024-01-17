@@ -584,6 +584,9 @@ export class LoginToThirdPartyAppResponse extends Message<LoginToThirdPartyAppRe
  */
 export enum LoginToThirdPartyAppResponse_Result {
   /**
+   * This supports idempotency. The same login with the same user will result
+   * in OK.
+   *
    * @generated from enum value: OK = 0;
    */
   OK = 0,
@@ -610,11 +613,11 @@ export enum LoginToThirdPartyAppResponse_Result {
   LOGIN_NOT_SUPPORTED = 3,
 
   /**
-   * A login already exists
+   * A login with a different user already exists
    *
-   * @generated from enum value: LOGIN_EXISTS = 4;
+   * @generated from enum value: DIFFERENT_LOGIN_EXISTS = 4;
    */
-  LOGIN_EXISTS = 4,
+  DIFFERENT_LOGIN_EXISTS = 4,
 
   /**
    * The provided account is not valid for login. It must be a relationship
@@ -630,7 +633,7 @@ proto3.util.setEnumType(LoginToThirdPartyAppResponse_Result, "code.user.v1.Login
   { no: 1, name: "REQUEST_NOT_FOUND" },
   { no: 2, name: "PAYMENT_REQUIRED" },
   { no: 3, name: "LOGIN_NOT_SUPPORTED" },
-  { no: 4, name: "LOGIN_EXISTS" },
+  { no: 4, name: "DIFFERENT_LOGIN_EXISTS" },
   { no: 5, name: "INVALID_ACCOUNT" },
 ]);
 
@@ -757,12 +760,21 @@ export enum GetLoginForThirdPartyAppResponse_Result {
    * @generated from enum value: LOGIN_NOT_SUPPORTED = 2;
    */
   LOGIN_NOT_SUPPORTED = 2,
+
+  /**
+   * The intent supports login, but it hasn't been submitted. There is no
+   * logged in user yet.
+   *
+   * @generated from enum value: NO_USER_LOGGED_IN = 3;
+   */
+  NO_USER_LOGGED_IN = 3,
 }
 // Retrieve enum metadata with: proto3.getEnumType(GetLoginForThirdPartyAppResponse_Result)
 proto3.util.setEnumType(GetLoginForThirdPartyAppResponse_Result, "code.user.v1.GetLoginForThirdPartyAppResponse.Result", [
   { no: 0, name: "OK" },
   { no: 1, name: "REQUEST_NOT_FOUND" },
   { no: 2, name: "LOGIN_NOT_SUPPORTED" },
+  { no: 3, name: "NO_USER_LOGGED_IN" },
 ]);
 
 /**
