@@ -187,6 +187,8 @@ message LoginToThirdPartyAppRequest {
 message LoginToThirdPartyAppResponse {
     Result result = 1;
     enum Result {
+        // This supports idempotency. The same login with the same user will result
+        // in OK.
         OK = 0;
         // There is no request for the provided intent ID.
         REQUEST_NOT_FOUND = 1;
@@ -194,8 +196,8 @@ message LoginToThirdPartyAppResponse {
         PAYMENT_REQUIRED = 2;
         // The request exists, but doesn't support login.
         LOGIN_NOT_SUPPORTED = 3;
-        // A login already exists
-        LOGIN_EXISTS = 4;
+        // A login with a different user already exists
+        DIFFERENT_LOGIN_EXISTS = 4;
         // The provided account is not valid for login. It must be a relationship
         // account with the correct identifier specified in the original request.
         INVALID_ACCOUNT = 5;
@@ -222,6 +224,9 @@ message GetLoginForThirdPartyAppResponse {
         REQUEST_NOT_FOUND = 1;
         // The request exists, but doesn't support login.
         LOGIN_NOT_SUPPORTED = 2;
+        // The intent supports login, but it hasn't been submitted. There is no
+        // logged in user yet.
+        NO_USER_LOGGED_IN = 3;
     }
 
     // The relationship authority account that logged in.
