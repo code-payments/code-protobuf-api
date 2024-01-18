@@ -1886,11 +1886,11 @@ export enum SwapResponse_Error_Code {
   SIGNATURE_ERROR = 2,
 
   /**
-   * An amount to swap to/from is invalid
+   * The swap failed server-side validation
    *
-   * @generated from enum value: INVALID_SWAP_AMOUNT = 3;
+   * @generated from enum value: INVALID_SWAP = 3;
    */
-  INVALID_SWAP_AMOUNT = 3,
+  INVALID_SWAP = 3,
 
   /**
    * The submitted swap transaction failed. Attempt the swap again.
@@ -1903,7 +1903,7 @@ export enum SwapResponse_Error_Code {
 proto3.util.setEnumType(SwapResponse_Error_Code, "code.transaction.v2.SwapResponse.Error.Code", [
   { no: 0, name: "DENIED" },
   { no: 2, name: "SIGNATURE_ERROR" },
-  { no: 3, name: "INVALID_SWAP_AMOUNT" },
+  { no: 3, name: "INVALID_SWAP" },
   { no: 4, name: "SWAP_FAILED" },
 ]);
 

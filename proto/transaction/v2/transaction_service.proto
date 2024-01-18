@@ -512,8 +512,8 @@ message SwapResponse {
             DENIED = 0;
             // There is an issue with the provided signature.
             SIGNATURE_ERROR = 2;
-            // An amount to swap to/from is invalid
-            INVALID_SWAP_AMOUNT = 3;
+            // The swap failed server-side validation
+            INVALID_SWAP = 3;
             // The submitted swap transaction failed. Attempt the swap again.
             SWAP_FAILED = 4;
         }
