@@ -1668,9 +1668,9 @@ export class SwapResponse_ServerParameters extends Message<SwapResponse_ServerPa
    * Compute unit limit provided to the ComputeBudget::SetComputeUnitLimit
    * instruction. If the value is 0, then the instruction can be omitted.
    *
-   * @generated from field: uint64 compute_unit_limit = 3;
+   * @generated from field: uint32 compute_unit_limit = 3;
    */
-  computeUnitLimit = protoInt64.zero;
+  computeUnitLimit = 0;
 
   /**
    * Compute unit price provided in the ComputeBudget::SetComputeUnitPrice
@@ -1736,7 +1736,7 @@ export class SwapResponse_ServerParameters extends Message<SwapResponse_ServerPa
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "payer", kind: "message", T: SolanaAccountId },
     { no: 2, name: "recent_blockhash", kind: "message", T: Blockhash },
-    { no: 3, name: "compute_unit_limit", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+    { no: 3, name: "compute_unit_limit", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
     { no: 4, name: "compute_unit_price", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
     { no: 5, name: "swap_program", kind: "message", T: SolanaAccountId },
     { no: 6, name: "swap_ixn_accounts", kind: "message", T: InstructionAccount, repeated: true },
@@ -1886,11 +1886,11 @@ export enum SwapResponse_Error_Code {
   SIGNATURE_ERROR = 2,
 
   /**
-   * An amount to swap to/from is invalid
+   * The swap failed server-side validation
    *
-   * @generated from enum value: INVALID_SWAP_AMOUNT = 3;
+   * @generated from enum value: INVALID_SWAP = 3;
    */
-  INVALID_SWAP_AMOUNT = 3,
+  INVALID_SWAP = 3,
 
   /**
    * The submitted swap transaction failed. Attempt the swap again.
@@ -1903,7 +1903,7 @@ export enum SwapResponse_Error_Code {
 proto3.util.setEnumType(SwapResponse_Error_Code, "code.transaction.v2.SwapResponse.Error.Code", [
   { no: 0, name: "DENIED" },
   { no: 2, name: "SIGNATURE_ERROR" },
-  { no: 3, name: "INVALID_SWAP_AMOUNT" },
+  { no: 3, name: "INVALID_SWAP" },
   { no: 4, name: "SWAP_FAILED" },
 ]);
 
