@@ -177,11 +177,11 @@ message TokenAccountInfo {
     // The token account's mint
     common.v1.SolanaAccountId mint = 13;
 
-    // The number of decimals configured for the mint
-    uint32 mint_decimals = 14;
+    // Reserved for the number of decimals configured for the mint
+    reserved 14;
 
-    // User-friendly display name for the mint
-    string mint_display_name = 15 [(validate.rules).string.max_len = 32];
+    // Reserved for a user-friendly display name for the mint
+    reserved 15;
 
     // The relationship with a third party that this account has established with.
     // This only applies to relevant account types (eg. RELATIONSHIP).
