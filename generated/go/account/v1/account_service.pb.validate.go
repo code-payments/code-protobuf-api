@@ -467,15 +467,6 @@ func (m *TokenAccountInfo) Validate() error {
 		}
 	}
 
-	// no validation rules for MintDecimals
-
-	if utf8.RuneCountInString(m.GetMintDisplayName()) > 32 {
-		return TokenAccountInfoValidationError{
-			field:  "MintDisplayName",
-			reason: "value length must be at most 32 runes",
-		}
-	}
-
 	if v, ok := interface{}(m.GetRelationship()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return TokenAccountInfoValidationError{

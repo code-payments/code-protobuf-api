@@ -353,20 +353,6 @@ export class TokenAccountInfo extends Message<TokenAccountInfo> {
   mint?: SolanaAccountId;
 
   /**
-   * The number of decimals configured for the mint
-   *
-   * @generated from field: uint32 mint_decimals = 14;
-   */
-  mintDecimals = 0;
-
-  /**
-   * User-friendly display name for the mint
-   *
-   * @generated from field: string mint_display_name = 15;
-   */
-  mintDisplayName = "";
-
-  /**
    * The relationship with a third party that this account has established with.
    * This only applies to relevant account types (eg. RELATIONSHIP).
    *
@@ -395,8 +381,6 @@ export class TokenAccountInfo extends Message<TokenAccountInfo> {
     { no: 11, name: "claim_state", kind: "enum", T: proto3.getEnumType(TokenAccountInfo_ClaimState) },
     { no: 12, name: "original_exchange_data", kind: "message", T: ExchangeData },
     { no: 13, name: "mint", kind: "message", T: SolanaAccountId },
-    { no: 14, name: "mint_decimals", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-    { no: 15, name: "mint_display_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 16, name: "relationship", kind: "message", T: Relationship },
   ]);
 
