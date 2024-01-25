@@ -29,6 +29,11 @@ type AccountClient interface {
 	// GetTokenAccountInfos returns token account metadata relevant to the Code owner
 	// account.
 	GetTokenAccountInfos(ctx context.Context, in *GetTokenAccountInfosRequest, opts ...grpc.CallOption) (*GetTokenAccountInfosResponse, error)
+	// LinkAdditionalAccounts allows a client to declare additional accounts to
+	// be tracked and used within Code. The accounts declared in this RPC are not
+	// managed by Code (ie. not a Timelock account), created externally and cannot
+	// be linked automatically (ie. authority derived off user 12 words).
+	LinkAdditionalAccounts(ctx context.Context, in *LinkAdditionalAccountsRequest, opts ...grpc.CallOption) (*LinkAdditionalAccountsResponse, error)
 }
 
 type accountClient struct {
@@ -57,6 +62,15 @@ func (c *accountClient) GetTokenAccountInfos(ctx context.Context, in *GetTokenAc
 	return out, nil
 }
 
+func (c *accountClient) LinkAdditionalAccounts(ctx context.Context, in *LinkAdditionalAccountsRequest, opts ...grpc.CallOption) (*LinkAdditionalAccountsResponse, error) {
+	out := new(LinkAdditionalAccountsResponse)
+	err := c.cc.Invoke(ctx, "/code.account.v1.Account/LinkAdditionalAccounts", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AccountServer is the server API for Account service.
 // All implementations must embed UnimplementedAccountServer
 // for forward compatibility
@@ -68,6 +82,11 @@ type AccountServer interface {
 	// GetTokenAccountInfos returns token account metadata relevant to the Code owner
 	// account.
 	GetTokenAccountInfos(context.Context, *GetTokenAccountInfosRequest) (*GetTokenAccountInfosResponse, error)
+	// LinkAdditionalAccounts allows a client to declare additional accounts to
+	// be tracked and used within Code. The accounts declared in this RPC are not
+	// managed by Code (ie. not a Timelock account), created externally and cannot
+	// be linked automatically (ie. authority derived off user 12 words).
+	LinkAdditionalAccounts(context.Context, *LinkAdditionalAccountsRequest) (*LinkAdditionalAccountsResponse, error)
 	mustEmbedUnimplementedAccountServer()
 }
 
@@ -80,6 +99,9 @@ func (UnimplementedAccountServer) IsCodeAccount(context.Context, *IsCodeAccountR
 }
 func (UnimplementedAccountServer) GetTokenAccountInfos(context.Context, *GetTokenAccountInfosRequest) (*GetTokenAccountInfosResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTokenAccountInfos not implemented")
+}
+func (UnimplementedAccountServer) LinkAdditionalAccounts(context.Context, *LinkAdditionalAccountsRequest) (*LinkAdditionalAccountsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LinkAdditionalAccounts not implemented")
 }
 func (UnimplementedAccountServer) mustEmbedUnimplementedAccountServer() {}
 
@@ -130,6 +152,24 @@ func _Account_GetTokenAccountInfos_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Account_LinkAdditionalAccounts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LinkAdditionalAccountsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountServer).LinkAdditionalAccounts(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/code.account.v1.Account/LinkAdditionalAccounts",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountServer).LinkAdditionalAccounts(ctx, req.(*LinkAdditionalAccountsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Account_ServiceDesc is the grpc.ServiceDesc for Account service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -144,6 +184,10 @@ var Account_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetTokenAccountInfos",
 			Handler:    _Account_GetTokenAccountInfos_Handler,
+		},
+		{
+			MethodName: "LinkAdditionalAccounts",
+			Handler:    _Account_LinkAdditionalAccounts_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

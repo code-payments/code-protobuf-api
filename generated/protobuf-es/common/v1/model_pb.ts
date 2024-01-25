@@ -84,9 +84,9 @@ export enum AccountType {
   RELATIONSHIP = 13,
 
   /**
-   * @generated from enum value: SWAP_ACCOUNT = 14;
+   * @generated from enum value: SWAP = 14;
    */
-  SWAP_ACCOUNT = 14,
+  SWAP = 14,
 }
 // Retrieve enum metadata with: proto3.getEnumType(AccountType)
 proto3.util.setEnumType(AccountType, "code.common.v1.AccountType", [
@@ -104,7 +104,7 @@ proto3.util.setEnumType(AccountType, "code.common.v1.AccountType", [
   { no: 11, name: "LEGACY_PRIMARY_2022" },
   { no: 12, name: "REMOTE_SEND_GIFT_CARD" },
   { no: 13, name: "RELATIONSHIP" },
-  { no: 14, name: "SWAP_ACCOUNT" },
+  { no: 14, name: "SWAP" },
 ]);
 
 /**
