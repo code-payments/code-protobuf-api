@@ -446,7 +446,7 @@ message SwapResponse {
     oneof response {
         option (validate.required) = true;
 
-        ServerParameters server_paramenters = 1;
+        ServerParameters server_parameters  = 1;
         Success          success            = 2;
         Error            error              = 3;
     }

@@ -1598,10 +1598,10 @@ export class SwapResponse extends Message<SwapResponse> {
    */
   response: {
     /**
-     * @generated from field: code.transaction.v2.SwapResponse.ServerParameters server_paramenters = 1;
+     * @generated from field: code.transaction.v2.SwapResponse.ServerParameters server_parameters = 1;
      */
     value: SwapResponse_ServerParameters;
-    case: "serverParamenters";
+    case: "serverParameters";
   } | {
     /**
      * @generated from field: code.transaction.v2.SwapResponse.Success success = 2;
@@ -1624,7 +1624,7 @@ export class SwapResponse extends Message<SwapResponse> {
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "code.transaction.v2.SwapResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "server_paramenters", kind: "message", T: SwapResponse_ServerParameters, oneof: "response" },
+    { no: 1, name: "server_parameters", kind: "message", T: SwapResponse_ServerParameters, oneof: "response" },
     { no: 2, name: "success", kind: "message", T: SwapResponse_Success, oneof: "response" },
     { no: 3, name: "error", kind: "message", T: SwapResponse_Error, oneof: "response" },
   ]);
