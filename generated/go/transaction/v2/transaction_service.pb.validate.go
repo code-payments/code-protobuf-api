@@ -1670,12 +1670,12 @@ func (m *SwapResponse) Validate() error {
 
 	switch m.Response.(type) {
 
-	case *SwapResponse_ServerParamenters:
+	case *SwapResponse_ServerParameters_:
 
-		if v, ok := interface{}(m.GetServerParamenters()).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(m.GetServerParameters()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return SwapResponseValidationError{
-					field:  "ServerParamenters",
+					field:  "ServerParameters",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
