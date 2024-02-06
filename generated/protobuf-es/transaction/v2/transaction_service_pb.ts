@@ -2105,11 +2105,20 @@ export class OpenAccountsMetadata extends Message<OpenAccountsMetadata> {
  *   TemporaryPrivacyExchangeAction(BUCKET_X_KIN, BUCKET_X_KIN, multiple * bucketSize),
  *   TemporaryPrivacyTransferAction(BUCKET_X_KIN, TEMPORARY_OUTGOING[index], multiple * bucketSize),
  *
- *   // Section 2: Rotate TEMPORARY_OUTGOING account
+ *   // Section 2: Fee payments
+ *
+ *   // Hard-coded Code $0.01 USD fee to a dynamic fee account
+ *   FeePayment(TEMPORARY_OUTGOING[index], codeFeeAccount, $0.01 USD of Kin),
+ *
+ *   // Additional fees, exactly as specified in the original payment request
+ *   FeePayment(TEMPORARY_OUTGOING[index], additionalFeeAccount0, additionalFeeQuarks0),
+ *   ...
+ *   FeePayment(TEMPORARY_OUTGOING[index], additionalFeeAccountN, additionalFeeQuarksN),
+ *
+ *   // Section 3: Rotate TEMPORARY_OUTGOING account
  *
  *   // Below must appear last in this exact order
- *   FeePayment(TEMPORARY_OUTGOING[index], feeAccount, $0.01 USD of Kin),
- *   NoPrivacyWithdrawAction(TEMPORARY_OUTGOING[index], destination, ExchangeData.Quarks - $0.01 USD of Kin),
+ *   NoPrivacyWithdrawAction(TEMPORARY_OUTGOING[index], destination, ExchangeData.Quarks - $0.01 USD of Kin - additionalFeeQuarks0 - ... - additionalFeeQuarksN),
  *   OpenAccountAction(TEMPORARY_OUTGOING[index + 1]),
  *   CloseDormantAccount(TEMPORARY_OUTGOING[index + 1]),
  * ]
@@ -3270,14 +3279,19 @@ export class PermanentPrivacyUpgradeAction extends Message<PermanentPrivacyUpgra
  *    3. timelock::TransferWithAuthority (source -> fee account)
  *  Client Signature Required: Yes
  *
- * Note: This is exactly a NoPrivacyTransferAction, except the destination
- *       account is controlled by Code and provided in a server parameter.
- * Note: The fee amount is hardcoded at the client and validated by server.
- *       Currently, its set to $0.01 USD.
+ * Note: This is exactly a NoPrivacyTransferAction, but with specialized metadata
+ *       for fees.
  *
  * @generated from message code.transaction.v2.FeePaymentAction
  */
 export class FeePaymentAction extends Message<FeePaymentAction> {
+  /**
+   * The type of fee being operated on
+   *
+   * @generated from field: code.transaction.v2.FeePaymentAction.FeeType type = 4;
+   */
+  type = FeePaymentAction_FeeType.CODE;
+
   /**
    * The public key of the private key that has authority over source
    *
@@ -3299,6 +3313,14 @@ export class FeePaymentAction extends Message<FeePaymentAction> {
    */
   amount = protoInt64.zero;
 
+  /**
+   * The destination where the fee payment is being made for fees outside of
+   * Code.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId destination = 5;
+   */
+  destination?: SolanaAccountId;
+
   constructor(data?: PartialMessage<FeePaymentAction>) {
     super();
     proto3.util.initPartial(data, this);
@@ -3307,9 +3329,11 @@ export class FeePaymentAction extends Message<FeePaymentAction> {
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "code.transaction.v2.FeePaymentAction";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 4, name: "type", kind: "enum", T: proto3.getEnumType(FeePaymentAction_FeeType) },
     { no: 1, name: "authority", kind: "message", T: SolanaAccountId },
     { no: 2, name: "source", kind: "message", T: SolanaAccountId },
     { no: 3, name: "amount", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+    { no: 5, name: "destination", kind: "message", T: SolanaAccountId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): FeePaymentAction {
@@ -3328,6 +3352,30 @@ export class FeePaymentAction extends Message<FeePaymentAction> {
     return proto3.util.equals(FeePaymentAction, a, b);
   }
 }
+
+/**
+ * @generated from enum code.transaction.v2.FeePaymentAction.FeeType
+ */
+export enum FeePaymentAction_FeeType {
+  /**
+   * Hardcoded $0.01 USD fee to a dynamic fee account specified by server
+   *
+   * @generated from enum value: CODE = 0;
+   */
+  CODE = 0,
+
+  /**
+   * Third party fee specified at time of payment request
+   *
+   * @generated from enum value: THIRD_PARTY = 1;
+   */
+  THIRD_PARTY = 1,
+}
+// Retrieve enum metadata with: proto3.getEnumType(FeePaymentAction_FeeType)
+proto3.util.setEnumType(FeePaymentAction_FeeType, "code.transaction.v2.FeePaymentAction.FeeType", [
+  { no: 0, name: "CODE" },
+  { no: 1, name: "THIRD_PARTY" },
+]);
 
 /**
  * ServerParameter are a set of parameters known and returned by server that
@@ -3846,11 +3894,12 @@ export class PermanentPrivacyUpgradeServerParameter extends Message<PermanentPri
  */
 export class FeePaymentServerParameter extends Message<FeePaymentServerParameter> {
   /**
-   * The destination account where the fee payment should be sent.
+   * The destination account where Code fee payments should be sent. This will
+   * only be set when the corresponding FeePaymentAction Type is CODE.
    *
-   * @generated from field: code.common.v1.SolanaAccountId destination = 1;
+   * @generated from field: code.common.v1.SolanaAccountId code_destination = 1;
    */
-  destination?: SolanaAccountId;
+  codeDestination?: SolanaAccountId;
 
   constructor(data?: PartialMessage<FeePaymentServerParameter>) {
     super();
@@ -3860,7 +3909,7 @@ export class FeePaymentServerParameter extends Message<FeePaymentServerParameter
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "code.transaction.v2.FeePaymentServerParameter";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "destination", kind: "message", T: SolanaAccountId },
+    { no: 1, name: "code_destination", kind: "message", T: SolanaAccountId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): FeePaymentServerParameter {

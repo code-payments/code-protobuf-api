@@ -3818,6 +3818,8 @@ func (m *FeePaymentAction) Validate() error {
 		return nil
 	}
 
+	// no validation rules for Type
+
 	if m.GetAuthority() == nil {
 		return FeePaymentActionValidationError{
 			field:  "Authority",
@@ -3856,6 +3858,16 @@ func (m *FeePaymentAction) Validate() error {
 		return FeePaymentActionValidationError{
 			field:  "Amount",
 			reason: "value must be greater than 0",
+		}
+	}
+
+	if v, ok := interface{}(m.GetDestination()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return FeePaymentActionValidationError{
+				field:  "Destination",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
 	}
 
@@ -4940,17 +4952,10 @@ func (m *FeePaymentServerParameter) Validate() error {
 		return nil
 	}
 
-	if m.GetDestination() == nil {
-		return FeePaymentServerParameterValidationError{
-			field:  "Destination",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetDestination()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetCodeDestination()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return FeePaymentServerParameterValidationError{
-				field:  "Destination",
+				field:  "CodeDestination",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
