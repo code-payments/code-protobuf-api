@@ -1297,6 +1297,13 @@ message ExchangeDataWithoutRate {
     double native_amount = 2 [(validate.rules).double.gt = 0];
 }
 
+message AdditionalFeePayment {
+    // Destination Kin token account where the fee payment will be made
+    common.v1.SolanaAccountId destination = 1 [(validate.rules).message.required = true];
+
+    // todo: how do we want to define the split
+}
+
 message RemainingSendLimit {
     // Remaining limit to apply on the next transaction
     float next_transaction = 1;

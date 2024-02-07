@@ -4500,6 +4500,45 @@ export class ExchangeDataWithoutRate extends Message<ExchangeDataWithoutRate> {
 }
 
 /**
+ * @generated from message code.transaction.v2.AdditionalFeePayment
+ */
+export class AdditionalFeePayment extends Message<AdditionalFeePayment> {
+  /**
+   * Destination Kin token account where the fee payment will be made
+   *
+   * @generated from field: code.common.v1.SolanaAccountId destination = 1;
+   */
+  destination?: SolanaAccountId;
+
+  constructor(data?: PartialMessage<AdditionalFeePayment>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.transaction.v2.AdditionalFeePayment";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "destination", kind: "message", T: SolanaAccountId },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): AdditionalFeePayment {
+    return new AdditionalFeePayment().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): AdditionalFeePayment {
+    return new AdditionalFeePayment().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): AdditionalFeePayment {
+    return new AdditionalFeePayment().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: AdditionalFeePayment | PlainMessage<AdditionalFeePayment> | undefined, b: AdditionalFeePayment | PlainMessage<AdditionalFeePayment> | undefined): boolean {
+    return proto3.util.equals(AdditionalFeePayment, a, b);
+  }
+}
+
+/**
  * @generated from message code.transaction.v2.RemainingSendLimit
  */
 export class RemainingSendLimit extends Message<RemainingSendLimit> {

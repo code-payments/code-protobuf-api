@@ -5732,6 +5732,90 @@ var _ interface {
 
 var _ExchangeDataWithoutRate_Currency_Pattern = regexp.MustCompile("^[a-z]{3}$")
 
+// Validate checks the field values on AdditionalFeePayment with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *AdditionalFeePayment) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetDestination() == nil {
+		return AdditionalFeePaymentValidationError{
+			field:  "Destination",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetDestination()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return AdditionalFeePaymentValidationError{
+				field:  "Destination",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// AdditionalFeePaymentValidationError is the validation error returned by
+// AdditionalFeePayment.Validate if the designated constraints aren't met.
+type AdditionalFeePaymentValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AdditionalFeePaymentValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AdditionalFeePaymentValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AdditionalFeePaymentValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AdditionalFeePaymentValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AdditionalFeePaymentValidationError) ErrorName() string {
+	return "AdditionalFeePaymentValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e AdditionalFeePaymentValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAdditionalFeePayment.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AdditionalFeePaymentValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AdditionalFeePaymentValidationError{}
+
 // Validate checks the field values on RemainingSendLimit with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
