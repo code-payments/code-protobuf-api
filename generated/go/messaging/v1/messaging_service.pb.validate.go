@@ -1278,6 +1278,28 @@ func (m *RequestToReceiveBill) Validate() error {
 		}
 	}
 
+	if len(m.GetAdditionalFees()) > 3 {
+		return RequestToReceiveBillValidationError{
+			field:  "AdditionalFees",
+			reason: "value must contain no more than 3 item(s)",
+		}
+	}
+
+	for idx, item := range m.GetAdditionalFees() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return RequestToReceiveBillValidationError{
+					field:  fmt.Sprintf("AdditionalFees[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
 	switch m.ExchangeData.(type) {
 
 	case *RequestToReceiveBill_Exact:

@@ -890,6 +890,9 @@ type RequestToReceiveBill struct {
 	Signature *v1.Signature `protobuf:"bytes,6,opt,name=signature,proto3" json:"signature,omitempty"`
 	// Rendezvous key to avoid replay attacks
 	RendezvousKey *RendezvousKey `protobuf:"bytes,7,opt,name=rendezvous_key,json=rendezvousKey,proto3" json:"rendezvous_key,omitempty"`
+	// Additional fee payments splitting the requested amount. This is in addition
+	// to the hard-coded Code $0.01 USD fee.
+	AdditionalFees []*v2.AdditionalFeePayment `protobuf:"bytes,8,rep,name=additional_fees,json=additionalFees,proto3" json:"additional_fees,omitempty"`
 }
 
 func (x *RequestToReceiveBill) Reset() {
@@ -976,6 +979,13 @@ func (x *RequestToReceiveBill) GetSignature() *v1.Signature {
 func (x *RequestToReceiveBill) GetRendezvousKey() *RendezvousKey {
 	if x != nil {
 		return x.RendezvousKey
+	}
+	return nil
+}
+
+func (x *RequestToReceiveBill) GetAdditionalFees() []*v2.AdditionalFeePayment {
+	if x != nil {
+		return x.AdditionalFees
 	}
 	return nil
 }
@@ -1868,7 +1878,7 @@ var file_messaging_v1_messaging_service_proto_rawDesc = []byte{
 	0x6f, 0x64, 0x65, 0x2e, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x6f,
 	0x6c, 0x61, 0x6e, 0x61, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x64, 0x42, 0x0a, 0xba,
 	0xe9, 0xc0, 0x03, 0x05, 0x8a, 0x01, 0x02, 0x10, 0x01, 0x52, 0x10, 0x72, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x6f, 0x72, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0xfc, 0x03, 0x0a, 0x14,
+	0x73, 0x74, 0x6f, 0x72, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0xdc, 0x04, 0x0a, 0x14,
 	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x54, 0x6f, 0x52, 0x65, 0x63, 0x65, 0x69, 0x76, 0x65,
 	0x42, 0x69, 0x6c, 0x6c, 0x12, 0x58, 0x0a, 0x11, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x6f,
 	0x72, 0x5f, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
@@ -1899,7 +1909,13 @@ var file_messaging_v1_messaging_service_proto_rawDesc = []byte{
 	0x0b, 0x32, 0x20, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x69,
 	0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x6e, 0x64, 0x65, 0x7a, 0x76, 0x6f, 0x75, 0x73,
 	0x4b, 0x65, 0x79, 0x52, 0x0d, 0x72, 0x65, 0x6e, 0x64, 0x65, 0x7a, 0x76, 0x6f, 0x75, 0x73, 0x4b,
-	0x65, 0x79, 0x42, 0x16, 0x0a, 0x0d, 0x65, 0x78, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x5f, 0x64,
+	0x65, 0x79, 0x12, 0x5e, 0x0a, 0x0f, 0x61, 0x64, 0x64, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x61, 0x6c,
+	0x5f, 0x66, 0x65, 0x65, 0x73, 0x18, 0x08, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x63, 0x6f,
+	0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76,
+	0x32, 0x2e, 0x41, 0x64, 0x64, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x61, 0x6c, 0x46, 0x65, 0x65, 0x50,
+	0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x42, 0x0a, 0xba, 0xe9, 0xc0, 0x03, 0x05, 0x92, 0x01, 0x02,
+	0x10, 0x03, 0x52, 0x0e, 0x61, 0x64, 0x64, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x61, 0x6c, 0x46, 0x65,
+	0x65, 0x73, 0x42, 0x16, 0x0a, 0x0d, 0x65, 0x78, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x5f, 0x64,
 	0x61, 0x74, 0x61, 0x12, 0x05, 0xb8, 0xe9, 0xc0, 0x03, 0x01, 0x22, 0x53, 0x0a, 0x0b, 0x43, 0x6f,
 	0x64, 0x65, 0x53, 0x63, 0x61, 0x6e, 0x6e, 0x65, 0x64, 0x12, 0x44, 0x0a, 0x09, 0x74, 0x69, 0x6d,
 	0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67,
@@ -2136,11 +2152,12 @@ var file_messaging_v1_messaging_service_proto_goTypes = []interface{}{
 	(*v2.ExchangeData)(nil),                        // 28: code.transaction.v2.ExchangeData
 	(*v2.ExchangeDataWithoutRate)(nil),             // 29: code.transaction.v2.ExchangeDataWithoutRate
 	(*v1.Domain)(nil),                              // 30: code.common.v1.Domain
-	(*timestamppb.Timestamp)(nil),                  // 31: google.protobuf.Timestamp
-	(*v1.IntentId)(nil),                            // 32: code.common.v1.IntentId
-	(*v2.Metadata)(nil),                            // 33: code.transaction.v2.Metadata
-	(v2.AirdropType)(0),                            // 34: code.transaction.v2.AirdropType
-	(*durationpb.Duration)(nil),                    // 35: google.protobuf.Duration
+	(*v2.AdditionalFeePayment)(nil),                // 31: code.transaction.v2.AdditionalFeePayment
+	(*timestamppb.Timestamp)(nil),                  // 32: google.protobuf.Timestamp
+	(*v1.IntentId)(nil),                            // 33: code.common.v1.IntentId
+	(*v2.Metadata)(nil),                            // 34: code.transaction.v2.Metadata
+	(v2.AirdropType)(0),                            // 35: code.transaction.v2.AirdropType
+	(*durationpb.Duration)(nil),                    // 36: google.protobuf.Duration
 }
 var file_messaging_v1_messaging_service_proto_depIdxs = []int32{
 	12, // 0: code.messaging.v1.OpenMessageStreamRequest.rendezvous_key:type_name -> code.messaging.v1.RendezvousKey
@@ -2169,48 +2186,49 @@ var file_messaging_v1_messaging_service_proto_depIdxs = []int32{
 	27, // 23: code.messaging.v1.RequestToReceiveBill.verifier:type_name -> code.common.v1.SolanaAccountId
 	26, // 24: code.messaging.v1.RequestToReceiveBill.signature:type_name -> code.common.v1.Signature
 	12, // 25: code.messaging.v1.RequestToReceiveBill.rendezvous_key:type_name -> code.messaging.v1.RendezvousKey
-	31, // 26: code.messaging.v1.CodeScanned.timestamp:type_name -> google.protobuf.Timestamp
-	32, // 27: code.messaging.v1.ClientRejectedPayment.intent_id:type_name -> code.common.v1.IntentId
-	32, // 28: code.messaging.v1.IntentSubmitted.intent_id:type_name -> code.common.v1.IntentId
-	33, // 29: code.messaging.v1.IntentSubmitted.metadata:type_name -> code.transaction.v2.Metadata
-	31, // 30: code.messaging.v1.WebhookCalled.timestamp:type_name -> google.protobuf.Timestamp
-	30, // 31: code.messaging.v1.RequestToLogin.domain:type_name -> code.common.v1.Domain
-	27, // 32: code.messaging.v1.RequestToLogin.verifier:type_name -> code.common.v1.SolanaAccountId
-	26, // 33: code.messaging.v1.RequestToLogin.signature:type_name -> code.common.v1.Signature
-	12, // 34: code.messaging.v1.RequestToLogin.rendezvous_key:type_name -> code.messaging.v1.RendezvousKey
-	31, // 35: code.messaging.v1.ClientRejectedLogin.timestamp:type_name -> google.protobuf.Timestamp
-	34, // 36: code.messaging.v1.AirdropReceived.airdrop_type:type_name -> code.transaction.v2.AirdropType
-	28, // 37: code.messaging.v1.AirdropReceived.exchange_data:type_name -> code.transaction.v2.ExchangeData
-	31, // 38: code.messaging.v1.AirdropReceived.timestamp:type_name -> google.protobuf.Timestamp
-	13, // 39: code.messaging.v1.Message.id:type_name -> code.messaging.v1.MessageId
-	26, // 40: code.messaging.v1.Message.send_message_request_signature:type_name -> code.common.v1.Signature
-	14, // 41: code.messaging.v1.Message.request_to_grab_bill:type_name -> code.messaging.v1.RequestToGrabBill
-	15, // 42: code.messaging.v1.Message.request_to_receive_bill:type_name -> code.messaging.v1.RequestToReceiveBill
-	16, // 43: code.messaging.v1.Message.code_scanned:type_name -> code.messaging.v1.CodeScanned
-	17, // 44: code.messaging.v1.Message.client_rejected_payment:type_name -> code.messaging.v1.ClientRejectedPayment
-	18, // 45: code.messaging.v1.Message.intent_submitted:type_name -> code.messaging.v1.IntentSubmitted
-	19, // 46: code.messaging.v1.Message.webhook_called:type_name -> code.messaging.v1.WebhookCalled
-	20, // 47: code.messaging.v1.Message.request_to_login:type_name -> code.messaging.v1.RequestToLogin
-	21, // 48: code.messaging.v1.Message.client_rejected_login:type_name -> code.messaging.v1.ClientRejectedLogin
-	22, // 49: code.messaging.v1.Message.airdrop_received:type_name -> code.messaging.v1.AirdropReceived
-	31, // 50: code.messaging.v1.ServerPing.timestamp:type_name -> google.protobuf.Timestamp
-	35, // 51: code.messaging.v1.ServerPing.ping_delay:type_name -> google.protobuf.Duration
-	31, // 52: code.messaging.v1.ClientPong.timestamp:type_name -> google.protobuf.Timestamp
-	2,  // 53: code.messaging.v1.Messaging.OpenMessageStream:input_type -> code.messaging.v1.OpenMessageStreamRequest
-	4,  // 54: code.messaging.v1.Messaging.OpenMessageStreamWithKeepAlive:input_type -> code.messaging.v1.OpenMessageStreamWithKeepAliveRequest
-	6,  // 55: code.messaging.v1.Messaging.PollMessages:input_type -> code.messaging.v1.PollMessagesRequest
-	8,  // 56: code.messaging.v1.Messaging.AckMessages:input_type -> code.messaging.v1.AckMessagesRequest
-	10, // 57: code.messaging.v1.Messaging.SendMessage:input_type -> code.messaging.v1.SendMessageRequest
-	3,  // 58: code.messaging.v1.Messaging.OpenMessageStream:output_type -> code.messaging.v1.OpenMessageStreamResponse
-	5,  // 59: code.messaging.v1.Messaging.OpenMessageStreamWithKeepAlive:output_type -> code.messaging.v1.OpenMessageStreamWithKeepAliveResponse
-	7,  // 60: code.messaging.v1.Messaging.PollMessages:output_type -> code.messaging.v1.PollMessagesResponse
-	9,  // 61: code.messaging.v1.Messaging.AckMessages:output_type -> code.messaging.v1.AckMesssagesResponse
-	11, // 62: code.messaging.v1.Messaging.SendMessage:output_type -> code.messaging.v1.SendMessageResponse
-	58, // [58:63] is the sub-list for method output_type
-	53, // [53:58] is the sub-list for method input_type
-	53, // [53:53] is the sub-list for extension type_name
-	53, // [53:53] is the sub-list for extension extendee
-	0,  // [0:53] is the sub-list for field type_name
+	31, // 26: code.messaging.v1.RequestToReceiveBill.additional_fees:type_name -> code.transaction.v2.AdditionalFeePayment
+	32, // 27: code.messaging.v1.CodeScanned.timestamp:type_name -> google.protobuf.Timestamp
+	33, // 28: code.messaging.v1.ClientRejectedPayment.intent_id:type_name -> code.common.v1.IntentId
+	33, // 29: code.messaging.v1.IntentSubmitted.intent_id:type_name -> code.common.v1.IntentId
+	34, // 30: code.messaging.v1.IntentSubmitted.metadata:type_name -> code.transaction.v2.Metadata
+	32, // 31: code.messaging.v1.WebhookCalled.timestamp:type_name -> google.protobuf.Timestamp
+	30, // 32: code.messaging.v1.RequestToLogin.domain:type_name -> code.common.v1.Domain
+	27, // 33: code.messaging.v1.RequestToLogin.verifier:type_name -> code.common.v1.SolanaAccountId
+	26, // 34: code.messaging.v1.RequestToLogin.signature:type_name -> code.common.v1.Signature
+	12, // 35: code.messaging.v1.RequestToLogin.rendezvous_key:type_name -> code.messaging.v1.RendezvousKey
+	32, // 36: code.messaging.v1.ClientRejectedLogin.timestamp:type_name -> google.protobuf.Timestamp
+	35, // 37: code.messaging.v1.AirdropReceived.airdrop_type:type_name -> code.transaction.v2.AirdropType
+	28, // 38: code.messaging.v1.AirdropReceived.exchange_data:type_name -> code.transaction.v2.ExchangeData
+	32, // 39: code.messaging.v1.AirdropReceived.timestamp:type_name -> google.protobuf.Timestamp
+	13, // 40: code.messaging.v1.Message.id:type_name -> code.messaging.v1.MessageId
+	26, // 41: code.messaging.v1.Message.send_message_request_signature:type_name -> code.common.v1.Signature
+	14, // 42: code.messaging.v1.Message.request_to_grab_bill:type_name -> code.messaging.v1.RequestToGrabBill
+	15, // 43: code.messaging.v1.Message.request_to_receive_bill:type_name -> code.messaging.v1.RequestToReceiveBill
+	16, // 44: code.messaging.v1.Message.code_scanned:type_name -> code.messaging.v1.CodeScanned
+	17, // 45: code.messaging.v1.Message.client_rejected_payment:type_name -> code.messaging.v1.ClientRejectedPayment
+	18, // 46: code.messaging.v1.Message.intent_submitted:type_name -> code.messaging.v1.IntentSubmitted
+	19, // 47: code.messaging.v1.Message.webhook_called:type_name -> code.messaging.v1.WebhookCalled
+	20, // 48: code.messaging.v1.Message.request_to_login:type_name -> code.messaging.v1.RequestToLogin
+	21, // 49: code.messaging.v1.Message.client_rejected_login:type_name -> code.messaging.v1.ClientRejectedLogin
+	22, // 50: code.messaging.v1.Message.airdrop_received:type_name -> code.messaging.v1.AirdropReceived
+	32, // 51: code.messaging.v1.ServerPing.timestamp:type_name -> google.protobuf.Timestamp
+	36, // 52: code.messaging.v1.ServerPing.ping_delay:type_name -> google.protobuf.Duration
+	32, // 53: code.messaging.v1.ClientPong.timestamp:type_name -> google.protobuf.Timestamp
+	2,  // 54: code.messaging.v1.Messaging.OpenMessageStream:input_type -> code.messaging.v1.OpenMessageStreamRequest
+	4,  // 55: code.messaging.v1.Messaging.OpenMessageStreamWithKeepAlive:input_type -> code.messaging.v1.OpenMessageStreamWithKeepAliveRequest
+	6,  // 56: code.messaging.v1.Messaging.PollMessages:input_type -> code.messaging.v1.PollMessagesRequest
+	8,  // 57: code.messaging.v1.Messaging.AckMessages:input_type -> code.messaging.v1.AckMessagesRequest
+	10, // 58: code.messaging.v1.Messaging.SendMessage:input_type -> code.messaging.v1.SendMessageRequest
+	3,  // 59: code.messaging.v1.Messaging.OpenMessageStream:output_type -> code.messaging.v1.OpenMessageStreamResponse
+	5,  // 60: code.messaging.v1.Messaging.OpenMessageStreamWithKeepAlive:output_type -> code.messaging.v1.OpenMessageStreamWithKeepAliveResponse
+	7,  // 61: code.messaging.v1.Messaging.PollMessages:output_type -> code.messaging.v1.PollMessagesResponse
+	9,  // 62: code.messaging.v1.Messaging.AckMessages:output_type -> code.messaging.v1.AckMesssagesResponse
+	11, // 63: code.messaging.v1.Messaging.SendMessage:output_type -> code.messaging.v1.SendMessageResponse
+	59, // [59:64] is the sub-list for method output_type
+	54, // [54:59] is the sub-list for method input_type
+	54, // [54:54] is the sub-list for extension type_name
+	54, // [54:54] is the sub-list for extension extendee
+	0,  // [0:54] is the sub-list for field type_name
 }
 
 func init() { file_messaging_v1_messaging_service_proto_init() }
