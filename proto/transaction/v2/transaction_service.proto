@@ -1301,7 +1301,11 @@ message AdditionalFeePayment {
     // Destination Kin token account where the fee payment will be made
     common.v1.SolanaAccountId destination = 1 [(validate.rules).message.required = true];
 
-    // todo: how do we want to define the split
+    // Fee percentage, in basis points, of the total quark amount of a payment.
+    uint32 fee_bps = 2 [(validate.rules).uint32 = {
+        gt: 0,
+        lte: 10000,
+    }];
 }
 
 message RemainingSendLimit {

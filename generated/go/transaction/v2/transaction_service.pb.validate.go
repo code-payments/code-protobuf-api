@@ -5757,6 +5757,13 @@ func (m *AdditionalFeePayment) Validate() error {
 		}
 	}
 
+	if val := m.GetFeeBps(); val <= 0 || val > 10000 {
+		return AdditionalFeePaymentValidationError{
+			field:  "FeeBps",
+			reason: "value must be inside range (0, 10000]",
+		}
+	}
+
 	return nil
 }
 

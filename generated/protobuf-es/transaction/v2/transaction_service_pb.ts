@@ -4510,6 +4510,13 @@ export class AdditionalFeePayment extends Message<AdditionalFeePayment> {
    */
   destination?: SolanaAccountId;
 
+  /**
+   * Fee percentage, in basis points, of the total quark amount of a payment.
+   *
+   * @generated from field: uint32 fee_bps = 2;
+   */
+  feeBps = 0;
+
   constructor(data?: PartialMessage<AdditionalFeePayment>) {
     super();
     proto3.util.initPartial(data, this);
@@ -4519,6 +4526,7 @@ export class AdditionalFeePayment extends Message<AdditionalFeePayment> {
   static readonly typeName = "code.transaction.v2.AdditionalFeePayment";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "destination", kind: "message", T: SolanaAccountId },
+    { no: 2, name: "fee_bps", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): AdditionalFeePayment {
