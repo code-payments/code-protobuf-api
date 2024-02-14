@@ -298,8 +298,8 @@ message GetLimitsResponse {
         OK = 0;
     }
 
-    // Remaining send limits keyed by currency
-    map<string, RemainingSendLimit> remaining_send_limits_by_currency = 2;
+    // Send limits keyed by currency
+    map<string, SendLimit> send_limits_by_currency = 2;
 
     // Deposit limits
     DepositLimit deposit_limit = 3;
@@ -1308,9 +1308,15 @@ message AdditionalFeePayment {
     }];
 }
 
-message RemainingSendLimit {
+message SendLimit {
     // Remaining limit to apply on the next transaction
     float next_transaction = 1;
+
+    // Maximum allowed on a per-transaction basis
+    float max_per_transaction = 2;
+
+    // Maximum allowed on a per-day basis
+    float max_per_day = 3;
 }
 
 message DepositLimit {

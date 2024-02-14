@@ -930,7 +930,7 @@ func (m *GetLimitsResponse) Validate() error {
 
 	// no validation rules for Result
 
-	// no validation rules for RemainingSendLimitsByCurrency
+	// no validation rules for SendLimitsByCurrency
 
 	if v, ok := interface{}(m.GetDepositLimit()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
@@ -5823,22 +5823,25 @@ var _ interface {
 	ErrorName() string
 } = AdditionalFeePaymentValidationError{}
 
-// Validate checks the field values on RemainingSendLimit with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *RemainingSendLimit) Validate() error {
+// Validate checks the field values on SendLimit with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *SendLimit) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	// no validation rules for NextTransaction
 
+	// no validation rules for MaxPerTransaction
+
+	// no validation rules for MaxPerDay
+
 	return nil
 }
 
-// RemainingSendLimitValidationError is the validation error returned by
-// RemainingSendLimit.Validate if the designated constraints aren't met.
-type RemainingSendLimitValidationError struct {
+// SendLimitValidationError is the validation error returned by
+// SendLimit.Validate if the designated constraints aren't met.
+type SendLimitValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -5846,24 +5849,22 @@ type RemainingSendLimitValidationError struct {
 }
 
 // Field function returns field value.
-func (e RemainingSendLimitValidationError) Field() string { return e.field }
+func (e SendLimitValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e RemainingSendLimitValidationError) Reason() string { return e.reason }
+func (e SendLimitValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e RemainingSendLimitValidationError) Cause() error { return e.cause }
+func (e SendLimitValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e RemainingSendLimitValidationError) Key() bool { return e.key }
+func (e SendLimitValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e RemainingSendLimitValidationError) ErrorName() string {
-	return "RemainingSendLimitValidationError"
-}
+func (e SendLimitValidationError) ErrorName() string { return "SendLimitValidationError" }
 
 // Error satisfies the builtin error interface
-func (e RemainingSendLimitValidationError) Error() string {
+func (e SendLimitValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -5875,14 +5876,14 @@ func (e RemainingSendLimitValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sRemainingSendLimit.%s: %s%s",
+		"invalid %sSendLimit.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = RemainingSendLimitValidationError{}
+var _ error = SendLimitValidationError{}
 
 var _ interface {
 	Field() string
@@ -5890,7 +5891,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = RemainingSendLimitValidationError{}
+} = SendLimitValidationError{}
 
 // Validate checks the field values on DepositLimit with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
