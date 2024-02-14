@@ -932,11 +932,11 @@ export class GetLimitsResponse extends Message<GetLimitsResponse> {
   result = GetLimitsResponse_Result.OK;
 
   /**
-   * Remaining send limits keyed by currency
+   * Send limits keyed by currency
    *
-   * @generated from field: map<string, code.transaction.v2.RemainingSendLimit> remaining_send_limits_by_currency = 2;
+   * @generated from field: map<string, code.transaction.v2.SendLimit> send_limits_by_currency = 2;
    */
-  remainingSendLimitsByCurrency: { [key: string]: RemainingSendLimit } = {};
+  sendLimitsByCurrency: { [key: string]: SendLimit } = {};
 
   /**
    * Deposit limits
@@ -961,7 +961,7 @@ export class GetLimitsResponse extends Message<GetLimitsResponse> {
   static readonly typeName = "code.transaction.v2.GetLimitsResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "result", kind: "enum", T: proto3.getEnumType(GetLimitsResponse_Result) },
-    { no: 2, name: "remaining_send_limits_by_currency", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: RemainingSendLimit} },
+    { no: 2, name: "send_limits_by_currency", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: SendLimit} },
     { no: 3, name: "deposit_limit", kind: "message", T: DepositLimit },
     { no: 4, name: "micro_payment_limits_by_currency", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: MicroPaymentLimit} },
   ]);
@@ -4547,9 +4547,9 @@ export class AdditionalFeePayment extends Message<AdditionalFeePayment> {
 }
 
 /**
- * @generated from message code.transaction.v2.RemainingSendLimit
+ * @generated from message code.transaction.v2.SendLimit
  */
-export class RemainingSendLimit extends Message<RemainingSendLimit> {
+export class SendLimit extends Message<SendLimit> {
   /**
    * Remaining limit to apply on the next transaction
    *
@@ -4557,31 +4557,47 @@ export class RemainingSendLimit extends Message<RemainingSendLimit> {
    */
   nextTransaction = 0;
 
-  constructor(data?: PartialMessage<RemainingSendLimit>) {
+  /**
+   * Maximum allowed on a per-transaction basis
+   *
+   * @generated from field: float max_per_transaction = 2;
+   */
+  maxPerTransaction = 0;
+
+  /**
+   * Maximum allowed on a per-day basis
+   *
+   * @generated from field: float max_per_day = 3;
+   */
+  maxPerDay = 0;
+
+  constructor(data?: PartialMessage<SendLimit>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.RemainingSendLimit";
+  static readonly typeName = "code.transaction.v2.SendLimit";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "next_transaction", kind: "scalar", T: 2 /* ScalarType.FLOAT */ },
+    { no: 2, name: "max_per_transaction", kind: "scalar", T: 2 /* ScalarType.FLOAT */ },
+    { no: 3, name: "max_per_day", kind: "scalar", T: 2 /* ScalarType.FLOAT */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RemainingSendLimit {
-    return new RemainingSendLimit().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SendLimit {
+    return new SendLimit().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): RemainingSendLimit {
-    return new RemainingSendLimit().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SendLimit {
+    return new SendLimit().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): RemainingSendLimit {
-    return new RemainingSendLimit().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SendLimit {
+    return new SendLimit().fromJsonString(jsonString, options);
   }
 
-  static equals(a: RemainingSendLimit | PlainMessage<RemainingSendLimit> | undefined, b: RemainingSendLimit | PlainMessage<RemainingSendLimit> | undefined): boolean {
-    return proto3.util.equals(RemainingSendLimit, a, b);
+  static equals(a: SendLimit | PlainMessage<SendLimit> | undefined, b: SendLimit | PlainMessage<SendLimit> | undefined): boolean {
+    return proto3.util.equals(SendLimit, a, b);
   }
 }
 
