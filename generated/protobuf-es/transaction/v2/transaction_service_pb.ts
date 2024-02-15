@@ -1986,6 +1986,11 @@ export class DeclareFiatOnrampAttemptRequest extends Message<DeclareFiatOnrampAt
  * @generated from message code.transaction.v2.DeclareFiatOnrampAttemptResponse
  */
 export class DeclareFiatOnrampAttemptResponse extends Message<DeclareFiatOnrampAttemptResponse> {
+  /**
+   * @generated from field: code.transaction.v2.DeclareFiatOnrampAttemptResponse.Result result = 1;
+   */
+  result = DeclareFiatOnrampAttemptResponse_Result.OK;
+
   constructor(data?: PartialMessage<DeclareFiatOnrampAttemptResponse>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1994,6 +1999,7 @@ export class DeclareFiatOnrampAttemptResponse extends Message<DeclareFiatOnrampA
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "code.transaction.v2.DeclareFiatOnrampAttemptResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "result", kind: "enum", T: proto3.getEnumType(DeclareFiatOnrampAttemptResponse_Result) },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DeclareFiatOnrampAttemptResponse {
