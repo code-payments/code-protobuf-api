@@ -148,6 +148,14 @@ message Hash {
     }];
 }
 
+// UUID is a 16 byte UUID value
+message UUID {
+    bytes value = 1 [(validate.rules).bytes = {
+        min_len: 16
+        max_len: 16
+    }];
+}
+
 // Request is a generic wrapper for gRPC requests
 message Request {
     string version = 1;

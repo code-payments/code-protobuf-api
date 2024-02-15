@@ -1773,6 +1773,210 @@ var _ interface {
 	ErrorName() string
 } = SwapResponseValidationError{}
 
+// Validate checks the field values on DeclareFiatOnrampAttemptRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DeclareFiatOnrampAttemptRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetOwner() == nil {
+		return DeclareFiatOnrampAttemptRequestValidationError{
+			field:  "Owner",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DeclareFiatOnrampAttemptRequestValidationError{
+				field:  "Owner",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetPurchaseAmount() == nil {
+		return DeclareFiatOnrampAttemptRequestValidationError{
+			field:  "PurchaseAmount",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetPurchaseAmount()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DeclareFiatOnrampAttemptRequestValidationError{
+				field:  "PurchaseAmount",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetNonce() == nil {
+		return DeclareFiatOnrampAttemptRequestValidationError{
+			field:  "Nonce",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetNonce()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DeclareFiatOnrampAttemptRequestValidationError{
+				field:  "Nonce",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetSignature() == nil {
+		return DeclareFiatOnrampAttemptRequestValidationError{
+			field:  "Signature",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DeclareFiatOnrampAttemptRequestValidationError{
+				field:  "Signature",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// DeclareFiatOnrampAttemptRequestValidationError is the validation error
+// returned by DeclareFiatOnrampAttemptRequest.Validate if the designated
+// constraints aren't met.
+type DeclareFiatOnrampAttemptRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeclareFiatOnrampAttemptRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeclareFiatOnrampAttemptRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeclareFiatOnrampAttemptRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeclareFiatOnrampAttemptRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeclareFiatOnrampAttemptRequestValidationError) ErrorName() string {
+	return "DeclareFiatOnrampAttemptRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DeclareFiatOnrampAttemptRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeclareFiatOnrampAttemptRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeclareFiatOnrampAttemptRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeclareFiatOnrampAttemptRequestValidationError{}
+
+// Validate checks the field values on DeclareFiatOnrampAttemptResponse with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, an error is returned.
+func (m *DeclareFiatOnrampAttemptResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// DeclareFiatOnrampAttemptResponseValidationError is the validation error
+// returned by DeclareFiatOnrampAttemptResponse.Validate if the designated
+// constraints aren't met.
+type DeclareFiatOnrampAttemptResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeclareFiatOnrampAttemptResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeclareFiatOnrampAttemptResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeclareFiatOnrampAttemptResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeclareFiatOnrampAttemptResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeclareFiatOnrampAttemptResponseValidationError) ErrorName() string {
+	return "DeclareFiatOnrampAttemptResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DeclareFiatOnrampAttemptResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeclareFiatOnrampAttemptResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeclareFiatOnrampAttemptResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeclareFiatOnrampAttemptResponseValidationError{}
+
 // Validate checks the field values on Metadata with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *Metadata) Validate() error {

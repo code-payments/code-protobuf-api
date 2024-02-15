@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { AirdropRequest, AirdropResponse, CanWithdrawToAccountRequest, CanWithdrawToAccountResponse, GetIntentMetadataRequest, GetIntentMetadataResponse, GetLimitsRequest, GetLimitsResponse, GetPaymentHistoryRequest, GetPaymentHistoryResponse, GetPrioritizedIntentsForPrivacyUpgradeRequest, GetPrioritizedIntentsForPrivacyUpgradeResponse, GetPrivacyUpgradeStatusRequest, GetPrivacyUpgradeStatusResponse, SubmitIntentRequest, SubmitIntentResponse, SwapRequest, SwapResponse } from "./transaction_service_pb";
+import { AirdropRequest, AirdropResponse, CanWithdrawToAccountRequest, CanWithdrawToAccountResponse, DeclareFiatOnrampAttemptRequest, DeclareFiatOnrampAttemptResponse, GetIntentMetadataRequest, GetIntentMetadataResponse, GetLimitsRequest, GetLimitsResponse, GetPaymentHistoryRequest, GetPaymentHistoryResponse, GetPrioritizedIntentsForPrivacyUpgradeRequest, GetPrioritizedIntentsForPrivacyUpgradeResponse, GetPrivacyUpgradeStatusRequest, GetPrivacyUpgradeStatusResponse, SubmitIntentRequest, SubmitIntentResponse, SwapRequest, SwapResponse } from "./transaction_service_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -166,6 +166,18 @@ export const Transaction = {
       I: SwapRequest,
       O: SwapResponse,
       kind: MethodKind.BiDiStreaming,
+    },
+    /**
+     * DeclareFiatOnrampAttempt is called whenever a user attempts to use a fiat
+     * onramp to buy crypto for use in Code.
+     *
+     * @generated from rpc code.transaction.v2.Transaction.DeclareFiatOnrampAttempt
+     */
+    declareFiatOnrampAttempt: {
+      name: "DeclareFiatOnrampAttempt",
+      I: DeclareFiatOnrampAttemptRequest,
+      O: DeclareFiatOnrampAttemptResponse,
+      kind: MethodKind.Unary,
     },
   }
 } as const;

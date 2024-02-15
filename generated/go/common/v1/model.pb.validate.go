@@ -1107,6 +1107,77 @@ var _ interface {
 	ErrorName() string
 } = HashValidationError{}
 
+// Validate checks the field values on UUID with the rules defined in the proto
+// definition for this message. If any rules are violated, an error is returned.
+func (m *UUID) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetValue()) != 16 {
+		return UUIDValidationError{
+			field:  "Value",
+			reason: "value length must be 16 bytes",
+		}
+	}
+
+	return nil
+}
+
+// UUIDValidationError is the validation error returned by UUID.Validate if the
+// designated constraints aren't met.
+type UUIDValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UUIDValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UUIDValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UUIDValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UUIDValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UUIDValidationError) ErrorName() string { return "UUIDValidationError" }
+
+// Error satisfies the builtin error interface
+func (e UUIDValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUUID.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UUIDValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UUIDValidationError{}
+
 // Validate checks the field values on Request with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *Request) Validate() error {
