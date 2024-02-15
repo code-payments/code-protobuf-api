@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { AirdropRequest, AirdropResponse, CanWithdrawToAccountRequest, CanWithdrawToAccountResponse, DeclareFiatOnrampAttemptRequest, DeclareFiatOnrampAttemptResponse, GetIntentMetadataRequest, GetIntentMetadataResponse, GetLimitsRequest, GetLimitsResponse, GetPaymentHistoryRequest, GetPaymentHistoryResponse, GetPrioritizedIntentsForPrivacyUpgradeRequest, GetPrioritizedIntentsForPrivacyUpgradeResponse, GetPrivacyUpgradeStatusRequest, GetPrivacyUpgradeStatusResponse, SubmitIntentRequest, SubmitIntentResponse, SwapRequest, SwapResponse } from "./transaction_service_pb";
+import { AirdropRequest, AirdropResponse, CanWithdrawToAccountRequest, CanWithdrawToAccountResponse, DeclareFiatOnrampPurchaseAttemptRequest, DeclareFiatOnrampPurchaseAttemptResponse, GetIntentMetadataRequest, GetIntentMetadataResponse, GetLimitsRequest, GetLimitsResponse, GetPaymentHistoryRequest, GetPaymentHistoryResponse, GetPrioritizedIntentsForPrivacyUpgradeRequest, GetPrioritizedIntentsForPrivacyUpgradeResponse, GetPrivacyUpgradeStatusRequest, GetPrivacyUpgradeStatusResponse, SubmitIntentRequest, SubmitIntentResponse, SwapRequest, SwapResponse } from "./transaction_service_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -168,15 +168,15 @@ export const Transaction = {
       kind: MethodKind.BiDiStreaming,
     },
     /**
-     * DeclareFiatOnrampAttempt is called whenever a user attempts to use a fiat
-     * onramp to buy crypto for use in Code.
+     * DeclareFiatOnrampPurchaseAttempt is called whenever a user attempts to use a fiat
+     * onramp to purchase crypto for use in Code.
      *
-     * @generated from rpc code.transaction.v2.Transaction.DeclareFiatOnrampAttempt
+     * @generated from rpc code.transaction.v2.Transaction.DeclareFiatOnrampPurchaseAttempt
      */
-    declareFiatOnrampAttempt: {
-      name: "DeclareFiatOnrampAttempt",
-      I: DeclareFiatOnrampAttemptRequest,
-      O: DeclareFiatOnrampAttemptResponse,
+    declareFiatOnrampPurchaseAttempt: {
+      name: "DeclareFiatOnrampPurchaseAttempt",
+      I: DeclareFiatOnrampPurchaseAttemptRequest,
+      O: DeclareFiatOnrampPurchaseAttemptResponse,
       kind: MethodKind.Unary,
     },
   }

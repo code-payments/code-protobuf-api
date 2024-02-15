@@ -1916,9 +1916,9 @@ proto3.util.setEnumType(SwapResponse_Error_Code, "code.transaction.v2.SwapRespon
 ]);
 
 /**
- * @generated from message code.transaction.v2.DeclareFiatOnrampAttemptRequest
+ * @generated from message code.transaction.v2.DeclareFiatOnrampPurchaseAttemptRequest
  */
-export class DeclareFiatOnrampAttemptRequest extends Message<DeclareFiatOnrampAttemptRequest> {
+export class DeclareFiatOnrampPurchaseAttemptRequest extends Message<DeclareFiatOnrampPurchaseAttemptRequest> {
   /**
    * The owner account invoking the buy module
    *
@@ -1943,21 +1943,21 @@ export class DeclareFiatOnrampAttemptRequest extends Message<DeclareFiatOnrampAt
   nonce?: UUID;
 
   /**
-   * The signature is of serialize(SomethingRequest) without this field set using the
-   * private key of the owner account. This provides an authentication mechanism
-   * to the RPC.
+   * The signature is of serialize(DeclareFiatOnrampPurchaseAttemptRequest) without
+   * this field set using the private key of the owner account. This provides an
+   * authentication mechanism to the RPC.
    *
    * @generated from field: code.common.v1.Signature signature = 4;
    */
   signature?: Signature;
 
-  constructor(data?: PartialMessage<DeclareFiatOnrampAttemptRequest>) {
+  constructor(data?: PartialMessage<DeclareFiatOnrampPurchaseAttemptRequest>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.DeclareFiatOnrampAttemptRequest";
+  static readonly typeName = "code.transaction.v2.DeclareFiatOnrampPurchaseAttemptRequest";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "owner", kind: "message", T: SolanaAccountId },
     { no: 2, name: "purchase_amount", kind: "message", T: ExchangeDataWithoutRate },
@@ -1965,72 +1965,96 @@ export class DeclareFiatOnrampAttemptRequest extends Message<DeclareFiatOnrampAt
     { no: 4, name: "signature", kind: "message", T: Signature },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DeclareFiatOnrampAttemptRequest {
-    return new DeclareFiatOnrampAttemptRequest().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DeclareFiatOnrampPurchaseAttemptRequest {
+    return new DeclareFiatOnrampPurchaseAttemptRequest().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DeclareFiatOnrampAttemptRequest {
-    return new DeclareFiatOnrampAttemptRequest().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DeclareFiatOnrampPurchaseAttemptRequest {
+    return new DeclareFiatOnrampPurchaseAttemptRequest().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DeclareFiatOnrampAttemptRequest {
-    return new DeclareFiatOnrampAttemptRequest().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DeclareFiatOnrampPurchaseAttemptRequest {
+    return new DeclareFiatOnrampPurchaseAttemptRequest().fromJsonString(jsonString, options);
   }
 
-  static equals(a: DeclareFiatOnrampAttemptRequest | PlainMessage<DeclareFiatOnrampAttemptRequest> | undefined, b: DeclareFiatOnrampAttemptRequest | PlainMessage<DeclareFiatOnrampAttemptRequest> | undefined): boolean {
-    return proto3.util.equals(DeclareFiatOnrampAttemptRequest, a, b);
+  static equals(a: DeclareFiatOnrampPurchaseAttemptRequest | PlainMessage<DeclareFiatOnrampPurchaseAttemptRequest> | undefined, b: DeclareFiatOnrampPurchaseAttemptRequest | PlainMessage<DeclareFiatOnrampPurchaseAttemptRequest> | undefined): boolean {
+    return proto3.util.equals(DeclareFiatOnrampPurchaseAttemptRequest, a, b);
   }
 }
 
 /**
- * @generated from message code.transaction.v2.DeclareFiatOnrampAttemptResponse
+ * @generated from message code.transaction.v2.DeclareFiatOnrampPurchaseAttemptResponse
  */
-export class DeclareFiatOnrampAttemptResponse extends Message<DeclareFiatOnrampAttemptResponse> {
+export class DeclareFiatOnrampPurchaseAttemptResponse extends Message<DeclareFiatOnrampPurchaseAttemptResponse> {
   /**
-   * @generated from field: code.transaction.v2.DeclareFiatOnrampAttemptResponse.Result result = 1;
+   * @generated from field: code.transaction.v2.DeclareFiatOnrampPurchaseAttemptResponse.Result result = 1;
    */
-  result = DeclareFiatOnrampAttemptResponse_Result.OK;
+  result = DeclareFiatOnrampPurchaseAttemptResponse_Result.OK;
 
-  constructor(data?: PartialMessage<DeclareFiatOnrampAttemptResponse>) {
+  constructor(data?: PartialMessage<DeclareFiatOnrampPurchaseAttemptResponse>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.DeclareFiatOnrampAttemptResponse";
+  static readonly typeName = "code.transaction.v2.DeclareFiatOnrampPurchaseAttemptResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "result", kind: "enum", T: proto3.getEnumType(DeclareFiatOnrampAttemptResponse_Result) },
+    { no: 1, name: "result", kind: "enum", T: proto3.getEnumType(DeclareFiatOnrampPurchaseAttemptResponse_Result) },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DeclareFiatOnrampAttemptResponse {
-    return new DeclareFiatOnrampAttemptResponse().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DeclareFiatOnrampPurchaseAttemptResponse {
+    return new DeclareFiatOnrampPurchaseAttemptResponse().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DeclareFiatOnrampAttemptResponse {
-    return new DeclareFiatOnrampAttemptResponse().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DeclareFiatOnrampPurchaseAttemptResponse {
+    return new DeclareFiatOnrampPurchaseAttemptResponse().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DeclareFiatOnrampAttemptResponse {
-    return new DeclareFiatOnrampAttemptResponse().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DeclareFiatOnrampPurchaseAttemptResponse {
+    return new DeclareFiatOnrampPurchaseAttemptResponse().fromJsonString(jsonString, options);
   }
 
-  static equals(a: DeclareFiatOnrampAttemptResponse | PlainMessage<DeclareFiatOnrampAttemptResponse> | undefined, b: DeclareFiatOnrampAttemptResponse | PlainMessage<DeclareFiatOnrampAttemptResponse> | undefined): boolean {
-    return proto3.util.equals(DeclareFiatOnrampAttemptResponse, a, b);
+  static equals(a: DeclareFiatOnrampPurchaseAttemptResponse | PlainMessage<DeclareFiatOnrampPurchaseAttemptResponse> | undefined, b: DeclareFiatOnrampPurchaseAttemptResponse | PlainMessage<DeclareFiatOnrampPurchaseAttemptResponse> | undefined): boolean {
+    return proto3.util.equals(DeclareFiatOnrampPurchaseAttemptResponse, a, b);
   }
 }
 
 /**
- * @generated from enum code.transaction.v2.DeclareFiatOnrampAttemptResponse.Result
+ * @generated from enum code.transaction.v2.DeclareFiatOnrampPurchaseAttemptResponse.Result
  */
-export enum DeclareFiatOnrampAttemptResponse_Result {
+export enum DeclareFiatOnrampPurchaseAttemptResponse_Result {
   /**
    * @generated from enum value: OK = 0;
    */
   OK = 0,
+
+  /**
+   * The owner account is not valid (ie. it isn't a Code account)
+   *
+   * @generated from enum value: INVALID_OWNER = 1;
+   */
+  INVALID_OWNER = 1,
+
+  /**
+   * The currency isn't supported
+   *
+   * @generated from enum value: UNSUPPORTED_CURRENCY = 2;
+   */
+  UNSUPPORTED_CURRENCY = 2,
+
+  /**
+   * The amount specified exceeds limits
+   *
+   * @generated from enum value: AMOUNT_EXCEEDS_MAXIMUM = 3;
+   */
+  AMOUNT_EXCEEDS_MAXIMUM = 3,
 }
-// Retrieve enum metadata with: proto3.getEnumType(DeclareFiatOnrampAttemptResponse_Result)
-proto3.util.setEnumType(DeclareFiatOnrampAttemptResponse_Result, "code.transaction.v2.DeclareFiatOnrampAttemptResponse.Result", [
+// Retrieve enum metadata with: proto3.getEnumType(DeclareFiatOnrampPurchaseAttemptResponse_Result)
+proto3.util.setEnumType(DeclareFiatOnrampPurchaseAttemptResponse_Result, "code.transaction.v2.DeclareFiatOnrampPurchaseAttemptResponse.Result", [
   { no: 0, name: "OK" },
+  { no: 1, name: "INVALID_OWNER" },
+  { no: 2, name: "UNSUPPORTED_CURRENCY" },
+  { no: 3, name: "AMOUNT_EXCEEDS_MAXIMUM" },
 ]);
 
 /**

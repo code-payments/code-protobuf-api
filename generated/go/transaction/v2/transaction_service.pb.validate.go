@@ -1773,16 +1773,16 @@ var _ interface {
 	ErrorName() string
 } = SwapResponseValidationError{}
 
-// Validate checks the field values on DeclareFiatOnrampAttemptRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DeclareFiatOnrampAttemptRequest) Validate() error {
+// Validate checks the field values on DeclareFiatOnrampPurchaseAttemptRequest
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, an error is returned.
+func (m *DeclareFiatOnrampPurchaseAttemptRequest) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if m.GetOwner() == nil {
-		return DeclareFiatOnrampAttemptRequestValidationError{
+		return DeclareFiatOnrampPurchaseAttemptRequestValidationError{
 			field:  "Owner",
 			reason: "value is required",
 		}
@@ -1790,7 +1790,7 @@ func (m *DeclareFiatOnrampAttemptRequest) Validate() error {
 
 	if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return DeclareFiatOnrampAttemptRequestValidationError{
+			return DeclareFiatOnrampPurchaseAttemptRequestValidationError{
 				field:  "Owner",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -1799,7 +1799,7 @@ func (m *DeclareFiatOnrampAttemptRequest) Validate() error {
 	}
 
 	if m.GetPurchaseAmount() == nil {
-		return DeclareFiatOnrampAttemptRequestValidationError{
+		return DeclareFiatOnrampPurchaseAttemptRequestValidationError{
 			field:  "PurchaseAmount",
 			reason: "value is required",
 		}
@@ -1807,7 +1807,7 @@ func (m *DeclareFiatOnrampAttemptRequest) Validate() error {
 
 	if v, ok := interface{}(m.GetPurchaseAmount()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return DeclareFiatOnrampAttemptRequestValidationError{
+			return DeclareFiatOnrampPurchaseAttemptRequestValidationError{
 				field:  "PurchaseAmount",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -1816,7 +1816,7 @@ func (m *DeclareFiatOnrampAttemptRequest) Validate() error {
 	}
 
 	if m.GetNonce() == nil {
-		return DeclareFiatOnrampAttemptRequestValidationError{
+		return DeclareFiatOnrampPurchaseAttemptRequestValidationError{
 			field:  "Nonce",
 			reason: "value is required",
 		}
@@ -1824,7 +1824,7 @@ func (m *DeclareFiatOnrampAttemptRequest) Validate() error {
 
 	if v, ok := interface{}(m.GetNonce()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return DeclareFiatOnrampAttemptRequestValidationError{
+			return DeclareFiatOnrampPurchaseAttemptRequestValidationError{
 				field:  "Nonce",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -1833,7 +1833,7 @@ func (m *DeclareFiatOnrampAttemptRequest) Validate() error {
 	}
 
 	if m.GetSignature() == nil {
-		return DeclareFiatOnrampAttemptRequestValidationError{
+		return DeclareFiatOnrampPurchaseAttemptRequestValidationError{
 			field:  "Signature",
 			reason: "value is required",
 		}
@@ -1841,7 +1841,7 @@ func (m *DeclareFiatOnrampAttemptRequest) Validate() error {
 
 	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return DeclareFiatOnrampAttemptRequestValidationError{
+			return DeclareFiatOnrampPurchaseAttemptRequestValidationError{
 				field:  "Signature",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -1852,10 +1852,10 @@ func (m *DeclareFiatOnrampAttemptRequest) Validate() error {
 	return nil
 }
 
-// DeclareFiatOnrampAttemptRequestValidationError is the validation error
-// returned by DeclareFiatOnrampAttemptRequest.Validate if the designated
-// constraints aren't met.
-type DeclareFiatOnrampAttemptRequestValidationError struct {
+// DeclareFiatOnrampPurchaseAttemptRequestValidationError is the validation
+// error returned by DeclareFiatOnrampPurchaseAttemptRequest.Validate if the
+// designated constraints aren't met.
+type DeclareFiatOnrampPurchaseAttemptRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1863,24 +1863,24 @@ type DeclareFiatOnrampAttemptRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e DeclareFiatOnrampAttemptRequestValidationError) Field() string { return e.field }
+func (e DeclareFiatOnrampPurchaseAttemptRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e DeclareFiatOnrampAttemptRequestValidationError) Reason() string { return e.reason }
+func (e DeclareFiatOnrampPurchaseAttemptRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e DeclareFiatOnrampAttemptRequestValidationError) Cause() error { return e.cause }
+func (e DeclareFiatOnrampPurchaseAttemptRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e DeclareFiatOnrampAttemptRequestValidationError) Key() bool { return e.key }
+func (e DeclareFiatOnrampPurchaseAttemptRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e DeclareFiatOnrampAttemptRequestValidationError) ErrorName() string {
-	return "DeclareFiatOnrampAttemptRequestValidationError"
+func (e DeclareFiatOnrampPurchaseAttemptRequestValidationError) ErrorName() string {
+	return "DeclareFiatOnrampPurchaseAttemptRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e DeclareFiatOnrampAttemptRequestValidationError) Error() string {
+func (e DeclareFiatOnrampPurchaseAttemptRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1892,14 +1892,14 @@ func (e DeclareFiatOnrampAttemptRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sDeclareFiatOnrampAttemptRequest.%s: %s%s",
+		"invalid %sDeclareFiatOnrampPurchaseAttemptRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = DeclareFiatOnrampAttemptRequestValidationError{}
+var _ error = DeclareFiatOnrampPurchaseAttemptRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -1907,12 +1907,12 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = DeclareFiatOnrampAttemptRequestValidationError{}
+} = DeclareFiatOnrampPurchaseAttemptRequestValidationError{}
 
-// Validate checks the field values on DeclareFiatOnrampAttemptResponse with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, an error is returned.
-func (m *DeclareFiatOnrampAttemptResponse) Validate() error {
+// Validate checks the field values on DeclareFiatOnrampPurchaseAttemptResponse
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, an error is returned.
+func (m *DeclareFiatOnrampPurchaseAttemptResponse) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -1922,10 +1922,10 @@ func (m *DeclareFiatOnrampAttemptResponse) Validate() error {
 	return nil
 }
 
-// DeclareFiatOnrampAttemptResponseValidationError is the validation error
-// returned by DeclareFiatOnrampAttemptResponse.Validate if the designated
-// constraints aren't met.
-type DeclareFiatOnrampAttemptResponseValidationError struct {
+// DeclareFiatOnrampPurchaseAttemptResponseValidationError is the validation
+// error returned by DeclareFiatOnrampPurchaseAttemptResponse.Validate if the
+// designated constraints aren't met.
+type DeclareFiatOnrampPurchaseAttemptResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1933,24 +1933,24 @@ type DeclareFiatOnrampAttemptResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e DeclareFiatOnrampAttemptResponseValidationError) Field() string { return e.field }
+func (e DeclareFiatOnrampPurchaseAttemptResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e DeclareFiatOnrampAttemptResponseValidationError) Reason() string { return e.reason }
+func (e DeclareFiatOnrampPurchaseAttemptResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e DeclareFiatOnrampAttemptResponseValidationError) Cause() error { return e.cause }
+func (e DeclareFiatOnrampPurchaseAttemptResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e DeclareFiatOnrampAttemptResponseValidationError) Key() bool { return e.key }
+func (e DeclareFiatOnrampPurchaseAttemptResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e DeclareFiatOnrampAttemptResponseValidationError) ErrorName() string {
-	return "DeclareFiatOnrampAttemptResponseValidationError"
+func (e DeclareFiatOnrampPurchaseAttemptResponseValidationError) ErrorName() string {
+	return "DeclareFiatOnrampPurchaseAttemptResponseValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e DeclareFiatOnrampAttemptResponseValidationError) Error() string {
+func (e DeclareFiatOnrampPurchaseAttemptResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1962,14 +1962,14 @@ func (e DeclareFiatOnrampAttemptResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sDeclareFiatOnrampAttemptResponse.%s: %s%s",
+		"invalid %sDeclareFiatOnrampPurchaseAttemptResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = DeclareFiatOnrampAttemptResponseValidationError{}
+var _ error = DeclareFiatOnrampPurchaseAttemptResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -1977,7 +1977,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = DeclareFiatOnrampAttemptResponseValidationError{}
+} = DeclareFiatOnrampPurchaseAttemptResponseValidationError{}
 
 // Validate checks the field values on Metadata with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
