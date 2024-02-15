@@ -1917,6 +1917,8 @@ func (m *DeclareFiatOnrampAttemptResponse) Validate() error {
 		return nil
 	}
 
+	// no validation rules for Result
+
 	return nil
 }
 
