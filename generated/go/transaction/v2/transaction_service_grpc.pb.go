@@ -97,6 +97,9 @@ type TransactionClient interface {
 	// Note: Currently limited to swapping USDC to Kin.
 	// Note: Kin is deposited into the primary account.
 	Swap(ctx context.Context, opts ...grpc.CallOption) (Transaction_SwapClient, error)
+	// DeclareFiatOnrampAttempt is called whenever a user attempts to use a fiat
+	// onramp to buy crypto for use in Code.
+	DeclareFiatOnrampAttempt(ctx context.Context, in *DeclareFiatOnrampAttemptRequest, opts ...grpc.CallOption) (*DeclareFiatOnrampAttemptResponse, error)
 }
 
 type transactionClient struct {
@@ -232,6 +235,15 @@ func (x *transactionSwapClient) Recv() (*SwapResponse, error) {
 	return m, nil
 }
 
+func (c *transactionClient) DeclareFiatOnrampAttempt(ctx context.Context, in *DeclareFiatOnrampAttemptRequest, opts ...grpc.CallOption) (*DeclareFiatOnrampAttemptResponse, error) {
+	out := new(DeclareFiatOnrampAttemptResponse)
+	err := c.cc.Invoke(ctx, "/code.transaction.v2.Transaction/DeclareFiatOnrampAttempt", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TransactionServer is the server API for Transaction service.
 // All implementations must embed UnimplementedTransactionServer
 // for forward compatibility
@@ -311,6 +323,9 @@ type TransactionServer interface {
 	// Note: Currently limited to swapping USDC to Kin.
 	// Note: Kin is deposited into the primary account.
 	Swap(Transaction_SwapServer) error
+	// DeclareFiatOnrampAttempt is called whenever a user attempts to use a fiat
+	// onramp to buy crypto for use in Code.
+	DeclareFiatOnrampAttempt(context.Context, *DeclareFiatOnrampAttemptRequest) (*DeclareFiatOnrampAttemptResponse, error)
 	mustEmbedUnimplementedTransactionServer()
 }
 
@@ -344,6 +359,9 @@ func (UnimplementedTransactionServer) Airdrop(context.Context, *AirdropRequest) 
 }
 func (UnimplementedTransactionServer) Swap(Transaction_SwapServer) error {
 	return status.Errorf(codes.Unimplemented, "method Swap not implemented")
+}
+func (UnimplementedTransactionServer) DeclareFiatOnrampAttempt(context.Context, *DeclareFiatOnrampAttemptRequest) (*DeclareFiatOnrampAttemptResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeclareFiatOnrampAttempt not implemented")
 }
 func (UnimplementedTransactionServer) mustEmbedUnimplementedTransactionServer() {}
 
@@ -536,6 +554,24 @@ func (x *transactionSwapServer) Recv() (*SwapRequest, error) {
 	return m, nil
 }
 
+func _Transaction_DeclareFiatOnrampAttempt_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeclareFiatOnrampAttemptRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TransactionServer).DeclareFiatOnrampAttempt(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/code.transaction.v2.Transaction/DeclareFiatOnrampAttempt",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TransactionServer).DeclareFiatOnrampAttempt(ctx, req.(*DeclareFiatOnrampAttemptRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Transaction_ServiceDesc is the grpc.ServiceDesc for Transaction service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -570,6 +606,10 @@ var Transaction_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Airdrop",
 			Handler:    _Transaction_Airdrop_Handler,
+		},
+		{
+			MethodName: "DeclareFiatOnrampAttempt",
+			Handler:    _Transaction_DeclareFiatOnrampAttempt_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

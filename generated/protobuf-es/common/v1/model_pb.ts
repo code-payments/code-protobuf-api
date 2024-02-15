@@ -684,6 +684,45 @@ export class Hash extends Message<Hash> {
 }
 
 /**
+ * UUID is a 16 byte UUID value
+ *
+ * @generated from message code.common.v1.UUID
+ */
+export class UUID extends Message<UUID> {
+  /**
+   * @generated from field: bytes value = 1;
+   */
+  value = new Uint8Array(0);
+
+  constructor(data?: PartialMessage<UUID>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.common.v1.UUID";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "value", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): UUID {
+    return new UUID().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): UUID {
+    return new UUID().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): UUID {
+    return new UUID().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: UUID | PlainMessage<UUID> | undefined, b: UUID | PlainMessage<UUID> | undefined): boolean {
+    return proto3.util.equals(UUID, a, b);
+  }
+}
+
+/**
  * Request is a generic wrapper for gRPC requests
  *
  * @generated from message code.common.v1.Request
