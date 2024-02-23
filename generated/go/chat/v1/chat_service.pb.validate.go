@@ -1665,10 +1665,10 @@ func (m *LocalizedContent) Validate() error {
 		return nil
 	}
 
-	if l := utf8.RuneCountInString(m.GetKey()); l < 1 || l > 64 {
+	if l := utf8.RuneCountInString(m.GetKeyOrText()); l < 1 || l > 1024 {
 		return LocalizedContentValidationError{
-			field:  "Key",
-			reason: "value length must be between 1 and 64 runes, inclusive",
+			field:  "KeyOrText",
+			reason: "value length must be between 1 and 1024 runes, inclusive",
 		}
 	}
 
