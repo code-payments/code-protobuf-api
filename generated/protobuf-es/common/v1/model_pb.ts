@@ -684,6 +684,45 @@ export class Hash extends Message<Hash> {
 }
 
 /**
+ * Locale is a user locale consisting of a combination of language, script and region
+ *
+ * @generated from message code.common.v1.Locale
+ */
+export class Locale extends Message<Locale> {
+  /**
+   * @generated from field: string value = 1;
+   */
+  value = "";
+
+  constructor(data?: PartialMessage<Locale>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.common.v1.Locale";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Locale {
+    return new Locale().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Locale {
+    return new Locale().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Locale {
+    return new Locale().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: Locale | PlainMessage<Locale> | undefined, b: Locale | PlainMessage<Locale> | undefined): boolean {
+    return proto3.util.equals(Locale, a, b);
+  }
+}
+
+/**
  * UUID is a 16 byte UUID value
  *
  * @generated from message code.common.v1.UUID
