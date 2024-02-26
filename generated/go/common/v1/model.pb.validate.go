@@ -1107,6 +1107,79 @@ var _ interface {
 	ErrorName() string
 } = HashValidationError{}
 
+// Validate checks the field values on Locale with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Locale) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if !_Locale_Value_Pattern.MatchString(m.GetValue()) {
+		return LocaleValidationError{
+			field:  "Value",
+			reason: "value does not match regex pattern \"^[A-Za-z]{2,4}([_-][A-Za-z]{4})?([_-]([A-Za-z]{2}|[0-9]{3}))?$\"",
+		}
+	}
+
+	return nil
+}
+
+// LocaleValidationError is the validation error returned by Locale.Validate if
+// the designated constraints aren't met.
+type LocaleValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e LocaleValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e LocaleValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e LocaleValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e LocaleValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e LocaleValidationError) ErrorName() string { return "LocaleValidationError" }
+
+// Error satisfies the builtin error interface
+func (e LocaleValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sLocale.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = LocaleValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = LocaleValidationError{}
+
+var _Locale_Value_Pattern = regexp.MustCompile("^[A-Za-z]{2,4}([_-][A-Za-z]{4})?([_-]([A-Za-z]{2}|[0-9]{3}))?$")
+
 // Validate checks the field values on UUID with the rules defined in the proto
 // definition for this message. If any rules are violated, an error is returned.
 func (m *UUID) Validate() error {

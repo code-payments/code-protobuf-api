@@ -696,6 +696,210 @@ var _ interface {
 	ErrorName() string
 } = GetUserResponseValidationError{}
 
+// Validate checks the field values on UpdatePreferencesRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *UpdatePreferencesRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetOwnerAccountId() == nil {
+		return UpdatePreferencesRequestValidationError{
+			field:  "OwnerAccountId",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetOwnerAccountId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdatePreferencesRequestValidationError{
+				field:  "OwnerAccountId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetContainerId() == nil {
+		return UpdatePreferencesRequestValidationError{
+			field:  "ContainerId",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetContainerId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdatePreferencesRequestValidationError{
+				field:  "ContainerId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetSignature() == nil {
+		return UpdatePreferencesRequestValidationError{
+			field:  "Signature",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdatePreferencesRequestValidationError{
+				field:  "Signature",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetLocale() == nil {
+		return UpdatePreferencesRequestValidationError{
+			field:  "Locale",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetLocale()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdatePreferencesRequestValidationError{
+				field:  "Locale",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// UpdatePreferencesRequestValidationError is the validation error returned by
+// UpdatePreferencesRequest.Validate if the designated constraints aren't met.
+type UpdatePreferencesRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdatePreferencesRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdatePreferencesRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdatePreferencesRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdatePreferencesRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdatePreferencesRequestValidationError) ErrorName() string {
+	return "UpdatePreferencesRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdatePreferencesRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdatePreferencesRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdatePreferencesRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdatePreferencesRequestValidationError{}
+
+// Validate checks the field values on UpdatePreferencesResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *UpdatePreferencesResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Result
+
+	return nil
+}
+
+// UpdatePreferencesResponseValidationError is the validation error returned by
+// UpdatePreferencesResponse.Validate if the designated constraints aren't met.
+type UpdatePreferencesResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdatePreferencesResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdatePreferencesResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdatePreferencesResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdatePreferencesResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdatePreferencesResponseValidationError) ErrorName() string {
+	return "UpdatePreferencesResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdatePreferencesResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdatePreferencesResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdatePreferencesResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdatePreferencesResponseValidationError{}
+
 // Validate checks the field values on LoginToThirdPartyAppRequest with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, an error is returned.

@@ -49,6 +49,8 @@ type IdentityClient interface {
 	UnlinkAccount(ctx context.Context, in *UnlinkAccountRequest, opts ...grpc.CallOption) (*UnlinkAccountResponse, error)
 	// GetUser gets user information given a user identifier and an owner account.
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error)
+	// UpdatePreferences updates user preferences.
+	UpdatePreferences(ctx context.Context, in *UpdatePreferencesRequest, opts ...grpc.CallOption) (*UpdatePreferencesResponse, error)
 	// LoginToThirdPartyApp logs a user into a third party app for a given intent
 	// ID. If the original request requires payment, then SubmitIntent must be called.
 	LoginToThirdPartyApp(ctx context.Context, in *LoginToThirdPartyAppRequest, opts ...grpc.CallOption) (*LoginToThirdPartyAppResponse, error)
@@ -87,6 +89,15 @@ func (c *identityClient) UnlinkAccount(ctx context.Context, in *UnlinkAccountReq
 func (c *identityClient) GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error) {
 	out := new(GetUserResponse)
 	err := c.cc.Invoke(ctx, "/code.user.v1.Identity/GetUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *identityClient) UpdatePreferences(ctx context.Context, in *UpdatePreferencesRequest, opts ...grpc.CallOption) (*UpdatePreferencesResponse, error) {
+	out := new(UpdatePreferencesResponse)
+	err := c.cc.Invoke(ctx, "/code.user.v1.Identity/UpdatePreferences", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -142,6 +153,8 @@ type IdentityServer interface {
 	UnlinkAccount(context.Context, *UnlinkAccountRequest) (*UnlinkAccountResponse, error)
 	// GetUser gets user information given a user identifier and an owner account.
 	GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error)
+	// UpdatePreferences updates user preferences.
+	UpdatePreferences(context.Context, *UpdatePreferencesRequest) (*UpdatePreferencesResponse, error)
 	// LoginToThirdPartyApp logs a user into a third party app for a given intent
 	// ID. If the original request requires payment, then SubmitIntent must be called.
 	LoginToThirdPartyApp(context.Context, *LoginToThirdPartyAppRequest) (*LoginToThirdPartyAppResponse, error)
@@ -164,6 +177,9 @@ func (UnimplementedIdentityServer) UnlinkAccount(context.Context, *UnlinkAccount
 }
 func (UnimplementedIdentityServer) GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
+}
+func (UnimplementedIdentityServer) UpdatePreferences(context.Context, *UpdatePreferencesRequest) (*UpdatePreferencesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatePreferences not implemented")
 }
 func (UnimplementedIdentityServer) LoginToThirdPartyApp(context.Context, *LoginToThirdPartyAppRequest) (*LoginToThirdPartyAppResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoginToThirdPartyApp not implemented")
@@ -238,6 +254,24 @@ func _Identity_GetUser_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Identity_UpdatePreferences_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePreferencesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IdentityServer).UpdatePreferences(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/code.user.v1.Identity/UpdatePreferences",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IdentityServer).UpdatePreferences(ctx, req.(*UpdatePreferencesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Identity_LoginToThirdPartyApp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LoginToThirdPartyAppRequest)
 	if err := dec(in); err != nil {
@@ -292,6 +326,10 @@ var Identity_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUser",
 			Handler:    _Identity_GetUser_Handler,
+		},
+		{
+			MethodName: "UpdatePreferences",
+			Handler:    _Identity_UpdatePreferences_Handler,
 		},
 		{
 			MethodName: "LoginToThirdPartyApp",
