@@ -11,281 +11,340 @@ import "transaction/v2/transaction_service.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
+// Chat service provides operations for managing chat sessions and messages within the platform.
 service Chat {
-    // GetChats gets the set of chats for an owner account
+    // Retrieves chat sessions for an account.
     rpc GetChats(GetChatsRequest) returns (GetChatsResponse);
 
-    // GetMessages gets the set of messages for a chat
+    // Fetches messages within a specific chat session.
     rpc GetMessages(GetMessagesRequest) returns (GetMessagesResponse);
 
-    // AdvancePointer advances a pointer in chat history
+    // Updates the read pointer in a chat to advance through chat history.
     rpc AdvancePointer(AdvancePointerRequest) returns (AdvancePointerResponse);
 
-    // SetMuteState configures the mute state of a chat
+    // Toggles the mute state for a specific chat session.
     rpc SetMuteState(SetMuteStateRequest) returns (SetMuteStateResponse);
 
-    // SetSubscriptionState configures the susbscription state of a chat
+    // Toggles the subscription state for a specific chat session.
     rpc SetSubscriptionState(SetSubscriptionStateRequest) returns (SetSubscriptionStateResponse);
 }
 
+// Request to retrieve chat sessions associated with an account.
 message GetChatsRequest {
+    // Account ID of the chat owner.
     common.v1.SolanaAccountId owner = 1 [(validate.rules).message.required = true];
 
+    // Signature to authenticate the request.
     common.v1.Signature signature = 2 [(validate.rules).message.required = true];
 
+    // Maximum number of chat sessions to return in this request.
     uint32 page_size = 3 [(validate.rules).uint32.lte = 100];
 
+    // Pagination cursor to fetch the next set of chat sessions.
     Cursor cursor = 4;
 
+    // Sort direction for chat sessions.
     Direction direction = 5;
     enum Direction {
-        ASC  = 0;
-        DESC = 1;
+        ASC = 0;  // Ascending order.
+        DESC = 1; // Descending order.
     }
 }
 
+// Response containing chat sessions for an account.
 message GetChatsResponse {
+    // Indicates the result of the GetChats operation.
     Result result = 1;
     enum Result {
-        OK = 0;
-        NOT_FOUND = 1;
+        OK = 0;          // Successfully retrieved chat sessions.
+        NOT_FOUND = 1;   // No chat sessions found.
     }
 
+    // List of chat session metadata.
     repeated ChatMetadata chats = 2 [(validate.rules).repeated = {
-        min_items: 0
+        min_items: 0,
         max_items: 100
     }];
 }
 
+// Request to fetch messages within a chat session.
 message GetMessagesRequest {
+    // Identifier of the chat session.
     ChatId chat_id = 1 [(validate.rules).message.required = true];
 
+    // Account ID of the chat owner.
     common.v1.SolanaAccountId owner = 2 [(validate.rules).message.required = true];
 
+    // Signature to authenticate the request.
     common.v1.Signature signature = 3 [(validate.rules).message.required = true];
 
+    // Maximum number of messages to return in this request.
     uint32 page_size = 4 [(validate.rules).uint32.lte = 100];
 
+    // Pagination cursor to fetch the next set of messages.
     Cursor cursor = 5;
 
+    // Sort direction for messages.
     Direction direction = 6;
-    enum Direction {
-        ASC  = 0;
-        DESC = 1;
-    }
 }
 
+// Response containing messages from a chat session.
 message GetMessagesResponse {
+    // Indicates the result of the GetMessages operation.
     Result result = 1;
     enum Result {
-        OK = 0;
-        NOT_FOUND = 1;
+        OK = 0;          // Successfully retrieved messages.
+        NOT_FOUND = 1;   // No messages found.
     }
 
+    // List of chat messages.
     repeated ChatMessage messages = 2 [(validate.rules).repeated = {
-        min_items: 0
+        min_items: 0,
         max_items: 100
     }];
 }
 
+// Request to update the read pointer in a chat session.
 message AdvancePointerRequest {
+    // Identifier of the chat session.
     ChatId chat_id = 1 [(validate.rules).message.required = true];
 
+    // New pointer position within the chat history.
     Pointer pointer = 2 [(validate.rules).message.required = true];
 
+    // Account ID of the chat owner.
     common.v1.SolanaAccountId owner = 3 [(validate.rules).message.required = true];
 
+    // Signature to authenticate the request.
     common.v1.Signature signature = 4 [(validate.rules).message.required = true];
 }
 
+// Response for updating the read pointer in a chat session.
 message AdvancePointerResponse {
+    // Indicates the result of the AdvancePointer operation.
     Result result = 1;
     enum Result {
-        OK = 0;
-        CHAT_NOT_FOUND = 1;
-        MESSAGE_NOT_FOUND = 2;
+        OK = 0;                 // Successfully advanced the pointer.
+        CHAT_NOT_FOUND = 1;     // Specified chat session not found.
+        MESSAGE_NOT_FOUND = 2;  // Specified message not found.
     }
 }
 
+// Request to set the mute state of a chat session.
 message SetMuteStateRequest {
+    // Identifier of the chat session.
     ChatId chat_id = 1 [(validate.rules).message.required = true];
 
+    // Desired mute state for the chat session.
     bool is_muted = 2;
 
+    // Account ID of the chat owner.
     common.v1.SolanaAccountId owner = 3 [(validate.rules).message.required = true];
 
+    // Signature to authenticate the request.
     common.v1.Signature signature = 4 [(validate.rules).message.required = true];
 }
 
+// Response for setting the mute state of a chat session.
 message SetMuteStateResponse {
+    // Indicates the result of the SetMuteState operation.
     Result result = 1;
     enum Result {
-        OK = 0;
-        CHAT_NOT_FOUND = 1;
-        CANT_MUTE = 2;
+        OK = 0;              // Successfully set the mute state.
+        CHAT_NOT_FOUND = 1;  // Specified chat session not found.
+        CANT_MUTE = 2;       // Chat session cannot be muted.
     }
 }
 
+// Request to set the subscription state of a chat session.
 message SetSubscriptionStateRequest {
+    // Identifier of the chat session.
     ChatId chat_id = 1 [(validate.rules).message.required = true];
 
+    // Desired subscription state for the chat session.
     bool is_subscribed = 2;
 
+    // Account ID of the chat owner.
     common.v1.SolanaAccountId owner = 3 [(validate.rules).message.required = true];
 
+    // Signature to authenticate the request.
     common.v1.Signature signature = 4 [(validate.rules).message.required = true];
 }
 
+// Response for setting the subscription state of a chat session.
 message SetSubscriptionStateResponse {
+    // Indicates the result of the SetSubscriptionState operation.
     Result result = 1;
     enum Result {
-        OK = 0;
-        CHAT_NOT_FOUND = 1;
-        CANT_UNSUBSCRIBE = 2;
+        OK = 0;                  // Successfully set the subscription state.
+        CHAT_NOT_FOUND = 1;      // Specified chat session not found.
+        CANT_UNSUBSCRIBE = 2;    // Chat session cannot be unsubscribed from.
     }
 }
 
+// Unique identifier for a chat session.
 message ChatId {
+    // The chat session's ID, fixed at 32 bytes.
     bytes value = 1 [(validate.rules).bytes = {
-        min_len: 32
+        min_len: 32,
         max_len: 32
     }];
 }
 
+// Unique identifier for a chat message.
 message ChatMessageId {
+    // The chat message's ID, ranging from 32 to 64 bytes.
     bytes value = 1 [(validate.rules).bytes = {
-        min_len: 32
+        min_len: 32,
         max_len: 64
     }];
 }
 
+// Represents a pointer within chat history, indicating read or other states.
 message Pointer {
+    // The type of pointer, such as for indicating read messages.
     Kind kind = 1;
     enum Kind {
-        UNKNOWN = 0;
-        READ = 1;
+        UNKNOWN = 0;  // Pointer type is not specified.
+        READ = 1;     // Pointer indicates the last read message.
     }
 
+    // The specific message ID the pointer refers to.
     ChatMessageId value = 2 [(validate.rules).message.required = true];
 }
 
+// Metadata associated with a chat session, including titles and pointers.
 message ChatMetadata {
+    // The unique identifier for the chat session.
     ChatId chat_id = 1 [(validate.rules).message.required = true];
 
-    // Recommended chat title inferred by the type of chat
+    // Title of the chat, which can be localized content or a domain name.
     oneof title {
         option (validate.required) = true;
-
         LocalizedContent localized = 2;
-        common.v1.Domain domain    = 3;
+        common.v1.Domain domain = 3;
     }
 
-    // Pointer in the chat indicating the most recently read message by the user
+    // Pointer indicating the most recently read message.
     Pointer read_pointer = 4;
 
-    // Estimated number of unread messages in this chat
+    // Estimated count of unread messages in the chat.
     uint32 num_unread = 5;
 
-    // Has the user muted this chat?
+    // Indicates if the chat is muted.
     bool is_muted = 6;
 
-    // Is the user subscribed to this chat?
+    // Indicates if the user is subscribed to the chat.
     bool is_subscribed = 7;
 
-    // Can the user mute this chat?
+    // Indicates if muting the chat is allowed.
     bool can_mute = 8;
 
-    // Can the user unsubscribe from this chat?
+    // Indicates if unsubscribing from the chat is allowed.
     bool can_unsubscribe = 9;
 
-    // Cursor value for this chat for reference in subsequent GetChatsRequest 
+    // Cursor for the chat session, used for pagination in subsequent requests.
     Cursor cursor = 10;
 
-    // Is this a verified chat?
-    //
-    // Note: It's possible to have two chats with the same title, but with
-    // different verification statuses. They should be treated separately.
+    // Indicates if the chat session is verified.
     bool is_verified = 11;
 }
 
+// Represents an individual message within a chat session.
 message ChatMessage {
-    // Unique ID for this message
+    // Unique identifier for the message.
     ChatMessageId message_id = 1 [(validate.rules).message.required = true];
 
-    // Timestamp this message was generated at
+    // Timestamp indicating when the message was sent.
     google.protobuf.Timestamp ts = 2 [(validate.rules).timestamp.required = true];
 
-    // Ordered message content. A message may have more than one piece of content.
+    // Content of the message, which can include multiple items.
     repeated Content content = 3 [(validate.rules).repeated = {
-        min_items: 1
+        min_items: 1,
         max_items: 10
     }];
 
-    // Cursor value for this message for reference in subsequent GetMessagesRequest 
+    // Cursor for this message, used for pagination in subsequent requests.
     Cursor cursor = 4;
 }
 
+// Represents various types of content that can be included in a chat message.
 message Content {
+    // The type of content, which can be one of several formats.
     oneof type {
         option (validate.required) = true;
-
-        LocalizedContent        localized     = 1;
-        ExchangeDataContent     exchange_data = 2;
-        NaclBoxEncryptedContent nacl_box      = 3;
+        LocalizedContent localized = 1;
+        ExchangeDataContent exchange_data = 2;
+        NaclBoxEncryptedContent nacl_box = 3;
     }
 }
 
+// Localized text content for a chat message.
 message LocalizedContent {
-    // When server-side localization is in place, clients will always see the
-    // localized text.
+    // The localization key or text content.
     string key_or_text = 1 [(validate.rules).string = {
-        min_len: 1
+        min_len: 1,
         max_len: 1024
     }];
 }
 
+// Content related to an exchange or transaction within the chat.
 message ExchangeDataContent {
+    // Action verb associated with the exchange, reflecting the nature of the transaction or interaction.
     Verb verb = 1;
     enum Verb {
-        UNKNOWN   = 0;
-        GAVE      = 1;
-        RECEIVED  = 2;
-        WITHDREW  = 3;
-        DEPOSITED = 4;
-        SENT      = 5;
-        RETURNED  = 6;
-        SPENT     = 7;
-        PAID      = 8;
-        PURCHASED = 9;
+        UNKNOWN = 0;    // The action is unspecified or unknown.
+        GAVE = 1;       // Indicates giving something to someone.
+        RECEIVED = 2;   // Indicates receiving something from someone.
+        WITHDREW = 3;   // Indicates withdrawing funds or assets.
+        DEPOSITED = 4;  // Indicates depositing funds or assets.
+        SENT = 5;       // Indicates sending funds or assets, possibly to a non-participant.
+        RETURNED = 6;   // Indicates returning previously received or borrowed assets.
+        SPENT = 7;      // Indicates spending funds or using assets for purchases.
+        PAID = 8;       // Indicates making a payment, typically in exchange for goods or services.
+        PURCHASED = 9;  // Indicates purchasing goods or services.
+        LOANED = 10;    // New verb: Indicates loaning funds or assets to someone.
+        BORROWED = 11;  // New verb: Indicates borrowing funds or assets from someone.
+        INVESTED = 12;  // New verb: Indicates investing funds or assets in an opportunity.
+        DIVIDED = 13;   // New verb: Indicates dividing and distributing funds or assets among participants.
+        CONSOLIDATED = 14; // New verb: Indicates consolidating funds or assets from multiple sources.
+        RECLAIMED = 15; // New verb: Indicates reclaiming ownership of previously allocated or loaned assets.
+        EXCHANGED = 16; // New verb: Indicates exchanging funds or assets, typically involving a conversion or trade.
+        DONATED = 17;   // New verb: Indicates donating funds or assets to a person or entity.
     }
 
+    // The exchange data, detailed by the exact or partial nature of the transaction.
     oneof exchange_data {
         option (validate.required) = true;
-
-        transaction.v2.ExchangeData            exact = 2;
-        transaction.v2.ExchangeDataWithoutRate partial = 3;
+        transaction.v2.ExchangeData exact = 2; // Exact exchange data including rate and amounts.
+        transaction.v2.ExchangeDataWithoutRate partial = 3; // Partial exchange data, rate not specified.
     }
 }
 
+
+// Encrypted content within a chat message, secured using NaCl box encryption.
 message NaclBoxEncryptedContent {
+    // Public key of the peer involved in the chat.
     common.v1.SolanaAccountId peer_public_key = 1 [(validate.rules).message.required = true];
 
+    // Nonce used for encryption, fixed at 24 bytes.
     bytes nonce = 2 [(validate.rules).bytes = {
-        min_len: 24
+        min_len: 24,
         max_len: 24
     }];
 
+    // The encrypted payload.
     bytes encrypted_payload = 3 [(validate.rules).bytes = {
-        min_len: 1
+        min_len: 1,
         max_len: 1024
     }];
 }
 
-// Opaque cursor used across paged APIs. Underlying bytes may change as paging
-// strategies evolve.
+// Represents a cursor for navigating paged API responses.
 message Cursor {
+    // Opaque value of the cursor, with flexible length for different paging strategies.
     bytes value = 1 [(validate.rules).bytes = {
-        min_len: 8
+        min_len: 8,
         max_len: 64
     }];
 }
