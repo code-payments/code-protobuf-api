@@ -8,109 +8,131 @@ option objc_class_prefix = "CPBInviteV2";
 
 import "common/v1/model.proto";
 import "validate/validate.proto";
+import "google/protobuf/timestamp.proto";
 
+// Invite service provides functionalities to manage user invitations.
 service Invite {
-    // GetInviteCount gets the number of invites that a user can send out.
+    // Gets the count of invitations available for a user to send.
     rpc GetInviteCount(GetInviteCountRequest) returns (GetInviteCountResponse);
 
-    // InvitePhoneNumber invites someone to join via their phone number. A phone number
-    // can only be invited once by a unique user or invite code. This is to avoid having
-    // a phone number consuming more than one invite count globally.
+    // Invites a user to the platform using their phone number. Each phone number can only be invited once.
     rpc InvitePhoneNumber(InvitePhoneNumberRequest) returns (InvitePhoneNumberResponse);
 
-    // GetInvitationStatus gets a phone number's invitation status.
+    // Retrieves the invitation status associated with a specific phone number.
     rpc GetInvitationStatus(GetInvitationStatusRequest) returns (GetInvitationStatusResponse);
 }
 
+// Request to get the count of available invitations for a user.
 message GetInviteCountRequest {
-    // The user to query for their invite count
+    // Identifier of the user whose invite count is queried.
     common.v1.UserId user_id = 1 [(validate.rules).message.required = true];
 }
 
+// Response containing the number of available invitations for a user.
 message GetInviteCountResponse {
+    // Indicates the result of the GetInviteCount operation.
     Result result = 1;
-    enum Result {
-        OK = 0;
-    }
-
-    // The number of invites the user is allowed to issue.
+    // Number of invitations the user can send.
     uint32 invite_count = 2;
+
+    // Enum detailing potential results of the GetInviteCount request.
+    enum Result {
+        OK = 0; // Query was successful.
+        UNAUTHORIZED = 1; // User lacks authorization to query invite counts.
+        SERVICE_UNAVAILABLE = 2; // The service is temporarily unavailable.
+    }
 }
 
+// Request to invite a person to the platform using their phone number.
 message InvitePhoneNumberRequest {
-    // The source for the invite. One of these values must be present
+    // Source of the invitation, either a UserId or an InviteCode.
     oneof source {
-        common.v1.UserId user = 1;
-        InviteCode invite_code = 3;
+        common.v1.UserId user = 1; // The user sending the invitation.
+        InviteCode invite_code = 3; // An invite code used for the invitation.
     }
 
-    // The phone number receiving the invite.
+    // Phone number of the invitee.
     common.v1.PhoneNumber receiver = 2 [(validate.rules).message.required = true];
 }
 
+// Response to an invitation request.
 message InvitePhoneNumberResponse {
+    // Result of the invitation attempt.
     Result result = 1;
+    // Detailed message for the result, especially useful for errors.
+    string error_message = 2;
+
+    // Enum detailing potential outcomes of the InvitePhoneNumber operation.
     enum Result {
-        OK = 0;
-        // The source exceeded their invite count and is restricted from issuing
-        // further invites.
-        INVITE_COUNT_EXCEEDED = 1;
-        // The receiver phone number has already been invited. Regardless of who
-        // invited it, the source's invite count is not decremented when this is
-        // returned.
-        ALREADY_INVITED = 2;
-        // The source  user has not been invited.
-        USER_NOT_INVITED = 3;
-        // The receiver phone number failed validation.
-        INVALID_RECEIVER_PHONE_NUMBER = 4;
-        // The invite code doesn't exist.
-        INVITE_CODE_NOT_FOUND = 5;
-        // The invite code has been revoked.
-        INVITE_CODE_REVOKED = 6;
-        // The invite code has expired.
-        INVITE_CODE_EXPIRED = 7;
+        OK = 0; // Invitation was successfully sent.
+        INVITE_COUNT_EXCEEDED = 1; // The inviter has exceeded their limit of invites.
+        ALREADY_INVITED = 2; // The phone number has already been invited.
+        USER_NOT_INVITED = 3; // The inviter is not eligible to send invites.
+        INVALID_RECEIVER_PHONE_NUMBER = 4; // The provided phone number is invalid.
+        INVITE_CODE_NOT_FOUND = 5; // The provided invite code does not exist.
+        INVITE_CODE_REVOKED = 6; // The invite code has been revoked.
+        INVITE_CODE_EXPIRED = 7; // The invite code has expired.
+        RATE_LIMIT_EXCEEDED = 8; // The rate limit for invitations has been exceeded.
+        TEMPORARILY_UNAVAILABLE = 9; // The service is temporarily unavailable.
     }
 }
 
+// Request to get the invitation status for a user.
 message GetInvitationStatusRequest {
-    // The user being queried for their invitation status.
+    // Identifier of the user whose invitation status is queried.
     common.v1.UserId user_id = 1 [(validate.rules).message.required = true];
 }
 
+// Response containing the invitation status for a user.
 message GetInvitationStatusResponse {
+    // Indicates the result of the GetInvitationStatus operation.
     Result result = 1;
-    enum Result {
-        OK = 0;
-    }
-
-    // The user's invitation status
+    // The current status of the user's invitation.
     InvitationStatus status = 2;
+
+    // Enum detailing potential results of the GetInvitationStatus request.
+    enum Result {
+        OK = 0; // Query was successful.
+        UNAUTHORIZED = 1; // The requester lacks authorization to view the status.
+        SERVICE_UNAVAILABLE = 2; // The service is temporarily unavailable.
+    }
 }
 
+// Defines the structure and validation for an invite code.
 message InviteCode {
-    // Regex for invite codes
-    string value = 1 [(validate.rules).string = {
-        pattern: "^[A-z0-9]{3,32}$",
-        min_len: 3,
-        max_len: 32,
-    }];
+    // The invite code, adhering to a specified pattern and length.
+    string value = 1 [(validate.rules).string = {pattern: "^[A-z0-9]{3,32}$", min_len: 3, max_len: 32}];
 }
 
-message PageToken {
-    bytes value = 1 [(validate.rules).bytes = {
-        min_len: 1
-        max_len: 128
-    }];
-}
-
+// Enumerates the possible statuses of an invitation.
 enum InvitationStatus {
-    // The phone number has never been invited.
-    NOT_INVITED = 0;
-    // The phone number has been invited at least once.
-    INVITED = 1;
-    // The phone number has been invited and used the app at least once via a
-    // phone verified account creation or login.
-    REGISTERED = 2;
-    // The phone number was invited, but revoked at a later time.
-    REVOKED = 3;
+    NOT_INVITED = 0; // The user has not received an invitation.
+    INVITED = 1; // The user has been invited.
+    REGISTERED = 2; // The user has registered on the platform.
+    REVOKED = 3; // The invitation was revoked.
+}
+
+// Encapsulates a pagination token used in listing and querying operations.
+message PageToken {
+    // The token value, subject to length constraints for efficiency.
+    bytes value = 1 [(validate.rules).bytes = {min_len: 1, max_len: 128}];
+}
+
+// Illustrative example of how PageToken could be utilized in listing invitations.
+message ListInvitationsRequest {
+    common.v1.UserId user_id = 1 [(validate.rules).message.required = true];
+    // Optional token for pagination, indicating where to start listing.
+    PageToken page_token = 2;
+}
+
+message ListInvitationsResponse {
+    // A list of invitations, potentially part of a larger set.
+    repeated Invitation invitations = 1;
+    // Token to retrieve the next page of invitations, if available.
+    PageToken next_page_token = 2;
+}
+
+// Placeholder for the structure of an Invitation, to demonstrate pagination.
+message Invitation {
+    // Details of an invitation would be defined here.
 }
