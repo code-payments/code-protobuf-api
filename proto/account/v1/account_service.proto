@@ -2,226 +2,147 @@ syntax = "proto3";
 
 package code.account.v1;
 
+// Package options for different programming languages.
 option go_package = "github.com/code-payments/code-protobuf-api/generated/go/account/v1;account";
 option java_package = "com.codeinc.gen.account.v1";
 option objc_class_prefix = "CPBAccountV1";
 
+// Dependencies for account service definitions.
 import "common/v1/model.proto";
 import "transaction/v2/transaction_service.proto";
 import "validate/validate.proto";
 
+// Service definition for account-related operations.
 service Account {
-    // IsCodeAccount returns whether an owner account is a Code account. This hints
-    // to the client whether the account can be logged in, used for making payments,
-    // etc.
+    // Checks if a given owner account is a Code account, which implies certain capabilities.
     rpc IsCodeAccount(IsCodeAccountRequest) returns (IsCodeAccountResponse);
 
-    // GetTokenAccountInfos returns token account metadata relevant to the Code owner
-    // account.
+    // Retrieves metadata for token accounts associated with a Code owner account.
     rpc GetTokenAccountInfos(GetTokenAccountInfosRequest) returns (GetTokenAccountInfosResponse);
 
-    // LinkAdditionalAccounts allows a client to declare additional accounts to
-    // be tracked and used within Code. The accounts declared in this RPC are not
-    // managed by Code (ie. not a Timelock account), created externally and cannot
-    // be linked automatically (ie. authority derived off user 12 words).
+    // Links additional, externally managed accounts for use within Code.
     rpc LinkAdditionalAccounts(LinkAdditionalAccountsRequest) returns (LinkAdditionalAccountsResponse);
 }
 
+// Request and response messages for IsCodeAccount RPC.
 message IsCodeAccountRequest {
-    // The owner account to check against.
+    // Owner account to check.
     common.v1.SolanaAccountId owner = 1 [(validate.rules).message.required = true];
-
-    // The signature is of serialize(IsCodeAccountRequest) without this field set
-    // using the private key of the owner account. This provides an authentication
-    // mechanism to the RPC.
+    // Signature for authentication.
     common.v1.Signature signature = 2 [(validate.rules).message.required = true];
 }
 
 message IsCodeAccountResponse {
+    // Result of the check.
     Result result = 1;
     enum Result {
-        // The account is a Code account.
-        OK = 0;
-        // The account is not a Code account.
-        NOT_FOUND = 1;
-        // The account exists, but at least one timelock account is unlocked.
-        UNLOCKED_TIMELOCK_ACCOUNT = 2;
+        OK = 0;  // The account is a Code account.
+        NOT_FOUND = 1;  // Not a Code account.
+        UNLOCKED_TIMELOCK_ACCOUNT = 2;  // Exists but with unlocked timelock.
     }
 }
 
+// Request and response messages for GetTokenAccountInfos RPC.
 message GetTokenAccountInfosRequest {
-    // The owner account, which can also be thought of as a parent account for this
-    // RPC that links to one or more token accounts.
+    // Owner (or parent) account for the query.
     common.v1.SolanaAccountId owner = 1 [(validate.rules).message.required = true];
-
-    // The signature is of serialize(GetTokenAccountInfosRequest) without this field set
-    // using the private key of the owner account. This provides an authentication
-    // mechanism to the RPC.
+    // Signature for authentication.
     common.v1.Signature signature = 2 [(validate.rules).message.required = true];
 }
 
 message GetTokenAccountInfosResponse {
+    // Result of the query.
     Result result = 1;
     enum Result {
-        OK = 0;
-        NOT_FOUND = 1;
+        OK = 0;  // Success.
+        NOT_FOUND = 1;  // No token accounts found.
     }
-
+    // Mapping of token accounts with their infos.
     map<string, TokenAccountInfo> token_account_infos = 2;
 }
 
+// Request and response messages for LinkAdditionalAccounts RPC.
 message LinkAdditionalAccountsRequest {
-    // The owner account to link to
+    // Owner account to which additional accounts will be linked.
     common.v1.SolanaAccountId owner = 1 [(validate.rules).message.required = true];
-
-    // The authority account derived off the user's 12 words, which contains
-    // the USDC ATA (and potentially others in the future) that will be used
-    // in swaps.
+    // Authority account derived from user's seed phrase.
     common.v1.SolanaAccountId swap_authority = 2 [(validate.rules).message.required = true];
-
-    // Signature values for each account provided in this request. Each signature
-    // must be generated without this array set. The expected ordering of signatures:
-    //  1. owner
-    //  2. swap_authority
-    repeated common.v1.Signature signatures = 3 [(validate.rules).repeated = {
-        min_items: 2
-        max_items: 2
-    }];
+    // Signatures for authentication.
+    repeated common.v1.Signature signatures = 3 [(validate.rules).repeated = {min_items: 2, max_items: 2}];
 }
 
 message LinkAdditionalAccountsResponse {
+    // Result of the linking operation.
     Result result = 1;
     enum Result {
-        // Supports idempotency, and will be returned as long as the request exactly
-        // matches a previous execution.
-        OK = 0;
-        // The action has been denied (eg. owner account not phone verified)
-        DENIED = 1;
-        // An account being linked is not valid
-        INVALID_ACCOUNT = 2;
+        OK = 0;  // Request matches a previous execution (idempotency).
+        DENIED = 1;  // Request denied (e.g., account not verified).
+        INVALID_ACCOUNT = 2;  // Invalid account in request.
     }
 }
 
+// Defines token account information and various states.
 message TokenAccountInfo {
-    // The token account's address
+    // Basic account identifiers.
     common.v1.SolanaAccountId address = 1 [(validate.rules).message.required = true];
+    common.v1.SolanaAccountId owner = 2;  // Parent account, if available.
+    common.v1.SolanaAccountId authority = 3;  // Authority over the funds.
 
-    // The owner of the token account, which can also be thought of as a parent
-    // account that links to one or more token accounts. This is provided when
-    // available.
-    common.v1.SolanaAccountId owner = 2;
-
-    // The token account's authority, which has access to moving funds for the
-    // account. This can be the owner account under certain circumstances (eg.
-    // ATA, primary account). This is provided when available.
-    common.v1.SolanaAccountId authority = 3;
-
-    // The type of token account, which infers its intended use.
+    // Account type and indexing for applicable types.
     common.v1.AccountType account_type = 4 [(validate.rules).enum.not_in = 0];
+    uint64 index = 5;  // Derivation index, zero if not applicable.
 
-    // The account's derivation index for applicable account types. When this field
-    // doesn't apply, a zero value is provided.
-    uint64 index = 5;
-
-    // The source of truth for the balance calculation.
+    // Balance information and source.
     BalanceSource balance_source = 6;
+    uint64 balance = 7;  // Balance in quarks as observed by Code.
+
+    // Management and blockchain states.
+    ManagementState management_state = 8;
+    BlockchainState blockchain_state = 9;
+
+    // Additional flags and information for specific account types.
+    bool must_rotate = 10;  // For temporary incoming accounts.
+    ClaimState claim_state = 11;  // Claim status for applicable accounts.
+    transaction.v2.ExchangeData original_exchange_data = 12;  // Original funding data.
+
+    // Token mint information.
+    common.v1.SolanaAccountId mint = 13;  // Token mint address.
+
+    // Relationships and other reserved fields.
+    common.v1.Relationship relationship = 16;  // Established third-party relationships.
+
+    // Enums for balance sources, management, blockchain states, and claim states.
     enum BalanceSource {
-        // The account's balance could not be determined. This may be returned when
-        // the data source is unstable and a reliable balance cannot be determined.
         BALANCE_SOURCE_UNKNOWN = 0;
-        // The account's balance was fetched directly from a finalized state on the
-        // blockchain.
         BALANCE_SOURCE_BLOCKCHAIN = 1;
-        // The account's balance was calculated using cached values in Code. Accuracy
-        // is only guaranteed when management_state is LOCKED.
         BALANCE_SOURCE_CACHE = 2;
     }
-
-    // The balance in quarks, as observed by Code. This may not reflect the value
-    // on the blockchain and could be non-zero even if the account hasn't been created.
-    // Use balance_source to determine how this value was calculated.
-    uint64 balance = 7;
-
-    // The state of the account as it pertains to Code's ability to manage funds.
-    ManagementState management_state = 8;
-    enum ManagementState {
-        // The state of the account is unknown. This may be returned when the
-        // data source is unstable and a reliable state cannot be determined.
-        MANAGEMENT_STATE_UNKNOWN = 0;
-        // Code does not maintain a management state and won't move funds for this
-        // account.
-        MANAGEMENT_STATE_NONE = 1;
-        // The account is in the process of transitioning to the LOCKED state.
-        MANAGEMENT_STATE_LOCKING = 2;
-        // The account's funds are locked and Code has co-signing authority.
-        MANAGEMENT_STATE_LOCKED = 3;
-        // The account is in the process of transitioning to the UNLOCKED state.
-        MANAGEMENT_STATE_UNLOCKING = 4;
-        // The account's funds are unlocked and Code no longer has co-signing
-        // authority. The account must transition to the LOCKED state to have
-        // management capabilities.
-        MANAGEMENT_STATE_UNLOCKED = 5;
-        // The account is in the process of transitioning to the CLOSED state.
-        MANAGEMENT_STATE_CLOSING = 6;
-        // The account has been closed and doesn't exist on the blockchain.
-        // Subsequently, it also has a zero balance.
-        MANAGEMENT_STATE_CLOSED = 7;
-    }
-
-    // The state of the account on the blockchain.
-    BlockchainState blockchain_state = 9;
-    enum BlockchainState {
-        // The state of the account is unknown. This may be returned when the
-        // data source is unstable and a reliable state cannot be determined.
-        BLOCKCHAIN_STATE_UNKNOWN = 0;
-        // The account does not exist on the blockchain.
-        BLOCKCHAIN_STATE_DOES_NOT_EXIST = 1;
-        // The account is created and exists on the blockchain.
-        BLOCKCHAIN_STATE_EXISTS = 2;
-    }
-
-    // For temporary incoming accounts only. Flag indicates whether client must
-    // actively try rotating it by issuing a ReceivePaymentsPrivately intent. In
-    // general, clients should wait as long as possible until this flag is true
-    // or requiring the funds to send their next payment.
-    bool must_rotate = 10;
-
-    // Whether an account is claimed. This only applies to relevant account types
-    // (eg. REMOTE_SEND_GIFT_CARD).
-    ClaimState claim_state = 11;
-    enum ClaimState {
-        // The account doesn't have a concept of being claimed, or the state
-        // could not be fetched by server.
-        CLAIM_STATE_UNKNOWN = 0;
-        // The account has not yet been claimed.
-        CLAIM_STATE_NOT_CLAIMED = 1;
-        // The account is claimed. Attempting to claim it will fail.
-        CLAIM_STATE_CLAIMED = 2;
-        // The account hasn't been claimed, but is expired. Funds will move
-        // back to the issuer. Attempting to claim it will fail.
-        CLAIM_STATE_EXPIRED = 3;
-    }
-
-    // For account types used as an intermediary for sending money between two
-    // users (eg. REMOTE_SEND_GIFT_CARD), this represents the original exchange
-    // data used to fund the account. Over time, this value will become stale:
-    //  1. Exchange rates will fluctuate, so the total fiat amount will differ.
-    //  2. External entities can deposit additional funds into the account, so
-    //     the balance, in quarks, may be greater than the original quark value.
-    //  3. The balance could have been received, so the total balance can show
-    //     as zero.
-    transaction.v2.ExchangeData original_exchange_data = 12;
-
-    // The token account's mint
-    common.v1.SolanaAccountId mint = 13;
-
-    // Reserved for the number of decimals configured for the mint
-    reserved 14;
-
-    // Reserved for a user-friendly display name for the mint
-    reserved 15;
-
-    // The relationship with a third party that this account has established with.
-    // This only applies to relevant account types (eg. RELATIONSHIP).
-    common.v1.Relationship relationship = 16;
+// Enumerates the possible management states of an account, reflecting its current operational status within the system.
+enum ManagementState {
+    MANAGEMENT_STATE_UNKNOWN = 0; // State is unknown or not specified, typically used when the account's state hasn't been determined.
+    MANAGEMENT_STATE_NONE = 1; // Account is not under any special management or locking protocol.
+    MANAGEMENT_STATE_LOCKING = 2; // Account is in the process of being locked, indicating a transitional state towards secure management.
+    MANAGEMENT_STATE_LOCKED = 3; // Account is fully locked, meaning it's under secure management and cannot be modified without authorization.
+    MANAGEMENT_STATE_UNLOCKING = 4; // Account is in the process of being unlocked, indicating a transitional state away from secure management.
+    MANAGEMENT_STATE_UNLOCKED = 5; // Account is fully unlocked, meaning it's no longer under secure management and is freely modifiable.
+    MANAGEMENT_STATE_CLOSING = 6; // Account is in the process of being closed, indicating a transitional state towards its termination.
+    MANAGEMENT_STATE_CLOSED = 7; // Account is fully closed, meaning it's terminated and no longer active or accessible within the system.
 }
+
+// Enumerates the states an account can have on the blockchain, providing clarity on its existence and operational status.
+enum BlockchainState {
+    BLOCKCHAIN_STATE_UNKNOWN = 0; // The blockchain state of the account is unknown, typically used when the account's existence hasn't been verified.
+    BLOCKCHAIN_STATE_DOES_NOT_EXIST = 1; // Indicates the account does not exist on the blockchain, either never created or possibly removed.
+    BLOCKCHAIN_STATE_EXISTS = 2; // Indicates the account exists on the blockchain and is recognized as a valid entity.
+}
+
+// Enumerates the claim states of an account, relevant for accounts that can be claimed or have ownership transferred.
+enum ClaimState {
+    CLAIM_STATE_UNKNOWN = 0; // The claim state of the account is unknown, used when the claim status hasn't been determined.
+    CLAIM_STATE_NOT_CLAIMED = 1; // Indicates the account has not been claimed, meaning it's available for claiming under defined conditions.
+    CLAIM_STATE_CLAIMED = 2; // Indicates the account has already been claimed, signifying an ownership or beneficiary assignment.
+    CLAIM_STATE_EXPIRED = 3; // Indicates the account's claim period has expired without being claimed, possibly leading to a change in its status or availability.
+}
+
+// Reserved fields for future enhancements to the TokenAccountInfo message, ensuring backward compatibility when new fields are added.
+reserved 14, 15;
