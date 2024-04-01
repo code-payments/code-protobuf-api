@@ -1288,6 +1288,167 @@ var _ interface {
 	ErrorName() string
 } = GetLoginForThirdPartyAppResponseValidationError{}
 
+// Validate checks the field values on GetTwitterUserRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *GetTwitterUserRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if l := utf8.RuneCountInString(m.GetUsername()); l < 1 || l > 15 {
+		return GetTwitterUserRequestValidationError{
+			field:  "Username",
+			reason: "value length must be between 1 and 15 runes, inclusive",
+		}
+	}
+
+	return nil
+}
+
+// GetTwitterUserRequestValidationError is the validation error returned by
+// GetTwitterUserRequest.Validate if the designated constraints aren't met.
+type GetTwitterUserRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetTwitterUserRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetTwitterUserRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetTwitterUserRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetTwitterUserRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetTwitterUserRequestValidationError) ErrorName() string {
+	return "GetTwitterUserRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetTwitterUserRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetTwitterUserRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetTwitterUserRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetTwitterUserRequestValidationError{}
+
+// Validate checks the field values on GetTwitterUserResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *GetTwitterUserResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Result
+
+	if v, ok := interface{}(m.GetTipAddress()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetTwitterUserResponseValidationError{
+				field:  "TipAddress",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for Name
+
+	// no validation rules for ProfilePicUrl
+
+	// no validation rules for VerifiedType
+
+	// no validation rules for FollowerCount
+
+	return nil
+}
+
+// GetTwitterUserResponseValidationError is the validation error returned by
+// GetTwitterUserResponse.Validate if the designated constraints aren't met.
+type GetTwitterUserResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetTwitterUserResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetTwitterUserResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetTwitterUserResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetTwitterUserResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetTwitterUserResponseValidationError) ErrorName() string {
+	return "GetTwitterUserResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetTwitterUserResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetTwitterUserResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetTwitterUserResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetTwitterUserResponseValidationError{}
+
 // Validate checks the field values on User with the rules defined in the proto
 // definition for this message. If any rules are violated, an error is returned.
 func (m *User) Validate() error {

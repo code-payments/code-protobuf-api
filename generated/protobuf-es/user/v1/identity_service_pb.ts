@@ -907,6 +907,176 @@ proto3.util.setEnumType(GetLoginForThirdPartyAppResponse_Result, "code.user.v1.G
 ]);
 
 /**
+ * @generated from message code.user.v1.GetTwitterUserRequest
+ */
+export class GetTwitterUserRequest extends Message<GetTwitterUserRequest> {
+  /**
+   * The Twitter username to query against
+   *
+   * @generated from field: string username = 1;
+   */
+  username = "";
+
+  constructor(data?: PartialMessage<GetTwitterUserRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.user.v1.GetTwitterUserRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "username", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetTwitterUserRequest {
+    return new GetTwitterUserRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetTwitterUserRequest {
+    return new GetTwitterUserRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetTwitterUserRequest {
+    return new GetTwitterUserRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: GetTwitterUserRequest | PlainMessage<GetTwitterUserRequest> | undefined, b: GetTwitterUserRequest | PlainMessage<GetTwitterUserRequest> | undefined): boolean {
+    return proto3.util.equals(GetTwitterUserRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message code.user.v1.GetTwitterUserResponse
+ */
+export class GetTwitterUserResponse extends Message<GetTwitterUserResponse> {
+  /**
+   * @generated from field: code.user.v1.GetTwitterUserResponse.Result result = 1;
+   */
+  result = GetTwitterUserResponse_Result.OK;
+
+  /**
+   * Public key for a token account where tips are routed
+   *
+   * @generated from field: code.common.v1.SolanaAccountId tip_address = 2;
+   */
+  tipAddress?: SolanaAccountId;
+
+  /**
+   * The user's friendly name on Twitter
+   *
+   * @generated from field: string name = 3;
+   */
+  name = "";
+
+  /**
+   * URL to the user's Twitter profile picture
+   *
+   * @generated from field: string profile_pic_url = 4;
+   */
+  profilePicUrl = "";
+
+  /**
+   * The type of Twitter verification associated with the user
+   *
+   * @generated from field: code.user.v1.GetTwitterUserResponse.VerifiedType verified_type = 5;
+   */
+  verifiedType = GetTwitterUserResponse_VerifiedType.NONE;
+
+  /**
+   * The number of followers the user has on Twitter
+   *
+   * @generated from field: uint32 follower_count = 6;
+   */
+  followerCount = 0;
+
+  constructor(data?: PartialMessage<GetTwitterUserResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.user.v1.GetTwitterUserResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "result", kind: "enum", T: proto3.getEnumType(GetTwitterUserResponse_Result) },
+    { no: 2, name: "tip_address", kind: "message", T: SolanaAccountId },
+    { no: 3, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "profile_pic_url", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "verified_type", kind: "enum", T: proto3.getEnumType(GetTwitterUserResponse_VerifiedType) },
+    { no: 6, name: "follower_count", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetTwitterUserResponse {
+    return new GetTwitterUserResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetTwitterUserResponse {
+    return new GetTwitterUserResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetTwitterUserResponse {
+    return new GetTwitterUserResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: GetTwitterUserResponse | PlainMessage<GetTwitterUserResponse> | undefined, b: GetTwitterUserResponse | PlainMessage<GetTwitterUserResponse> | undefined): boolean {
+    return proto3.util.equals(GetTwitterUserResponse, a, b);
+  }
+}
+
+/**
+ * @generated from enum code.user.v1.GetTwitterUserResponse.Result
+ */
+export enum GetTwitterUserResponse_Result {
+  /**
+   * @generated from enum value: OK = 0;
+   */
+  OK = 0,
+
+  /**
+   * The Twitter user doesn't exist or isn't linked with a Code account
+   *
+   * @generated from enum value: NOT_FOUND = 1;
+   */
+  NOT_FOUND = 1,
+}
+// Retrieve enum metadata with: proto3.getEnumType(GetTwitterUserResponse_Result)
+proto3.util.setEnumType(GetTwitterUserResponse_Result, "code.user.v1.GetTwitterUserResponse.Result", [
+  { no: 0, name: "OK" },
+  { no: 1, name: "NOT_FOUND" },
+]);
+
+/**
+ * @generated from enum code.user.v1.GetTwitterUserResponse.VerifiedType
+ */
+export enum GetTwitterUserResponse_VerifiedType {
+  /**
+   * @generated from enum value: NONE = 0;
+   */
+  NONE = 0,
+
+  /**
+   * @generated from enum value: BLUE = 1;
+   */
+  BLUE = 1,
+
+  /**
+   * @generated from enum value: BUSINESS = 2;
+   */
+  BUSINESS = 2,
+
+  /**
+   * @generated from enum value: GOVERNMENT = 3;
+   */
+  GOVERNMENT = 3,
+}
+// Retrieve enum metadata with: proto3.getEnumType(GetTwitterUserResponse_VerifiedType)
+proto3.util.setEnumType(GetTwitterUserResponse_VerifiedType, "code.user.v1.GetTwitterUserResponse.VerifiedType", [
+  { no: 0, name: "NONE" },
+  { no: 1, name: "BLUE" },
+  { no: 2, name: "BUSINESS" },
+  { no: 3, name: "GOVERNMENT" },
+]);
+
+/**
  * User is the highest order of a form of identity within Code.
  *
  * Note: Users outside Code are modelled as relationship accounts

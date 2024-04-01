@@ -58,6 +58,14 @@ type IdentityClient interface {
 	// request. This endpoint supports all paths where login is possible (login on payment,
 	// raw login, etc.).
 	GetLoginForThirdPartyApp(ctx context.Context, in *GetLoginForThirdPartyAppRequest, opts ...grpc.CallOption) (*GetLoginForThirdPartyAppResponse, error)
+	// GetTwitterUser gets Twitter user information
+	//
+	// Note 1: This RPC will only return results for Twitter users that have
+	// accounts linked with Code.
+	//
+	// Note 2: This RPC is heavily cached, and may not reflect real-time Twitter
+	// information.
+	GetTwitterUser(ctx context.Context, in *GetTwitterUserRequest, opts ...grpc.CallOption) (*GetTwitterUserResponse, error)
 }
 
 type identityClient struct {
@@ -122,6 +130,15 @@ func (c *identityClient) GetLoginForThirdPartyApp(ctx context.Context, in *GetLo
 	return out, nil
 }
 
+func (c *identityClient) GetTwitterUser(ctx context.Context, in *GetTwitterUserRequest, opts ...grpc.CallOption) (*GetTwitterUserResponse, error) {
+	out := new(GetTwitterUserResponse)
+	err := c.cc.Invoke(ctx, "/code.user.v1.Identity/GetTwitterUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // IdentityServer is the server API for Identity service.
 // All implementations must embed UnimplementedIdentityServer
 // for forward compatibility
@@ -162,6 +179,14 @@ type IdentityServer interface {
 	// request. This endpoint supports all paths where login is possible (login on payment,
 	// raw login, etc.).
 	GetLoginForThirdPartyApp(context.Context, *GetLoginForThirdPartyAppRequest) (*GetLoginForThirdPartyAppResponse, error)
+	// GetTwitterUser gets Twitter user information
+	//
+	// Note 1: This RPC will only return results for Twitter users that have
+	// accounts linked with Code.
+	//
+	// Note 2: This RPC is heavily cached, and may not reflect real-time Twitter
+	// information.
+	GetTwitterUser(context.Context, *GetTwitterUserRequest) (*GetTwitterUserResponse, error)
 	mustEmbedUnimplementedIdentityServer()
 }
 
@@ -186,6 +211,9 @@ func (UnimplementedIdentityServer) LoginToThirdPartyApp(context.Context, *LoginT
 }
 func (UnimplementedIdentityServer) GetLoginForThirdPartyApp(context.Context, *GetLoginForThirdPartyAppRequest) (*GetLoginForThirdPartyAppResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLoginForThirdPartyApp not implemented")
+}
+func (UnimplementedIdentityServer) GetTwitterUser(context.Context, *GetTwitterUserRequest) (*GetTwitterUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTwitterUser not implemented")
 }
 func (UnimplementedIdentityServer) mustEmbedUnimplementedIdentityServer() {}
 
@@ -308,6 +336,24 @@ func _Identity_GetLoginForThirdPartyApp_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Identity_GetTwitterUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTwitterUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IdentityServer).GetTwitterUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/code.user.v1.Identity/GetTwitterUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IdentityServer).GetTwitterUser(ctx, req.(*GetTwitterUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Identity_ServiceDesc is the grpc.ServiceDesc for Identity service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -338,6 +384,10 @@ var Identity_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetLoginForThirdPartyApp",
 			Handler:    _Identity_GetLoginForThirdPartyApp_Handler,
+		},
+		{
+			MethodName: "GetTwitterUser",
+			Handler:    _Identity_GetTwitterUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
