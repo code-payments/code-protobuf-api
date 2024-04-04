@@ -686,6 +686,9 @@ message SendPrivatePaymentMetadata {
 
     // Is the payment for a tip?
     bool is_tip = 5;
+
+    // If is_tip is true, the user being tipped
+    TippedUser tipped_user = 6;
 }
 
 // Send a payment to a destination account publicly.
@@ -1384,6 +1387,20 @@ message BuyModuleLimit {
     float max_per_transaction = 2;
 }
 
+message TippedUser {
+    Platform platform = 1 [(validate.rules).enum = {
+        in: [1] // TWITTER
+    }];
+    enum Platform {
+        UNKNOWN = 0;
+        TWITTER = 1;
+    }
+
+    string username = 2 [(validate.rules).string = {
+        min_len: 1
+        max_len: 15
+    }];
+}
 
 message Cursor {
     bytes value = 1 [(validate.rules).bytes = {

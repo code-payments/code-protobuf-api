@@ -2312,6 +2312,13 @@ export class SendPrivatePaymentMetadata extends Message<SendPrivatePaymentMetada
    */
   isTip = false;
 
+  /**
+   * If is_tip is true, the user being tipped
+   *
+   * @generated from field: code.transaction.v2.TippedUser tipped_user = 6;
+   */
+  tippedUser?: TippedUser;
+
   constructor(data?: PartialMessage<SendPrivatePaymentMetadata>) {
     super();
     proto3.util.initPartial(data, this);
@@ -2325,6 +2332,7 @@ export class SendPrivatePaymentMetadata extends Message<SendPrivatePaymentMetada
     { no: 3, name: "is_withdrawal", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 4, name: "is_remote_send", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 5, name: "is_tip", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 6, name: "tipped_user", kind: "message", T: TippedUser },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SendPrivatePaymentMetadata {
@@ -4894,6 +4902,69 @@ export class BuyModuleLimit extends Message<BuyModuleLimit> {
     return proto3.util.equals(BuyModuleLimit, a, b);
   }
 }
+
+/**
+ * @generated from message code.transaction.v2.TippedUser
+ */
+export class TippedUser extends Message<TippedUser> {
+  /**
+   * @generated from field: code.transaction.v2.TippedUser.Platform platform = 1;
+   */
+  platform = TippedUser_Platform.UNKNOWN;
+
+  /**
+   * @generated from field: string username = 2;
+   */
+  username = "";
+
+  constructor(data?: PartialMessage<TippedUser>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.transaction.v2.TippedUser";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "platform", kind: "enum", T: proto3.getEnumType(TippedUser_Platform) },
+    { no: 2, name: "username", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): TippedUser {
+    return new TippedUser().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): TippedUser {
+    return new TippedUser().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): TippedUser {
+    return new TippedUser().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: TippedUser | PlainMessage<TippedUser> | undefined, b: TippedUser | PlainMessage<TippedUser> | undefined): boolean {
+    return proto3.util.equals(TippedUser, a, b);
+  }
+}
+
+/**
+ * @generated from enum code.transaction.v2.TippedUser.Platform
+ */
+export enum TippedUser_Platform {
+  /**
+   * @generated from enum value: UNKNOWN = 0;
+   */
+  UNKNOWN = 0,
+
+  /**
+   * @generated from enum value: TWITTER = 1;
+   */
+  TWITTER = 1,
+}
+// Retrieve enum metadata with: proto3.getEnumType(TippedUser_Platform)
+proto3.util.setEnumType(TippedUser_Platform, "code.transaction.v2.TippedUser.Platform", [
+  { no: 0, name: "UNKNOWN" },
+  { no: 1, name: "TWITTER" },
+]);
 
 /**
  * @generated from message code.transaction.v2.Cursor
