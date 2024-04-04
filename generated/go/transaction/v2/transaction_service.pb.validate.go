@@ -2262,6 +2262,8 @@ func (m *SendPrivatePaymentMetadata) Validate() error {
 
 	// no validation rules for IsRemoteSend
 
+	// no validation rules for IsTip
+
 	return nil
 }
 
