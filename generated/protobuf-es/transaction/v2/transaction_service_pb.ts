@@ -2199,7 +2199,7 @@ export class OpenAccountsMetadata extends Message<OpenAccountsMetadata> {
  * should also reorganize their bucket accounts and rotate their temporary outgoing
  * account.
  *
- * Action Spec (In Person Cash Payment or Withdrawal):
+ * Action Spec (In Person Cash Payment or Withdrawal or Tip):
  *
  * actions = [
  *   // Section 1: Transfer ExchangeData.Quarks from BUCKET_X_KIN accounts to TEMPORARY_OUTGOING account with reogranizations
@@ -2305,6 +2305,13 @@ export class SendPrivatePaymentMetadata extends Message<SendPrivatePaymentMetada
    */
   isRemoteSend = false;
 
+  /**
+   * Is the payment for a tip?
+   *
+   * @generated from field: bool is_tip = 5;
+   */
+  isTip = false;
+
   constructor(data?: PartialMessage<SendPrivatePaymentMetadata>) {
     super();
     proto3.util.initPartial(data, this);
@@ -2317,6 +2324,7 @@ export class SendPrivatePaymentMetadata extends Message<SendPrivatePaymentMetada
     { no: 2, name: "exchange_data", kind: "message", T: ExchangeData },
     { no: 3, name: "is_withdrawal", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 4, name: "is_remote_send", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 5, name: "is_tip", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SendPrivatePaymentMetadata {

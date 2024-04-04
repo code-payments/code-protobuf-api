@@ -1187,6 +1187,16 @@ export enum ExchangeDataContent_Verb {
    * @generated from enum value: PURCHASED = 9;
    */
   PURCHASED = 9,
+
+  /**
+   * @generated from enum value: RECEIVED_TIP = 10;
+   */
+  RECEIVED_TIP = 10,
+
+  /**
+   * @generated from enum value: SENT_TIP = 11;
+   */
+  SENT_TIP = 11,
 }
 // Retrieve enum metadata with: proto3.getEnumType(ExchangeDataContent_Verb)
 proto3.util.setEnumType(ExchangeDataContent_Verb, "code.chat.v1.ExchangeDataContent.Verb", [
@@ -1200,6 +1210,8 @@ proto3.util.setEnumType(ExchangeDataContent_Verb, "code.chat.v1.ExchangeDataCont
   { no: 7, name: "SPENT" },
   { no: 8, name: "PAID" },
   { no: 9, name: "PURCHASED" },
+  { no: 10, name: "RECEIVED_TIP" },
+  { no: 11, name: "SENT_TIP" },
 ]);
 
 /**
