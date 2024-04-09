@@ -1296,11 +1296,35 @@ func (m *GetTwitterUserRequest) Validate() error {
 		return nil
 	}
 
-	if l := utf8.RuneCountInString(m.GetUsername()); l < 1 || l > 15 {
-		return GetTwitterUserRequestValidationError{
-			field:  "Username",
-			reason: "value length must be between 1 and 15 runes, inclusive",
+	switch m.Query.(type) {
+
+	case *GetTwitterUserRequest_Username:
+
+		if utf8.RuneCountInString(m.GetUsername()) > 15 {
+			return GetTwitterUserRequestValidationError{
+				field:  "Username",
+				reason: "value length must be at most 15 runes",
+			}
 		}
+
+	case *GetTwitterUserRequest_TipAddress:
+
+		if v, ok := interface{}(m.GetTipAddress()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return GetTwitterUserRequestValidationError{
+					field:  "TipAddress",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return GetTwitterUserRequestValidationError{
+			field:  "Query",
+			reason: "value is required",
+		}
+
 	}
 
 	return nil
@@ -1372,23 +1396,15 @@ func (m *GetTwitterUserResponse) Validate() error {
 
 	// no validation rules for Result
 
-	if v, ok := interface{}(m.GetTipAddress()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetTwitterUser()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetTwitterUserResponseValidationError{
-				field:  "TipAddress",
+				field:  "TwitterUser",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
 		}
 	}
-
-	// no validation rules for Name
-
-	// no validation rules for ProfilePicUrl
-
-	// no validation rules for VerifiedType
-
-	// no validation rules for FollowerCount
 
 	return nil
 }
@@ -1694,3 +1710,110 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = PhoneMetadataValidationError{}
+
+// Validate checks the field values on TwitterUser with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *TwitterUser) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetTipAddress() == nil {
+		return TwitterUserValidationError{
+			field:  "TipAddress",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetTipAddress()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return TwitterUserValidationError{
+				field:  "TipAddress",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if l := utf8.RuneCountInString(m.GetUsername()); l < 1 || l > 15 {
+		return TwitterUserValidationError{
+			field:  "Username",
+			reason: "value length must be between 1 and 15 runes, inclusive",
+		}
+	}
+
+	if l := utf8.RuneCountInString(m.GetName()); l < 1 || l > 256 {
+		return TwitterUserValidationError{
+			field:  "Name",
+			reason: "value length must be between 1 and 256 runes, inclusive",
+		}
+	}
+
+	if l := utf8.RuneCountInString(m.GetProfilePicUrl()); l < 1 || l > 2048 {
+		return TwitterUserValidationError{
+			field:  "ProfilePicUrl",
+			reason: "value length must be between 1 and 2048 runes, inclusive",
+		}
+	}
+
+	// no validation rules for VerifiedType
+
+	// no validation rules for FollowerCount
+
+	return nil
+}
+
+// TwitterUserValidationError is the validation error returned by
+// TwitterUser.Validate if the designated constraints aren't met.
+type TwitterUserValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e TwitterUserValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e TwitterUserValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e TwitterUserValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e TwitterUserValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e TwitterUserValidationError) ErrorName() string { return "TwitterUserValidationError" }
+
+// Error satisfies the builtin error interface
+func (e TwitterUserValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sTwitterUser.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = TwitterUserValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = TwitterUserValidationError{}
