@@ -415,6 +415,13 @@ export class GetUserResponse extends Message<GetUserResponse> {
    */
   eligibleAirdrops: AirdropType[] = [];
 
+  /**
+   * Wether the buy module is enabled for this user
+   *
+   * @generated from field: bool enable_buy_module = 8;
+   */
+  enableBuyModule = false;
+
   constructor(data?: PartialMessage<GetUserResponse>) {
     super();
     proto3.util.initPartial(data, this);
@@ -429,6 +436,7 @@ export class GetUserResponse extends Message<GetUserResponse> {
     { no: 5, name: "phone", kind: "message", T: PhoneMetadata, oneof: "metadata" },
     { no: 6, name: "enable_internal_flags", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 7, name: "eligible_airdrops", kind: "enum", T: proto3.getEnumType(AirdropType), repeated: true },
+    { no: 8, name: "enable_buy_module", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetUserResponse {

@@ -616,6 +616,8 @@ func (m *GetUserResponse) Validate() error {
 
 	// no validation rules for EnableInternalFlags
 
+	// no validation rules for EnableBuyModule
+
 	switch m.Metadata.(type) {
 
 	case *GetUserResponse_Phone:
