@@ -1392,3 +1392,152 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ResponseValidationError{}
+
+// Validate checks the field values on ServerPing with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *ServerPing) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetTimestamp() == nil {
+		return ServerPingValidationError{
+			field:  "Timestamp",
+			reason: "value is required",
+		}
+	}
+
+	if m.GetPingDelay() == nil {
+		return ServerPingValidationError{
+			field:  "PingDelay",
+			reason: "value is required",
+		}
+	}
+
+	return nil
+}
+
+// ServerPingValidationError is the validation error returned by
+// ServerPing.Validate if the designated constraints aren't met.
+type ServerPingValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ServerPingValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ServerPingValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ServerPingValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ServerPingValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ServerPingValidationError) ErrorName() string { return "ServerPingValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ServerPingValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sServerPing.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ServerPingValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ServerPingValidationError{}
+
+// Validate checks the field values on ClientPong with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *ClientPong) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetTimestamp() == nil {
+		return ClientPongValidationError{
+			field:  "Timestamp",
+			reason: "value is required",
+		}
+	}
+
+	return nil
+}
+
+// ClientPongValidationError is the validation error returned by
+// ClientPong.Validate if the designated constraints aren't met.
+type ClientPongValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ClientPongValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ClientPongValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ClientPongValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ClientPongValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ClientPongValidationError) ErrorName() string { return "ClientPongValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ClientPongValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sClientPong.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ClientPongValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ClientPongValidationError{}

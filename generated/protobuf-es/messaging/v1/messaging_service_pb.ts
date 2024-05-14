@@ -4,8 +4,8 @@
 // @ts-nocheck
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Duration, Message as Message$1, proto3, Timestamp } from "@bufbuild/protobuf";
-import { Domain, IntentId, Signature, SolanaAccountId } from "../../common/v1/model_pb";
+import { Message as Message$1, proto3, Timestamp } from "@bufbuild/protobuf";
+import { ClientPong, Domain, IntentId, ServerPing, Signature, SolanaAccountId } from "../../common/v1/model_pb";
 import { AdditionalFeePayment, AirdropType, ExchangeData, ExchangeDataWithoutRate, Metadata } from "../../transaction/v2/transaction_service_pb";
 
 /**
@@ -97,7 +97,7 @@ export class OpenMessageStreamResponse extends Message$1<OpenMessageStreamRespon
  */
 export class OpenMessageStreamWithKeepAliveRequest extends Message$1<OpenMessageStreamWithKeepAliveRequest> {
   /**
-   * @generated from oneof code.messaging.v1.OpenMessageStreamWithKeepAliveRequest.requestOrPong
+   * @generated from oneof code.messaging.v1.OpenMessageStreamWithKeepAliveRequest.request_or_pong
    */
   requestOrPong: {
     /**
@@ -107,7 +107,7 @@ export class OpenMessageStreamWithKeepAliveRequest extends Message$1<OpenMessage
     case: "request";
   } | {
     /**
-     * @generated from field: code.messaging.v1.ClientPong pong = 2;
+     * @generated from field: code.common.v1.ClientPong pong = 2;
      */
     value: ClientPong;
     case: "pong";
@@ -121,8 +121,8 @@ export class OpenMessageStreamWithKeepAliveRequest extends Message$1<OpenMessage
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "code.messaging.v1.OpenMessageStreamWithKeepAliveRequest";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "request", kind: "message", T: OpenMessageStreamRequest, oneof: "requestOrPong" },
-    { no: 2, name: "pong", kind: "message", T: ClientPong, oneof: "requestOrPong" },
+    { no: 1, name: "request", kind: "message", T: OpenMessageStreamRequest, oneof: "request_or_pong" },
+    { no: 2, name: "pong", kind: "message", T: ClientPong, oneof: "request_or_pong" },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): OpenMessageStreamWithKeepAliveRequest {
@@ -147,7 +147,7 @@ export class OpenMessageStreamWithKeepAliveRequest extends Message$1<OpenMessage
  */
 export class OpenMessageStreamWithKeepAliveResponse extends Message$1<OpenMessageStreamWithKeepAliveResponse> {
   /**
-   * @generated from oneof code.messaging.v1.OpenMessageStreamWithKeepAliveResponse.responseOrPing
+   * @generated from oneof code.messaging.v1.OpenMessageStreamWithKeepAliveResponse.response_or_ping
    */
   responseOrPing: {
     /**
@@ -157,7 +157,7 @@ export class OpenMessageStreamWithKeepAliveResponse extends Message$1<OpenMessag
     case: "response";
   } | {
     /**
-     * @generated from field: code.messaging.v1.ServerPing ping = 2;
+     * @generated from field: code.common.v1.ServerPing ping = 2;
      */
     value: ServerPing;
     case: "ping";
@@ -171,8 +171,8 @@ export class OpenMessageStreamWithKeepAliveResponse extends Message$1<OpenMessag
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "code.messaging.v1.OpenMessageStreamWithKeepAliveResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "response", kind: "message", T: OpenMessageStreamResponse, oneof: "responseOrPing" },
-    { no: 2, name: "ping", kind: "message", T: ServerPing, oneof: "responseOrPing" },
+    { no: 1, name: "response", kind: "message", T: OpenMessageStreamResponse, oneof: "response_or_ping" },
+    { no: 2, name: "ping", kind: "message", T: ServerPing, oneof: "response_or_ping" },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): OpenMessageStreamWithKeepAliveResponse {
@@ -1204,94 +1204,6 @@ export class Message extends Message$1<Message> {
 
   static equals(a: Message | PlainMessage<Message> | undefined, b: Message | PlainMessage<Message> | undefined): boolean {
     return proto3.util.equals(Message, a, b);
-  }
-}
-
-/**
- * @generated from message code.messaging.v1.ServerPing
- */
-export class ServerPing extends Message$1<ServerPing> {
-  /**
-   * Timestamp the ping was sent on the stream, for client to get a sense
-   * of potential network latency
-   *
-   * @generated from field: google.protobuf.Timestamp timestamp = 1;
-   */
-  timestamp?: Timestamp;
-
-  /**
-   * The delay server will apply before sending the next ping
-   *
-   * @generated from field: google.protobuf.Duration ping_delay = 2;
-   */
-  pingDelay?: Duration;
-
-  constructor(data?: PartialMessage<ServerPing>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.messaging.v1.ServerPing";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "timestamp", kind: "message", T: Timestamp },
-    { no: 2, name: "ping_delay", kind: "message", T: Duration },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ServerPing {
-    return new ServerPing().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ServerPing {
-    return new ServerPing().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ServerPing {
-    return new ServerPing().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: ServerPing | PlainMessage<ServerPing> | undefined, b: ServerPing | PlainMessage<ServerPing> | undefined): boolean {
-    return proto3.util.equals(ServerPing, a, b);
-  }
-}
-
-/**
- * @generated from message code.messaging.v1.ClientPong
- */
-export class ClientPong extends Message$1<ClientPong> {
-  /**
-   * Timestamp the Pong was sent on the stream, for server to get a sense
-   * of potential network latency
-   *
-   * @generated from field: google.protobuf.Timestamp timestamp = 1;
-   */
-  timestamp?: Timestamp;
-
-  constructor(data?: PartialMessage<ClientPong>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.messaging.v1.ClientPong";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "timestamp", kind: "message", T: Timestamp },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ClientPong {
-    return new ClientPong().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ClientPong {
-    return new ClientPong().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ClientPong {
-    return new ClientPong().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: ClientPong | PlainMessage<ClientPong> | undefined, b: ClientPong | PlainMessage<ClientPong> | undefined): boolean {
-    return proto3.util.equals(ClientPong, a, b);
   }
 }
 

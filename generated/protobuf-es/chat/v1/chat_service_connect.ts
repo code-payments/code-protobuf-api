@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { AdvancePointerRequest, AdvancePointerResponse, GetChatsRequest, GetChatsResponse, GetMessagesRequest, GetMessagesResponse, SetMuteStateRequest, SetMuteStateResponse, SetSubscriptionStateRequest, SetSubscriptionStateResponse } from "./chat_service_pb";
+import { AdvancePointerRequest, AdvancePointerResponse, GetChatsRequest, GetChatsResponse, GetMessagesRequest, GetMessagesResponse, SendMessageRequest, SendMessageResponse, SetMuteStateRequest, SetMuteStateResponse, SetSubscriptionStateRequest, SetSubscriptionStateResponse, StreamChatEventsRequest, StreamChatEventsResponse } from "./chat_service_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -65,6 +65,24 @@ export const Chat = {
       name: "SetSubscriptionState",
       I: SetSubscriptionStateRequest,
       O: SetSubscriptionStateResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc code.chat.v1.Chat.StreamChatEvents
+     */
+    streamChatEvents: {
+      name: "StreamChatEvents",
+      I: StreamChatEventsRequest,
+      O: StreamChatEventsResponse,
+      kind: MethodKind.BiDiStreaming,
+    },
+    /**
+     * @generated from rpc code.chat.v1.Chat.SendMessage
+     */
+    sendMessage: {
+      name: "SendMessage",
+      I: SendMessageRequest,
+      O: SendMessageResponse,
       kind: MethodKind.Unary,
     },
   }
