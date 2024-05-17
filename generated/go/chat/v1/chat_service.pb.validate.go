@@ -1178,6 +1178,13 @@ func (m *ChatStreamEvent) Validate() error {
 		return nil
 	}
 
+	if len(m.GetMessages()) > 100 {
+		return ChatStreamEventValidationError{
+			field:  "Messages",
+			reason: "value must contain no more than 100 item(s)",
+		}
+	}
+
 	for idx, item := range m.GetMessages() {
 		_, _ = idx, item
 
@@ -1191,6 +1198,13 @@ func (m *ChatStreamEvent) Validate() error {
 			}
 		}
 
+	}
+
+	if len(m.GetPointers()) > 100 {
+		return ChatStreamEventValidationError{
+			field:  "Pointers",
+			reason: "value must contain no more than 100 item(s)",
+		}
 	}
 
 	for idx, item := range m.GetPointers() {

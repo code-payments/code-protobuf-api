@@ -162,9 +162,9 @@ message OpenChatEventStream {
 }
 
 message ChatStreamEvent {
-    repeated ChatMessage messages = 1;
+    repeated ChatMessage messages = 1 [(validate.rules).repeated.max_items = 100];
 
-    repeated Pointer pointers = 2;
+    repeated Pointer pointers = 2 [(validate.rules).repeated.max_items = 100];
 }
 
 message ChatStreamEventBatch {
