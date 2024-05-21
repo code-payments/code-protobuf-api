@@ -2421,12 +2421,24 @@ func (m *Content) Validate() error {
 			}
 		}
 
-	case *Content_UserText:
+	case *Content_Text:
 
-		if v, ok := interface{}(m.GetUserText()).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(m.GetText()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return ContentValidationError{
-					field:  "UserText",
+					field:  "Text",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *Content_ThankYou:
+
+		if v, ok := interface{}(m.GetThankYou()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ContentValidationError{
+					field:  "ThankYou",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -2773,16 +2785,16 @@ var _ interface {
 	ErrorName() string
 } = NaclBoxEncryptedContentValidationError{}
 
-// Validate checks the field values on UserTextContent with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *UserTextContent) Validate() error {
+// Validate checks the field values on TextContent with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *TextContent) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if l := utf8.RuneCountInString(m.GetText()); l < 1 || l > 1024 {
-		return UserTextContentValidationError{
+		return TextContentValidationError{
 			field:  "Text",
 			reason: "value length must be between 1 and 1024 runes, inclusive",
 		}
@@ -2791,9 +2803,9 @@ func (m *UserTextContent) Validate() error {
 	return nil
 }
 
-// UserTextContentValidationError is the validation error returned by
-// UserTextContent.Validate if the designated constraints aren't met.
-type UserTextContentValidationError struct {
+// TextContentValidationError is the validation error returned by
+// TextContent.Validate if the designated constraints aren't met.
+type TextContentValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -2801,22 +2813,22 @@ type UserTextContentValidationError struct {
 }
 
 // Field function returns field value.
-func (e UserTextContentValidationError) Field() string { return e.field }
+func (e TextContentValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e UserTextContentValidationError) Reason() string { return e.reason }
+func (e TextContentValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e UserTextContentValidationError) Cause() error { return e.cause }
+func (e TextContentValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e UserTextContentValidationError) Key() bool { return e.key }
+func (e TextContentValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e UserTextContentValidationError) ErrorName() string { return "UserTextContentValidationError" }
+func (e TextContentValidationError) ErrorName() string { return "TextContentValidationError" }
 
 // Error satisfies the builtin error interface
-func (e UserTextContentValidationError) Error() string {
+func (e TextContentValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -2828,14 +2840,14 @@ func (e UserTextContentValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sUserTextContent.%s: %s%s",
+		"invalid %sTextContent.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = UserTextContentValidationError{}
+var _ error = TextContentValidationError{}
 
 var _ interface {
 	Field() string
@@ -2843,7 +2855,72 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = UserTextContentValidationError{}
+} = TextContentValidationError{}
+
+// Validate checks the field values on ThankYouContent with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *ThankYouContent) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// ThankYouContentValidationError is the validation error returned by
+// ThankYouContent.Validate if the designated constraints aren't met.
+type ThankYouContentValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ThankYouContentValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ThankYouContentValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ThankYouContentValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ThankYouContentValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ThankYouContentValidationError) ErrorName() string { return "ThankYouContentValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ThankYouContentValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sThankYouContent.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ThankYouContentValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ThankYouContentValidationError{}
 
 // Validate checks the field values on Cursor with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.

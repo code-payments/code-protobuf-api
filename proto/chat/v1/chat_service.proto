@@ -316,7 +316,8 @@ message Content {
         ServerLocalizedContent  server_localized = 1;
         ExchangeDataContent     exchange_data    = 2;
         NaclBoxEncryptedContent nacl_box         = 3;
-        UserTextContent         user_text        = 4;
+        TextContent             text             = 4;
+        ThankYouContent         thank_you        = 5;
     }
 }
 
@@ -368,11 +369,15 @@ message NaclBoxEncryptedContent {
     }];
 }
 
-message UserTextContent {
+message TextContent {
     string text = 1 [(validate.rules).string = {
         min_len: 1
         max_len: 1024
     }];
+}
+
+message ThankYouContent {
+    // todo: May need additional metdata (who is being thanked, which tip, etc)
 }
 
 // Opaque cursor used across paged APIs. Underlying bytes may change as paging
