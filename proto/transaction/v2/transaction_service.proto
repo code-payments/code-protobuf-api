@@ -1199,7 +1199,7 @@ message ErrorDetails {
 
         ReasonStringErrorDetails     reason_string     = 1;
         InvalidSignatureErrorDetails invalid_signature = 2;
-        IntentDeniedErrorDetails     intent_denied     = 3; // Set when SubmitIntentResponse.Error.Code = DENIED
+        DeniedErrorDetails           denied            = 3;
     }
 }
 
@@ -1222,11 +1222,11 @@ message InvalidSignatureErrorDetails {
     common.v1.Signature provided_signature = 3 [(validate.rules).message.required = true];
 }
 
-message IntentDeniedErrorDetails {
-    Reason reason = 1;
-    enum Reason {
-        // Reason not given and is obscured from client
-        UNKNOWN = 0;
+message DeniedErrorDetails {
+    Code code = 1;
+    enum Code {
+        // Reason code not yet defined
+        UNSPECIFIED = 0;
         // Phone number has exceeded its free account allocation
         TOO_MANY_FREE_ACCOUNTS_FOR_PHONE_NUMBER = 1;
         // Device has exceeded its free account allocation
@@ -1237,6 +1237,12 @@ message IntentDeniedErrorDetails {
         // The device is not supported (eg. it fails device attestation checks)
         UNSUPPORTED_DEVICE = 4;
     }
+
+    // Human readable string indicating the failure.
+    string reason = 2 [(validate.rules).string = {
+        min_len: 1,
+        max_len: 2048, // Arbitrary
+    }];
 }
 
 //
