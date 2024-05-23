@@ -5275,12 +5275,12 @@ func (m *ErrorDetails) Validate() error {
 			}
 		}
 
-	case *ErrorDetails_IntentDenied:
+	case *ErrorDetails_Denied:
 
-		if v, ok := interface{}(m.GetIntentDenied()).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(m.GetDenied()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return ErrorDetailsValidationError{
-					field:  "IntentDenied",
+					field:  "Denied",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -5530,22 +5530,29 @@ var _ interface {
 	ErrorName() string
 } = InvalidSignatureErrorDetailsValidationError{}
 
-// Validate checks the field values on IntentDeniedErrorDetails with the rules
+// Validate checks the field values on DeniedErrorDetails with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *IntentDeniedErrorDetails) Validate() error {
+func (m *DeniedErrorDetails) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	// no validation rules for Reason
+	// no validation rules for Code
+
+	if l := utf8.RuneCountInString(m.GetReason()); l < 1 || l > 2048 {
+		return DeniedErrorDetailsValidationError{
+			field:  "Reason",
+			reason: "value length must be between 1 and 2048 runes, inclusive",
+		}
+	}
 
 	return nil
 }
 
-// IntentDeniedErrorDetailsValidationError is the validation error returned by
-// IntentDeniedErrorDetails.Validate if the designated constraints aren't met.
-type IntentDeniedErrorDetailsValidationError struct {
+// DeniedErrorDetailsValidationError is the validation error returned by
+// DeniedErrorDetails.Validate if the designated constraints aren't met.
+type DeniedErrorDetailsValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -5553,24 +5560,24 @@ type IntentDeniedErrorDetailsValidationError struct {
 }
 
 // Field function returns field value.
-func (e IntentDeniedErrorDetailsValidationError) Field() string { return e.field }
+func (e DeniedErrorDetailsValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e IntentDeniedErrorDetailsValidationError) Reason() string { return e.reason }
+func (e DeniedErrorDetailsValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e IntentDeniedErrorDetailsValidationError) Cause() error { return e.cause }
+func (e DeniedErrorDetailsValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e IntentDeniedErrorDetailsValidationError) Key() bool { return e.key }
+func (e DeniedErrorDetailsValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e IntentDeniedErrorDetailsValidationError) ErrorName() string {
-	return "IntentDeniedErrorDetailsValidationError"
+func (e DeniedErrorDetailsValidationError) ErrorName() string {
+	return "DeniedErrorDetailsValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e IntentDeniedErrorDetailsValidationError) Error() string {
+func (e DeniedErrorDetailsValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -5582,14 +5589,14 @@ func (e IntentDeniedErrorDetailsValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sIntentDeniedErrorDetails.%s: %s%s",
+		"invalid %sDeniedErrorDetails.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = IntentDeniedErrorDetailsValidationError{}
+var _ error = DeniedErrorDetailsValidationError{}
 
 var _ interface {
 	Field() string
@@ -5597,7 +5604,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = IntentDeniedErrorDetailsValidationError{}
+} = DeniedErrorDetailsValidationError{}
 
 // Validate checks the field values on UpgradeableIntent with the rules defined
 // in the proto definition for this message. If any rules are violated, an
