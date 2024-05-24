@@ -1230,7 +1230,7 @@ message DeniedErrorDetails {
         // Phone number has exceeded its free account allocation
         TOO_MANY_FREE_ACCOUNTS_FOR_PHONE_NUMBER = 1;
         // Device has exceeded its free account allocation
-        TOO_MANY_FREE_ACCOUNTS_FOR_DEVIEC = 2;
+        TOO_MANY_FREE_ACCOUNTS_FOR_DEVICE = 2;
         // The country associated with the phone number with the account is not
         // supported (eg. it is on the sanctioned list).
         UNSUPPORTED_COUNTRY = 3;
