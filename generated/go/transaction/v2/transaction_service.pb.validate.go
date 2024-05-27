@@ -5275,6 +5275,18 @@ func (m *ErrorDetails) Validate() error {
 			}
 		}
 
+	case *ErrorDetails_Denied:
+
+		if v, ok := interface{}(m.GetDenied()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ErrorDetailsValidationError{
+					field:  "Denied",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
 	default:
 		return ErrorDetailsValidationError{
 			field:  "Type",
@@ -5517,6 +5529,82 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = InvalidSignatureErrorDetailsValidationError{}
+
+// Validate checks the field values on DeniedErrorDetails with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DeniedErrorDetails) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Code
+
+	if l := utf8.RuneCountInString(m.GetReason()); l < 1 || l > 2048 {
+		return DeniedErrorDetailsValidationError{
+			field:  "Reason",
+			reason: "value length must be between 1 and 2048 runes, inclusive",
+		}
+	}
+
+	return nil
+}
+
+// DeniedErrorDetailsValidationError is the validation error returned by
+// DeniedErrorDetails.Validate if the designated constraints aren't met.
+type DeniedErrorDetailsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeniedErrorDetailsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeniedErrorDetailsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeniedErrorDetailsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeniedErrorDetailsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeniedErrorDetailsValidationError) ErrorName() string {
+	return "DeniedErrorDetailsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DeniedErrorDetailsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeniedErrorDetails.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeniedErrorDetailsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeniedErrorDetailsValidationError{}
 
 // Validate checks the field values on UpgradeableIntent with the rules defined
 // in the proto definition for this message. If any rules are violated, an
