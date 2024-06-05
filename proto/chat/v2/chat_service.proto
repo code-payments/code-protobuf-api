@@ -1,0 +1,503 @@
+syntax = "proto3";
+
+package code.chat.v2;
+
+option go_package = "github.com/code-payments/code-protobuf-api/generated/go/chat/v2;chat";
+option java_package = "com.codeinc.gen.chat.v2";
+option objc_class_prefix = "CPBChatV2";
+
+import "common/v1/model.proto";
+import "transaction/v2/transaction_service.proto";
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+
+service Chat {
+    // GetChats gets the set of chats for an owner account using a paged API
+    rpc GetChats(GetChatsRequest) returns (GetChatsResponse);
+
+    // GetMessages gets the set of messages for a chat using a paged API
+    rpc GetMessages(GetMessagesRequest) returns (GetMessagesResponse);
+
+    // StreamChatEvents streams chat events in real-time. This RPC also supports
+    // flushes to push initial chat state after stream open.
+    rpc StreamChatEvents(stream StreamChatEventsRequest) returns (stream StreamChatEventsResponse);
+
+    // SendMessage sends a message to a chat
+    rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
+
+    // AdvancePointer advances a pointer in chat history
+    rpc AdvancePointer(AdvancePointerRequest) returns (AdvancePointerResponse);
+
+    // SetMuteState configures the mute state of a chat
+    rpc SetMuteState(SetMuteStateRequest) returns (SetMuteStateResponse);
+
+    // SetSubscriptionState configures the susbscription state of a chat
+    rpc SetSubscriptionState(SetSubscriptionStateRequest) returns (SetSubscriptionStateResponse);
+}
+
+message GetChatsRequest {
+    common.v1.SolanaAccountId owner = 1 [(validate.rules).message.required = true];
+
+    common.v1.Signature signature = 2 [(validate.rules).message.required = true];
+
+    uint32 page_size = 3 [(validate.rules).uint32.lte = 100];
+
+    Cursor cursor = 4;
+
+    Direction direction = 5;
+    enum Direction {
+        ASC  = 0;
+        DESC = 1;
+    }
+}
+
+message GetChatsResponse {
+    Result result = 1;
+    enum Result {
+        OK        = 0;
+        NOT_FOUND = 1;
+    }
+
+    repeated ChatMetadata chats = 2 [(validate.rules).repeated = {
+        min_items: 0
+        max_items: 100
+    }];
+}
+
+message GetMessagesRequest {
+    ChatId chat_id = 1 [(validate.rules).message.required = true];
+
+    ChatMemberId member_id = 2;
+
+    common.v1.SolanaAccountId owner = 3 [(validate.rules).message.required = true];
+
+    common.v1.Signature signature = 4 [(validate.rules).message.required = true];
+
+    uint32 page_size = 5 [(validate.rules).uint32.lte = 100];
+
+    Cursor cursor = 6;
+
+    Direction direction = 7;
+    enum Direction {
+        ASC  = 0;
+        DESC = 1;
+    }
+}
+
+message GetMessagesResponse {
+    Result result = 1;
+    enum Result {
+        OK        = 0;
+        NOT_FOUND = 1;
+    }
+
+    repeated ChatMessage messages = 2 [(validate.rules).repeated = {
+        min_items: 0
+        max_items: 100
+    }];
+}
+
+message OpenChatEventStream {
+    ChatId chat_id = 1 [(validate.rules).message.required = true];
+
+    ChatMemberId member_id = 2  [(validate.rules).message.required = true];
+
+    common.v1.SolanaAccountId owner = 3 [(validate.rules).message.required = true];
+
+    common.v1.Signature signature = 4 [(validate.rules).message.required = true];
+}
+
+message ChatStreamEvent {
+    oneof type {
+        option (validate.required) = true;
+
+        ChatMessage message = 1;
+        Pointer     pointer = 2;
+    }
+}
+
+message ChatStreamEventBatch {
+    repeated ChatStreamEvent events = 2 [(validate.rules).repeated = {
+        min_items: 1
+        max_items: 1024
+    }];
+}
+
+message StreamChatEventsRequest {
+    oneof type {
+        option (validate.required) = true;
+
+        OpenChatEventStream  open_stream = 1;
+        common.v1.ClientPong pong        = 2;
+    }
+}
+
+message StreamChatEventsResponse {
+    oneof type {
+        option (validate.required) = true;
+
+        ChatStreamEventBatch events = 1;
+        common.v1.ServerPing ping   = 2;
+    }
+}
+
+message SendMessageRequest {
+    ChatId chat_id = 1 [(validate.rules).message.required = true];
+
+    ChatMemberId member_id = 2  [(validate.rules).message.required = true];
+
+    repeated Content content = 3 [(validate.rules).repeated = {
+        min_items: 1
+        max_items: 1
+    }];
+
+    common.v1.SolanaAccountId owner = 4 [(validate.rules).message.required = true];
+
+    common.v1.Signature signature = 5 [(validate.rules).message.required = true];
+}
+
+message SendMessageResponse {
+    Result result = 1;
+    enum Result {
+        OK                   = 0;
+        CHAT_NOT_FOUND       = 1;
+        INVALID_CHAT_TYPE    = 2;
+        INVALID_CONTENT_TYPE = 3;
+    }
+
+    // The chat message that was sent, which includes server-side metadata like
+    // the generated message ID and official timestamp
+    ChatMessage message = 2;
+}
+
+message AdvancePointerRequest {
+    ChatId chat_id = 1 [(validate.rules).message.required = true];
+
+    Pointer pointer = 2 [(validate.rules).message.required = true];
+
+    common.v1.SolanaAccountId owner = 3 [(validate.rules).message.required = true];
+
+    common.v1.Signature signature = 4 [(validate.rules).message.required = true];
+}
+
+message AdvancePointerResponse {
+    Result result = 1;
+    enum Result {
+        OK                = 0;
+        CHAT_NOT_FOUND    = 1;
+        MESSAGE_NOT_FOUND = 2;
+    }
+}
+
+message SetMuteStateRequest {
+    ChatId chat_id = 1 [(validate.rules).message.required = true];
+
+    ChatMemberId member_id = 2  [(validate.rules).message.required = true];
+
+    bool is_muted = 3;
+
+    common.v1.SolanaAccountId owner = 4 [(validate.rules).message.required = true];
+
+    common.v1.Signature signature = 5 [(validate.rules).message.required = true];
+}
+
+message SetMuteStateResponse {
+    Result result = 1;
+    enum Result {
+        OK             = 0;
+        CHAT_NOT_FOUND = 1;
+        CANT_MUTE      = 2;
+    }
+}
+
+message SetSubscriptionStateRequest {
+    ChatId chat_id = 1 [(validate.rules).message.required = true];
+
+    ChatMemberId member_id = 2  [(validate.rules).message.required = true];
+
+    bool is_subscribed = 3;
+
+    common.v1.SolanaAccountId owner = 4 [(validate.rules).message.required = true];
+
+    common.v1.Signature signature = 5 [(validate.rules).message.required = true];
+}
+
+message SetSubscriptionStateResponse {
+    Result result = 1;
+    enum Result {
+        OK               = 0;
+        CHAT_NOT_FOUND   = 1;
+        CANT_UNSUBSCRIBE = 2;
+    }
+}
+
+message ChatId {
+    bytes value = 1 [(validate.rules).bytes = {
+        min_len: 32
+        max_len: 32
+    }];
+}
+
+message ChatMessageId {
+    // Guaranteed to be a time-based UUID. This should be used to construct a
+    // consistently ordered message history based on time.
+    bytes value = 1 [(validate.rules).bytes = {
+        min_len: 16
+        max_len: 16
+    }];
+}
+
+message ChatMemberId {
+    // Random UUID
+    bytes value = 1 [(validate.rules).bytes = {
+        min_len: 16
+        max_len: 16
+    }];
+}
+
+// todo: Support is_verified in a clean way
+message ChatMetadata {
+    // Globally unique ID for this chat
+    ChatId chat_id = 1 [(validate.rules).message.required = true];
+
+    // The type of chat
+    Kind kind = 2 [(validate.rules).enum = {
+        not_in: [0] // UNKNOWN
+    }];
+    enum Kind {
+        UNKNOWN      = 0;
+        NOTIFICATION = 1;
+        TWO_WAY      = 2;
+        // GROUP        = 3;
+    }
+
+    // The chat title, which will be localized by server when applicable
+    string title = 3 [(validate.rules).string = {
+        min_len: 1
+        max_len: 1024
+    }];
+
+    // The members in this chat
+    //
+    // For NOTIFICATION chats, this list has exactly 1 item
+    // For TWO_WAY chats, this list has exactly 2 items
+    //
+    // todo: If we support group chats, then we'll likely return the first page
+    //       or a prioritized list. The remaining members would be fetched via
+    //       a new RPC.
+    repeated ChatMember members = 4 [(validate.rules).repeated = {
+        min_items: 1
+        max_items: 2
+    }];
+
+    // Estimated number of unread messages in this chat
+    uint32 num_unread = 5;
+
+    // Can the user mute this chat?
+    bool can_mute = 6;
+
+    // Has the user muted this chat?
+    bool is_muted = 7;
+
+    // Can the user unsubscribe from this chat?
+    bool can_unsubscribe = 8;
+ 
+    // Is the user subscribed to this chat?
+    bool is_subscribed = 9;
+ 
+    // Cursor value for this chat for reference in subsequent GetChatsRequest 
+    Cursor cursor = 10;  
+}
+
+message ChatMessage {
+    // Globally unique ID for this message
+    ChatMessageId message_id = 1 [(validate.rules).message.required = true];
+
+    // The chat member that sent the message. For NOTIFICATION chats, this field
+    // is omitted since the chat has exactly 1 member.
+    ChatMemberId sender_id = 2;
+
+    // Ordered message content. A message may have more than one piece of content.
+    repeated Content content = 3 [(validate.rules).repeated = {
+        min_items: 1
+        max_items: 2
+    }];
+
+    // Timestamp this message was generated at. This value is also encoded in
+    // any time-based UUID message IDs.
+    google.protobuf.Timestamp ts = 4 [(validate.rules).timestamp.required = true];
+
+    // Cursor value for this message for reference in a paged GetMessagesRequest 
+    Cursor cursor = 5;
+}
+
+message ChatMember {
+    // Globally unique ID for this chat member
+    ChatMemberId member_id = 1 [(validate.rules).message.required = true];
+
+    // Is this chat member yourself? This enables client to identify which member_id
+    // is themselves.
+    bool is_self = 2;
+
+    // The chat member's identity if it has been revealed.
+    ChatMemberIdentity identity = 3;
+
+    // Chat message state for this member. This list will have DELIVERED and READ
+    // pointers, if they exist. SENT pointers should be inferred by persistence
+    // on server.
+    repeated Pointer pointers = 4 [(validate.rules).repeated = {
+        min_items: 0
+        max_items: 2
+    }];
+}
+
+message ChatMemberIdentity {
+    // The external social platform linked to this chat member
+    Platform platform = 1 [(validate.rules).enum = {
+        in: [1] // TWITTER
+    }];
+    enum Platform {
+        UNKNOWN = 0;
+        TWITTER = 1;
+    }
+
+    // The chat member's username on the external social platform
+    string username = 2 [(validate.rules).string = {
+        min_len: 1
+        max_len: 15 // Twitter limit
+    }];
+
+    // Reserved for a display name
+    reserved 3;
+}
+
+// Pointer in a chat indicating a user's message state in a chat.
+message Pointer {
+    Kind kind = 1 [(validate.rules).enum = {
+        not_in: [0] // UNKNOWN
+    }];
+    enum Kind {
+        UNKNOWN   = 0;
+        SENT      = 1; // Always inferred by OK result in SendMessageResponse or message presence in a chat
+        DELIVERED = 2;
+        READ      = 3;
+    }
+
+    // Everything at or before this message ID is considered to have the state
+    // inferred by the type of pointer. 
+    ChatMessageId value = 2 [(validate.rules).message.required = true];
+
+    // The chat member associated with this pointer state
+    ChatMemberId member_id = 3 [(validate.rules).message.required = true];
+}
+
+// Content for a chat message
+message Content {
+    oneof type {
+        option (validate.required) = true;
+
+        TextContent             text          = 1;
+        LocalizedContent        localized     = 2;
+        ExchangeDataContent     exchange_data = 3;
+        NaclBoxEncryptedContent nacl_box      = 4;
+        ThankYouContent         thank_you     = 5;
+    }
+}
+
+// Raw text content
+message TextContent {
+    string text = 1 [(validate.rules).string = {
+        min_len: 1
+        max_len: 1024
+    }];
+}
+
+// Text content that is either a localization key that should be translated on
+// client, or a server-side translated piece of text.
+message LocalizedContent {
+    string key_or_text = 1 [(validate.rules).string = {
+        min_len: 1
+        max_len: 1024
+    }];
+}
+
+// Exchange data content for movement of a value of Kin.
+message ExchangeDataContent {
+    enum Verb {
+        UNKNOWN      = 0;
+        GAVE         = 1;
+        RECEIVED     = 2;
+        WITHDREW     = 3;
+        DEPOSITED    = 4;
+        SENT         = 5;
+        RETURNED     = 6;
+        SPENT        = 7;
+        PAID         = 8;
+        PURCHASED    = 9;
+        RECEIVED_TIP = 10;
+        SENT_TIP     = 11;
+    }
+
+    // Verb describing how the amount of Kin was exchanged
+    //
+    // Note: The current definition is not suitable outside a NOTIFICATION chat
+    //       as not enough context is provided as to which member this verb is
+    //       associated with.
+    Verb verb = 1 [(validate.rules).enum = {
+        not_in: [0] // UNKNOWN
+    }];
+
+    // An amount of Kin being exchanged
+    oneof exchange_data {
+        option (validate.required) = true;
+
+        transaction.v2.ExchangeData            exact   = 2;
+        transaction.v2.ExchangeDataWithoutRate partial = 3;
+    }
+
+    // An ID that can be referenced to the source of the exchange of Kin 
+    oneof reference {
+        option (validate.required) = true;
+
+        common.v1.IntentId  intent    = 4;
+        common.v1.Signature signature = 5;
+    }
+}
+
+// Encrypted piece of content using NaCl box encryption
+message NaclBoxEncryptedContent {
+    common.v1.SolanaAccountId peer_public_key = 1 [(validate.rules).message.required = true];
+
+    bytes nonce = 2 [(validate.rules).bytes = {
+        min_len: 24
+        max_len: 24
+    }];
+
+    bytes encrypted_payload = 3 [(validate.rules).bytes = {
+        min_len: 1
+        max_len: 1024
+    }];
+}
+
+message ThankYouContent {
+    // The tip intent that is being thanked.
+    common.v1.IntentId tip_intent = 1 [(validate.rules).message.required = true];
+
+    // Reserved for the thanker, which is only required if we support GROUP chats.
+    // Otherwise, it can be inferred from the sender in a TWO_WAY chat.
+    reserved 2;
+
+    // Reserved for the thankee, which is only required if we support GROUP chats.
+    // Otherwise, it can be inferred from the sender in a TWO_WAY chat.
+    reserved 3;
+}
+
+// Opaque cursor used across paged APIs. Underlying bytes may change as paging
+// strategies evolve. Expected length value will vary based on the RPC being
+// executed.package
+message Cursor {
+    bytes value = 1 [(validate.rules).bytes = {
+        min_len: 16
+        max_len: 32
+    }];
+}
