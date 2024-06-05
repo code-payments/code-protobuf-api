@@ -67,7 +67,7 @@ message GetChatsResponse {
 message GetMessagesRequest {
     ChatId chat_id = 1 [(validate.rules).message.required = true];
 
-    ChatMemberId member_id = 2;
+    ChatMemberId member_id = 2 [(validate.rules).message.required = true];
 
     common.v1.SolanaAccountId owner = 3 [(validate.rules).message.required = true];
 

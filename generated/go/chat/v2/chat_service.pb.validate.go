@@ -265,6 +265,13 @@ func (m *GetMessagesRequest) Validate() error {
 		}
 	}
 
+	if m.GetMemberId() == nil {
+		return GetMessagesRequestValidationError{
+			field:  "MemberId",
+			reason: "value is required",
+		}
+	}
+
 	if v, ok := interface{}(m.GetMemberId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetMessagesRequestValidationError{
