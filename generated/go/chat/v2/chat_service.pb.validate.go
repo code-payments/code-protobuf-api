@@ -808,6 +808,75 @@ var _ interface {
 	ErrorName() string
 } = ChatStreamEventBatchValidationError{}
 
+// Validate checks the field values on ChatStreamEventError with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ChatStreamEventError) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Code
+
+	return nil
+}
+
+// ChatStreamEventErrorValidationError is the validation error returned by
+// ChatStreamEventError.Validate if the designated constraints aren't met.
+type ChatStreamEventErrorValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ChatStreamEventErrorValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ChatStreamEventErrorValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ChatStreamEventErrorValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ChatStreamEventErrorValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ChatStreamEventErrorValidationError) ErrorName() string {
+	return "ChatStreamEventErrorValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ChatStreamEventErrorValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sChatStreamEventError.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ChatStreamEventErrorValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ChatStreamEventErrorValidationError{}
+
 // Validate checks the field values on StreamChatEventsRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -937,6 +1006,18 @@ func (m *StreamChatEventsResponse) Validate() error {
 			if err := v.Validate(); err != nil {
 				return StreamChatEventsResponseValidationError{
 					field:  "Ping",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *StreamChatEventsResponse_Error:
+
+		if v, ok := interface{}(m.GetError()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StreamChatEventsResponseValidationError{
+					field:  "Error",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}

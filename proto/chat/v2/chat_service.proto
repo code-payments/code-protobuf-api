@@ -87,8 +87,10 @@ message GetMessagesRequest {
 message GetMessagesResponse {
     Result result = 1;
     enum Result {
-        OK        = 0;
-        NOT_FOUND = 1;
+        OK                = 0;
+        DENIED            = 1;
+        CHAT_NOT_FOUND    = 2;
+        MESSAGE_NOT_FOUND = 3;
     }
 
     repeated ChatMessage messages = 2 [(validate.rules).repeated = {
@@ -123,6 +125,14 @@ message ChatStreamEventBatch {
     }];
 }
 
+message ChatStreamEventError {
+    Code code = 1;
+    enum Code {
+        DENIED         = 0;
+        CHAT_NOT_FOUND = 1;
+    }
+}
+
 message StreamChatEventsRequest {
     oneof type {
         option (validate.required) = true;
@@ -138,6 +148,7 @@ message StreamChatEventsResponse {
 
         ChatStreamEventBatch events = 1;
         common.v1.ServerPing ping   = 2;
+        ChatStreamEventError error  = 3;
     }
 }
 
@@ -160,9 +171,10 @@ message SendMessageResponse {
     Result result = 1;
     enum Result {
         OK                   = 0;
-        CHAT_NOT_FOUND       = 1;
-        INVALID_CHAT_TYPE    = 2;
-        INVALID_CONTENT_TYPE = 3;
+        DENIED               = 1;
+        CHAT_NOT_FOUND       = 2;
+        INVALID_CHAT_TYPE    = 3;
+        INVALID_CONTENT_TYPE = 4;
     }
 
     // The chat message that was sent, which includes server-side metadata like
@@ -183,9 +195,11 @@ message AdvancePointerRequest {
 message AdvancePointerResponse {
     Result result = 1;
     enum Result {
-        OK                = 0;
-        CHAT_NOT_FOUND    = 1;
-        MESSAGE_NOT_FOUND = 2;
+        OK                   = 0;
+        DENIED               = 1;
+        CHAT_NOT_FOUND       = 2;
+        MESSAGE_NOT_FOUND    = 3;
+        INVALID_POINTER_TYPE = 4;
     }
 }
 
@@ -205,8 +219,9 @@ message SetMuteStateResponse {
     Result result = 1;
     enum Result {
         OK             = 0;
-        CHAT_NOT_FOUND = 1;
-        CANT_MUTE      = 2;
+        DENIED         = 1;
+        CHAT_NOT_FOUND = 2;
+        CANT_MUTE      = 3;
     }
 }
 
@@ -226,8 +241,9 @@ message SetSubscriptionStateResponse {
     Result result = 1;
     enum Result {
         OK               = 0;
-        CHAT_NOT_FOUND   = 1;
-        CANT_UNSUBSCRIBE = 2;
+        DENIED           = 1;
+        CHAT_NOT_FOUND   = 2;
+        CANT_UNSUBSCRIBE = 3;
     }
 }
 
