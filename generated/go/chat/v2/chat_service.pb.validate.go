@@ -3353,10 +3353,10 @@ func (m *Cursor) Validate() error {
 		return nil
 	}
 
-	if l := len(m.GetValue()); l < 16 || l > 32 {
+	if l := len(m.GetValue()); l < 8 || l > 32 {
 		return CursorValidationError{
 			field:  "Value",
-			reason: "value length must be between 16 and 32 bytes, inclusive",
+			reason: "value length must be between 8 and 32 bytes, inclusive",
 		}
 	}
 

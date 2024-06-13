@@ -513,7 +513,7 @@ message ThankYouContent {
 // executed.package
 message Cursor {
     bytes value = 1 [(validate.rules).bytes = {
-        min_len: 16
+        min_len: 8
         max_len: 32
     }];
 }
