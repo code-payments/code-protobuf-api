@@ -29,6 +29,9 @@ type ChatClient interface {
 	// StreamChatEvents streams chat events in real-time. This RPC also supports
 	// flushes to push initial chat state after stream open.
 	StreamChatEvents(ctx context.Context, opts ...grpc.CallOption) (Chat_StreamChatEventsClient, error)
+	// StartChat starts a chat. The RPC call is idempotent and will use existing
+	// chats whenever applicable within the context of message routing.
+	StartChat(ctx context.Context, in *StartChatRequest, opts ...grpc.CallOption) (*StartChatResponse, error)
 	// SendMessage sends a message to a chat
 	SendMessage(ctx context.Context, in *SendMessageRequest, opts ...grpc.CallOption) (*SendMessageResponse, error)
 	// AdvancePointer advances a pointer in chat history
@@ -96,6 +99,15 @@ func (x *chatStreamChatEventsClient) Recv() (*StreamChatEventsResponse, error) {
 	return m, nil
 }
 
+func (c *chatClient) StartChat(ctx context.Context, in *StartChatRequest, opts ...grpc.CallOption) (*StartChatResponse, error) {
+	out := new(StartChatResponse)
+	err := c.cc.Invoke(ctx, "/code.chat.v2.Chat/StartChat", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *chatClient) SendMessage(ctx context.Context, in *SendMessageRequest, opts ...grpc.CallOption) (*SendMessageResponse, error) {
 	out := new(SendMessageResponse)
 	err := c.cc.Invoke(ctx, "/code.chat.v2.Chat/SendMessage", in, out, opts...)
@@ -143,6 +155,9 @@ type ChatServer interface {
 	// StreamChatEvents streams chat events in real-time. This RPC also supports
 	// flushes to push initial chat state after stream open.
 	StreamChatEvents(Chat_StreamChatEventsServer) error
+	// StartChat starts a chat. The RPC call is idempotent and will use existing
+	// chats whenever applicable within the context of message routing.
+	StartChat(context.Context, *StartChatRequest) (*StartChatResponse, error)
 	// SendMessage sends a message to a chat
 	SendMessage(context.Context, *SendMessageRequest) (*SendMessageResponse, error)
 	// AdvancePointer advances a pointer in chat history
@@ -166,6 +181,9 @@ func (UnimplementedChatServer) GetMessages(context.Context, *GetMessagesRequest)
 }
 func (UnimplementedChatServer) StreamChatEvents(Chat_StreamChatEventsServer) error {
 	return status.Errorf(codes.Unimplemented, "method StreamChatEvents not implemented")
+}
+func (UnimplementedChatServer) StartChat(context.Context, *StartChatRequest) (*StartChatResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StartChat not implemented")
 }
 func (UnimplementedChatServer) SendMessage(context.Context, *SendMessageRequest) (*SendMessageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendMessage not implemented")
@@ -254,6 +272,24 @@ func (x *chatStreamChatEventsServer) Recv() (*StreamChatEventsRequest, error) {
 	return m, nil
 }
 
+func _Chat_StartChat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StartChatRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChatServer).StartChat(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/code.chat.v2.Chat/StartChat",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChatServer).StartChat(ctx, req.(*StartChatRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Chat_SendMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SendMessageRequest)
 	if err := dec(in); err != nil {
@@ -340,6 +376,10 @@ var Chat_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetMessages",
 			Handler:    _Chat_GetMessages_Handler,
+		},
+		{
+			MethodName: "StartChat",
+			Handler:    _Chat_StartChat_Handler,
 		},
 		{
 			MethodName: "SendMessage",

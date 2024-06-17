@@ -22,6 +22,10 @@ service Chat {
     // flushes to push initial chat state after stream open.
     rpc StreamChatEvents(stream StreamChatEventsRequest) returns (stream StreamChatEventsResponse);
 
+    // StartChat starts a chat. The RPC call is idempotent and will use existing
+    // chats whenever applicable within the context of message routing.
+    rpc StartChat(StartChatRequest) returns (StartChatResponse);
+
     // SendMessage sends a message to a chat
     rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
 
@@ -152,6 +156,37 @@ message StreamChatEventsResponse {
     }
 }
 
+message StartChatRequest {
+    common.v1.SolanaAccountId owner = 1 [(validate.rules).message.required = true];
+
+    common.v1.Signature signature = 2 [(validate.rules).message.required = true];
+
+    oneof parameters {
+        option (validate.required) = true;
+
+        StartTipChatParameters tip_chat = 3;
+        // GroupChatParameters group_chat  = 4;
+    }
+}
+
+// Starts a two-way chat between a tipper and tippee. Chat members are
+// inferred from the 12 word public keys
+message StartTipChatParameters {
+    common.v1.IntentId intent_id = 1 [(validate.rules).message.required = true];
+}
+
+message StartChatResponse {
+    Result result = 1;
+    enum Result {
+        OK                = 0;
+        DENIED            = 1;
+        INVALID_PARAMETER = 2;
+    }
+
+    // The chat to use if the RPC was successful
+    ChatMetadata chat = 2;
+}
+
 message SendMessageRequest {
     ChatId chat_id = 1 [(validate.rules).message.required = true];
 
@@ -177,8 +212,8 @@ message SendMessageResponse {
         INVALID_CONTENT_TYPE = 4;
     }
 
-    // The chat message that was sent, which includes server-side metadata like
-    // the generated message ID and official timestamp
+    // The chat message that was sent if the RPC was succesful, which includes
+    // server-side metadata like the generated message ID and official timestamp
     ChatMessage message = 2;
 }
 
@@ -271,21 +306,29 @@ message ChatMemberId {
     }];
 }
 
+enum ChatType {
+    UNKNOWN_CHAT_TYPE = 0;
+    NOTIFICATION      = 1;
+    TWO_WAY           = 2;
+    // GROUP             = 3;
+}
+
+enum PointerType {
+    UNKNOWN_POINTER_TYPE = 0;
+    SENT                 = 1; // Always inferred by OK result in SendMessageResponse or message presence in a chat
+    DELIVERED            = 2;
+    READ                 = 3;
+}
+
 // todo: Support is_verified in a clean way
 message ChatMetadata {
     // Globally unique ID for this chat
     ChatId chat_id = 1 [(validate.rules).message.required = true];
 
     // The type of chat
-    Kind kind = 2 [(validate.rules).enum = {
+    ChatType kind = 2 [(validate.rules).enum = {
         not_in: [0] // UNKNOWN
     }];
-    enum Kind {
-        UNKNOWN      = 0;
-        NOTIFICATION = 1;
-        TWO_WAY      = 2;
-        // GROUP        = 3;
-    }
 
     // The chat title, which will be localized by server when applicable
     string title = 3 [(validate.rules).string = {
@@ -389,15 +432,9 @@ message ChatMemberIdentity {
 
 // Pointer in a chat indicating a user's message state in a chat.
 message Pointer {
-    Kind kind = 1 [(validate.rules).enum = {
+    PointerType kind = 1 [(validate.rules).enum = {
         not_in: [0] // UNKNOWN
     }];
-    enum Kind {
-        UNKNOWN   = 0;
-        SENT      = 1; // Always inferred by OK result in SendMessageResponse or message presence in a chat
-        DELIVERED = 2;
-        READ      = 3;
-    }
 
     // Everything at or before this message ID is considered to have the state
     // inferred by the type of pointer. 

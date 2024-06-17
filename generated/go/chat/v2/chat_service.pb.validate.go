@@ -1091,6 +1091,290 @@ var _ interface {
 	ErrorName() string
 } = StreamChatEventsResponseValidationError{}
 
+// Validate checks the field values on StartChatRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *StartChatRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetOwner() == nil {
+		return StartChatRequestValidationError{
+			field:  "Owner",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StartChatRequestValidationError{
+				field:  "Owner",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetSignature() == nil {
+		return StartChatRequestValidationError{
+			field:  "Signature",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StartChatRequestValidationError{
+				field:  "Signature",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	switch m.Parameters.(type) {
+
+	case *StartChatRequest_TipChat:
+
+		if v, ok := interface{}(m.GetTipChat()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StartChatRequestValidationError{
+					field:  "TipChat",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return StartChatRequestValidationError{
+			field:  "Parameters",
+			reason: "value is required",
+		}
+
+	}
+
+	return nil
+}
+
+// StartChatRequestValidationError is the validation error returned by
+// StartChatRequest.Validate if the designated constraints aren't met.
+type StartChatRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StartChatRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StartChatRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StartChatRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StartChatRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StartChatRequestValidationError) ErrorName() string { return "StartChatRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e StartChatRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStartChatRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StartChatRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StartChatRequestValidationError{}
+
+// Validate checks the field values on StartTipChatParameters with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *StartTipChatParameters) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetIntentId() == nil {
+		return StartTipChatParametersValidationError{
+			field:  "IntentId",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetIntentId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StartTipChatParametersValidationError{
+				field:  "IntentId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// StartTipChatParametersValidationError is the validation error returned by
+// StartTipChatParameters.Validate if the designated constraints aren't met.
+type StartTipChatParametersValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StartTipChatParametersValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StartTipChatParametersValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StartTipChatParametersValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StartTipChatParametersValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StartTipChatParametersValidationError) ErrorName() string {
+	return "StartTipChatParametersValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StartTipChatParametersValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStartTipChatParameters.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StartTipChatParametersValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StartTipChatParametersValidationError{}
+
+// Validate checks the field values on StartChatResponse with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *StartChatResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Result
+
+	if v, ok := interface{}(m.GetChat()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StartChatResponseValidationError{
+				field:  "Chat",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// StartChatResponseValidationError is the validation error returned by
+// StartChatResponse.Validate if the designated constraints aren't met.
+type StartChatResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StartChatResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StartChatResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StartChatResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StartChatResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StartChatResponseValidationError) ErrorName() string {
+	return "StartChatResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StartChatResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStartChatResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StartChatResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StartChatResponseValidationError{}
+
 // Validate checks the field values on SendMessageRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -2298,7 +2582,7 @@ var _ interface {
 	ErrorName() string
 } = ChatMetadataValidationError{}
 
-var _ChatMetadata_Kind_NotInLookup = map[ChatMetadata_Kind]struct{}{
+var _ChatMetadata_Kind_NotInLookup = map[ChatType]struct{}{
 	0: {},
 }
 
@@ -2738,7 +3022,7 @@ var _ interface {
 	ErrorName() string
 } = PointerValidationError{}
 
-var _Pointer_Kind_NotInLookup = map[Pointer_Kind]struct{}{
+var _Pointer_Kind_NotInLookup = map[PointerType]struct{}{
 	0: {},
 }
 
