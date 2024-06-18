@@ -257,9 +257,10 @@ message RevealIdentityRequest {
 message RevealIdentityResponse {
     Result result = 1;
     enum Result {
-        OK                   = 0;
-        DENIED               = 1;
-        CHAT_NOT_FOUND       = 2;
+        OK                        = 0;
+        DENIED                    = 1;
+        CHAT_NOT_FOUND            = 2;
+        IDENTITY_ALREADY_REVEALED = 3;
     }
 }
 
