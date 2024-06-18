@@ -257,10 +257,10 @@ message RevealIdentityRequest {
 message RevealIdentityResponse {
     Result result = 1;
     enum Result {
-        OK                        = 0;
-        DENIED                    = 1;
-        CHAT_NOT_FOUND            = 2;
-        IDENTITY_ALREADY_REVEALED = 3;
+        OK                          = 0;
+        DENIED                      = 1;
+        CHAT_NOT_FOUND              = 2;
+        DIFFERENT_IDENTITY_REVEALED = 3;
     }
 }
 
@@ -337,6 +337,11 @@ enum ChatType {
     NOTIFICATION      = 1;
     TWO_WAY           = 2;
     // GROUP             = 3;
+}
+
+enum Platform {
+    UNKNOWN_PLATFORM = 0;
+    TWITTER          = 1;
 }
 
 enum PointerType {
@@ -447,10 +452,6 @@ message ChatMemberIdentity {
     Platform platform = 1 [(validate.rules).enum = {
         in: [1] // TWITTER
     }];
-    enum Platform {
-        UNKNOWN = 0;
-        TWITTER = 1;
-    }
 
     // The chat member's username on the external social platform
     string username = 2 [(validate.rules).string = {

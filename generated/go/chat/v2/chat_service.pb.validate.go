@@ -3134,7 +3134,7 @@ var _ interface {
 	ErrorName() string
 } = ChatMemberIdentityValidationError{}
 
-var _ChatMemberIdentity_Platform_InLookup = map[ChatMemberIdentity_Platform]struct{}{
+var _ChatMemberIdentity_Platform_InLookup = map[Platform]struct{}{
 	1: {},
 }
 
