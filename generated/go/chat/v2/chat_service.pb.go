@@ -2505,15 +2505,15 @@ type ChatMember struct {
 	Pointers []*Pointer `protobuf:"bytes,4,rep,name=pointers,proto3" json:"pointers,omitempty"`
 	// Estimated number of unread messages in this chat
 	//
-	// Set when is_self = true
+	// Only valid when is_self = true
 	NumUnread uint32 `protobuf:"varint,5,opt,name=num_unread,json=numUnread,proto3" json:"num_unread,omitempty"`
 	// Has the chat member muted this chat?
 	//
-	// Set when is_self = true
+	// Only valid when is_self = true
 	IsMuted bool `protobuf:"varint,6,opt,name=is_muted,json=isMuted,proto3" json:"is_muted,omitempty"`
-	// Is the chat member to this chat?
+	// Is the chat member subscribed to this chat?
 	//
-	// Set when is_self = true
+	// Only valid when is_self = true
 	IsSubscribed bool `protobuf:"varint,7,opt,name=is_subscribed,json=isSubscribed,proto3" json:"is_subscribed,omitempty"`
 }
 

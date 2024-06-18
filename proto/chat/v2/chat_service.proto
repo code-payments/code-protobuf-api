@@ -402,17 +402,17 @@ message ChatMember {
 
     // Estimated number of unread messages in this chat
     //
-    // Set when is_self = true
+    // Only valid when is_self = true
     uint32 num_unread = 5;
 
     // Has the chat member muted this chat?
     //
-    // Set when is_self = true
+    // Only valid when is_self = true
     bool is_muted = 6;
 
-    // Is the chat member to this chat?
+    // Is the chat member subscribed to this chat?
     //
-    // Set when is_self = true
+    // Only valid when is_self = true
     bool is_subscribed = 7;
 }
 
