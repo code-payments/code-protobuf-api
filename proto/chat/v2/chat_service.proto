@@ -349,23 +349,14 @@ message ChatMetadata {
         max_items: 2
     }];
 
-    // Estimated number of unread messages in this chat
-    uint32 num_unread = 5;
-
     // Can the user mute this chat?
-    bool can_mute = 6;
-
-    // Has the user muted this chat?
-    bool is_muted = 7;
+    bool can_mute = 5;
 
     // Can the user unsubscribe from this chat?
-    bool can_unsubscribe = 8;
- 
-    // Is the user subscribed to this chat?
-    bool is_subscribed = 9;
+    bool can_unsubscribe = 6;
  
     // Cursor value for this chat for reference in subsequent GetChatsRequest 
-    Cursor cursor = 10;  
+    Cursor cursor = 7;
 }
 
 message ChatMessage {
@@ -408,6 +399,21 @@ message ChatMember {
         min_items: 0
         max_items: 2
     }];
+
+    // Estimated number of unread messages in this chat
+    //
+    // Set when is_self = true
+    uint32 num_unread = 5;
+
+    // Has the chat member muted this chat?
+    //
+    // Set when is_self = true
+    bool is_muted = 6;
+
+    // Is the chat member to this chat?
+    //
+    // Set when is_self = true
+    bool is_subscribed = 7;
 }
 
 message ChatMemberIdentity {

@@ -2505,15 +2505,9 @@ func (m *ChatMetadata) Validate() error {
 
 	}
 
-	// no validation rules for NumUnread
-
 	// no validation rules for CanMute
 
-	// no validation rules for IsMuted
-
 	// no validation rules for CanUnsubscribe
-
-	// no validation rules for IsSubscribed
 
 	if v, ok := interface{}(m.GetCursor()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
@@ -2774,6 +2768,12 @@ func (m *ChatMember) Validate() error {
 		}
 
 	}
+
+	// no validation rules for NumUnread
+
+	// no validation rules for IsMuted
+
+	// no validation rules for IsSubscribed
 
 	return nil
 }
