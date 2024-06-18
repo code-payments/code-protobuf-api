@@ -1815,6 +1815,227 @@ var _ interface {
 	ErrorName() string
 } = AdvancePointerResponseValidationError{}
 
+// Validate checks the field values on RevealIdentityRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *RevealIdentityRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetChatId() == nil {
+		return RevealIdentityRequestValidationError{
+			field:  "ChatId",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetChatId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RevealIdentityRequestValidationError{
+				field:  "ChatId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetMemberId() == nil {
+		return RevealIdentityRequestValidationError{
+			field:  "MemberId",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetMemberId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RevealIdentityRequestValidationError{
+				field:  "MemberId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetIdentity() == nil {
+		return RevealIdentityRequestValidationError{
+			field:  "Identity",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetIdentity()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RevealIdentityRequestValidationError{
+				field:  "Identity",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetOwner() == nil {
+		return RevealIdentityRequestValidationError{
+			field:  "Owner",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RevealIdentityRequestValidationError{
+				field:  "Owner",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetSignature() == nil {
+		return RevealIdentityRequestValidationError{
+			field:  "Signature",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RevealIdentityRequestValidationError{
+				field:  "Signature",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// RevealIdentityRequestValidationError is the validation error returned by
+// RevealIdentityRequest.Validate if the designated constraints aren't met.
+type RevealIdentityRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RevealIdentityRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RevealIdentityRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RevealIdentityRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RevealIdentityRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RevealIdentityRequestValidationError) ErrorName() string {
+	return "RevealIdentityRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e RevealIdentityRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRevealIdentityRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RevealIdentityRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RevealIdentityRequestValidationError{}
+
+// Validate checks the field values on RevealIdentityResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *RevealIdentityResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Result
+
+	return nil
+}
+
+// RevealIdentityResponseValidationError is the validation error returned by
+// RevealIdentityResponse.Validate if the designated constraints aren't met.
+type RevealIdentityResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RevealIdentityResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RevealIdentityResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RevealIdentityResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RevealIdentityResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RevealIdentityResponseValidationError) ErrorName() string {
+	return "RevealIdentityResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e RevealIdentityResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRevealIdentityResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RevealIdentityResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RevealIdentityResponseValidationError{}
+
 // Validate checks the field values on SetMuteStateRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -3095,6 +3316,18 @@ func (m *Content) Validate() error {
 			}
 		}
 
+	case *Content_IdentityRevealed:
+
+		if v, ok := interface{}(m.GetIdentityRevealed()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ContentValidationError{
+					field:  "IdentityRevealed",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
 	default:
 		return ContentValidationError{
 			field:  "Type",
@@ -3629,6 +3862,73 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ThankYouContentValidationError{}
+
+// Validate checks the field values on IdentityRevealedContent with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *IdentityRevealedContent) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// IdentityRevealedContentValidationError is the validation error returned by
+// IdentityRevealedContent.Validate if the designated constraints aren't met.
+type IdentityRevealedContentValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e IdentityRevealedContentValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e IdentityRevealedContentValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e IdentityRevealedContentValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e IdentityRevealedContentValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e IdentityRevealedContentValidationError) ErrorName() string {
+	return "IdentityRevealedContentValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e IdentityRevealedContentValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sIdentityRevealedContent.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = IdentityRevealedContentValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = IdentityRevealedContentValidationError{}
 
 // Validate checks the field values on Cursor with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.

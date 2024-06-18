@@ -32,6 +32,10 @@ service Chat {
     // AdvancePointer advances a pointer in chat history
     rpc AdvancePointer(AdvancePointerRequest) returns (AdvancePointerResponse);
 
+    // RevealIdentity reveals a chat member's identity if it is anonymous. A chat
+    // message will be inserted on success.
+    rpc RevealIdentity(RevealIdentityRequest) returns (RevealIdentityResponse);
+
     // SetMuteState configures the mute state of a chat
     rpc SetMuteState(SetMuteStateRequest) returns (SetMuteStateResponse);
 
@@ -235,6 +239,27 @@ message AdvancePointerResponse {
         CHAT_NOT_FOUND       = 2;
         MESSAGE_NOT_FOUND    = 3;
         INVALID_POINTER_TYPE = 4;
+    }
+}
+
+message RevealIdentityRequest {
+    ChatId chat_id = 1 [(validate.rules).message.required = true];
+
+    ChatMemberId member_id = 2 [(validate.rules).message.required = true];
+
+    ChatMemberIdentity identity = 3 [(validate.rules).message.required = true];
+
+    common.v1.SolanaAccountId owner = 4 [(validate.rules).message.required = true];
+
+    common.v1.Signature signature = 5 [(validate.rules).message.required = true];
+}
+
+message RevealIdentityResponse {
+    Result result = 1;
+    enum Result {
+        OK                   = 0;
+        DENIED               = 1;
+        CHAT_NOT_FOUND       = 2;
     }
 }
 
@@ -455,11 +480,12 @@ message Content {
     oneof type {
         option (validate.required) = true;
 
-        TextContent             text          = 1;
-        LocalizedContent        localized     = 2;
-        ExchangeDataContent     exchange_data = 3;
-        NaclBoxEncryptedContent nacl_box      = 4;
-        ThankYouContent         thank_you     = 5;
+        TextContent             text              = 1;
+        LocalizedContent        localized         = 2;
+        ExchangeDataContent     exchange_data     = 3;
+        NaclBoxEncryptedContent nacl_box          = 4;
+        ThankYouContent         thank_you         = 5;
+        IdentityRevealedContent identity_revealed = 6;
     }
 }
 
@@ -549,6 +575,11 @@ message ThankYouContent {
     // Reserved for the thankee, which is only required if we support GROUP chats.
     // Otherwise, it can be inferred from the sender in a TWO_WAY chat.
     reserved 3;
+}
+
+message IdentityRevealedContent {
+    // No fields as of right now. The chat member ID that was revealed can be inferred
+    // from the message sender ID, and the identity from the chat member's metadata.
 }
 
 // Opaque cursor used across paged APIs. Underlying bytes may change as paging

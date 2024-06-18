@@ -36,6 +36,9 @@ type ChatClient interface {
 	SendMessage(ctx context.Context, in *SendMessageRequest, opts ...grpc.CallOption) (*SendMessageResponse, error)
 	// AdvancePointer advances a pointer in chat history
 	AdvancePointer(ctx context.Context, in *AdvancePointerRequest, opts ...grpc.CallOption) (*AdvancePointerResponse, error)
+	// RevealIdentity reveals a chat member's identity if it is anonymous. A chat
+	// message will be inserted on success.
+	RevealIdentity(ctx context.Context, in *RevealIdentityRequest, opts ...grpc.CallOption) (*RevealIdentityResponse, error)
 	// SetMuteState configures the mute state of a chat
 	SetMuteState(ctx context.Context, in *SetMuteStateRequest, opts ...grpc.CallOption) (*SetMuteStateResponse, error)
 	// SetSubscriptionState configures the susbscription state of a chat
@@ -126,6 +129,15 @@ func (c *chatClient) AdvancePointer(ctx context.Context, in *AdvancePointerReque
 	return out, nil
 }
 
+func (c *chatClient) RevealIdentity(ctx context.Context, in *RevealIdentityRequest, opts ...grpc.CallOption) (*RevealIdentityResponse, error) {
+	out := new(RevealIdentityResponse)
+	err := c.cc.Invoke(ctx, "/code.chat.v2.Chat/RevealIdentity", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *chatClient) SetMuteState(ctx context.Context, in *SetMuteStateRequest, opts ...grpc.CallOption) (*SetMuteStateResponse, error) {
 	out := new(SetMuteStateResponse)
 	err := c.cc.Invoke(ctx, "/code.chat.v2.Chat/SetMuteState", in, out, opts...)
@@ -162,6 +174,9 @@ type ChatServer interface {
 	SendMessage(context.Context, *SendMessageRequest) (*SendMessageResponse, error)
 	// AdvancePointer advances a pointer in chat history
 	AdvancePointer(context.Context, *AdvancePointerRequest) (*AdvancePointerResponse, error)
+	// RevealIdentity reveals a chat member's identity if it is anonymous. A chat
+	// message will be inserted on success.
+	RevealIdentity(context.Context, *RevealIdentityRequest) (*RevealIdentityResponse, error)
 	// SetMuteState configures the mute state of a chat
 	SetMuteState(context.Context, *SetMuteStateRequest) (*SetMuteStateResponse, error)
 	// SetSubscriptionState configures the susbscription state of a chat
@@ -190,6 +205,9 @@ func (UnimplementedChatServer) SendMessage(context.Context, *SendMessageRequest)
 }
 func (UnimplementedChatServer) AdvancePointer(context.Context, *AdvancePointerRequest) (*AdvancePointerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AdvancePointer not implemented")
+}
+func (UnimplementedChatServer) RevealIdentity(context.Context, *RevealIdentityRequest) (*RevealIdentityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RevealIdentity not implemented")
 }
 func (UnimplementedChatServer) SetMuteState(context.Context, *SetMuteStateRequest) (*SetMuteStateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetMuteState not implemented")
@@ -326,6 +344,24 @@ func _Chat_AdvancePointer_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Chat_RevealIdentity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevealIdentityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChatServer).RevealIdentity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/code.chat.v2.Chat/RevealIdentity",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChatServer).RevealIdentity(ctx, req.(*RevealIdentityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Chat_SetMuteState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SetMuteStateRequest)
 	if err := dec(in); err != nil {
@@ -388,6 +424,10 @@ var Chat_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AdvancePointer",
 			Handler:    _Chat_AdvancePointer_Handler,
+		},
+		{
+			MethodName: "RevealIdentity",
+			Handler:    _Chat_RevealIdentity_Handler,
 		},
 		{
 			MethodName: "SetMuteState",
