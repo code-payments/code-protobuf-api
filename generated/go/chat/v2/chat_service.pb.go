@@ -3393,6 +3393,11 @@ type IdentityRevealedContent struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	// The chat member who revealed their identity
+	MemberId *ChatMemberId `protobuf:"bytes,1,opt,name=member_id,json=memberId,proto3" json:"member_id,omitempty"`
+	// The identity that was revealed
+	Identity *ChatMemberIdentity `protobuf:"bytes,2,opt,name=identity,proto3" json:"identity,omitempty"`
 }
 
 func (x *IdentityRevealedContent) Reset() {
@@ -3425,6 +3430,20 @@ func (x *IdentityRevealedContent) ProtoReflect() protoreflect.Message {
 // Deprecated: Use IdentityRevealedContent.ProtoReflect.Descriptor instead.
 func (*IdentityRevealedContent) Descriptor() ([]byte, []int) {
 	return file_chat_v2_chat_service_proto_rawDescGZIP(), []int{37}
+}
+
+func (x *IdentityRevealedContent) GetMemberId() *ChatMemberId {
+	if x != nil {
+		return x.MemberId
+	}
+	return nil
+}
+
+func (x *IdentityRevealedContent) GetIdentity() *ChatMemberIdentity {
+	if x != nil {
+		return x.Identity
+	}
+	return nil
 }
 
 // Opaque cursor used across paged APIs. Underlying bytes may change as paging
@@ -4006,9 +4025,18 @@ var file_chat_v2_chat_service_proto_rawDesc = []byte{
 	0x18, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x2e, 0x76, 0x31,
 	0x2e, 0x49, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x42, 0x0a, 0xba, 0xe9, 0xc0, 0x03, 0x05,
 	0x8a, 0x01, 0x02, 0x10, 0x01, 0x52, 0x09, 0x74, 0x69, 0x70, 0x49, 0x6e, 0x74, 0x65, 0x6e, 0x74,
-	0x4a, 0x04, 0x08, 0x02, 0x10, 0x03, 0x4a, 0x04, 0x08, 0x03, 0x10, 0x04, 0x22, 0x19, 0x0a, 0x17,
-	0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x52, 0x65, 0x76, 0x65, 0x61, 0x6c, 0x65, 0x64,
-	0x43, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x22, 0x2b, 0x0a, 0x06, 0x43, 0x75, 0x72, 0x73, 0x6f,
+	0x4a, 0x04, 0x08, 0x02, 0x10, 0x03, 0x4a, 0x04, 0x08, 0x03, 0x10, 0x04, 0x22, 0xa8, 0x01, 0x0a,
+	0x17, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x52, 0x65, 0x76, 0x65, 0x61, 0x6c, 0x65,
+	0x64, 0x43, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x12, 0x43, 0x0a, 0x09, 0x6d, 0x65, 0x6d, 0x62,
+	0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x63, 0x6f,
+	0x64, 0x65, 0x2e, 0x63, 0x68, 0x61, 0x74, 0x2e, 0x76, 0x32, 0x2e, 0x43, 0x68, 0x61, 0x74, 0x4d,
+	0x65, 0x6d, 0x62, 0x65, 0x72, 0x49, 0x64, 0x42, 0x0a, 0xba, 0xe9, 0xc0, 0x03, 0x05, 0x8a, 0x01,
+	0x02, 0x10, 0x01, 0x52, 0x08, 0x6d, 0x65, 0x6d, 0x62, 0x65, 0x72, 0x49, 0x64, 0x12, 0x48, 0x0a,
+	0x08, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x20, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x63, 0x68, 0x61, 0x74, 0x2e, 0x76, 0x32, 0x2e, 0x43,
+	0x68, 0x61, 0x74, 0x4d, 0x65, 0x6d, 0x62, 0x65, 0x72, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x74,
+	0x79, 0x42, 0x0a, 0xba, 0xe9, 0xc0, 0x03, 0x05, 0x8a, 0x01, 0x02, 0x10, 0x01, 0x52, 0x08, 0x69,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x22, 0x2b, 0x0a, 0x06, 0x43, 0x75, 0x72, 0x73, 0x6f,
 	0x72, 0x12, 0x21, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c,
 	0x42, 0x0b, 0xba, 0xe9, 0xc0, 0x03, 0x06, 0x7a, 0x04, 0x10, 0x08, 0x18, 0x20, 0x52, 0x05, 0x76,
 	0x61, 0x6c, 0x75, 0x65, 0x2a, 0x40, 0x0a, 0x08, 0x43, 0x68, 0x61, 0x74, 0x54, 0x79, 0x70, 0x65,
@@ -4163,119 +4191,121 @@ var file_chat_v2_chat_service_proto_goTypes = []interface{}{
 	(*v2.ExchangeDataWithoutRate)(nil),       // 61: code.transaction.v2.ExchangeDataWithoutRate
 }
 var file_chat_v2_chat_service_proto_depIdxs = []int32{
-	54, // 0: code.chat.v2.GetChatsRequest.owner:type_name -> code.common.v1.SolanaAccountId
-	55, // 1: code.chat.v2.GetChatsRequest.signature:type_name -> code.common.v1.Signature
-	53, // 2: code.chat.v2.GetChatsRequest.cursor:type_name -> code.chat.v2.Cursor
-	3,  // 3: code.chat.v2.GetChatsRequest.direction:type_name -> code.chat.v2.GetChatsRequest.Direction
-	4,  // 4: code.chat.v2.GetChatsResponse.result:type_name -> code.chat.v2.GetChatsResponse.Result
-	41, // 5: code.chat.v2.GetChatsResponse.chats:type_name -> code.chat.v2.ChatMetadata
-	38, // 6: code.chat.v2.GetMessagesRequest.chat_id:type_name -> code.chat.v2.ChatId
-	40, // 7: code.chat.v2.GetMessagesRequest.member_id:type_name -> code.chat.v2.ChatMemberId
-	54, // 8: code.chat.v2.GetMessagesRequest.owner:type_name -> code.common.v1.SolanaAccountId
-	55, // 9: code.chat.v2.GetMessagesRequest.signature:type_name -> code.common.v1.Signature
-	53, // 10: code.chat.v2.GetMessagesRequest.cursor:type_name -> code.chat.v2.Cursor
-	5,  // 11: code.chat.v2.GetMessagesRequest.direction:type_name -> code.chat.v2.GetMessagesRequest.Direction
-	6,  // 12: code.chat.v2.GetMessagesResponse.result:type_name -> code.chat.v2.GetMessagesResponse.Result
-	42, // 13: code.chat.v2.GetMessagesResponse.messages:type_name -> code.chat.v2.ChatMessage
-	38, // 14: code.chat.v2.OpenChatEventStream.chat_id:type_name -> code.chat.v2.ChatId
-	40, // 15: code.chat.v2.OpenChatEventStream.member_id:type_name -> code.chat.v2.ChatMemberId
-	54, // 16: code.chat.v2.OpenChatEventStream.owner:type_name -> code.common.v1.SolanaAccountId
-	55, // 17: code.chat.v2.OpenChatEventStream.signature:type_name -> code.common.v1.Signature
-	42, // 18: code.chat.v2.ChatStreamEvent.message:type_name -> code.chat.v2.ChatMessage
-	45, // 19: code.chat.v2.ChatStreamEvent.pointer:type_name -> code.chat.v2.Pointer
-	20, // 20: code.chat.v2.ChatStreamEventBatch.events:type_name -> code.chat.v2.ChatStreamEvent
-	7,  // 21: code.chat.v2.ChatStreamEventError.code:type_name -> code.chat.v2.ChatStreamEventError.Code
-	19, // 22: code.chat.v2.StreamChatEventsRequest.open_stream:type_name -> code.chat.v2.OpenChatEventStream
-	56, // 23: code.chat.v2.StreamChatEventsRequest.pong:type_name -> code.common.v1.ClientPong
-	21, // 24: code.chat.v2.StreamChatEventsResponse.events:type_name -> code.chat.v2.ChatStreamEventBatch
-	57, // 25: code.chat.v2.StreamChatEventsResponse.ping:type_name -> code.common.v1.ServerPing
-	22, // 26: code.chat.v2.StreamChatEventsResponse.error:type_name -> code.chat.v2.ChatStreamEventError
-	54, // 27: code.chat.v2.StartChatRequest.owner:type_name -> code.common.v1.SolanaAccountId
-	55, // 28: code.chat.v2.StartChatRequest.signature:type_name -> code.common.v1.Signature
-	26, // 29: code.chat.v2.StartChatRequest.tip_chat:type_name -> code.chat.v2.StartTipChatParameters
-	58, // 30: code.chat.v2.StartTipChatParameters.intent_id:type_name -> code.common.v1.IntentId
-	8,  // 31: code.chat.v2.StartChatResponse.result:type_name -> code.chat.v2.StartChatResponse.Result
-	41, // 32: code.chat.v2.StartChatResponse.chat:type_name -> code.chat.v2.ChatMetadata
-	38, // 33: code.chat.v2.SendMessageRequest.chat_id:type_name -> code.chat.v2.ChatId
-	40, // 34: code.chat.v2.SendMessageRequest.member_id:type_name -> code.chat.v2.ChatMemberId
-	46, // 35: code.chat.v2.SendMessageRequest.content:type_name -> code.chat.v2.Content
-	54, // 36: code.chat.v2.SendMessageRequest.owner:type_name -> code.common.v1.SolanaAccountId
-	55, // 37: code.chat.v2.SendMessageRequest.signature:type_name -> code.common.v1.Signature
-	9,  // 38: code.chat.v2.SendMessageResponse.result:type_name -> code.chat.v2.SendMessageResponse.Result
-	42, // 39: code.chat.v2.SendMessageResponse.message:type_name -> code.chat.v2.ChatMessage
-	38, // 40: code.chat.v2.AdvancePointerRequest.chat_id:type_name -> code.chat.v2.ChatId
-	45, // 41: code.chat.v2.AdvancePointerRequest.pointer:type_name -> code.chat.v2.Pointer
-	54, // 42: code.chat.v2.AdvancePointerRequest.owner:type_name -> code.common.v1.SolanaAccountId
-	55, // 43: code.chat.v2.AdvancePointerRequest.signature:type_name -> code.common.v1.Signature
-	10, // 44: code.chat.v2.AdvancePointerResponse.result:type_name -> code.chat.v2.AdvancePointerResponse.Result
-	38, // 45: code.chat.v2.RevealIdentityRequest.chat_id:type_name -> code.chat.v2.ChatId
-	40, // 46: code.chat.v2.RevealIdentityRequest.member_id:type_name -> code.chat.v2.ChatMemberId
-	44, // 47: code.chat.v2.RevealIdentityRequest.identity:type_name -> code.chat.v2.ChatMemberIdentity
-	54, // 48: code.chat.v2.RevealIdentityRequest.owner:type_name -> code.common.v1.SolanaAccountId
-	55, // 49: code.chat.v2.RevealIdentityRequest.signature:type_name -> code.common.v1.Signature
-	11, // 50: code.chat.v2.RevealIdentityResponse.result:type_name -> code.chat.v2.RevealIdentityResponse.Result
-	38, // 51: code.chat.v2.SetMuteStateRequest.chat_id:type_name -> code.chat.v2.ChatId
-	40, // 52: code.chat.v2.SetMuteStateRequest.member_id:type_name -> code.chat.v2.ChatMemberId
-	54, // 53: code.chat.v2.SetMuteStateRequest.owner:type_name -> code.common.v1.SolanaAccountId
-	55, // 54: code.chat.v2.SetMuteStateRequest.signature:type_name -> code.common.v1.Signature
-	12, // 55: code.chat.v2.SetMuteStateResponse.result:type_name -> code.chat.v2.SetMuteStateResponse.Result
-	38, // 56: code.chat.v2.SetSubscriptionStateRequest.chat_id:type_name -> code.chat.v2.ChatId
-	40, // 57: code.chat.v2.SetSubscriptionStateRequest.member_id:type_name -> code.chat.v2.ChatMemberId
-	54, // 58: code.chat.v2.SetSubscriptionStateRequest.owner:type_name -> code.common.v1.SolanaAccountId
-	55, // 59: code.chat.v2.SetSubscriptionStateRequest.signature:type_name -> code.common.v1.Signature
-	13, // 60: code.chat.v2.SetSubscriptionStateResponse.result:type_name -> code.chat.v2.SetSubscriptionStateResponse.Result
-	38, // 61: code.chat.v2.ChatMetadata.chat_id:type_name -> code.chat.v2.ChatId
-	0,  // 62: code.chat.v2.ChatMetadata.kind:type_name -> code.chat.v2.ChatType
-	43, // 63: code.chat.v2.ChatMetadata.members:type_name -> code.chat.v2.ChatMember
-	53, // 64: code.chat.v2.ChatMetadata.cursor:type_name -> code.chat.v2.Cursor
-	39, // 65: code.chat.v2.ChatMessage.message_id:type_name -> code.chat.v2.ChatMessageId
-	40, // 66: code.chat.v2.ChatMessage.sender_id:type_name -> code.chat.v2.ChatMemberId
-	46, // 67: code.chat.v2.ChatMessage.content:type_name -> code.chat.v2.Content
-	59, // 68: code.chat.v2.ChatMessage.ts:type_name -> google.protobuf.Timestamp
-	53, // 69: code.chat.v2.ChatMessage.cursor:type_name -> code.chat.v2.Cursor
-	40, // 70: code.chat.v2.ChatMember.member_id:type_name -> code.chat.v2.ChatMemberId
-	44, // 71: code.chat.v2.ChatMember.identity:type_name -> code.chat.v2.ChatMemberIdentity
-	45, // 72: code.chat.v2.ChatMember.pointers:type_name -> code.chat.v2.Pointer
-	1,  // 73: code.chat.v2.ChatMemberIdentity.platform:type_name -> code.chat.v2.Platform
-	2,  // 74: code.chat.v2.Pointer.kind:type_name -> code.chat.v2.PointerType
-	39, // 75: code.chat.v2.Pointer.value:type_name -> code.chat.v2.ChatMessageId
-	40, // 76: code.chat.v2.Pointer.member_id:type_name -> code.chat.v2.ChatMemberId
-	47, // 77: code.chat.v2.Content.text:type_name -> code.chat.v2.TextContent
-	48, // 78: code.chat.v2.Content.localized:type_name -> code.chat.v2.LocalizedContent
-	49, // 79: code.chat.v2.Content.exchange_data:type_name -> code.chat.v2.ExchangeDataContent
-	50, // 80: code.chat.v2.Content.nacl_box:type_name -> code.chat.v2.NaclBoxEncryptedContent
-	51, // 81: code.chat.v2.Content.thank_you:type_name -> code.chat.v2.ThankYouContent
-	52, // 82: code.chat.v2.Content.identity_revealed:type_name -> code.chat.v2.IdentityRevealedContent
-	14, // 83: code.chat.v2.ExchangeDataContent.verb:type_name -> code.chat.v2.ExchangeDataContent.Verb
-	60, // 84: code.chat.v2.ExchangeDataContent.exact:type_name -> code.transaction.v2.ExchangeData
-	61, // 85: code.chat.v2.ExchangeDataContent.partial:type_name -> code.transaction.v2.ExchangeDataWithoutRate
-	58, // 86: code.chat.v2.ExchangeDataContent.intent:type_name -> code.common.v1.IntentId
-	55, // 87: code.chat.v2.ExchangeDataContent.signature:type_name -> code.common.v1.Signature
-	54, // 88: code.chat.v2.NaclBoxEncryptedContent.peer_public_key:type_name -> code.common.v1.SolanaAccountId
-	58, // 89: code.chat.v2.ThankYouContent.tip_intent:type_name -> code.common.v1.IntentId
-	15, // 90: code.chat.v2.Chat.GetChats:input_type -> code.chat.v2.GetChatsRequest
-	17, // 91: code.chat.v2.Chat.GetMessages:input_type -> code.chat.v2.GetMessagesRequest
-	23, // 92: code.chat.v2.Chat.StreamChatEvents:input_type -> code.chat.v2.StreamChatEventsRequest
-	25, // 93: code.chat.v2.Chat.StartChat:input_type -> code.chat.v2.StartChatRequest
-	28, // 94: code.chat.v2.Chat.SendMessage:input_type -> code.chat.v2.SendMessageRequest
-	30, // 95: code.chat.v2.Chat.AdvancePointer:input_type -> code.chat.v2.AdvancePointerRequest
-	32, // 96: code.chat.v2.Chat.RevealIdentity:input_type -> code.chat.v2.RevealIdentityRequest
-	34, // 97: code.chat.v2.Chat.SetMuteState:input_type -> code.chat.v2.SetMuteStateRequest
-	36, // 98: code.chat.v2.Chat.SetSubscriptionState:input_type -> code.chat.v2.SetSubscriptionStateRequest
-	16, // 99: code.chat.v2.Chat.GetChats:output_type -> code.chat.v2.GetChatsResponse
-	18, // 100: code.chat.v2.Chat.GetMessages:output_type -> code.chat.v2.GetMessagesResponse
-	24, // 101: code.chat.v2.Chat.StreamChatEvents:output_type -> code.chat.v2.StreamChatEventsResponse
-	27, // 102: code.chat.v2.Chat.StartChat:output_type -> code.chat.v2.StartChatResponse
-	29, // 103: code.chat.v2.Chat.SendMessage:output_type -> code.chat.v2.SendMessageResponse
-	31, // 104: code.chat.v2.Chat.AdvancePointer:output_type -> code.chat.v2.AdvancePointerResponse
-	33, // 105: code.chat.v2.Chat.RevealIdentity:output_type -> code.chat.v2.RevealIdentityResponse
-	35, // 106: code.chat.v2.Chat.SetMuteState:output_type -> code.chat.v2.SetMuteStateResponse
-	37, // 107: code.chat.v2.Chat.SetSubscriptionState:output_type -> code.chat.v2.SetSubscriptionStateResponse
-	99, // [99:108] is the sub-list for method output_type
-	90, // [90:99] is the sub-list for method input_type
-	90, // [90:90] is the sub-list for extension type_name
-	90, // [90:90] is the sub-list for extension extendee
-	0,  // [0:90] is the sub-list for field type_name
+	54,  // 0: code.chat.v2.GetChatsRequest.owner:type_name -> code.common.v1.SolanaAccountId
+	55,  // 1: code.chat.v2.GetChatsRequest.signature:type_name -> code.common.v1.Signature
+	53,  // 2: code.chat.v2.GetChatsRequest.cursor:type_name -> code.chat.v2.Cursor
+	3,   // 3: code.chat.v2.GetChatsRequest.direction:type_name -> code.chat.v2.GetChatsRequest.Direction
+	4,   // 4: code.chat.v2.GetChatsResponse.result:type_name -> code.chat.v2.GetChatsResponse.Result
+	41,  // 5: code.chat.v2.GetChatsResponse.chats:type_name -> code.chat.v2.ChatMetadata
+	38,  // 6: code.chat.v2.GetMessagesRequest.chat_id:type_name -> code.chat.v2.ChatId
+	40,  // 7: code.chat.v2.GetMessagesRequest.member_id:type_name -> code.chat.v2.ChatMemberId
+	54,  // 8: code.chat.v2.GetMessagesRequest.owner:type_name -> code.common.v1.SolanaAccountId
+	55,  // 9: code.chat.v2.GetMessagesRequest.signature:type_name -> code.common.v1.Signature
+	53,  // 10: code.chat.v2.GetMessagesRequest.cursor:type_name -> code.chat.v2.Cursor
+	5,   // 11: code.chat.v2.GetMessagesRequest.direction:type_name -> code.chat.v2.GetMessagesRequest.Direction
+	6,   // 12: code.chat.v2.GetMessagesResponse.result:type_name -> code.chat.v2.GetMessagesResponse.Result
+	42,  // 13: code.chat.v2.GetMessagesResponse.messages:type_name -> code.chat.v2.ChatMessage
+	38,  // 14: code.chat.v2.OpenChatEventStream.chat_id:type_name -> code.chat.v2.ChatId
+	40,  // 15: code.chat.v2.OpenChatEventStream.member_id:type_name -> code.chat.v2.ChatMemberId
+	54,  // 16: code.chat.v2.OpenChatEventStream.owner:type_name -> code.common.v1.SolanaAccountId
+	55,  // 17: code.chat.v2.OpenChatEventStream.signature:type_name -> code.common.v1.Signature
+	42,  // 18: code.chat.v2.ChatStreamEvent.message:type_name -> code.chat.v2.ChatMessage
+	45,  // 19: code.chat.v2.ChatStreamEvent.pointer:type_name -> code.chat.v2.Pointer
+	20,  // 20: code.chat.v2.ChatStreamEventBatch.events:type_name -> code.chat.v2.ChatStreamEvent
+	7,   // 21: code.chat.v2.ChatStreamEventError.code:type_name -> code.chat.v2.ChatStreamEventError.Code
+	19,  // 22: code.chat.v2.StreamChatEventsRequest.open_stream:type_name -> code.chat.v2.OpenChatEventStream
+	56,  // 23: code.chat.v2.StreamChatEventsRequest.pong:type_name -> code.common.v1.ClientPong
+	21,  // 24: code.chat.v2.StreamChatEventsResponse.events:type_name -> code.chat.v2.ChatStreamEventBatch
+	57,  // 25: code.chat.v2.StreamChatEventsResponse.ping:type_name -> code.common.v1.ServerPing
+	22,  // 26: code.chat.v2.StreamChatEventsResponse.error:type_name -> code.chat.v2.ChatStreamEventError
+	54,  // 27: code.chat.v2.StartChatRequest.owner:type_name -> code.common.v1.SolanaAccountId
+	55,  // 28: code.chat.v2.StartChatRequest.signature:type_name -> code.common.v1.Signature
+	26,  // 29: code.chat.v2.StartChatRequest.tip_chat:type_name -> code.chat.v2.StartTipChatParameters
+	58,  // 30: code.chat.v2.StartTipChatParameters.intent_id:type_name -> code.common.v1.IntentId
+	8,   // 31: code.chat.v2.StartChatResponse.result:type_name -> code.chat.v2.StartChatResponse.Result
+	41,  // 32: code.chat.v2.StartChatResponse.chat:type_name -> code.chat.v2.ChatMetadata
+	38,  // 33: code.chat.v2.SendMessageRequest.chat_id:type_name -> code.chat.v2.ChatId
+	40,  // 34: code.chat.v2.SendMessageRequest.member_id:type_name -> code.chat.v2.ChatMemberId
+	46,  // 35: code.chat.v2.SendMessageRequest.content:type_name -> code.chat.v2.Content
+	54,  // 36: code.chat.v2.SendMessageRequest.owner:type_name -> code.common.v1.SolanaAccountId
+	55,  // 37: code.chat.v2.SendMessageRequest.signature:type_name -> code.common.v1.Signature
+	9,   // 38: code.chat.v2.SendMessageResponse.result:type_name -> code.chat.v2.SendMessageResponse.Result
+	42,  // 39: code.chat.v2.SendMessageResponse.message:type_name -> code.chat.v2.ChatMessage
+	38,  // 40: code.chat.v2.AdvancePointerRequest.chat_id:type_name -> code.chat.v2.ChatId
+	45,  // 41: code.chat.v2.AdvancePointerRequest.pointer:type_name -> code.chat.v2.Pointer
+	54,  // 42: code.chat.v2.AdvancePointerRequest.owner:type_name -> code.common.v1.SolanaAccountId
+	55,  // 43: code.chat.v2.AdvancePointerRequest.signature:type_name -> code.common.v1.Signature
+	10,  // 44: code.chat.v2.AdvancePointerResponse.result:type_name -> code.chat.v2.AdvancePointerResponse.Result
+	38,  // 45: code.chat.v2.RevealIdentityRequest.chat_id:type_name -> code.chat.v2.ChatId
+	40,  // 46: code.chat.v2.RevealIdentityRequest.member_id:type_name -> code.chat.v2.ChatMemberId
+	44,  // 47: code.chat.v2.RevealIdentityRequest.identity:type_name -> code.chat.v2.ChatMemberIdentity
+	54,  // 48: code.chat.v2.RevealIdentityRequest.owner:type_name -> code.common.v1.SolanaAccountId
+	55,  // 49: code.chat.v2.RevealIdentityRequest.signature:type_name -> code.common.v1.Signature
+	11,  // 50: code.chat.v2.RevealIdentityResponse.result:type_name -> code.chat.v2.RevealIdentityResponse.Result
+	38,  // 51: code.chat.v2.SetMuteStateRequest.chat_id:type_name -> code.chat.v2.ChatId
+	40,  // 52: code.chat.v2.SetMuteStateRequest.member_id:type_name -> code.chat.v2.ChatMemberId
+	54,  // 53: code.chat.v2.SetMuteStateRequest.owner:type_name -> code.common.v1.SolanaAccountId
+	55,  // 54: code.chat.v2.SetMuteStateRequest.signature:type_name -> code.common.v1.Signature
+	12,  // 55: code.chat.v2.SetMuteStateResponse.result:type_name -> code.chat.v2.SetMuteStateResponse.Result
+	38,  // 56: code.chat.v2.SetSubscriptionStateRequest.chat_id:type_name -> code.chat.v2.ChatId
+	40,  // 57: code.chat.v2.SetSubscriptionStateRequest.member_id:type_name -> code.chat.v2.ChatMemberId
+	54,  // 58: code.chat.v2.SetSubscriptionStateRequest.owner:type_name -> code.common.v1.SolanaAccountId
+	55,  // 59: code.chat.v2.SetSubscriptionStateRequest.signature:type_name -> code.common.v1.Signature
+	13,  // 60: code.chat.v2.SetSubscriptionStateResponse.result:type_name -> code.chat.v2.SetSubscriptionStateResponse.Result
+	38,  // 61: code.chat.v2.ChatMetadata.chat_id:type_name -> code.chat.v2.ChatId
+	0,   // 62: code.chat.v2.ChatMetadata.kind:type_name -> code.chat.v2.ChatType
+	43,  // 63: code.chat.v2.ChatMetadata.members:type_name -> code.chat.v2.ChatMember
+	53,  // 64: code.chat.v2.ChatMetadata.cursor:type_name -> code.chat.v2.Cursor
+	39,  // 65: code.chat.v2.ChatMessage.message_id:type_name -> code.chat.v2.ChatMessageId
+	40,  // 66: code.chat.v2.ChatMessage.sender_id:type_name -> code.chat.v2.ChatMemberId
+	46,  // 67: code.chat.v2.ChatMessage.content:type_name -> code.chat.v2.Content
+	59,  // 68: code.chat.v2.ChatMessage.ts:type_name -> google.protobuf.Timestamp
+	53,  // 69: code.chat.v2.ChatMessage.cursor:type_name -> code.chat.v2.Cursor
+	40,  // 70: code.chat.v2.ChatMember.member_id:type_name -> code.chat.v2.ChatMemberId
+	44,  // 71: code.chat.v2.ChatMember.identity:type_name -> code.chat.v2.ChatMemberIdentity
+	45,  // 72: code.chat.v2.ChatMember.pointers:type_name -> code.chat.v2.Pointer
+	1,   // 73: code.chat.v2.ChatMemberIdentity.platform:type_name -> code.chat.v2.Platform
+	2,   // 74: code.chat.v2.Pointer.kind:type_name -> code.chat.v2.PointerType
+	39,  // 75: code.chat.v2.Pointer.value:type_name -> code.chat.v2.ChatMessageId
+	40,  // 76: code.chat.v2.Pointer.member_id:type_name -> code.chat.v2.ChatMemberId
+	47,  // 77: code.chat.v2.Content.text:type_name -> code.chat.v2.TextContent
+	48,  // 78: code.chat.v2.Content.localized:type_name -> code.chat.v2.LocalizedContent
+	49,  // 79: code.chat.v2.Content.exchange_data:type_name -> code.chat.v2.ExchangeDataContent
+	50,  // 80: code.chat.v2.Content.nacl_box:type_name -> code.chat.v2.NaclBoxEncryptedContent
+	51,  // 81: code.chat.v2.Content.thank_you:type_name -> code.chat.v2.ThankYouContent
+	52,  // 82: code.chat.v2.Content.identity_revealed:type_name -> code.chat.v2.IdentityRevealedContent
+	14,  // 83: code.chat.v2.ExchangeDataContent.verb:type_name -> code.chat.v2.ExchangeDataContent.Verb
+	60,  // 84: code.chat.v2.ExchangeDataContent.exact:type_name -> code.transaction.v2.ExchangeData
+	61,  // 85: code.chat.v2.ExchangeDataContent.partial:type_name -> code.transaction.v2.ExchangeDataWithoutRate
+	58,  // 86: code.chat.v2.ExchangeDataContent.intent:type_name -> code.common.v1.IntentId
+	55,  // 87: code.chat.v2.ExchangeDataContent.signature:type_name -> code.common.v1.Signature
+	54,  // 88: code.chat.v2.NaclBoxEncryptedContent.peer_public_key:type_name -> code.common.v1.SolanaAccountId
+	58,  // 89: code.chat.v2.ThankYouContent.tip_intent:type_name -> code.common.v1.IntentId
+	40,  // 90: code.chat.v2.IdentityRevealedContent.member_id:type_name -> code.chat.v2.ChatMemberId
+	44,  // 91: code.chat.v2.IdentityRevealedContent.identity:type_name -> code.chat.v2.ChatMemberIdentity
+	15,  // 92: code.chat.v2.Chat.GetChats:input_type -> code.chat.v2.GetChatsRequest
+	17,  // 93: code.chat.v2.Chat.GetMessages:input_type -> code.chat.v2.GetMessagesRequest
+	23,  // 94: code.chat.v2.Chat.StreamChatEvents:input_type -> code.chat.v2.StreamChatEventsRequest
+	25,  // 95: code.chat.v2.Chat.StartChat:input_type -> code.chat.v2.StartChatRequest
+	28,  // 96: code.chat.v2.Chat.SendMessage:input_type -> code.chat.v2.SendMessageRequest
+	30,  // 97: code.chat.v2.Chat.AdvancePointer:input_type -> code.chat.v2.AdvancePointerRequest
+	32,  // 98: code.chat.v2.Chat.RevealIdentity:input_type -> code.chat.v2.RevealIdentityRequest
+	34,  // 99: code.chat.v2.Chat.SetMuteState:input_type -> code.chat.v2.SetMuteStateRequest
+	36,  // 100: code.chat.v2.Chat.SetSubscriptionState:input_type -> code.chat.v2.SetSubscriptionStateRequest
+	16,  // 101: code.chat.v2.Chat.GetChats:output_type -> code.chat.v2.GetChatsResponse
+	18,  // 102: code.chat.v2.Chat.GetMessages:output_type -> code.chat.v2.GetMessagesResponse
+	24,  // 103: code.chat.v2.Chat.StreamChatEvents:output_type -> code.chat.v2.StreamChatEventsResponse
+	27,  // 104: code.chat.v2.Chat.StartChat:output_type -> code.chat.v2.StartChatResponse
+	29,  // 105: code.chat.v2.Chat.SendMessage:output_type -> code.chat.v2.SendMessageResponse
+	31,  // 106: code.chat.v2.Chat.AdvancePointer:output_type -> code.chat.v2.AdvancePointerResponse
+	33,  // 107: code.chat.v2.Chat.RevealIdentity:output_type -> code.chat.v2.RevealIdentityResponse
+	35,  // 108: code.chat.v2.Chat.SetMuteState:output_type -> code.chat.v2.SetMuteStateResponse
+	37,  // 109: code.chat.v2.Chat.SetSubscriptionState:output_type -> code.chat.v2.SetSubscriptionStateResponse
+	101, // [101:110] is the sub-list for method output_type
+	92,  // [92:101] is the sub-list for method input_type
+	92,  // [92:92] is the sub-list for extension type_name
+	92,  // [92:92] is the sub-list for extension extendee
+	0,   // [0:92] is the sub-list for field type_name
 }
 
 func init() { file_chat_v2_chat_service_proto_init() }

@@ -580,8 +580,11 @@ message ThankYouContent {
 }
 
 message IdentityRevealedContent {
-    // No fields as of right now. The chat member ID that was revealed can be inferred
-    // from the message sender ID, and the identity from the chat member's metadata.
+    // The chat member who revealed their identity
+    ChatMemberId member_id = 1 [(validate.rules).message.required = true];
+
+    // The identity that was revealed
+    ChatMemberIdentity identity = 2 [(validate.rules).message.required = true];
 }
 
 // Opaque cursor used across paged APIs. Underlying bytes may change as paging

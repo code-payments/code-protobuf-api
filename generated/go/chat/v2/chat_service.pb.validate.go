@@ -3871,6 +3871,40 @@ func (m *IdentityRevealedContent) Validate() error {
 		return nil
 	}
 
+	if m.GetMemberId() == nil {
+		return IdentityRevealedContentValidationError{
+			field:  "MemberId",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetMemberId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return IdentityRevealedContentValidationError{
+				field:  "MemberId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetIdentity() == nil {
+		return IdentityRevealedContentValidationError{
+			field:  "Identity",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetIdentity()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return IdentityRevealedContentValidationError{
+				field:  "Identity",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
