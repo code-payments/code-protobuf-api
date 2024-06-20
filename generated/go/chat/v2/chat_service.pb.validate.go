@@ -1977,6 +1977,16 @@ func (m *RevealIdentityResponse) Validate() error {
 
 	// no validation rules for Result
 
+	if v, ok := interface{}(m.GetMessage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RevealIdentityResponseValidationError{
+				field:  "Message",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
@@ -2690,9 +2700,9 @@ func (m *ChatMetadata) Validate() error {
 		}
 	}
 
-	if _, ok := _ChatMetadata_Kind_NotInLookup[m.GetKind()]; ok {
+	if _, ok := _ChatMetadata_Type_NotInLookup[m.GetType()]; ok {
 		return ChatMetadataValidationError{
-			field:  "Kind",
+			field:  "Type",
 			reason: "value must not be in list [0]",
 		}
 	}
@@ -2797,7 +2807,7 @@ var _ interface {
 	ErrorName() string
 } = ChatMetadataValidationError{}
 
-var _ChatMetadata_Kind_NotInLookup = map[ChatType]struct{}{
+var _ChatMetadata_Type_NotInLookup = map[ChatType]struct{}{
 	0: {},
 }
 
@@ -3145,9 +3155,9 @@ func (m *Pointer) Validate() error {
 		return nil
 	}
 
-	if _, ok := _Pointer_Kind_NotInLookup[m.GetKind()]; ok {
+	if _, ok := _Pointer_Type_NotInLookup[m.GetType()]; ok {
 		return PointerValidationError{
-			field:  "Kind",
+			field:  "Type",
 			reason: "value must not be in list [0]",
 		}
 	}
@@ -3243,7 +3253,7 @@ var _ interface {
 	ErrorName() string
 } = PointerValidationError{}
 
-var _Pointer_Kind_NotInLookup = map[PointerType]struct{}{
+var _Pointer_Type_NotInLookup = map[PointerType]struct{}{
 	0: {},
 }
 

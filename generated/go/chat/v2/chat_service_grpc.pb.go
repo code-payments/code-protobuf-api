@@ -22,26 +22,55 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ChatClient interface {
-	// GetChats gets the set of chats for an owner account using a paged API
+	// GetChats gets the set of chats for an owner account using a paged API.
+	// This RPC is aware of all identities tied to the owner account.
 	GetChats(ctx context.Context, in *GetChatsRequest, opts ...grpc.CallOption) (*GetChatsResponse, error)
-	// GetMessages gets the set of messages for a chat using a paged API
+	// GetMessages gets the set of messages for a chat member using a paged API
 	GetMessages(ctx context.Context, in *GetMessagesRequest, opts ...grpc.CallOption) (*GetMessagesResponse, error)
-	// StreamChatEvents streams chat events in real-time. This RPC also supports
-	// flushes to push initial chat state after stream open.
+	// StreamChatEvents streams chat events in real-time. Chat events include
+	// messages, pointer updates, etc.
+	//
+	// The streaming protocol is follows:
+	//  1. Client initiates a stream by sending an OpenChatEventStream message.
+	//  2. If an error is encoutered, a ChatStreamEventError message will be
+	//     returned by server and the stream will be closed.
+	//  3. Server will immediately flush initial chat state.
+	//  4. New chat events will be pushed to the stream in real time as they
+	//     are received.
+	//
+	// This RPC supports a keepalive protocol as follows:
+	//  1. Client initiates a stream by sending an OpenChatEventStream message.
+	//  2. Upon stream initialization, server begins the keepalive protocol.
+	//  3. Server sends a ping to the client.
+	//  4. Client responds with a pong as fast as possible, making note of
+	//     the delay for when to expect the next ping.
+	//  5. Steps 3 and 4 are repeated until the stream is explicitly terminated
+	//     or is deemed to be unhealthy.
+	//
+	// Client notes:
+	//   - Client should be careful to process events async, so any responses to pings are
+	//     not delayed.
+	//   - Clients should implement a reasonable backoff strategy upon continued timeout
+	//     failures.
+	//   - Clients that abuse pong messages may have their streams terminated by server.
+	//
+	// At any point in the stream, server will respond with events in real time as
+	// they are observed. Events sent over the stream should not affect the ping/pong
+	// protocol timings.
 	StreamChatEvents(ctx context.Context, opts ...grpc.CallOption) (Chat_StreamChatEventsClient, error)
 	// StartChat starts a chat. The RPC call is idempotent and will use existing
 	// chats whenever applicable within the context of message routing.
 	StartChat(ctx context.Context, in *StartChatRequest, opts ...grpc.CallOption) (*StartChatResponse, error)
 	// SendMessage sends a message to a chat
 	SendMessage(ctx context.Context, in *SendMessageRequest, opts ...grpc.CallOption) (*SendMessageResponse, error)
-	// AdvancePointer advances a pointer in chat history
+	// AdvancePointer advances a pointer in message history for a chat member
 	AdvancePointer(ctx context.Context, in *AdvancePointerRequest, opts ...grpc.CallOption) (*AdvancePointerResponse, error)
 	// RevealIdentity reveals a chat member's identity if it is anonymous. A chat
 	// message will be inserted on success.
 	RevealIdentity(ctx context.Context, in *RevealIdentityRequest, opts ...grpc.CallOption) (*RevealIdentityResponse, error)
-	// SetMuteState configures the mute state of a chat
+	// SetMuteState configures a chat member's mute state
 	SetMuteState(ctx context.Context, in *SetMuteStateRequest, opts ...grpc.CallOption) (*SetMuteStateResponse, error)
-	// SetSubscriptionState configures the susbscription state of a chat
+	// SetSubscriptionState configures a chat member's susbscription state
 	SetSubscriptionState(ctx context.Context, in *SetSubscriptionStateRequest, opts ...grpc.CallOption) (*SetSubscriptionStateResponse, error)
 }
 
@@ -160,26 +189,55 @@ func (c *chatClient) SetSubscriptionState(ctx context.Context, in *SetSubscripti
 // All implementations must embed UnimplementedChatServer
 // for forward compatibility
 type ChatServer interface {
-	// GetChats gets the set of chats for an owner account using a paged API
+	// GetChats gets the set of chats for an owner account using a paged API.
+	// This RPC is aware of all identities tied to the owner account.
 	GetChats(context.Context, *GetChatsRequest) (*GetChatsResponse, error)
-	// GetMessages gets the set of messages for a chat using a paged API
+	// GetMessages gets the set of messages for a chat member using a paged API
 	GetMessages(context.Context, *GetMessagesRequest) (*GetMessagesResponse, error)
-	// StreamChatEvents streams chat events in real-time. This RPC also supports
-	// flushes to push initial chat state after stream open.
+	// StreamChatEvents streams chat events in real-time. Chat events include
+	// messages, pointer updates, etc.
+	//
+	// The streaming protocol is follows:
+	//  1. Client initiates a stream by sending an OpenChatEventStream message.
+	//  2. If an error is encoutered, a ChatStreamEventError message will be
+	//     returned by server and the stream will be closed.
+	//  3. Server will immediately flush initial chat state.
+	//  4. New chat events will be pushed to the stream in real time as they
+	//     are received.
+	//
+	// This RPC supports a keepalive protocol as follows:
+	//  1. Client initiates a stream by sending an OpenChatEventStream message.
+	//  2. Upon stream initialization, server begins the keepalive protocol.
+	//  3. Server sends a ping to the client.
+	//  4. Client responds with a pong as fast as possible, making note of
+	//     the delay for when to expect the next ping.
+	//  5. Steps 3 and 4 are repeated until the stream is explicitly terminated
+	//     or is deemed to be unhealthy.
+	//
+	// Client notes:
+	//   - Client should be careful to process events async, so any responses to pings are
+	//     not delayed.
+	//   - Clients should implement a reasonable backoff strategy upon continued timeout
+	//     failures.
+	//   - Clients that abuse pong messages may have their streams terminated by server.
+	//
+	// At any point in the stream, server will respond with events in real time as
+	// they are observed. Events sent over the stream should not affect the ping/pong
+	// protocol timings.
 	StreamChatEvents(Chat_StreamChatEventsServer) error
 	// StartChat starts a chat. The RPC call is idempotent and will use existing
 	// chats whenever applicable within the context of message routing.
 	StartChat(context.Context, *StartChatRequest) (*StartChatResponse, error)
 	// SendMessage sends a message to a chat
 	SendMessage(context.Context, *SendMessageRequest) (*SendMessageResponse, error)
-	// AdvancePointer advances a pointer in chat history
+	// AdvancePointer advances a pointer in message history for a chat member
 	AdvancePointer(context.Context, *AdvancePointerRequest) (*AdvancePointerResponse, error)
 	// RevealIdentity reveals a chat member's identity if it is anonymous. A chat
 	// message will be inserted on success.
 	RevealIdentity(context.Context, *RevealIdentityRequest) (*RevealIdentityResponse, error)
-	// SetMuteState configures the mute state of a chat
+	// SetMuteState configures a chat member's mute state
 	SetMuteState(context.Context, *SetMuteStateRequest) (*SetMuteStateResponse, error)
-	// SetSubscriptionState configures the susbscription state of a chat
+	// SetSubscriptionState configures a chat member's susbscription state
 	SetSubscriptionState(context.Context, *SetSubscriptionStateRequest) (*SetSubscriptionStateResponse, error)
 	mustEmbedUnimplementedChatServer()
 }
