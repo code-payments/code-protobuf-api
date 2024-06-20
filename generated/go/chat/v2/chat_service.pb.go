@@ -2487,6 +2487,8 @@ func (x *ChatMemberId) GetValue() []byte {
 	return nil
 }
 
+// A chat
+//
 // todo: Support is_verified in a clean way
 type ChatMetadata struct {
 	state         protoimpl.MessageState
@@ -2598,6 +2600,7 @@ func (x *ChatMetadata) GetCursor() *Cursor {
 	return nil
 }
 
+// A message in a chat
 type ChatMessage struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -2684,6 +2687,7 @@ func (x *ChatMessage) GetCursor() *Cursor {
 	return nil
 }
 
+// A user in a chat
 type ChatMember struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -2795,6 +2799,7 @@ func (x *ChatMember) GetIsSubscribed() bool {
 	return false
 }
 
+// Identity to an external social platform that can be linked to a Code account
 type ChatMemberIdentity struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -3158,7 +3163,7 @@ func (x *LocalizedContent) GetKeyOrText() string {
 	return ""
 }
 
-// Exchange data content for movement of a value of Kin.
+// Exchange data content for movement of a value of Kin
 type ExchangeDataContent struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -3306,9 +3311,13 @@ type NaclBoxEncryptedContent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PeerPublicKey    *v1.SolanaAccountId `protobuf:"bytes,1,opt,name=peer_public_key,json=peerPublicKey,proto3" json:"peer_public_key,omitempty"`
-	Nonce            []byte              `protobuf:"bytes,2,opt,name=nonce,proto3" json:"nonce,omitempty"`
-	EncryptedPayload []byte              `protobuf:"bytes,3,opt,name=encrypted_payload,json=encryptedPayload,proto3" json:"encrypted_payload,omitempty"`
+	// The sender's public key that is used to derive the shared private key for
+	// decryption for message content.
+	PeerPublicKey *v1.SolanaAccountId `protobuf:"bytes,1,opt,name=peer_public_key,json=peerPublicKey,proto3" json:"peer_public_key,omitempty"`
+	// Globally random nonce that is unique to this encrypted piece of content
+	Nonce []byte `protobuf:"bytes,2,opt,name=nonce,proto3" json:"nonce,omitempty"`
+	// The encrypted piece of message content
+	EncryptedPayload []byte `protobuf:"bytes,3,opt,name=encrypted_payload,json=encryptedPayload,proto3" json:"encrypted_payload,omitempty"`
 }
 
 func (x *NaclBoxEncryptedContent) Reset() {
@@ -3364,6 +3373,7 @@ func (x *NaclBoxEncryptedContent) GetEncryptedPayload() []byte {
 	return nil
 }
 
+// Thank you content that is used to thank Code users for tips
 type ThankYouContent struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -3412,6 +3422,8 @@ func (x *ThankYouContent) GetTipIntent() *v1.IntentId {
 	return nil
 }
 
+// Identity revealed content that is inserted into chat whenever a chat member
+// reveals their identity
 type IdentityRevealedContent struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
