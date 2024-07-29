@@ -70,6 +70,11 @@ service Chat {
 
     // SetSubscriptionState configures a chat member's susbscription state
     rpc SetSubscriptionState(SetSubscriptionStateRequest) returns (SetSubscriptionStateResponse);
+
+    // NotifyIsTypingRequest notifies a chat that the sending member is typing.
+    //
+    // These requests are transient, and may be dropped at any point.
+    rpc NotifyIsTyping(NotifyIsTypingRequest) returns (NotifyIsTypingResponse);
 }
 
 message GetChatsRequest {
@@ -347,6 +352,27 @@ message SetSubscriptionStateResponse {
     }
 }
 
+message NotifyIsTypingRequest {
+    ChatId chat_id = 1 [(validate.rules).message.required = true];
+
+    ChatMemberId member_id = 2  [(validate.rules).message.required = true];
+
+    bool is_typing = 3;
+
+    common.v1.SolanaAccountId owner = 4 [(validate.rules).message.required = true];
+
+    common.v1.Signature signature = 5 [(validate.rules).message.required = true];
+}
+
+message NotifyIsTypingResponse {
+    Result result = 1;
+    enum Result {
+        OK             = 0;
+        DENIED         = 1;
+        CHAT_NOT_FOUND = 2;
+    }
+}
+
 message ChatId {
     // Sufficient space is left for a consistent hash value, though other types
     // of values may be used.
@@ -429,8 +455,8 @@ message ChatMetadata {
 
     // Can the user unsubscribe from this chat?
     bool can_unsubscribe = 6;
- 
-    // Cursor value for this chat for reference in subsequent GetChatsRequest 
+
+    // Cursor value for this chat for reference in subsequent GetChatsRequest
     Cursor cursor = 7;
 }
 
@@ -453,7 +479,7 @@ message ChatMessage {
     // any time-based UUID message IDs.
     google.protobuf.Timestamp ts = 4 [(validate.rules).timestamp.required = true];
 
-    // Cursor value for this message for reference in a paged GetMessagesRequest 
+    // Cursor value for this message for reference in a paged GetMessagesRequest
     Cursor cursor = 5;
 }
 
@@ -505,6 +531,12 @@ message ChatMemberIdentity {
         min_len: 1
         max_len: 15 // Twitter limit
     }];
+
+    // If present, the URL of the users profile pic.
+    string profile_pic_url = 3 [(validate.rules).string = {
+        min_len: 1
+        max_len: 255 // Arbitrary limit
+    }];
 }
 
 // Pointer in a chat indicating a user's message history state in a chat.
@@ -518,7 +550,7 @@ message Pointer {
     }];
 
     // Everything at or before this message ID is considered to have the state
-    // inferred by the type of pointer. 
+    // inferred by the type of pointer.
     ChatMessageId value = 2 [(validate.rules).message.required = true];
 
     // The chat member associated with this pointer state
@@ -590,7 +622,7 @@ message ExchangeDataContent {
         transaction.v2.ExchangeDataWithoutRate partial = 3;
     }
 
-    // An ID that can be referenced to the source of the exchange of Kin 
+    // An ID that can be referenced to the source of the exchange of Kin
     oneof reference {
         option (validate.required) = true;
 
@@ -611,7 +643,7 @@ message NaclBoxEncryptedContent {
         max_len: 24
     }];
 
-    // The encrypted piece of message content 
+    // The encrypted piece of message content
     bytes encrypted_payload = 3 [(validate.rules).bytes = {
         min_len: 1
         max_len: 1024

@@ -72,6 +72,10 @@ type ChatClient interface {
 	SetMuteState(ctx context.Context, in *SetMuteStateRequest, opts ...grpc.CallOption) (*SetMuteStateResponse, error)
 	// SetSubscriptionState configures a chat member's susbscription state
 	SetSubscriptionState(ctx context.Context, in *SetSubscriptionStateRequest, opts ...grpc.CallOption) (*SetSubscriptionStateResponse, error)
+	// NotifyIsTypingRequest notifies a chat that the sending member is typing.
+	//
+	// These requests are transient, and may be dropped at any point.
+	NotifyIsTyping(ctx context.Context, in *NotifyIsTypingRequest, opts ...grpc.CallOption) (*NotifyIsTypingResponse, error)
 }
 
 type chatClient struct {
@@ -185,6 +189,15 @@ func (c *chatClient) SetSubscriptionState(ctx context.Context, in *SetSubscripti
 	return out, nil
 }
 
+func (c *chatClient) NotifyIsTyping(ctx context.Context, in *NotifyIsTypingRequest, opts ...grpc.CallOption) (*NotifyIsTypingResponse, error) {
+	out := new(NotifyIsTypingResponse)
+	err := c.cc.Invoke(ctx, "/code.chat.v2.Chat/NotifyIsTyping", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ChatServer is the server API for Chat service.
 // All implementations must embed UnimplementedChatServer
 // for forward compatibility
@@ -239,6 +252,10 @@ type ChatServer interface {
 	SetMuteState(context.Context, *SetMuteStateRequest) (*SetMuteStateResponse, error)
 	// SetSubscriptionState configures a chat member's susbscription state
 	SetSubscriptionState(context.Context, *SetSubscriptionStateRequest) (*SetSubscriptionStateResponse, error)
+	// NotifyIsTypingRequest notifies a chat that the sending member is typing.
+	//
+	// These requests are transient, and may be dropped at any point.
+	NotifyIsTyping(context.Context, *NotifyIsTypingRequest) (*NotifyIsTypingResponse, error)
 	mustEmbedUnimplementedChatServer()
 }
 
@@ -272,6 +289,9 @@ func (UnimplementedChatServer) SetMuteState(context.Context, *SetMuteStateReques
 }
 func (UnimplementedChatServer) SetSubscriptionState(context.Context, *SetSubscriptionStateRequest) (*SetSubscriptionStateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetSubscriptionState not implemented")
+}
+func (UnimplementedChatServer) NotifyIsTyping(context.Context, *NotifyIsTypingRequest) (*NotifyIsTypingResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method NotifyIsTyping not implemented")
 }
 func (UnimplementedChatServer) mustEmbedUnimplementedChatServer() {}
 
@@ -456,6 +476,24 @@ func _Chat_SetSubscriptionState_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Chat_NotifyIsTyping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NotifyIsTypingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChatServer).NotifyIsTyping(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/code.chat.v2.Chat/NotifyIsTyping",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChatServer).NotifyIsTyping(ctx, req.(*NotifyIsTypingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Chat_ServiceDesc is the grpc.ServiceDesc for Chat service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -494,6 +532,10 @@ var Chat_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetSubscriptionState",
 			Handler:    _Chat_SetSubscriptionState_Handler,
+		},
+		{
+			MethodName: "NotifyIsTyping",
+			Handler:    _Chat_NotifyIsTyping_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

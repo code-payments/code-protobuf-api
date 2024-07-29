@@ -7,6 +7,8 @@ import { AdvancePointerRequest, AdvancePointerResponse, GetChatsRequest, GetChat
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
+ * Deprecated: Use the v2 service
+ *
  * @generated from service code.chat.v1.Chat
  */
 export const Chat = {
