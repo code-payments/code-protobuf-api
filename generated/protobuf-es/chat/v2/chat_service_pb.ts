@@ -2093,6 +2093,13 @@ export class ChatMemberIdentity extends Message<ChatMemberIdentity> {
    */
   username = "";
 
+  /**
+   * If present, the URL of the users profile pic.
+   *
+   * @generated from field: string profile_pic_url = 3;
+   */
+  profilePicUrl = "";
+
   constructor(data?: PartialMessage<ChatMemberIdentity>) {
     super();
     proto3.util.initPartial(data, this);
@@ -2103,6 +2110,7 @@ export class ChatMemberIdentity extends Message<ChatMemberIdentity> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "platform", kind: "enum", T: proto3.getEnumType(Platform) },
     { no: 2, name: "username", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "profile_pic_url", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ChatMemberIdentity {

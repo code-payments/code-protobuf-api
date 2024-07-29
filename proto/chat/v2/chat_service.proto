@@ -531,6 +531,12 @@ message ChatMemberIdentity {
         min_len: 1
         max_len: 15 // Twitter limit
     }];
+
+    // If present, the URL of the users profile pic.
+    string profile_pic_url = 3 [(validate.rules).string = {
+        min_len: 1
+        max_len: 255 // Arbitrary limit
+    }];
 }
 
 // Pointer in a chat indicating a user's message history state in a chat.
