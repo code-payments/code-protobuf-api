@@ -2460,6 +2460,212 @@ var _ interface {
 	ErrorName() string
 } = SetSubscriptionStateResponseValidationError{}
 
+// Validate checks the field values on NotifyIsTypingRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *NotifyIsTypingRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetChatId() == nil {
+		return NotifyIsTypingRequestValidationError{
+			field:  "ChatId",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetChatId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return NotifyIsTypingRequestValidationError{
+				field:  "ChatId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetMemberId() == nil {
+		return NotifyIsTypingRequestValidationError{
+			field:  "MemberId",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetMemberId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return NotifyIsTypingRequestValidationError{
+				field:  "MemberId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for IsTyping
+
+	if m.GetOwner() == nil {
+		return NotifyIsTypingRequestValidationError{
+			field:  "Owner",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return NotifyIsTypingRequestValidationError{
+				field:  "Owner",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetSignature() == nil {
+		return NotifyIsTypingRequestValidationError{
+			field:  "Signature",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return NotifyIsTypingRequestValidationError{
+				field:  "Signature",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// NotifyIsTypingRequestValidationError is the validation error returned by
+// NotifyIsTypingRequest.Validate if the designated constraints aren't met.
+type NotifyIsTypingRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e NotifyIsTypingRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e NotifyIsTypingRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e NotifyIsTypingRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e NotifyIsTypingRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e NotifyIsTypingRequestValidationError) ErrorName() string {
+	return "NotifyIsTypingRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e NotifyIsTypingRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sNotifyIsTypingRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = NotifyIsTypingRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = NotifyIsTypingRequestValidationError{}
+
+// Validate checks the field values on NotifyIsTypingResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *NotifyIsTypingResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Result
+
+	return nil
+}
+
+// NotifyIsTypingResponseValidationError is the validation error returned by
+// NotifyIsTypingResponse.Validate if the designated constraints aren't met.
+type NotifyIsTypingResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e NotifyIsTypingResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e NotifyIsTypingResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e NotifyIsTypingResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e NotifyIsTypingResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e NotifyIsTypingResponseValidationError) ErrorName() string {
+	return "NotifyIsTypingResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e NotifyIsTypingResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sNotifyIsTypingResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = NotifyIsTypingResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = NotifyIsTypingResponseValidationError{}
+
 // Validate checks the field values on ChatId with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *ChatId) Validate() error {
