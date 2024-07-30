@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { AddTokenRequest, AddTokenResponse } from "./push_service_pb";
+import { AddTokenRequest, AddTokenResponse, RemoveTokenRequest, RemoveTokenResponse } from "./push_service_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -18,12 +18,29 @@ export const Push = {
      * validated against the user agent and any mismatches will result in an
      * INVALID_ARGUMENT status error.
      *
+     * The token will be unlinked from any and all other accounts that it was
+     * previously bound to.
+     *
      * @generated from rpc code.push.v1.Push.AddToken
      */
     addToken: {
       name: "AddToken",
       I: AddTokenRequest,
       O: AddTokenResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * RemoveToken removes the provided push token from the account.
+     *
+     * The provided token must be bound to the current account.
+     * Otherwise, the RPC will succeed with without removal.
+     *
+     * @generated from rpc code.push.v1.Push.RemoveToken
+     */
+    removeToken: {
+      name: "RemoveToken",
+      I: RemoveTokenRequest,
+      O: RemoveTokenResponse,
       kind: MethodKind.Unary,
     },
   }

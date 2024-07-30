@@ -26,7 +26,15 @@ type PushClient interface {
 	// and adding an existing valid token will not fail. Token types will be
 	// validated against the user agent and any mismatches will result in an
 	// INVALID_ARGUMENT status error.
+	//
+	// The token will be unlinked from any and all other accounts that it was
+	// previously bound to.
 	AddToken(ctx context.Context, in *AddTokenRequest, opts ...grpc.CallOption) (*AddTokenResponse, error)
+	// RemoveToken removes the provided push token from the account.
+	//
+	// The provided token must be bound to the current account.
+	// Otherwise, the RPC will succeed with without removal.
+	RemoveToken(ctx context.Context, in *RemoveTokenRequest, opts ...grpc.CallOption) (*RemoveTokenResponse, error)
 }
 
 type pushClient struct {
@@ -46,6 +54,15 @@ func (c *pushClient) AddToken(ctx context.Context, in *AddTokenRequest, opts ...
 	return out, nil
 }
 
+func (c *pushClient) RemoveToken(ctx context.Context, in *RemoveTokenRequest, opts ...grpc.CallOption) (*RemoveTokenResponse, error) {
+	out := new(RemoveTokenResponse)
+	err := c.cc.Invoke(ctx, "/code.push.v1.Push/RemoveToken", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PushServer is the server API for Push service.
 // All implementations must embed UnimplementedPushServer
 // for forward compatibility
@@ -54,7 +71,15 @@ type PushServer interface {
 	// and adding an existing valid token will not fail. Token types will be
 	// validated against the user agent and any mismatches will result in an
 	// INVALID_ARGUMENT status error.
+	//
+	// The token will be unlinked from any and all other accounts that it was
+	// previously bound to.
 	AddToken(context.Context, *AddTokenRequest) (*AddTokenResponse, error)
+	// RemoveToken removes the provided push token from the account.
+	//
+	// The provided token must be bound to the current account.
+	// Otherwise, the RPC will succeed with without removal.
+	RemoveToken(context.Context, *RemoveTokenRequest) (*RemoveTokenResponse, error)
 	mustEmbedUnimplementedPushServer()
 }
 
@@ -64,6 +89,9 @@ type UnimplementedPushServer struct {
 
 func (UnimplementedPushServer) AddToken(context.Context, *AddTokenRequest) (*AddTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddToken not implemented")
+}
+func (UnimplementedPushServer) RemoveToken(context.Context, *RemoveTokenRequest) (*RemoveTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveToken not implemented")
 }
 func (UnimplementedPushServer) mustEmbedUnimplementedPushServer() {}
 
@@ -96,6 +124,24 @@ func _Push_AddToken_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Push_RemoveToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PushServer).RemoveToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/code.push.v1.Push/RemoveToken",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PushServer).RemoveToken(ctx, req.(*RemoveTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Push_ServiceDesc is the grpc.ServiceDesc for Push service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -106,6 +152,10 @@ var Push_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddToken",
 			Handler:    _Push_AddToken_Handler,
+		},
+		{
+			MethodName: "RemoveToken",
+			Handler:    _Push_RemoveToken_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
