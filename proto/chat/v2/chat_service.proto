@@ -157,6 +157,7 @@ message ChatStreamEvent {
 
         ChatMessage message = 1;
         Pointer     pointer = 2;
+        IsTyping    is_typing = 3;
     }
 }
 
@@ -682,4 +683,12 @@ message Cursor {
         min_len: 8
         max_len: 32
     }];
+}
+
+message IsTyping {
+    ChatMemberId member_id = 1 [(validate.rules).message.required = true];
+
+    // is_typing indicates whether or not the user is typing.
+    // If false, the user has explicitly stopped typing.
+    bool is_typing = 2;
 }
