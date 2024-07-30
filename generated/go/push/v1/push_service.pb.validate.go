@@ -244,3 +244,209 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = AddTokenResponseValidationError{}
+
+// Validate checks the field values on RemoveTokenRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *RemoveTokenRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetOwnerAccountId() == nil {
+		return RemoveTokenRequestValidationError{
+			field:  "OwnerAccountId",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetOwnerAccountId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RemoveTokenRequestValidationError{
+				field:  "OwnerAccountId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetSignature() == nil {
+		return RemoveTokenRequestValidationError{
+			field:  "Signature",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RemoveTokenRequestValidationError{
+				field:  "Signature",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetContainerId() == nil {
+		return RemoveTokenRequestValidationError{
+			field:  "ContainerId",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetContainerId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RemoveTokenRequestValidationError{
+				field:  "ContainerId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if l := utf8.RuneCountInString(m.GetPushToken()); l < 1 || l > 4096 {
+		return RemoveTokenRequestValidationError{
+			field:  "PushToken",
+			reason: "value length must be between 1 and 4096 runes, inclusive",
+		}
+	}
+
+	if _, ok := _RemoveTokenRequest_TokenType_InLookup[m.GetTokenType()]; !ok {
+		return RemoveTokenRequestValidationError{
+			field:  "TokenType",
+			reason: "value must be in list [1 2]",
+		}
+	}
+
+	return nil
+}
+
+// RemoveTokenRequestValidationError is the validation error returned by
+// RemoveTokenRequest.Validate if the designated constraints aren't met.
+type RemoveTokenRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RemoveTokenRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RemoveTokenRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RemoveTokenRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RemoveTokenRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RemoveTokenRequestValidationError) ErrorName() string {
+	return "RemoveTokenRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e RemoveTokenRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRemoveTokenRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RemoveTokenRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RemoveTokenRequestValidationError{}
+
+var _RemoveTokenRequest_TokenType_InLookup = map[TokenType]struct{}{
+	1: {},
+	2: {},
+}
+
+// Validate checks the field values on RemoveTokenResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *RemoveTokenResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Result
+
+	return nil
+}
+
+// RemoveTokenResponseValidationError is the validation error returned by
+// RemoveTokenResponse.Validate if the designated constraints aren't met.
+type RemoveTokenResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RemoveTokenResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RemoveTokenResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RemoveTokenResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RemoveTokenResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RemoveTokenResponseValidationError) ErrorName() string {
+	return "RemoveTokenResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e RemoveTokenResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRemoveTokenResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RemoveTokenResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RemoveTokenResponseValidationError{}
