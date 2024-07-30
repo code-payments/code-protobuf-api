@@ -654,6 +654,18 @@ func (m *ChatStreamEvent) Validate() error {
 			}
 		}
 
+	case *ChatStreamEvent_IsTyping:
+
+		if v, ok := interface{}(m.GetIsTyping()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ChatStreamEventValidationError{
+					field:  "IsTyping",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
 	default:
 		return ChatStreamEventValidationError{
 			field:  "Type",
@@ -4257,3 +4269,86 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CursorValidationError{}
+
+// Validate checks the field values on IsTyping with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *IsTyping) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetMemberId() == nil {
+		return IsTypingValidationError{
+			field:  "MemberId",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetMemberId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return IsTypingValidationError{
+				field:  "MemberId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for IsTyping
+
+	return nil
+}
+
+// IsTypingValidationError is the validation error returned by
+// IsTyping.Validate if the designated constraints aren't met.
+type IsTypingValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e IsTypingValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e IsTypingValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e IsTypingValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e IsTypingValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e IsTypingValidationError) ErrorName() string { return "IsTypingValidationError" }
+
+// Error satisfies the builtin error interface
+func (e IsTypingValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sIsTyping.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = IsTypingValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = IsTypingValidationError{}

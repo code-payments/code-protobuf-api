@@ -476,6 +476,12 @@ export class ChatStreamEvent extends Message<ChatStreamEvent> {
      */
     value: Pointer;
     case: "pointer";
+  } | {
+    /**
+     * @generated from field: code.chat.v2.IsTyping is_typing = 3;
+     */
+    value: IsTyping;
+    case: "isTyping";
   } | { case: undefined; value?: undefined } = { case: undefined };
 
   constructor(data?: PartialMessage<ChatStreamEvent>) {
@@ -488,6 +494,7 @@ export class ChatStreamEvent extends Message<ChatStreamEvent> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "message", kind: "message", T: ChatMessage, oneof: "type" },
     { no: 2, name: "pointer", kind: "message", T: Pointer, oneof: "type" },
+    { no: 3, name: "is_typing", kind: "message", T: IsTyping, oneof: "type" },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ChatStreamEvent {
@@ -2704,6 +2711,52 @@ export class Cursor extends Message<Cursor> {
 
   static equals(a: Cursor | PlainMessage<Cursor> | undefined, b: Cursor | PlainMessage<Cursor> | undefined): boolean {
     return proto3.util.equals(Cursor, a, b);
+  }
+}
+
+/**
+ * @generated from message code.chat.v2.IsTyping
+ */
+export class IsTyping extends Message<IsTyping> {
+  /**
+   * @generated from field: code.chat.v2.ChatMemberId member_id = 1;
+   */
+  memberId?: ChatMemberId;
+
+  /**
+   * is_typing indicates whether or not the user is typing.
+   * If false, the user has explicitly stopped typing.
+   *
+   * @generated from field: bool is_typing = 2;
+   */
+  isTyping = false;
+
+  constructor(data?: PartialMessage<IsTyping>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.chat.v2.IsTyping";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "member_id", kind: "message", T: ChatMemberId },
+    { no: 2, name: "is_typing", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): IsTyping {
+    return new IsTyping().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): IsTyping {
+    return new IsTyping().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): IsTyping {
+    return new IsTyping().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: IsTyping | PlainMessage<IsTyping> | undefined, b: IsTyping | PlainMessage<IsTyping> | undefined): boolean {
+    return proto3.util.equals(IsTyping, a, b);
   }
 }
 
