@@ -178,3 +178,127 @@ proto3.util.setEnumType(AddTokenResponse_Result, "code.push.v1.AddTokenResponse.
   { no: 1, name: "INVALID_PUSH_TOKEN" },
 ]);
 
+/**
+ * @generated from message code.push.v1.RemoveTokenRequest
+ */
+export class RemoveTokenRequest extends Message<RemoveTokenRequest> {
+  /**
+   * The public key of the owner account that signed this request message.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId owner_account_id = 1;
+   */
+  ownerAccountId?: SolanaAccountId;
+
+  /**
+   * The signature is of serialize(AddTokenRequest) without this field set
+   * using the private key of owner_account_id. This provides an authentication
+   * mechanism to the RPC.
+   *
+   * @generated from field: code.common.v1.Signature signature = 2;
+   */
+  signature?: Signature;
+
+  /**
+   * The data container where the push token was stored.
+   *
+   * @generated from field: code.common.v1.DataContainerId container_id = 3;
+   */
+  containerId?: DataContainerId;
+
+  /**
+   * The push token to remove.
+   *
+   * @generated from field: string push_token = 4;
+   */
+  pushToken = "";
+
+  /**
+   * The type of push token to remove.
+   *
+   * @generated from field: code.push.v1.TokenType token_type = 5;
+   */
+  tokenType = TokenType.UNKNOWN;
+
+  constructor(data?: PartialMessage<RemoveTokenRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.push.v1.RemoveTokenRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "owner_account_id", kind: "message", T: SolanaAccountId },
+    { no: 2, name: "signature", kind: "message", T: Signature },
+    { no: 3, name: "container_id", kind: "message", T: DataContainerId },
+    { no: 4, name: "push_token", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "token_type", kind: "enum", T: proto3.getEnumType(TokenType) },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RemoveTokenRequest {
+    return new RemoveTokenRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): RemoveTokenRequest {
+    return new RemoveTokenRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): RemoveTokenRequest {
+    return new RemoveTokenRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: RemoveTokenRequest | PlainMessage<RemoveTokenRequest> | undefined, b: RemoveTokenRequest | PlainMessage<RemoveTokenRequest> | undefined): boolean {
+    return proto3.util.equals(RemoveTokenRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message code.push.v1.RemoveTokenResponse
+ */
+export class RemoveTokenResponse extends Message<RemoveTokenResponse> {
+  /**
+   * @generated from field: code.push.v1.RemoveTokenResponse.Result result = 1;
+   */
+  result = RemoveTokenResponse_Result.OK;
+
+  constructor(data?: PartialMessage<RemoveTokenResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.push.v1.RemoveTokenResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "result", kind: "enum", T: proto3.getEnumType(RemoveTokenResponse_Result) },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RemoveTokenResponse {
+    return new RemoveTokenResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): RemoveTokenResponse {
+    return new RemoveTokenResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): RemoveTokenResponse {
+    return new RemoveTokenResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: RemoveTokenResponse | PlainMessage<RemoveTokenResponse> | undefined, b: RemoveTokenResponse | PlainMessage<RemoveTokenResponse> | undefined): boolean {
+    return proto3.util.equals(RemoveTokenResponse, a, b);
+  }
+}
+
+/**
+ * @generated from enum code.push.v1.RemoveTokenResponse.Result
+ */
+export enum RemoveTokenResponse_Result {
+  /**
+   * @generated from enum value: OK = 0;
+   */
+  OK = 0,
+}
+// Retrieve enum metadata with: proto3.getEnumType(RemoveTokenResponse_Result)
+proto3.util.setEnumType(RemoveTokenResponse_Result, "code.push.v1.RemoveTokenResponse.Result", [
+  { no: 0, name: "OK" },
+]);
+
