@@ -26,13 +26,13 @@ type TransactionClient interface {
 	// client actions to execute on the blockchain using the Code sequencer for
 	// fulfillment.
 	//
-	// Transactions are never exchanged between client and server. Instead, the
-	// required accounts and arguments for instructions known to each actor are
-	// exchanged to allow independent and local transaction construction.
+	// Transactions and virtual instructions are never exchanged between client and server.
+	// Instead, the required accounts and arguments for instructions known to each actor are
+	// exchanged to allow independent and local construction.
 	//
 	// Client and server are expected to fully validate the intent. Proofs will
 	// be provided for any parameter requiring one. Signatures should only be
-	// generated after approval of all transactions.
+	// generated after approval.
 	//
 	// This RPC is not a traditional streaming endpoint. It bundles two unary calls
 	// to enable DB-level transaction semantics.
@@ -40,16 +40,16 @@ type TransactionClient interface {
 	// The high-level happy path flow for the RPC is as follows:
 	//  1. Client initiates a stream and sends SubmitIntentRequest.SubmitActions
 	//  2. Server validates the intent, its actions and metadata
-	//     3a. If there are transactions requiring the user's signature, then server
-	//     returns SubmitIntentResponse.ServerParameters
+	//     3a. If there are transactions or virtual instructions requiring the user's signature,
+	//     then server returns SubmitIntentResponse.ServerParameters
 	//     3b. Otherwise, server returns SubmitIntentResponse.Success and closes the
 	//     stream
-	//  4. For each transaction requiring the user's signature, the client locally
-	//     constructs it, performs validation and collects the signature
+	//  4. For each transaction or virtual instruction requiring the user's signature, the client
+	//     locally constructs it, performs validation and collects the signature
 	//  5. Client sends SubmitIntentRequest.SubmitSignatures with the signature
 	//     list generated from 4
 	//  6. Server validates all signatures are submitted and are the expected values
-	//     using locally constructed transactions.
+	//     using locally constructed transactions or virtual instructions.
 	//  7. Server returns SubmitIntentResponse.Success and closes the stream
 	//
 	// In the error case:
@@ -69,10 +69,6 @@ type TransactionClient interface {
 	// GetLimits gets limits for money moving intents for an owner account in an
 	// identity-aware manner
 	GetLimits(ctx context.Context, in *GetLimitsRequest, opts ...grpc.CallOption) (*GetLimitsResponse, error)
-	// GetPaymentHistory gets an owner account's payment history inferred from intents
-	//
-	// Deprecated: Payment history has migrated to chats
-	GetPaymentHistory(ctx context.Context, in *GetPaymentHistoryRequest, opts ...grpc.CallOption) (*GetPaymentHistoryResponse, error)
 	// CanWithdrawToAccount provides hints to clients for submitting withdraw intents.
 	// The RPC indicates if a withdrawal is possible, and how it should be performed.
 	CanWithdrawToAccount(ctx context.Context, in *CanWithdrawToAccountRequest, opts ...grpc.CallOption) (*CanWithdrawToAccountResponse, error)
@@ -177,15 +173,6 @@ func (c *transactionClient) GetLimits(ctx context.Context, in *GetLimitsRequest,
 	return out, nil
 }
 
-func (c *transactionClient) GetPaymentHistory(ctx context.Context, in *GetPaymentHistoryRequest, opts ...grpc.CallOption) (*GetPaymentHistoryResponse, error) {
-	out := new(GetPaymentHistoryResponse)
-	err := c.cc.Invoke(ctx, "/code.transaction.v2.Transaction/GetPaymentHistory", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *transactionClient) CanWithdrawToAccount(ctx context.Context, in *CanWithdrawToAccountRequest, opts ...grpc.CallOption) (*CanWithdrawToAccountResponse, error) {
 	out := new(CanWithdrawToAccountResponse)
 	err := c.cc.Invoke(ctx, "/code.transaction.v2.Transaction/CanWithdrawToAccount", in, out, opts...)
@@ -252,13 +239,13 @@ type TransactionServer interface {
 	// client actions to execute on the blockchain using the Code sequencer for
 	// fulfillment.
 	//
-	// Transactions are never exchanged between client and server. Instead, the
-	// required accounts and arguments for instructions known to each actor are
-	// exchanged to allow independent and local transaction construction.
+	// Transactions and virtual instructions are never exchanged between client and server.
+	// Instead, the required accounts and arguments for instructions known to each actor are
+	// exchanged to allow independent and local construction.
 	//
 	// Client and server are expected to fully validate the intent. Proofs will
 	// be provided for any parameter requiring one. Signatures should only be
-	// generated after approval of all transactions.
+	// generated after approval.
 	//
 	// This RPC is not a traditional streaming endpoint. It bundles two unary calls
 	// to enable DB-level transaction semantics.
@@ -266,16 +253,16 @@ type TransactionServer interface {
 	// The high-level happy path flow for the RPC is as follows:
 	//  1. Client initiates a stream and sends SubmitIntentRequest.SubmitActions
 	//  2. Server validates the intent, its actions and metadata
-	//     3a. If there are transactions requiring the user's signature, then server
-	//     returns SubmitIntentResponse.ServerParameters
+	//     3a. If there are transactions or virtual instructions requiring the user's signature,
+	//     then server returns SubmitIntentResponse.ServerParameters
 	//     3b. Otherwise, server returns SubmitIntentResponse.Success and closes the
 	//     stream
-	//  4. For each transaction requiring the user's signature, the client locally
-	//     constructs it, performs validation and collects the signature
+	//  4. For each transaction or virtual instruction requiring the user's signature, the client
+	//     locally constructs it, performs validation and collects the signature
 	//  5. Client sends SubmitIntentRequest.SubmitSignatures with the signature
 	//     list generated from 4
 	//  6. Server validates all signatures are submitted and are the expected values
-	//     using locally constructed transactions.
+	//     using locally constructed transactions or virtual instructions.
 	//  7. Server returns SubmitIntentResponse.Success and closes the stream
 	//
 	// In the error case:
@@ -295,10 +282,6 @@ type TransactionServer interface {
 	// GetLimits gets limits for money moving intents for an owner account in an
 	// identity-aware manner
 	GetLimits(context.Context, *GetLimitsRequest) (*GetLimitsResponse, error)
-	// GetPaymentHistory gets an owner account's payment history inferred from intents
-	//
-	// Deprecated: Payment history has migrated to chats
-	GetPaymentHistory(context.Context, *GetPaymentHistoryRequest) (*GetPaymentHistoryResponse, error)
 	// CanWithdrawToAccount provides hints to clients for submitting withdraw intents.
 	// The RPC indicates if a withdrawal is possible, and how it should be performed.
 	CanWithdrawToAccount(context.Context, *CanWithdrawToAccountRequest) (*CanWithdrawToAccountResponse, error)
@@ -347,9 +330,6 @@ func (UnimplementedTransactionServer) GetPrioritizedIntentsForPrivacyUpgrade(con
 }
 func (UnimplementedTransactionServer) GetLimits(context.Context, *GetLimitsRequest) (*GetLimitsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLimits not implemented")
-}
-func (UnimplementedTransactionServer) GetPaymentHistory(context.Context, *GetPaymentHistoryRequest) (*GetPaymentHistoryResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPaymentHistory not implemented")
 }
 func (UnimplementedTransactionServer) CanWithdrawToAccount(context.Context, *CanWithdrawToAccountRequest) (*CanWithdrawToAccountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CanWithdrawToAccount not implemented")
@@ -474,24 +454,6 @@ func _Transaction_GetLimits_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Transaction_GetPaymentHistory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPaymentHistoryRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TransactionServer).GetPaymentHistory(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/code.transaction.v2.Transaction/GetPaymentHistory",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TransactionServer).GetPaymentHistory(ctx, req.(*GetPaymentHistoryRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Transaction_CanWithdrawToAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CanWithdrawToAccountRequest)
 	if err := dec(in); err != nil {
@@ -594,10 +556,6 @@ var Transaction_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetLimits",
 			Handler:    _Transaction_GetLimits_Handler,
-		},
-		{
-			MethodName: "GetPaymentHistory",
-			Handler:    _Transaction_GetPaymentHistory_Handler,
 		},
 		{
 			MethodName: "CanWithdrawToAccount",

@@ -57,6 +57,15 @@ message Transaction {
     }];
 }
 
+// VirtualInstruction is a raw binary Code VM virtual instruction
+message VirtualInstruction {
+    // Maximum size taken from: https://github.com/solana-labs/solana/blob/39b3ac6a8d29e14faa1de73d8b46d390ad41797b/sdk/src/packet.rs#L9-L13
+    bytes value = 1 [(validate.rules).bytes = {
+        min_len: 1
+        max_len: 1232
+    }];
+}
+
 // Blockhash is a raw binary Solana blockchash
 message Blockhash {
     bytes value = 1 [(validate.rules).bytes = {
