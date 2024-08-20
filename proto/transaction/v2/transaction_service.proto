@@ -1099,8 +1099,15 @@ message InvalidSignatureErrorDetails {
     // The action whose signature mismatched 
     uint32 action_id = 1; 
 
-    // The transaction the server expected to have signed.
-    common.v1.Transaction expected_transaction = 2 [(validate.rules).message.required = true];
+    oneof expected_blob {
+        option (validate.required) = true;
+
+        // The transaction the server expected to have signed.
+        common.v1.Transaction expected_transaction = 2;
+
+         // The virtual ixn hash the server expected to have signed.
+        common.v1.Hash expected_vixn_hash = 4;
+    }
 
     // The signature that was provided by the client.
     common.v1.Signature provided_signature = 3 [(validate.rules).message.required = true];

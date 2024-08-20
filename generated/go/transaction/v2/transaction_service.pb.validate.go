@@ -4714,23 +4714,6 @@ func (m *InvalidSignatureErrorDetails) Validate() error {
 
 	// no validation rules for ActionId
 
-	if m.GetExpectedTransaction() == nil {
-		return InvalidSignatureErrorDetailsValidationError{
-			field:  "ExpectedTransaction",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetExpectedTransaction()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return InvalidSignatureErrorDetailsValidationError{
-				field:  "ExpectedTransaction",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
 	if m.GetProvidedSignature() == nil {
 		return InvalidSignatureErrorDetailsValidationError{
 			field:  "ProvidedSignature",
@@ -4746,6 +4729,40 @@ func (m *InvalidSignatureErrorDetails) Validate() error {
 				cause:  err,
 			}
 		}
+	}
+
+	switch m.ExpectedBlob.(type) {
+
+	case *InvalidSignatureErrorDetails_ExpectedTransaction:
+
+		if v, ok := interface{}(m.GetExpectedTransaction()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return InvalidSignatureErrorDetailsValidationError{
+					field:  "ExpectedTransaction",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *InvalidSignatureErrorDetails_ExpectedVixnHash:
+
+		if v, ok := interface{}(m.GetExpectedVixnHash()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return InvalidSignatureErrorDetailsValidationError{
+					field:  "ExpectedVixnHash",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return InvalidSignatureErrorDetailsValidationError{
+			field:  "ExpectedBlob",
+			reason: "value is required",
+		}
+
 	}
 
 	return nil

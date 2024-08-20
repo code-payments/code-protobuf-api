@@ -3745,11 +3745,25 @@ export class InvalidSignatureErrorDetails extends Message<InvalidSignatureErrorD
   actionId = 0;
 
   /**
-   * The transaction the server expected to have signed.
-   *
-   * @generated from field: code.common.v1.Transaction expected_transaction = 2;
+   * @generated from oneof code.transaction.v2.InvalidSignatureErrorDetails.expected_blob
    */
-  expectedTransaction?: Transaction;
+  expectedBlob: {
+    /**
+     * The transaction the server expected to have signed.
+     *
+     * @generated from field: code.common.v1.Transaction expected_transaction = 2;
+     */
+    value: Transaction;
+    case: "expectedTransaction";
+  } | {
+    /**
+     * The virtual ixn hash the server expected to have signed.
+     *
+     * @generated from field: code.common.v1.Hash expected_vixn_hash = 4;
+     */
+    value: Hash;
+    case: "expectedVixnHash";
+  } | { case: undefined; value?: undefined } = { case: undefined };
 
   /**
    * The signature that was provided by the client.
@@ -3767,7 +3781,8 @@ export class InvalidSignatureErrorDetails extends Message<InvalidSignatureErrorD
   static readonly typeName = "code.transaction.v2.InvalidSignatureErrorDetails";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "action_id", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-    { no: 2, name: "expected_transaction", kind: "message", T: Transaction },
+    { no: 2, name: "expected_transaction", kind: "message", T: Transaction, oneof: "expected_blob" },
+    { no: 4, name: "expected_vixn_hash", kind: "message", T: Hash, oneof: "expected_blob" },
     { no: 3, name: "provided_signature", kind: "message", T: Signature },
   ]);
 
