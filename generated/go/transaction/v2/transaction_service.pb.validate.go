@@ -6759,17 +6759,17 @@ func (m *UpgradeableIntent_UpgradeablePrivateAction) Validate() error {
 		return nil
 	}
 
-	if m.GetVirtualInstructionBlob() == nil {
+	if m.GetTransactionBlob() == nil {
 		return UpgradeableIntent_UpgradeablePrivateActionValidationError{
-			field:  "VirtualInstructionBlob",
+			field:  "TransactionBlob",
 			reason: "value is required",
 		}
 	}
 
-	if v, ok := interface{}(m.GetVirtualInstructionBlob()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetTransactionBlob()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return UpgradeableIntent_UpgradeablePrivateActionValidationError{
-				field:  "VirtualInstructionBlob",
+				field:  "TransactionBlob",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}

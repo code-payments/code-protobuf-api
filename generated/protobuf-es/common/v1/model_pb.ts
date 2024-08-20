@@ -240,47 +240,6 @@ export class Transaction extends Message<Transaction> {
 }
 
 /**
- * VirtualInstruction is a raw binary Code VM virtual instruction
- *
- * @generated from message code.common.v1.VirtualInstruction
- */
-export class VirtualInstruction extends Message<VirtualInstruction> {
-  /**
-   * Maximum size taken from: https://github.com/solana-labs/solana/blob/39b3ac6a8d29e14faa1de73d8b46d390ad41797b/sdk/src/packet.rs#L9-L13
-   *
-   * @generated from field: bytes value = 1;
-   */
-  value = new Uint8Array(0);
-
-  constructor(data?: PartialMessage<VirtualInstruction>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.common.v1.VirtualInstruction";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "value", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): VirtualInstruction {
-    return new VirtualInstruction().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): VirtualInstruction {
-    return new VirtualInstruction().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): VirtualInstruction {
-    return new VirtualInstruction().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: VirtualInstruction | PlainMessage<VirtualInstruction> | undefined, b: VirtualInstruction | PlainMessage<VirtualInstruction> | undefined): boolean {
-    return proto3.util.equals(VirtualInstruction, a, b);
-  }
-}
-
-/**
  * Blockhash is a raw binary Solana blockchash
  *
  * @generated from message code.common.v1.Blockhash

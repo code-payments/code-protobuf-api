@@ -1152,10 +1152,11 @@ message UpgradeableIntent {
     }];
 
     message UpgradeablePrivateAction {
-        // The blob that was signed by the client. Clients *MUST* use the source and
-        // destination accounts in the timelock::TransferWithAuthority virtual instruction
-        // to validate all fields provided by server by locally computing the expected addresses.
-        common.v1.VirtualInstruction virtual_instruction_blob = 1 [(validate.rules).message.required = true];
+        // The blob that was hashed and signed by the client for a virtual instruction.
+        // Clients *MUST* use the source and destination accounts in the timelock::TransferWithAuthority
+        // instruction to validate all fields provided by server by locally computing the expected
+        // addresses.
+        common.v1.Transaction transaction_blob = 1 [(validate.rules).message.required = true];
 
         // The client's signature for the virtual instruction. Clients MUST use this to
         // locally validate the virtual instruction blob provided by server.

@@ -5,7 +5,7 @@
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
 import { Message, proto3, protoInt64, Timestamp } from "@bufbuild/protobuf";
-import { AccountType, Blockhash, DeviceToken, Hash, InstructionAccount, IntentId, Relationship, Signature, SolanaAccountId, Transaction, UUID, VirtualInstruction } from "../../common/v1/model_pb";
+import { AccountType, Blockhash, DeviceToken, Hash, InstructionAccount, IntentId, Relationship, Signature, SolanaAccountId, Transaction, UUID } from "../../common/v1/model_pb";
 
 /**
  * @generated from enum code.transaction.v2.AirdropType
@@ -3951,13 +3951,14 @@ export class UpgradeableIntent extends Message<UpgradeableIntent> {
  */
 export class UpgradeableIntent_UpgradeablePrivateAction extends Message<UpgradeableIntent_UpgradeablePrivateAction> {
   /**
-   * The blob that was signed by the client. Clients *MUST* use the source and
-   * destination accounts in the timelock::TransferWithAuthority virtual instruction
-   * to validate all fields provided by server by locally computing the expected addresses.
+   * The blob that was hashed and signed by the client for a virtual instruction.
+   * Clients *MUST* use the source and destination accounts in the timelock::TransferWithAuthority
+   * instruction to validate all fields provided by server by locally computing the expected
+   * addresses.
    *
-   * @generated from field: code.common.v1.VirtualInstruction virtual_instruction_blob = 1;
+   * @generated from field: code.common.v1.Transaction transaction_blob = 1;
    */
-  virtualInstructionBlob?: VirtualInstruction;
+  transactionBlob?: Transaction;
 
   /**
    * The client's signature for the virtual instruction. Clients MUST use this to
@@ -4024,7 +4025,7 @@ export class UpgradeableIntent_UpgradeablePrivateAction extends Message<Upgradea
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "virtual_instruction_blob", kind: "message", T: VirtualInstruction },
+    { no: 1, name: "transaction_blob", kind: "message", T: Transaction },
     { no: 2, name: "client_signature", kind: "message", T: Signature },
     { no: 3, name: "action_id", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
     { no: 4, name: "source_account_type", kind: "enum", T: proto3.getEnumType(AccountType) },
