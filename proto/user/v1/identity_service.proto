@@ -291,6 +291,11 @@ message GetTwitterUserRequest {
         // The tip address to query against
         common.v1.SolanaAccountId tip_address = 2;
     }
+
+    // An optional set of authentication information that allows for more
+    // information to be returned in the request.
+    common.v1.SolanaAccountId requestor = 10;
+    common.v1.Signature signature = 11;
 }
 
 message GetTwitterUserResponse {
@@ -335,6 +340,8 @@ message PhoneMetadata {
 
 message TwitterUser {
     // Public key for a token account where tips are routed
+    //
+    // TODO(tip_rename): Candidate for renaming to something more generic.
     common.v1.SolanaAccountId tip_address = 1 [(validate.rules).message.required = true];
 
     // The user's username on Twitter
@@ -365,5 +372,18 @@ message TwitterUser {
     }
 
     // The number of followers the user has on Twitter
-    uint32 follower_count = 6;    
+    uint32 follower_count = 6;
+
+    // ===========================================================
+    // The rest of the fields require authentication to be present.
+    // ===========================================================
+
+    // If a friendship has already been established with the user,
+    // then the following IntentId is the intent that unlocked it.
+    //
+    // This ID can be used directly with StartChat() if no other
+    // chats with the user exists. While this isn't required for
+    // deduplication on StartChat(), it can help circumvent a lot
+    // of the flow.
+    common.v1.IntentId friendship_intent_id = 10;
 }

@@ -203,31 +203,70 @@ message StartChatRequest {
     oneof parameters {
         option (validate.required) = true;
 
-        StartTipChatParameters tip_chat = 3;
+        StartTwoWayChatParameters two_way_chat = 3;
         // GroupChatParameters group_chat  = 4;
     }
 }
 
-// Starts a two-way chat between a tipper and tippee. Chat members are
-// inferred from the 12 word public keys involved in the intent. Only
-// the tippee can start the chat, and the tipper is anonymous if this
-// is the first between the involved Code users.
-message StartTipChatParameters {
-    // The tip's intent ID, which can be extracted from the reference in
-    // an ExchangeDataContent message content where the verb is RECEIVED_TIP.
-    common.v1.IntentId intent_id = 1 [(validate.rules).message.required = true];
+// StartTwoWayChatParameters contains the parameters required to start
+// or recover a two way chat between the caller and the specified 'other_user'.
+//
+// The 'other_user' is currently the 'tip_address', normally retrieved from
+// user.Identity.GetTwitterUser(username).
+message StartTwoWayChatParameters {
+    common.v1.SolanaAccountId other_user = 1 [(validate.rules).message.required = true];
+
+    oneof payment {
+        option (validate.required) = true;
+
+        // A previous intent with data that indicates the intent was for establishing
+        // the chat/friendship.
+        //
+        // In cases where a friendship has already been established, it can be grabbed
+        // from the respective users profile RPCs. For example, user.Identity.GetTwitterUser().
+        common.v1.IntentId intent_id = 2;
+
+        // The intent that the server should submit to the transaction service.
+        //
+        // Clients should not submit this on their own, in order for server to help
+        // facilitate distributed transactions.
+        //
+        // If no intent has been submitted for this relationship, or the previous intents
+        // failed, the intent will be submitted.
+        //
+        // Otherwise, the intent will not be submitted. Read another way, if the relationship
+        // was already confirmed, or is pending confirmation, the intent will not be submitted.
+        transaction.v2.SubmitIntentRequest intent_to_submit = 3;
+    }
 }
 
 message StartChatResponse {
     Result result = 1;
     enum Result {
-        OK                = 0;
-        DENIED            = 1;
+        OK = 0;
+
+        // DENIED indicates the caller is not allowed to start/join the chat.
+        DENIED = 1;
+
+        // INVALID_PRAMETER indicates one of the parameters is invalid.
         INVALID_PARAMETER = 2;
+
+        // PENDING indicates that an intent (not necessarily the provided one) is
+        // pending confirmation before the service will create the chat. This can
+        // happen in cases of retry, or if the blockchain confirmation is being
+        // particularly slow.
+        PENDING = 3;
     }
 
-    // The chat to use if the RPC was successful
+    // The chat to use if the RPC was successful.
     ChatMetadata chat = 2;
+
+    // If result == PENDING_INTENT, pending_intent_id contains the intent that
+    // the server is waiting on before proceeding with chat creation.
+    //
+    // The server may return this instead of OK if the blockchain has accepted
+    // the transaction, but is taking an unsually long time to confirm.
+    common.v1.IntentId pending_intent_id = 3;
 }
 
 message SendMessageRequest {
