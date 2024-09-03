@@ -5084,6 +5084,69 @@ proto3.util.setEnumType(TippedUser_Platform, "code.transaction.v2.TippedUser.Pla
 ]);
 
 /**
+ * @generated from message code.transaction.v2.FriendedUser
+ */
+export class FriendedUser extends Message<FriendedUser> {
+  /**
+   * @generated from field: code.transaction.v2.FriendedUser.Platform platform = 1;
+   */
+  platform = FriendedUser_Platform.UNKNOWN;
+
+  /**
+   * @generated from field: string username = 2;
+   */
+  username = "";
+
+  constructor(data?: PartialMessage<FriendedUser>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.transaction.v2.FriendedUser";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "platform", kind: "enum", T: proto3.getEnumType(FriendedUser_Platform) },
+    { no: 2, name: "username", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): FriendedUser {
+    return new FriendedUser().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): FriendedUser {
+    return new FriendedUser().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): FriendedUser {
+    return new FriendedUser().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: FriendedUser | PlainMessage<FriendedUser> | undefined, b: FriendedUser | PlainMessage<FriendedUser> | undefined): boolean {
+    return proto3.util.equals(FriendedUser, a, b);
+  }
+}
+
+/**
+ * @generated from enum code.transaction.v2.FriendedUser.Platform
+ */
+export enum FriendedUser_Platform {
+  /**
+   * @generated from enum value: UNKNOWN = 0;
+   */
+  UNKNOWN = 0,
+
+  /**
+   * @generated from enum value: TWITTER = 1;
+   */
+  TWITTER = 1,
+}
+// Retrieve enum metadata with: proto3.getEnumType(FriendedUser_Platform)
+proto3.util.setEnumType(FriendedUser_Platform, "code.transaction.v2.FriendedUser.Platform", [
+  { no: 0, name: "UNKNOWN" },
+  { no: 1, name: "TWITTER" },
+]);
+
+/**
  * @generated from message code.transaction.v2.Cursor
  */
 export class Cursor extends Message<Cursor> {
