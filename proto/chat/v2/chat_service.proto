@@ -230,6 +230,11 @@ message StartTwoWayChatParameters {
     // This is most likely to occur when initiating a chat with a user for the first
     // time.
     common.v1.IntentId intent_id = 2;
+
+    // The identity of the other user.
+    //
+    // Note: This can/should be removed with proper intent plumbing.
+    ChatMemberIdentity identity = 3 [(validate.rules).message.required = true];
 }
 
 message StartChatResponse {

@@ -811,6 +811,15 @@ export class StartTwoWayChatParameters extends Message<StartTwoWayChatParameters
    */
   intentId?: IntentId;
 
+  /**
+   * The identity of the other user.
+   *
+   * Note: This can/should be removed with proper intent plumbing.
+   *
+   * @generated from field: code.chat.v2.ChatMemberIdentity identity = 3;
+   */
+  identity?: ChatMemberIdentity;
+
   constructor(data?: PartialMessage<StartTwoWayChatParameters>) {
     super();
     proto3.util.initPartial(data, this);
@@ -821,6 +830,7 @@ export class StartTwoWayChatParameters extends Message<StartTwoWayChatParameters
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "other_user", kind: "message", T: SolanaAccountId },
     { no: 2, name: "intent_id", kind: "message", T: IntentId },
+    { no: 3, name: "identity", kind: "message", T: ChatMemberIdentity },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StartTwoWayChatParameters {

@@ -1276,6 +1276,23 @@ func (m *StartTwoWayChatParameters) Validate() error {
 		}
 	}
 
+	if m.GetIdentity() == nil {
+		return StartTwoWayChatParametersValidationError{
+			field:  "Identity",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetIdentity()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StartTwoWayChatParametersValidationError{
+				field:  "Identity",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
