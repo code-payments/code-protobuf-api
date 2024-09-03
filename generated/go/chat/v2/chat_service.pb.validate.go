@@ -1147,12 +1147,12 @@ func (m *StartChatRequest) Validate() error {
 
 	switch m.Parameters.(type) {
 
-	case *StartChatRequest_TipChat:
+	case *StartChatRequest_TwoWayChat:
 
-		if v, ok := interface{}(m.GetTipChat()).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(m.GetTwoWayChat()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return StartChatRequestValidationError{
-					field:  "TipChat",
+					field:  "TwoWayChat",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -1224,24 +1224,34 @@ var _ interface {
 	ErrorName() string
 } = StartChatRequestValidationError{}
 
-// Validate checks the field values on StartTipChatParameters with the rules
+// Validate checks the field values on StartTwoWayChatParameters with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *StartTipChatParameters) Validate() error {
+func (m *StartTwoWayChatParameters) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	if m.GetIntentId() == nil {
-		return StartTipChatParametersValidationError{
-			field:  "IntentId",
+	if m.GetOtherUser() == nil {
+		return StartTwoWayChatParametersValidationError{
+			field:  "OtherUser",
 			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetOtherUser()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StartTwoWayChatParametersValidationError{
+				field:  "OtherUser",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
 	}
 
 	if v, ok := interface{}(m.GetIntentId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return StartTipChatParametersValidationError{
+			return StartTwoWayChatParametersValidationError{
 				field:  "IntentId",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -1252,9 +1262,9 @@ func (m *StartTipChatParameters) Validate() error {
 	return nil
 }
 
-// StartTipChatParametersValidationError is the validation error returned by
-// StartTipChatParameters.Validate if the designated constraints aren't met.
-type StartTipChatParametersValidationError struct {
+// StartTwoWayChatParametersValidationError is the validation error returned by
+// StartTwoWayChatParameters.Validate if the designated constraints aren't met.
+type StartTwoWayChatParametersValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1262,24 +1272,24 @@ type StartTipChatParametersValidationError struct {
 }
 
 // Field function returns field value.
-func (e StartTipChatParametersValidationError) Field() string { return e.field }
+func (e StartTwoWayChatParametersValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e StartTipChatParametersValidationError) Reason() string { return e.reason }
+func (e StartTwoWayChatParametersValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e StartTipChatParametersValidationError) Cause() error { return e.cause }
+func (e StartTwoWayChatParametersValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e StartTipChatParametersValidationError) Key() bool { return e.key }
+func (e StartTwoWayChatParametersValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e StartTipChatParametersValidationError) ErrorName() string {
-	return "StartTipChatParametersValidationError"
+func (e StartTwoWayChatParametersValidationError) ErrorName() string {
+	return "StartTwoWayChatParametersValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e StartTipChatParametersValidationError) Error() string {
+func (e StartTwoWayChatParametersValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1291,14 +1301,14 @@ func (e StartTipChatParametersValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sStartTipChatParameters.%s: %s%s",
+		"invalid %sStartTwoWayChatParameters.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = StartTipChatParametersValidationError{}
+var _ error = StartTwoWayChatParametersValidationError{}
 
 var _ interface {
 	Field() string
@@ -1306,7 +1316,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = StartTipChatParametersValidationError{}
+} = StartTwoWayChatParametersValidationError{}
 
 // Validate checks the field values on StartChatResponse with the rules defined
 // in the proto definition for this message. If any rules are violated, an

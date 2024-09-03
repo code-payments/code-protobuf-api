@@ -736,10 +736,10 @@ export class StartChatRequest extends Message<StartChatRequest> {
     /**
      * GroupChatParameters group_chat  = 4;
      *
-     * @generated from field: code.chat.v2.StartTipChatParameters tip_chat = 3;
+     * @generated from field: code.chat.v2.StartTwoWayChatParameters two_way_chat = 3;
      */
-    value: StartTipChatParameters;
-    case: "tipChat";
+    value: StartTwoWayChatParameters;
+    case: "twoWayChat";
   } | { case: undefined; value?: undefined } = { case: undefined };
 
   constructor(data?: PartialMessage<StartChatRequest>) {
@@ -752,7 +752,7 @@ export class StartChatRequest extends Message<StartChatRequest> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "owner", kind: "message", T: SolanaAccountId },
     { no: 2, name: "signature", kind: "message", T: Signature },
-    { no: 3, name: "tip_chat", kind: "message", T: StartTipChatParameters, oneof: "parameters" },
+    { no: 3, name: "two_way_chat", kind: "message", T: StartTwoWayChatParameters, oneof: "parameters" },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StartChatRequest {
@@ -773,47 +773,64 @@ export class StartChatRequest extends Message<StartChatRequest> {
 }
 
 /**
- * Starts a two-way chat between a tipper and tippee. Chat members are
- * inferred from the 12 word public keys involved in the intent. Only
- * the tippee can start the chat, and the tipper is anonymous if this
- * is the first between the involved Code users.
+ * StartTwoWayChatParameters contains the parameters required to start
+ * or recover a two way chat between the caller and the specified 'other_user'.
  *
- * @generated from message code.chat.v2.StartTipChatParameters
+ * The 'other_user' is currently the 'tip_address', normally retrieved from
+ * user.Identity.GetTwitterUser(username).
+ *
+ * @generated from message code.chat.v2.StartTwoWayChatParameters
  */
-export class StartTipChatParameters extends Message<StartTipChatParameters> {
+export class StartTwoWayChatParameters extends Message<StartTwoWayChatParameters> {
   /**
-   * The tip's intent ID, which can be extracted from the reference in
-   * an ExchangeDataContent message content where the verb is RECEIVED_TIP.
+   * The account id of the user the caller wishes to chat with.
    *
-   * @generated from field: code.common.v1.IntentId intent_id = 1;
+   * This will be the `tip` (or equivalent) address.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId other_user = 1;
+   */
+  otherUser?: SolanaAccountId;
+
+  /**
+   * The intent_id of the payment that initiated the chat/friendship.
+   *
+   * This field is optional. It is used as an optimization when the server has not
+   * yet observed the establishment of a friendship. In this case, the server will
+   * use the provided intent_id to verify the friendship.
+   *
+   * This is most likely to occur when initiating a chat with a user for the first
+   * time.
+   *
+   * @generated from field: code.common.v1.IntentId intent_id = 2;
    */
   intentId?: IntentId;
 
-  constructor(data?: PartialMessage<StartTipChatParameters>) {
+  constructor(data?: PartialMessage<StartTwoWayChatParameters>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.StartTipChatParameters";
+  static readonly typeName = "code.chat.v2.StartTwoWayChatParameters";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "intent_id", kind: "message", T: IntentId },
+    { no: 1, name: "other_user", kind: "message", T: SolanaAccountId },
+    { no: 2, name: "intent_id", kind: "message", T: IntentId },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StartTipChatParameters {
-    return new StartTipChatParameters().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StartTwoWayChatParameters {
+    return new StartTwoWayChatParameters().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StartTipChatParameters {
-    return new StartTipChatParameters().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StartTwoWayChatParameters {
+    return new StartTwoWayChatParameters().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StartTipChatParameters {
-    return new StartTipChatParameters().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StartTwoWayChatParameters {
+    return new StartTwoWayChatParameters().fromJsonString(jsonString, options);
   }
 
-  static equals(a: StartTipChatParameters | PlainMessage<StartTipChatParameters> | undefined, b: StartTipChatParameters | PlainMessage<StartTipChatParameters> | undefined): boolean {
-    return proto3.util.equals(StartTipChatParameters, a, b);
+  static equals(a: StartTwoWayChatParameters | PlainMessage<StartTwoWayChatParameters> | undefined, b: StartTwoWayChatParameters | PlainMessage<StartTwoWayChatParameters> | undefined): boolean {
+    return proto3.util.equals(StartTwoWayChatParameters, a, b);
   }
 }
 
@@ -827,7 +844,7 @@ export class StartChatResponse extends Message<StartChatResponse> {
   result = StartChatResponse_Result.OK;
 
   /**
-   * The chat to use if the RPC was successful
+   * The chat to use if the RPC was successful.
    *
    * @generated from field: code.chat.v2.ChatMetadata chat = 2;
    */
@@ -872,20 +889,34 @@ export enum StartChatResponse_Result {
   OK = 0,
 
   /**
+   * DENIED indicates the caller is not allowed to start/join the chat.
+   *
    * @generated from enum value: DENIED = 1;
    */
   DENIED = 1,
 
   /**
+   * INVALID_PRAMETER indicates one of the parameters is invalid.
+   *
    * @generated from enum value: INVALID_PARAMETER = 2;
    */
   INVALID_PARAMETER = 2,
+
+  /**
+   * PENDING indicates that the payment (for chat) intent is pending confirmation
+   * before the service will permit the creation of the chat. This can happen in
+   * cases where the block chain is particularly slow (beyond our RPC timeouts).
+   *
+   * @generated from enum value: PENDING = 3;
+   */
+  PENDING = 3,
 }
 // Retrieve enum metadata with: proto3.getEnumType(StartChatResponse_Result)
 proto3.util.setEnumType(StartChatResponse_Result, "code.chat.v2.StartChatResponse.Result", [
   { no: 0, name: "OK" },
   { no: 1, name: "DENIED" },
   { no: 2, name: "INVALID_PARAMETER" },
+  { no: 3, name: "PENDING" },
 ]);
 
 /**
