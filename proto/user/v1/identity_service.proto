@@ -378,12 +378,6 @@ message TwitterUser {
     // The rest of the fields require authentication to be present.
     // ===========================================================
 
-    // If a friendship has already been established with the user,
-    // then the following IntentId is the intent that unlocked it.
-    //
-    // This ID can be used directly with StartChat() if no other
-    // chats with the user exists. While this isn't required for
-    // deduplication on StartChat(), it can help circumvent a lot
-    // of the flow.
-    common.v1.IntentId friendship_intent_id = 10;
+    // Indicates the user is a friend of the caller.
+    bool is_friend = 10;
 }
