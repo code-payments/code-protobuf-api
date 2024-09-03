@@ -200,10 +200,12 @@ message StartChatRequest {
 
     common.v1.Signature signature = 2 [(validate.rules).message.required = true];
 
+    ChatMemberIdentity self = 3 [(validate.rules).message.required = true];
+
     oneof parameters {
         option (validate.required) = true;
 
-        StartTwoWayChatParameters two_way_chat = 3;
+        StartTwoWayChatParameters two_way_chat = 4;
         // GroupChatParameters group_chat  = 4;
     }
 }

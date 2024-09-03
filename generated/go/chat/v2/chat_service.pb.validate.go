@@ -1145,6 +1145,23 @@ func (m *StartChatRequest) Validate() error {
 		}
 	}
 
+	if m.GetSelf() == nil {
+		return StartChatRequestValidationError{
+			field:  "Self",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetSelf()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StartChatRequestValidationError{
+				field:  "Self",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	switch m.Parameters.(type) {
 
 	case *StartChatRequest_TwoWayChat:

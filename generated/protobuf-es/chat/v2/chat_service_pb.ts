@@ -730,13 +730,18 @@ export class StartChatRequest extends Message<StartChatRequest> {
   signature?: Signature;
 
   /**
+   * @generated from field: code.chat.v2.ChatMemberIdentity self = 3;
+   */
+  self?: ChatMemberIdentity;
+
+  /**
    * @generated from oneof code.chat.v2.StartChatRequest.parameters
    */
   parameters: {
     /**
      * GroupChatParameters group_chat  = 4;
      *
-     * @generated from field: code.chat.v2.StartTwoWayChatParameters two_way_chat = 3;
+     * @generated from field: code.chat.v2.StartTwoWayChatParameters two_way_chat = 4;
      */
     value: StartTwoWayChatParameters;
     case: "twoWayChat";
@@ -752,7 +757,8 @@ export class StartChatRequest extends Message<StartChatRequest> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "owner", kind: "message", T: SolanaAccountId },
     { no: 2, name: "signature", kind: "message", T: Signature },
-    { no: 3, name: "two_way_chat", kind: "message", T: StartTwoWayChatParameters, oneof: "parameters" },
+    { no: 3, name: "self", kind: "message", T: ChatMemberIdentity },
+    { no: 4, name: "two_way_chat", kind: "message", T: StartTwoWayChatParameters, oneof: "parameters" },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StartChatRequest {
