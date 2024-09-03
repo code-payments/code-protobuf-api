@@ -374,6 +374,12 @@ message TwitterUser {
     // The number of followers the user has on Twitter
     uint32 follower_count = 6;
 
+    // The cost of establishing the friendship (regardless if caller is a friend).
+    //
+    // This should not be cached for an extended period, as exchange rate / value
+    // may change at any time.
+    transaction.v2.ExchangeData friendship_cost = 7;
+
     // ===========================================================
     // The rest of the fields require authentication to be present.
     // ===========================================================
