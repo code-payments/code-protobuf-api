@@ -840,7 +840,10 @@ message NoPrivacyTransferAction {
     common.v1.SolanaAccountId destination = 3 [(validate.rules).message.required = true];
 
     // The Kin quark amount to transfer
-    uint64 amount = 4 [(validate.rules).uint64.gt = 0];
+    uint64 amount = 4 [(validate.rules).uint64 = {
+        gt: 0
+        lte: 4294967295 // uint32 max due to VM instruction packing optimizations
+    }];
 }
 
 // Virtual Instruction 1
@@ -863,7 +866,10 @@ message NoPrivacyWithdrawAction {
     common.v1.SolanaAccountId destination = 3 [(validate.rules).message.required = true];
 
     // The intended Kin quark amount to withdraw
-    uint64 amount = 4 [(validate.rules).uint64.gt = 0];
+    uint64 amount = 4 [(validate.rules).uint64 = {
+        gt: 0
+        lte: 4294967295 // uint32 max due to VM instruction packing optimizations
+    }];
     
     // Whether the account is closed afterwards. This is always true, since there
     // are no current se cases to leave it open.
@@ -895,7 +901,10 @@ message TemporaryPrivacyTransferAction {
     common.v1.SolanaAccountId destination = 3 [(validate.rules).message.required = true];
 
      // The Kin quark amount to transfer
-    uint64 amount = 4 [(validate.rules).uint64.gt = 0];
+    uint64 amount = 4 [(validate.rules).uint64 = {
+        gt: 0
+        lte: 4294967295 // uint32 max due to VM instruction packing optimizations
+    }];
 }
 
 // Virtual Instruction 1
@@ -922,7 +931,10 @@ message TemporaryPrivacyExchangeAction {
     common.v1.SolanaAccountId destination = 3 [(validate.rules).message.required = true];
 
      // The Kin quark amount to exchange
-    uint64 amount = 4 [(validate.rules).uint64.gt = 0];
+    uint64 amount = 4 [(validate.rules).uint64 = {
+        gt: 0
+        lte: 4294967295 // uint32 max due to VM instruction packing optimizations
+    }];
 }
 
 // Virtual Instruction 1
@@ -960,7 +972,10 @@ message FeePaymentAction {
     common.v1.SolanaAccountId source = 2 [(validate.rules).message.required = true];
 
     // The Kin quark amount to transfer
-    uint64 amount = 3 [(validate.rules).uint64.gt = 0];
+    uint64 amount = 3 [(validate.rules).uint64 = {
+        gt: 0
+        lte: 4294967295 // uint32 max due to VM instruction packing optimizations
+    }];
 
     // The destination where the fee payment is being made for fees outside of
     // Code.
