@@ -2948,10 +2948,10 @@ func (m *NoPrivacyTransferAction) Validate() error {
 		}
 	}
 
-	if val := m.GetAmount(); val <= 0 || val > 4294967295 {
+	if m.GetAmount() <= 0 {
 		return NoPrivacyTransferActionValidationError{
 			field:  "Amount",
-			reason: "value must be inside range (0, 4294967295]",
+			reason: "value must be greater than 0",
 		}
 	}
 
@@ -3073,10 +3073,10 @@ func (m *NoPrivacyWithdrawAction) Validate() error {
 		}
 	}
 
-	if val := m.GetAmount(); val <= 0 || val > 4294967295 {
+	if m.GetAmount() <= 0 {
 		return NoPrivacyWithdrawActionValidationError{
 			field:  "Amount",
-			reason: "value must be inside range (0, 4294967295]",
+			reason: "value must be greater than 0",
 		}
 	}
 
@@ -3205,10 +3205,10 @@ func (m *TemporaryPrivacyTransferAction) Validate() error {
 		}
 	}
 
-	if val := m.GetAmount(); val <= 0 || val > 4294967295 {
+	if m.GetAmount() <= 0 {
 		return TemporaryPrivacyTransferActionValidationError{
 			field:  "Amount",
-			reason: "value must be inside range (0, 4294967295]",
+			reason: "value must be greater than 0",
 		}
 	}
 
@@ -3331,10 +3331,10 @@ func (m *TemporaryPrivacyExchangeAction) Validate() error {
 		}
 	}
 
-	if val := m.GetAmount(); val <= 0 || val > 4294967295 {
+	if m.GetAmount() <= 0 {
 		return TemporaryPrivacyExchangeActionValidationError{
 			field:  "Amount",
-			reason: "value must be inside range (0, 4294967295]",
+			reason: "value must be greater than 0",
 		}
 	}
 
@@ -3512,10 +3512,10 @@ func (m *FeePaymentAction) Validate() error {
 		}
 	}
 
-	if val := m.GetAmount(); val <= 0 || val > 4294967295 {
+	if m.GetAmount() <= 0 {
 		return FeePaymentActionValidationError{
 			field:  "Amount",
-			reason: "value must be inside range (0, 4294967295]",
+			reason: "value must be greater than 0",
 		}
 	}
 
