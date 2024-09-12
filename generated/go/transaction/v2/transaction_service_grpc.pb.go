@@ -83,6 +83,9 @@ type TransactionClient interface {
 	//   - Balance changes are applied after the transaction has finalized
 	//   - Transactions use recent blockhashes over a nonce
 	//
+	// SubmitIntent also operates on VM virtual instructions, whereas Swap uses
+	// Solana transactions.
+	//
 	// The transaction will have the following instruction format:
 	//  1. ComputeBudget::SetComputeUnitLimit
 	//  2. ComputeBudget::SetComputeUnitPrice
@@ -91,7 +94,7 @@ type TransactionClient interface {
 	//  5. SwapValidator::PostSwap
 	//
 	// Note: Currently limited to swapping USDC to Kin.
-	// Note: Kin is deposited into the primary account.
+	// Note: Kin is deposited into the token account derived from the VM deposit PDA of the owner account.
 	Swap(ctx context.Context, opts ...grpc.CallOption) (Transaction_SwapClient, error)
 	// DeclareFiatOnrampPurchaseAttempt is called whenever a user attempts to use a fiat
 	// onramp to purchase crypto for use in Code.
@@ -296,6 +299,9 @@ type TransactionServer interface {
 	//   - Balance changes are applied after the transaction has finalized
 	//   - Transactions use recent blockhashes over a nonce
 	//
+	// SubmitIntent also operates on VM virtual instructions, whereas Swap uses
+	// Solana transactions.
+	//
 	// The transaction will have the following instruction format:
 	//  1. ComputeBudget::SetComputeUnitLimit
 	//  2. ComputeBudget::SetComputeUnitPrice
@@ -304,7 +310,7 @@ type TransactionServer interface {
 	//  5. SwapValidator::PostSwap
 	//
 	// Note: Currently limited to swapping USDC to Kin.
-	// Note: Kin is deposited into the primary account.
+	// Note: Kin is deposited into the token account derived from the VM deposit PDA of the owner account.
 	Swap(Transaction_SwapServer) error
 	// DeclareFiatOnrampPurchaseAttempt is called whenever a user attempts to use a fiat
 	// onramp to purchase crypto for use in Code.

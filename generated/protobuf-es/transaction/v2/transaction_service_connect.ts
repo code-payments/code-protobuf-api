@@ -135,6 +135,8 @@ export const Transaction = {
      *    Sequencer within the RPC handler
      *  * Balance changes are applied after the transaction has finalized
      *  * Transactions use recent blockhashes over a nonce
+     * SubmitIntent also operates on VM virtual instructions, whereas Swap uses
+     * Solana transactions.
      *
      * The transaction will have the following instruction format:
      *   1. ComputeBudget::SetComputeUnitLimit
@@ -144,7 +146,7 @@ export const Transaction = {
      *   5. SwapValidator::PostSwap
      *
      * Note: Currently limited to swapping USDC to Kin.
-     * Note: Kin is deposited into the primary account.
+     * Note: Kin is deposited into the token account derived from the VM deposit PDA of the owner account.
      *
      * @generated from rpc code.transaction.v2.Transaction.Swap
      */
