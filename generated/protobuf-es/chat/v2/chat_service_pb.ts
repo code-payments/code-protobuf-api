@@ -5,7 +5,7 @@
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
 import { Message, proto3, Timestamp } from "@bufbuild/protobuf";
-import { ClientPong, IntentId, ServerPing, Signature, SolanaAccountId } from "../../common/v1/model_pb";
+import { ChatId, ClientPong, IntentId, ServerPing, Signature, SolanaAccountId } from "../../common/v1/model_pb";
 import { ExchangeData, ExchangeDataWithoutRate } from "../../transaction/v2/transaction_service_pb";
 
 /**
@@ -239,7 +239,7 @@ proto3.util.setEnumType(GetChatsResponse_Result, "code.chat.v2.GetChatsResponse.
  */
 export class GetMessagesRequest extends Message<GetMessagesRequest> {
   /**
-   * @generated from field: code.chat.v2.ChatId chat_id = 1;
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
@@ -407,7 +407,7 @@ proto3.util.setEnumType(GetMessagesResponse_Result, "code.chat.v2.GetMessagesRes
  */
 export class OpenChatEventStream extends Message<OpenChatEventStream> {
   /**
-   * @generated from field: code.chat.v2.ChatId chat_id = 1;
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
@@ -893,7 +893,7 @@ proto3.util.setEnumType(StartChatResponse_Result, "code.chat.v2.StartChatRespons
  */
 export class SendMessageRequest extends Message<SendMessageRequest> {
   /**
-   * @generated from field: code.chat.v2.ChatId chat_id = 1;
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
@@ -1042,7 +1042,7 @@ proto3.util.setEnumType(SendMessageResponse_Result, "code.chat.v2.SendMessageRes
  */
 export class AdvancePointerRequest extends Message<AdvancePointerRequest> {
   /**
-   * @generated from field: code.chat.v2.ChatId chat_id = 1;
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
@@ -1172,7 +1172,7 @@ proto3.util.setEnumType(AdvancePointerResponse_Result, "code.chat.v2.AdvancePoin
  */
 export class RevealIdentityRequest extends Message<RevealIdentityRequest> {
   /**
-   * @generated from field: code.chat.v2.ChatId chat_id = 1;
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
@@ -1310,7 +1310,7 @@ proto3.util.setEnumType(RevealIdentityResponse_Result, "code.chat.v2.RevealIdent
  */
 export class SetMuteStateRequest extends Message<SetMuteStateRequest> {
   /**
-   * @generated from field: code.chat.v2.ChatId chat_id = 1;
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
@@ -1440,7 +1440,7 @@ proto3.util.setEnumType(SetMuteStateResponse_Result, "code.chat.v2.SetMuteStateR
  */
 export class SetSubscriptionStateRequest extends Message<SetSubscriptionStateRequest> {
   /**
-   * @generated from field: code.chat.v2.ChatId chat_id = 1;
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
@@ -1570,7 +1570,7 @@ proto3.util.setEnumType(SetSubscriptionStateResponse_Result, "code.chat.v2.SetSu
  */
 export class NotifyIsTypingRequest extends Message<NotifyIsTypingRequest> {
   /**
-   * @generated from field: code.chat.v2.ChatId chat_id = 1;
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
@@ -1690,46 +1690,6 @@ proto3.util.setEnumType(NotifyIsTypingResponse_Result, "code.chat.v2.NotifyIsTyp
 ]);
 
 /**
- * @generated from message code.chat.v2.ChatId
- */
-export class ChatId extends Message<ChatId> {
-  /**
-   * Sufficient space is left for a consistent hash value, though other types
-   * of values may be used.
-   *
-   * @generated from field: bytes value = 1;
-   */
-  value = new Uint8Array(0);
-
-  constructor(data?: PartialMessage<ChatId>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.ChatId";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "value", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ChatId {
-    return new ChatId().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ChatId {
-    return new ChatId().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ChatId {
-    return new ChatId().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: ChatId | PlainMessage<ChatId> | undefined, b: ChatId | PlainMessage<ChatId> | undefined): boolean {
-    return proto3.util.equals(ChatId, a, b);
-  }
-}
-
-/**
  * @generated from message code.chat.v2.ChatMessageId
  */
 export class ChatMessageId extends Message<ChatMessageId> {
@@ -1820,7 +1780,7 @@ export class ChatMetadata extends Message<ChatMetadata> {
   /**
    * Globally unique ID for this chat
    *
-   * @generated from field: code.chat.v2.ChatId chat_id = 1;
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
