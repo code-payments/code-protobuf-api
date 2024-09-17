@@ -7,7 +7,7 @@ import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialM
 import { Message, proto3 } from "@bufbuild/protobuf";
 import { ChatId, DataContainerId, IntentId, Locale, PhoneNumber, Signature, SolanaAccountId, UserId } from "../../common/v1/model_pb";
 import { PhoneLinkingToken } from "../../phone/v1/phone_verification_service_pb";
-import { AirdropType, ExchangeData } from "../../transaction/v2/transaction_service_pb";
+import { AirdropType, ExchangeDataWithoutRate } from "../../transaction/v2/transaction_service_pb";
 
 /**
  * @generated from message code.user.v1.LinkAccountRequest
@@ -1240,9 +1240,9 @@ export class TwitterUser extends Message<TwitterUser> {
    * This should not be cached for an extended period, as exchange rate / value
    * may change at any time.
    *
-   * @generated from field: code.transaction.v2.ExchangeData friendship_cost = 7;
+   * @generated from field: code.transaction.v2.ExchangeDataWithoutRate friendship_cost = 7;
    */
-  friendshipCost?: ExchangeData;
+  friendshipCost?: ExchangeDataWithoutRate;
 
   /**
    * Indicates the user is a friend of the caller.
@@ -1276,7 +1276,7 @@ export class TwitterUser extends Message<TwitterUser> {
     { no: 4, name: "profile_pic_url", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 5, name: "verified_type", kind: "enum", T: proto3.getEnumType(TwitterUser_VerifiedType) },
     { no: 6, name: "follower_count", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-    { no: 7, name: "friendship_cost", kind: "message", T: ExchangeData },
+    { no: 7, name: "friendship_cost", kind: "message", T: ExchangeDataWithoutRate },
     { no: 10, name: "is_friend", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 11, name: "friend_chat_id", kind: "message", T: ChatId },
   ]);

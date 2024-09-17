@@ -378,7 +378,7 @@ message TwitterUser {
     //
     // This should not be cached for an extended period, as exchange rate / value
     // may change at any time.
-    transaction.v2.ExchangeData friendship_cost = 7;
+    transaction.v2.ExchangeDataWithoutRate friendship_cost = 7;
 
     // ===========================================================
     // The rest of the fields require authentication to be present.
