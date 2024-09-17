@@ -5,7 +5,7 @@
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
 import { Message, proto3 } from "@bufbuild/protobuf";
-import { DataContainerId, IntentId, Locale, PhoneNumber, Signature, SolanaAccountId, UserId } from "../../common/v1/model_pb";
+import { ChatId, DataContainerId, IntentId, Locale, PhoneNumber, Signature, SolanaAccountId, UserId } from "../../common/v1/model_pb";
 import { PhoneLinkingToken } from "../../phone/v1/phone_verification_service_pb";
 import { AirdropType, ExchangeData } from "../../transaction/v2/transaction_service_pb";
 
@@ -1251,6 +1251,17 @@ export class TwitterUser extends Message<TwitterUser> {
    */
   isFriend = false;
 
+  /**
+   * The ChatId used to communicate with this friend.
+   *
+   * This will always be set for authenticated users.
+   * If is_friend=false, this ChatId should be used when crafting
+   * the intent.
+   *
+   * @generated from field: code.common.v1.ChatId friend_chat_id = 11;
+   */
+  friendChatId?: ChatId;
+
   constructor(data?: PartialMessage<TwitterUser>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1267,6 +1278,7 @@ export class TwitterUser extends Message<TwitterUser> {
     { no: 6, name: "follower_count", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
     { no: 7, name: "friendship_cost", kind: "message", T: ExchangeData },
     { no: 10, name: "is_friend", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 11, name: "friend_chat_id", kind: "message", T: ChatId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): TwitterUser {

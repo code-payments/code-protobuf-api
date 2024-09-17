@@ -1795,6 +1795,16 @@ func (m *TwitterUser) Validate() error {
 
 	// no validation rules for IsFriend
 
+	if v, ok := interface{}(m.GetFriendChatId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return TwitterUserValidationError{
+				field:  "FriendChatId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
