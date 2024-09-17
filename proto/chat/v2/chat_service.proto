@@ -7,7 +7,6 @@ option java_package = "com.codeinc.gen.chat.v2";
 option objc_class_prefix = "CPBChatV2";
 
 import "common/v1/model.proto";
-import "chat/v2/model.proto";
 import "transaction/v2/transaction_service.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
@@ -108,7 +107,7 @@ message GetChatsResponse {
 }
 
 message GetMessagesRequest {
-    ChatId chat_id = 1 [(validate.rules).message.required = true];
+    common.v1.ChatId chat_id = 1 [(validate.rules).message.required = true];
 
     ChatMemberId member_id = 2 [(validate.rules).message.required = true];
 
@@ -143,7 +142,7 @@ message GetMessagesResponse {
 }
 
 message OpenChatEventStream {
-    ChatId chat_id = 1 [(validate.rules).message.required = true];
+    common.v1.ChatId chat_id = 1 [(validate.rules).message.required = true];
 
     ChatMemberId member_id = 2  [(validate.rules).message.required = true];
 
@@ -232,7 +231,7 @@ message StartChatResponse {
 }
 
 message SendMessageRequest {
-    ChatId chat_id = 1 [(validate.rules).message.required = true];
+    common.v1.ChatId chat_id = 1 [(validate.rules).message.required = true];
 
     ChatMemberId member_id = 2  [(validate.rules).message.required = true];
 
@@ -265,7 +264,7 @@ message SendMessageResponse {
 }
 
 message AdvancePointerRequest {
-    ChatId chat_id = 1 [(validate.rules).message.required = true];
+    common.v1.ChatId chat_id = 1 [(validate.rules).message.required = true];
 
     Pointer pointer = 2 [(validate.rules).message.required = true];
 
@@ -286,7 +285,7 @@ message AdvancePointerResponse {
 }
 
 message RevealIdentityRequest {
-    ChatId chat_id = 1 [(validate.rules).message.required = true];
+    common.v1.ChatId chat_id = 1 [(validate.rules).message.required = true];
 
     ChatMemberId member_id = 2 [(validate.rules).message.required = true];
 
@@ -311,7 +310,7 @@ message RevealIdentityResponse {
 }
 
 message SetMuteStateRequest {
-    ChatId chat_id = 1 [(validate.rules).message.required = true];
+    common.v1.ChatId chat_id = 1 [(validate.rules).message.required = true];
 
     ChatMemberId member_id = 2  [(validate.rules).message.required = true];
 
@@ -333,7 +332,7 @@ message SetMuteStateResponse {
 }
 
 message SetSubscriptionStateRequest {
-    ChatId chat_id = 1 [(validate.rules).message.required = true];
+    common.v1.ChatId chat_id = 1 [(validate.rules).message.required = true];
 
     ChatMemberId member_id = 2  [(validate.rules).message.required = true];
 
@@ -355,7 +354,7 @@ message SetSubscriptionStateResponse {
 }
 
 message NotifyIsTypingRequest {
-    ChatId chat_id = 1 [(validate.rules).message.required = true];
+    common.v1.ChatId chat_id = 1 [(validate.rules).message.required = true];
 
     ChatMemberId member_id = 2  [(validate.rules).message.required = true];
 
@@ -417,7 +416,7 @@ enum PointerType {
 // todo: Support is_verified in a clean way
 message ChatMetadata {
     // Globally unique ID for this chat
-    ChatId chat_id = 1 [(validate.rules).message.required = true];
+    common.v1.ChatId chat_id = 1 [(validate.rules).message.required = true];
 
     // The type of chat
     ChatType type = 2 [(validate.rules).enum = {

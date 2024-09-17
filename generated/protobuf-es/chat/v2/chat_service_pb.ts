@@ -5,8 +5,7 @@
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
 import { Message, proto3, Timestamp } from "@bufbuild/protobuf";
-import { ClientPong, IntentId, ServerPing, Signature, SolanaAccountId } from "../../common/v1/model_pb";
-import { ChatId } from "./model_pb";
+import { ChatId, ClientPong, IntentId, ServerPing, Signature, SolanaAccountId } from "../../common/v1/model_pb";
 import { ExchangeData, ExchangeDataWithoutRate } from "../../transaction/v2/transaction_service_pb";
 
 /**
@@ -240,7 +239,7 @@ proto3.util.setEnumType(GetChatsResponse_Result, "code.chat.v2.GetChatsResponse.
  */
 export class GetMessagesRequest extends Message<GetMessagesRequest> {
   /**
-   * @generated from field: code.chat.v2.ChatId chat_id = 1;
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
@@ -408,7 +407,7 @@ proto3.util.setEnumType(GetMessagesResponse_Result, "code.chat.v2.GetMessagesRes
  */
 export class OpenChatEventStream extends Message<OpenChatEventStream> {
   /**
-   * @generated from field: code.chat.v2.ChatId chat_id = 1;
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
@@ -894,7 +893,7 @@ proto3.util.setEnumType(StartChatResponse_Result, "code.chat.v2.StartChatRespons
  */
 export class SendMessageRequest extends Message<SendMessageRequest> {
   /**
-   * @generated from field: code.chat.v2.ChatId chat_id = 1;
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
@@ -1043,7 +1042,7 @@ proto3.util.setEnumType(SendMessageResponse_Result, "code.chat.v2.SendMessageRes
  */
 export class AdvancePointerRequest extends Message<AdvancePointerRequest> {
   /**
-   * @generated from field: code.chat.v2.ChatId chat_id = 1;
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
@@ -1173,7 +1172,7 @@ proto3.util.setEnumType(AdvancePointerResponse_Result, "code.chat.v2.AdvancePoin
  */
 export class RevealIdentityRequest extends Message<RevealIdentityRequest> {
   /**
-   * @generated from field: code.chat.v2.ChatId chat_id = 1;
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
@@ -1311,7 +1310,7 @@ proto3.util.setEnumType(RevealIdentityResponse_Result, "code.chat.v2.RevealIdent
  */
 export class SetMuteStateRequest extends Message<SetMuteStateRequest> {
   /**
-   * @generated from field: code.chat.v2.ChatId chat_id = 1;
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
@@ -1441,7 +1440,7 @@ proto3.util.setEnumType(SetMuteStateResponse_Result, "code.chat.v2.SetMuteStateR
  */
 export class SetSubscriptionStateRequest extends Message<SetSubscriptionStateRequest> {
   /**
-   * @generated from field: code.chat.v2.ChatId chat_id = 1;
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
@@ -1571,7 +1570,7 @@ proto3.util.setEnumType(SetSubscriptionStateResponse_Result, "code.chat.v2.SetSu
  */
 export class NotifyIsTypingRequest extends Message<NotifyIsTypingRequest> {
   /**
-   * @generated from field: code.chat.v2.ChatId chat_id = 1;
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
@@ -1781,7 +1780,7 @@ export class ChatMetadata extends Message<ChatMetadata> {
   /**
    * Globally unique ID for this chat
    *
-   * @generated from field: code.chat.v2.ChatId chat_id = 1;
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 

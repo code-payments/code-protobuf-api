@@ -5,8 +5,7 @@
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
 import { Message, proto3, protoInt64, Timestamp } from "@bufbuild/protobuf";
-import { AccountType, Blockhash, DeviceToken, Hash, InstructionAccount, IntentId, Relationship, Signature, SolanaAccountId, Transaction, UUID } from "../../common/v1/model_pb";
-import { ChatId } from "../../chat/v2/model_pb";
+import { AccountType, Blockhash, ChatId, DeviceToken, Hash, InstructionAccount, IntentId, Relationship, Signature, SolanaAccountId, Transaction, UUID } from "../../common/v1/model_pb";
 
 /**
  * @generated from enum code.transaction.v2.AirdropType
@@ -2330,7 +2329,7 @@ export class SendPrivatePaymentMetadata extends Message<SendPrivatePaymentMetada
   /**
    * If is_chat is true, the chat being paid for.
    *
-   * @generated from field: code.chat.v2.ChatId chat_id = 8;
+   * @generated from field: code.common.v1.ChatId chat_id = 8;
    */
   chatId?: ChatId;
 
