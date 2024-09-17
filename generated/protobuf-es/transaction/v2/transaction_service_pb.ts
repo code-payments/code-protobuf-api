@@ -6,6 +6,7 @@
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
 import { Message, proto3, protoInt64, Timestamp } from "@bufbuild/protobuf";
 import { AccountType, Blockhash, DeviceToken, Hash, InstructionAccount, IntentId, Relationship, Signature, SolanaAccountId, Transaction, UUID } from "../../common/v1/model_pb";
+import { ChatId } from "../../chat/v2/model_pb";
 
 /**
  * @generated from enum code.transaction.v2.AirdropType
@@ -273,7 +274,7 @@ export class SubmitIntentResponse_ServerParameters extends Message<SubmitIntentR
   /**
    * The set of all server paremeters required to fill missing transaction
    * details. Server guarantees to provide a message for each client action
-   * in an order consistent with the received action list. 
+   * in an order consistent with the received action list.
    *
    * @generated from field: repeated code.transaction.v2.ServerParameter server_parameters = 1;
    */
@@ -1511,7 +1512,7 @@ export class SwapRequest_Initiate extends Message<SwapRequest_Initiate> {
   /**
    * Whether the client wants the RPC to wait for blockchain status. If false,
    * then the RPC will return Success when the swap is submitted to the blockchain.
-   * Otherwise, the RPC will observe and report back the status of the transaction. 
+   * Otherwise, the RPC will observe and report back the status of the transaction.
    *
    * @generated from field: bool wait_for_blockchain_status = 4;
    */
@@ -2319,6 +2320,20 @@ export class SendPrivatePaymentMetadata extends Message<SendPrivatePaymentMetada
    */
   tippedUser?: TippedUser;
 
+  /**
+   * Is the payment for a chat?
+   *
+   * @generated from field: bool is_chat = 7;
+   */
+  isChat = false;
+
+  /**
+   * If is_chat is true, the chat being paid for.
+   *
+   * @generated from field: code.chat.v2.ChatId chat_id = 8;
+   */
+  chatId?: ChatId;
+
   constructor(data?: PartialMessage<SendPrivatePaymentMetadata>) {
     super();
     proto3.util.initPartial(data, this);
@@ -2333,6 +2348,8 @@ export class SendPrivatePaymentMetadata extends Message<SendPrivatePaymentMetada
     { no: 4, name: "is_remote_send", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 5, name: "is_tip", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 6, name: "tipped_user", kind: "message", T: TippedUser },
+    { no: 7, name: "is_chat", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 8, name: "chat_id", kind: "message", T: ChatId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SendPrivatePaymentMetadata {
@@ -4196,7 +4213,7 @@ export class ReasonStringErrorDetails extends Message<ReasonStringErrorDetails> 
  */
 export class InvalidSignatureErrorDetails extends Message<InvalidSignatureErrorDetails> {
   /**
-   * The action whose signature mismatched 
+   * The action whose signature mismatched
    *
    * @generated from field: uint32 action_id = 1;
    */
@@ -4572,7 +4589,7 @@ export class PaymentHistoryItem extends Message<PaymentHistoryItem> {
   airdropType = AirdropType.UNKNOWN;
 
   /**
-   * Is this a micro payment? 
+   * Is this a micro payment?
    *
    * @generated from field: bool is_micro_payment = 11;
    */

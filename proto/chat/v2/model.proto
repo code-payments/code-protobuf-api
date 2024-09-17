@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package code.chat.v2;
+
+option go_package = "github.com/code-payments/code-protobuf-api/generated/go/chat/v2;chat";
+option java_package = "com.codeinc.gen.chat.v2";
+option objc_class_prefix = "CPBChatV2";
+
+import "validate/validate.proto";
+
+message ChatId {
+    // Sufficient space is left for a consistent hash value, though other types
+    // of values may be used.
+    bytes value = 1 [(validate.rules).bytes = {
+        min_len: 32
+        max_len: 32
+    }];
+}
+

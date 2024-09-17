@@ -2274,6 +2274,18 @@ func (m *SendPrivatePaymentMetadata) Validate() error {
 		}
 	}
 
+	// no validation rules for IsChat
+
+	if v, ok := interface{}(m.GetChatId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SendPrivatePaymentMetadataValidationError{
+				field:  "ChatId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
