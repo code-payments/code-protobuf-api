@@ -3276,10 +3276,10 @@ func (m *ChatMemberIdentity) Validate() error {
 		}
 	}
 
-	if l := utf8.RuneCountInString(m.GetProfilePicUrl()); l < 1 || l > 255 {
+	if utf8.RuneCountInString(m.GetProfilePicUrl()) > 255 {
 		return ChatMemberIdentityValidationError{
 			field:  "ProfilePicUrl",
-			reason: "value length must be between 1 and 255 runes, inclusive",
+			reason: "value length must be at most 255 runes",
 		}
 	}
 

@@ -554,7 +554,6 @@ message ChatMemberIdentity {
 
     // If present, the URL of the users profile pic.
     string profile_pic_url = 3 [(validate.rules).string = {
-        min_len: 1
         max_len: 255 // Arbitrary limit
     }];
 }
