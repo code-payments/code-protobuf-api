@@ -265,23 +265,6 @@ func (m *GetMessagesRequest) Validate() error {
 		}
 	}
 
-	if m.GetMemberId() == nil {
-		return GetMessagesRequestValidationError{
-			field:  "MemberId",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetMemberId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return GetMessagesRequestValidationError{
-				field:  "MemberId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
 	if m.GetOwner() == nil {
 		return GetMessagesRequestValidationError{
 			field:  "Owner",
@@ -504,23 +487,6 @@ func (m *OpenChatEventStream) Validate() error {
 		if err := v.Validate(); err != nil {
 			return OpenChatEventStreamValidationError{
 				field:  "ChatId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetMemberId() == nil {
-		return OpenChatEventStreamValidationError{
-			field:  "MemberId",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetMemberId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return OpenChatEventStreamValidationError{
-				field:  "MemberId",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -1145,23 +1111,6 @@ func (m *StartChatRequest) Validate() error {
 		}
 	}
 
-	if m.GetSelf() == nil {
-		return StartChatRequestValidationError{
-			field:  "Self",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetSelf()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return StartChatRequestValidationError{
-				field:  "Self",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
 	switch m.Parameters.(type) {
 
 	case *StartChatRequest_TwoWayChat:
@@ -1270,23 +1219,6 @@ func (m *StartTwoWayChatParameters) Validate() error {
 		if err := v.Validate(); err != nil {
 			return StartTwoWayChatParametersValidationError{
 				field:  "IntentId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetIdentity() == nil {
-		return StartTwoWayChatParametersValidationError{
-			field:  "Identity",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetIdentity()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return StartTwoWayChatParametersValidationError{
-				field:  "Identity",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -1450,23 +1382,6 @@ func (m *SendMessageRequest) Validate() error {
 		if err := v.Validate(); err != nil {
 			return SendMessageRequestValidationError{
 				field:  "ChatId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetMemberId() == nil {
-		return SendMessageRequestValidationError{
-			field:  "MemberId",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetMemberId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SendMessageRequestValidationError{
-				field:  "MemberId",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -1871,237 +1786,6 @@ var _ interface {
 	ErrorName() string
 } = AdvancePointerResponseValidationError{}
 
-// Validate checks the field values on RevealIdentityRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *RevealIdentityRequest) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	if m.GetChatId() == nil {
-		return RevealIdentityRequestValidationError{
-			field:  "ChatId",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetChatId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return RevealIdentityRequestValidationError{
-				field:  "ChatId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetMemberId() == nil {
-		return RevealIdentityRequestValidationError{
-			field:  "MemberId",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetMemberId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return RevealIdentityRequestValidationError{
-				field:  "MemberId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetIdentity() == nil {
-		return RevealIdentityRequestValidationError{
-			field:  "Identity",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetIdentity()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return RevealIdentityRequestValidationError{
-				field:  "Identity",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetOwner() == nil {
-		return RevealIdentityRequestValidationError{
-			field:  "Owner",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return RevealIdentityRequestValidationError{
-				field:  "Owner",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetSignature() == nil {
-		return RevealIdentityRequestValidationError{
-			field:  "Signature",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return RevealIdentityRequestValidationError{
-				field:  "Signature",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	return nil
-}
-
-// RevealIdentityRequestValidationError is the validation error returned by
-// RevealIdentityRequest.Validate if the designated constraints aren't met.
-type RevealIdentityRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e RevealIdentityRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e RevealIdentityRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e RevealIdentityRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e RevealIdentityRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e RevealIdentityRequestValidationError) ErrorName() string {
-	return "RevealIdentityRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e RevealIdentityRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sRevealIdentityRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = RevealIdentityRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = RevealIdentityRequestValidationError{}
-
-// Validate checks the field values on RevealIdentityResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *RevealIdentityResponse) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	// no validation rules for Result
-
-	if v, ok := interface{}(m.GetMessage()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return RevealIdentityResponseValidationError{
-				field:  "Message",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	return nil
-}
-
-// RevealIdentityResponseValidationError is the validation error returned by
-// RevealIdentityResponse.Validate if the designated constraints aren't met.
-type RevealIdentityResponseValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e RevealIdentityResponseValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e RevealIdentityResponseValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e RevealIdentityResponseValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e RevealIdentityResponseValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e RevealIdentityResponseValidationError) ErrorName() string {
-	return "RevealIdentityResponseValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e RevealIdentityResponseValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sRevealIdentityResponse.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = RevealIdentityResponseValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = RevealIdentityResponseValidationError{}
-
 // Validate checks the field values on SetMuteStateRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -2121,23 +1805,6 @@ func (m *SetMuteStateRequest) Validate() error {
 		if err := v.Validate(); err != nil {
 			return SetMuteStateRequestValidationError{
 				field:  "ChatId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetMemberId() == nil {
-		return SetMuteStateRequestValidationError{
-			field:  "MemberId",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetMemberId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SetMuteStateRequestValidationError{
-				field:  "MemberId",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -2308,214 +1975,6 @@ var _ interface {
 	ErrorName() string
 } = SetMuteStateResponseValidationError{}
 
-// Validate checks the field values on SetSubscriptionStateRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *SetSubscriptionStateRequest) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	if m.GetChatId() == nil {
-		return SetSubscriptionStateRequestValidationError{
-			field:  "ChatId",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetChatId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SetSubscriptionStateRequestValidationError{
-				field:  "ChatId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetMemberId() == nil {
-		return SetSubscriptionStateRequestValidationError{
-			field:  "MemberId",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetMemberId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SetSubscriptionStateRequestValidationError{
-				field:  "MemberId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	// no validation rules for IsSubscribed
-
-	if m.GetOwner() == nil {
-		return SetSubscriptionStateRequestValidationError{
-			field:  "Owner",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SetSubscriptionStateRequestValidationError{
-				field:  "Owner",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetSignature() == nil {
-		return SetSubscriptionStateRequestValidationError{
-			field:  "Signature",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SetSubscriptionStateRequestValidationError{
-				field:  "Signature",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	return nil
-}
-
-// SetSubscriptionStateRequestValidationError is the validation error returned
-// by SetSubscriptionStateRequest.Validate if the designated constraints
-// aren't met.
-type SetSubscriptionStateRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e SetSubscriptionStateRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e SetSubscriptionStateRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e SetSubscriptionStateRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e SetSubscriptionStateRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e SetSubscriptionStateRequestValidationError) ErrorName() string {
-	return "SetSubscriptionStateRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e SetSubscriptionStateRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sSetSubscriptionStateRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = SetSubscriptionStateRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = SetSubscriptionStateRequestValidationError{}
-
-// Validate checks the field values on SetSubscriptionStateResponse with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *SetSubscriptionStateResponse) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	// no validation rules for Result
-
-	return nil
-}
-
-// SetSubscriptionStateResponseValidationError is the validation error returned
-// by SetSubscriptionStateResponse.Validate if the designated constraints
-// aren't met.
-type SetSubscriptionStateResponseValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e SetSubscriptionStateResponseValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e SetSubscriptionStateResponseValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e SetSubscriptionStateResponseValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e SetSubscriptionStateResponseValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e SetSubscriptionStateResponseValidationError) ErrorName() string {
-	return "SetSubscriptionStateResponseValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e SetSubscriptionStateResponseValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sSetSubscriptionStateResponse.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = SetSubscriptionStateResponseValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = SetSubscriptionStateResponseValidationError{}
-
 // Validate checks the field values on NotifyIsTypingRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -2535,23 +1994,6 @@ func (m *NotifyIsTypingRequest) Validate() error {
 		if err := v.Validate(); err != nil {
 			return NotifyIsTypingRequestValidationError{
 				field:  "ChatId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetMemberId() == nil {
-		return NotifyIsTypingRequestValidationError{
-			field:  "MemberId",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetMemberId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return NotifyIsTypingRequestValidationError{
-				field:  "MemberId",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -2722,16 +2164,15 @@ var _ interface {
 	ErrorName() string
 } = NotifyIsTypingResponseValidationError{}
 
-// Validate checks the field values on ChatMessageId with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *ChatMessageId) Validate() error {
+// Validate checks the field values on MessageId with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *MessageId) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if len(m.GetValue()) != 16 {
-		return ChatMessageIdValidationError{
+		return MessageIdValidationError{
 			field:  "Value",
 			reason: "value length must be 16 bytes",
 		}
@@ -2740,9 +2181,9 @@ func (m *ChatMessageId) Validate() error {
 	return nil
 }
 
-// ChatMessageIdValidationError is the validation error returned by
-// ChatMessageId.Validate if the designated constraints aren't met.
-type ChatMessageIdValidationError struct {
+// MessageIdValidationError is the validation error returned by
+// MessageId.Validate if the designated constraints aren't met.
+type MessageIdValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -2750,22 +2191,22 @@ type ChatMessageIdValidationError struct {
 }
 
 // Field function returns field value.
-func (e ChatMessageIdValidationError) Field() string { return e.field }
+func (e MessageIdValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ChatMessageIdValidationError) Reason() string { return e.reason }
+func (e MessageIdValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ChatMessageIdValidationError) Cause() error { return e.cause }
+func (e MessageIdValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ChatMessageIdValidationError) Key() bool { return e.key }
+func (e MessageIdValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ChatMessageIdValidationError) ErrorName() string { return "ChatMessageIdValidationError" }
+func (e MessageIdValidationError) ErrorName() string { return "MessageIdValidationError" }
 
 // Error satisfies the builtin error interface
-func (e ChatMessageIdValidationError) Error() string {
+func (e MessageIdValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -2777,14 +2218,14 @@ func (e ChatMessageIdValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sChatMessageId.%s: %s%s",
+		"invalid %sMessageId.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ChatMessageIdValidationError{}
+var _ error = MessageIdValidationError{}
 
 var _ interface {
 	Field() string
@@ -2792,29 +2233,28 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ChatMessageIdValidationError{}
+} = MessageIdValidationError{}
 
-// Validate checks the field values on ChatMemberId with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *ChatMemberId) Validate() error {
+// Validate checks the field values on MemberId with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *MemberId) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	if len(m.GetValue()) != 16 {
-		return ChatMemberIdValidationError{
+	if len(m.GetValue()) != 32 {
+		return MemberIdValidationError{
 			field:  "Value",
-			reason: "value length must be 16 bytes",
+			reason: "value length must be 32 bytes",
 		}
 	}
 
 	return nil
 }
 
-// ChatMemberIdValidationError is the validation error returned by
-// ChatMemberId.Validate if the designated constraints aren't met.
-type ChatMemberIdValidationError struct {
+// MemberIdValidationError is the validation error returned by
+// MemberId.Validate if the designated constraints aren't met.
+type MemberIdValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -2822,22 +2262,22 @@ type ChatMemberIdValidationError struct {
 }
 
 // Field function returns field value.
-func (e ChatMemberIdValidationError) Field() string { return e.field }
+func (e MemberIdValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ChatMemberIdValidationError) Reason() string { return e.reason }
+func (e MemberIdValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ChatMemberIdValidationError) Cause() error { return e.cause }
+func (e MemberIdValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ChatMemberIdValidationError) Key() bool { return e.key }
+func (e MemberIdValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ChatMemberIdValidationError) ErrorName() string { return "ChatMemberIdValidationError" }
+func (e MemberIdValidationError) ErrorName() string { return "MemberIdValidationError" }
 
 // Error satisfies the builtin error interface
-func (e ChatMemberIdValidationError) Error() string {
+func (e MemberIdValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -2849,14 +2289,14 @@ func (e ChatMemberIdValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sChatMemberId.%s: %s%s",
+		"invalid %sMemberId.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ChatMemberIdValidationError{}
+var _ error = MemberIdValidationError{}
 
 var _ interface {
 	Field() string
@@ -2864,18 +2304,17 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ChatMemberIdValidationError{}
+} = MemberIdValidationError{}
 
-// Validate checks the field values on ChatMetadata with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *ChatMetadata) Validate() error {
+// Validate checks the field values on Metadata with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Metadata) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if m.GetChatId() == nil {
-		return ChatMetadataValidationError{
+		return MetadataValidationError{
 			field:  "ChatId",
 			reason: "value is required",
 		}
@@ -2883,7 +2322,7 @@ func (m *ChatMetadata) Validate() error {
 
 	if v, ok := interface{}(m.GetChatId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return ChatMetadataValidationError{
+			return MetadataValidationError{
 				field:  "ChatId",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -2891,22 +2330,32 @@ func (m *ChatMetadata) Validate() error {
 		}
 	}
 
-	if _, ok := _ChatMetadata_Type_NotInLookup[m.GetType()]; ok {
-		return ChatMetadataValidationError{
+	if _, ok := _Metadata_Type_NotInLookup[m.GetType()]; ok {
+		return MetadataValidationError{
 			field:  "Type",
 			reason: "value must not be in list [0]",
 		}
 	}
 
-	if l := utf8.RuneCountInString(m.GetTitle()); l < 1 || l > 1024 {
-		return ChatMetadataValidationError{
+	if v, ok := interface{}(m.GetCursor()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return MetadataValidationError{
+				field:  "Cursor",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if l := utf8.RuneCountInString(m.GetTitle()); l < 0 || l > 1024 {
+		return MetadataValidationError{
 			field:  "Title",
-			reason: "value length must be between 1 and 1024 runes, inclusive",
+			reason: "value length must be between 0 and 1024 runes, inclusive",
 		}
 	}
 
 	if l := len(m.GetMembers()); l < 1 || l > 2 {
-		return ChatMetadataValidationError{
+		return MetadataValidationError{
 			field:  "Members",
 			reason: "value must contain between 1 and 2 items, inclusive",
 		}
@@ -2917,7 +2366,7 @@ func (m *ChatMetadata) Validate() error {
 
 		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return ChatMetadataValidationError{
+				return MetadataValidationError{
 					field:  fmt.Sprintf("Members[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -2927,26 +2376,18 @@ func (m *ChatMetadata) Validate() error {
 
 	}
 
-	// no validation rules for CanMute
+	// no validation rules for IsMuted
 
-	// no validation rules for CanUnsubscribe
+	// no validation rules for Muteable
 
-	if v, ok := interface{}(m.GetCursor()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ChatMetadataValidationError{
-				field:  "Cursor",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
+	// no validation rules for NumUnread
 
 	return nil
 }
 
-// ChatMetadataValidationError is the validation error returned by
-// ChatMetadata.Validate if the designated constraints aren't met.
-type ChatMetadataValidationError struct {
+// MetadataValidationError is the validation error returned by
+// Metadata.Validate if the designated constraints aren't met.
+type MetadataValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -2954,22 +2395,22 @@ type ChatMetadataValidationError struct {
 }
 
 // Field function returns field value.
-func (e ChatMetadataValidationError) Field() string { return e.field }
+func (e MetadataValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ChatMetadataValidationError) Reason() string { return e.reason }
+func (e MetadataValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ChatMetadataValidationError) Cause() error { return e.cause }
+func (e MetadataValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ChatMetadataValidationError) Key() bool { return e.key }
+func (e MetadataValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ChatMetadataValidationError) ErrorName() string { return "ChatMetadataValidationError" }
+func (e MetadataValidationError) ErrorName() string { return "MetadataValidationError" }
 
 // Error satisfies the builtin error interface
-func (e ChatMetadataValidationError) Error() string {
+func (e MetadataValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -2981,14 +2422,14 @@ func (e ChatMetadataValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sChatMetadata.%s: %s%s",
+		"invalid %sMetadata.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ChatMetadataValidationError{}
+var _ error = MetadataValidationError{}
 
 var _ interface {
 	Field() string
@@ -2996,22 +2437,21 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ChatMetadataValidationError{}
+} = MetadataValidationError{}
 
-var _ChatMetadata_Type_NotInLookup = map[ChatType]struct{}{
+var _Metadata_Type_NotInLookup = map[ChatType]struct{}{
 	0: {},
 }
 
-// Validate checks the field values on ChatMessage with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *ChatMessage) Validate() error {
+// Validate checks the field values on Message with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Message) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if m.GetMessageId() == nil {
-		return ChatMessageValidationError{
+		return MessageValidationError{
 			field:  "MessageId",
 			reason: "value is required",
 		}
@@ -3019,7 +2459,7 @@ func (m *ChatMessage) Validate() error {
 
 	if v, ok := interface{}(m.GetMessageId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return ChatMessageValidationError{
+			return MessageValidationError{
 				field:  "MessageId",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -3029,7 +2469,7 @@ func (m *ChatMessage) Validate() error {
 
 	if v, ok := interface{}(m.GetSenderId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return ChatMessageValidationError{
+			return MessageValidationError{
 				field:  "SenderId",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -3038,7 +2478,7 @@ func (m *ChatMessage) Validate() error {
 	}
 
 	if l := len(m.GetContent()); l < 1 || l > 2 {
-		return ChatMessageValidationError{
+		return MessageValidationError{
 			field:  "Content",
 			reason: "value must contain between 1 and 2 items, inclusive",
 		}
@@ -3049,7 +2489,7 @@ func (m *ChatMessage) Validate() error {
 
 		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return ChatMessageValidationError{
+				return MessageValidationError{
 					field:  fmt.Sprintf("Content[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -3060,7 +2500,7 @@ func (m *ChatMessage) Validate() error {
 	}
 
 	if m.GetTs() == nil {
-		return ChatMessageValidationError{
+		return MessageValidationError{
 			field:  "Ts",
 			reason: "value is required",
 		}
@@ -3068,7 +2508,7 @@ func (m *ChatMessage) Validate() error {
 
 	if v, ok := interface{}(m.GetCursor()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return ChatMessageValidationError{
+			return MessageValidationError{
 				field:  "Cursor",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -3079,9 +2519,9 @@ func (m *ChatMessage) Validate() error {
 	return nil
 }
 
-// ChatMessageValidationError is the validation error returned by
-// ChatMessage.Validate if the designated constraints aren't met.
-type ChatMessageValidationError struct {
+// MessageValidationError is the validation error returned by Message.Validate
+// if the designated constraints aren't met.
+type MessageValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -3089,22 +2529,22 @@ type ChatMessageValidationError struct {
 }
 
 // Field function returns field value.
-func (e ChatMessageValidationError) Field() string { return e.field }
+func (e MessageValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ChatMessageValidationError) Reason() string { return e.reason }
+func (e MessageValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ChatMessageValidationError) Cause() error { return e.cause }
+func (e MessageValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ChatMessageValidationError) Key() bool { return e.key }
+func (e MessageValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ChatMessageValidationError) ErrorName() string { return "ChatMessageValidationError" }
+func (e MessageValidationError) ErrorName() string { return "MessageValidationError" }
 
 // Error satisfies the builtin error interface
-func (e ChatMessageValidationError) Error() string {
+func (e MessageValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -3116,14 +2556,14 @@ func (e ChatMessageValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sChatMessage.%s: %s%s",
+		"invalid %sMessage.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ChatMessageValidationError{}
+var _ error = MessageValidationError{}
 
 var _ interface {
 	Field() string
@@ -3131,17 +2571,17 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ChatMessageValidationError{}
+} = MessageValidationError{}
 
-// Validate checks the field values on ChatMember with the rules defined in the
+// Validate checks the field values on Member with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
-func (m *ChatMember) Validate() error {
+func (m *Member) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if m.GetMemberId() == nil {
-		return ChatMemberValidationError{
+		return MemberValidationError{
 			field:  "MemberId",
 			reason: "value is required",
 		}
@@ -3149,7 +2589,7 @@ func (m *ChatMember) Validate() error {
 
 	if v, ok := interface{}(m.GetMemberId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return ChatMemberValidationError{
+			return MemberValidationError{
 				field:  "MemberId",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -3157,11 +2597,9 @@ func (m *ChatMember) Validate() error {
 		}
 	}
 
-	// no validation rules for IsSelf
-
 	if v, ok := interface{}(m.GetIdentity()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return ChatMemberValidationError{
+			return MemberValidationError{
 				field:  "Identity",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -3170,7 +2608,7 @@ func (m *ChatMember) Validate() error {
 	}
 
 	if len(m.GetPointers()) > 2 {
-		return ChatMemberValidationError{
+		return MemberValidationError{
 			field:  "Pointers",
 			reason: "value must contain no more than 2 item(s)",
 		}
@@ -3181,7 +2619,7 @@ func (m *ChatMember) Validate() error {
 
 		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return ChatMemberValidationError{
+				return MemberValidationError{
 					field:  fmt.Sprintf("Pointers[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -3191,18 +2629,12 @@ func (m *ChatMember) Validate() error {
 
 	}
 
-	// no validation rules for NumUnread
-
-	// no validation rules for IsMuted
-
-	// no validation rules for IsSubscribed
-
 	return nil
 }
 
-// ChatMemberValidationError is the validation error returned by
-// ChatMember.Validate if the designated constraints aren't met.
-type ChatMemberValidationError struct {
+// MemberValidationError is the validation error returned by Member.Validate if
+// the designated constraints aren't met.
+type MemberValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -3210,22 +2642,22 @@ type ChatMemberValidationError struct {
 }
 
 // Field function returns field value.
-func (e ChatMemberValidationError) Field() string { return e.field }
+func (e MemberValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ChatMemberValidationError) Reason() string { return e.reason }
+func (e MemberValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ChatMemberValidationError) Cause() error { return e.cause }
+func (e MemberValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ChatMemberValidationError) Key() bool { return e.key }
+func (e MemberValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ChatMemberValidationError) ErrorName() string { return "ChatMemberValidationError" }
+func (e MemberValidationError) ErrorName() string { return "MemberValidationError" }
 
 // Error satisfies the builtin error interface
-func (e ChatMemberValidationError) Error() string {
+func (e MemberValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -3237,14 +2669,14 @@ func (e ChatMemberValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sChatMember.%s: %s%s",
+		"invalid %sMember.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ChatMemberValidationError{}
+var _ error = MemberValidationError{}
 
 var _ interface {
 	Field() string
@@ -3252,32 +2684,39 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ChatMemberValidationError{}
+} = MemberValidationError{}
 
-// Validate checks the field values on ChatMemberIdentity with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *ChatMemberIdentity) Validate() error {
+// Validate checks the field values on MemberIdentity with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *MemberIdentity) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	if _, ok := _ChatMemberIdentity_Platform_InLookup[m.GetPlatform()]; !ok {
-		return ChatMemberIdentityValidationError{
+	if _, ok := _MemberIdentity_Platform_InLookup[m.GetPlatform()]; !ok {
+		return MemberIdentityValidationError{
 			field:  "Platform",
 			reason: "value must be in list [1]",
 		}
 	}
 
 	if l := utf8.RuneCountInString(m.GetUsername()); l < 1 || l > 15 {
-		return ChatMemberIdentityValidationError{
+		return MemberIdentityValidationError{
 			field:  "Username",
 			reason: "value length must be between 1 and 15 runes, inclusive",
 		}
 	}
 
+	if utf8.RuneCountInString(m.GetDisplayName()) > 255 {
+		return MemberIdentityValidationError{
+			field:  "DisplayName",
+			reason: "value length must be at most 255 runes",
+		}
+	}
+
 	if utf8.RuneCountInString(m.GetProfilePicUrl()) > 255 {
-		return ChatMemberIdentityValidationError{
+		return MemberIdentityValidationError{
 			field:  "ProfilePicUrl",
 			reason: "value length must be at most 255 runes",
 		}
@@ -3286,9 +2725,9 @@ func (m *ChatMemberIdentity) Validate() error {
 	return nil
 }
 
-// ChatMemberIdentityValidationError is the validation error returned by
-// ChatMemberIdentity.Validate if the designated constraints aren't met.
-type ChatMemberIdentityValidationError struct {
+// MemberIdentityValidationError is the validation error returned by
+// MemberIdentity.Validate if the designated constraints aren't met.
+type MemberIdentityValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -3296,24 +2735,22 @@ type ChatMemberIdentityValidationError struct {
 }
 
 // Field function returns field value.
-func (e ChatMemberIdentityValidationError) Field() string { return e.field }
+func (e MemberIdentityValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ChatMemberIdentityValidationError) Reason() string { return e.reason }
+func (e MemberIdentityValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ChatMemberIdentityValidationError) Cause() error { return e.cause }
+func (e MemberIdentityValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ChatMemberIdentityValidationError) Key() bool { return e.key }
+func (e MemberIdentityValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ChatMemberIdentityValidationError) ErrorName() string {
-	return "ChatMemberIdentityValidationError"
-}
+func (e MemberIdentityValidationError) ErrorName() string { return "MemberIdentityValidationError" }
 
 // Error satisfies the builtin error interface
-func (e ChatMemberIdentityValidationError) Error() string {
+func (e MemberIdentityValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -3325,14 +2762,14 @@ func (e ChatMemberIdentityValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sChatMemberIdentity.%s: %s%s",
+		"invalid %sMemberIdentity.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ChatMemberIdentityValidationError{}
+var _ error = MemberIdentityValidationError{}
 
 var _ interface {
 	Field() string
@@ -3340,9 +2777,9 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ChatMemberIdentityValidationError{}
+} = MemberIdentityValidationError{}
 
-var _ChatMemberIdentity_Platform_InLookup = map[Platform]struct{}{
+var _MemberIdentity_Platform_InLookup = map[Platform]struct{}{
 	1: {},
 }
 
@@ -3506,30 +2943,6 @@ func (m *Content) Validate() error {
 			if err := v.Validate(); err != nil {
 				return ContentValidationError{
 					field:  "NaclBox",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	case *Content_ThankYou:
-
-		if v, ok := interface{}(m.GetThankYou()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ContentValidationError{
-					field:  "ThankYou",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	case *Content_IdentityRevealed:
-
-		if v, ok := interface{}(m.GetIdentityRevealed()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ContentValidationError{
-					field:  "IdentityRevealed",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -3988,189 +3401,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = NaclBoxEncryptedContentValidationError{}
-
-// Validate checks the field values on ThankYouContent with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *ThankYouContent) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	if m.GetTipIntent() == nil {
-		return ThankYouContentValidationError{
-			field:  "TipIntent",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetTipIntent()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ThankYouContentValidationError{
-				field:  "TipIntent",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	return nil
-}
-
-// ThankYouContentValidationError is the validation error returned by
-// ThankYouContent.Validate if the designated constraints aren't met.
-type ThankYouContentValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ThankYouContentValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ThankYouContentValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ThankYouContentValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ThankYouContentValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ThankYouContentValidationError) ErrorName() string { return "ThankYouContentValidationError" }
-
-// Error satisfies the builtin error interface
-func (e ThankYouContentValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sThankYouContent.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ThankYouContentValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ThankYouContentValidationError{}
-
-// Validate checks the field values on IdentityRevealedContent with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *IdentityRevealedContent) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	if m.GetMemberId() == nil {
-		return IdentityRevealedContentValidationError{
-			field:  "MemberId",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetMemberId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return IdentityRevealedContentValidationError{
-				field:  "MemberId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetIdentity() == nil {
-		return IdentityRevealedContentValidationError{
-			field:  "Identity",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetIdentity()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return IdentityRevealedContentValidationError{
-				field:  "Identity",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	return nil
-}
-
-// IdentityRevealedContentValidationError is the validation error returned by
-// IdentityRevealedContent.Validate if the designated constraints aren't met.
-type IdentityRevealedContentValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e IdentityRevealedContentValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e IdentityRevealedContentValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e IdentityRevealedContentValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e IdentityRevealedContentValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e IdentityRevealedContentValidationError) ErrorName() string {
-	return "IdentityRevealedContentValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e IdentityRevealedContentValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sIdentityRevealedContent.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = IdentityRevealedContentValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = IdentityRevealedContentValidationError{}
 
 // Validate checks the field values on Cursor with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.

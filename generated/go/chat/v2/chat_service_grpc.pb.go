@@ -61,17 +61,12 @@ type ChatClient interface {
 	// StartChat starts a chat. The RPC call is idempotent and will use existing
 	// chats whenever applicable within the context of message routing.
 	StartChat(ctx context.Context, in *StartChatRequest, opts ...grpc.CallOption) (*StartChatResponse, error)
-	// SendMessage sends a message to a chat
+	// SendMessage sends a message to a chat.
 	SendMessage(ctx context.Context, in *SendMessageRequest, opts ...grpc.CallOption) (*SendMessageResponse, error)
-	// AdvancePointer advances a pointer in message history for a chat member
+	// AdvancePointer advances a pointer in message history for a chat member.
 	AdvancePointer(ctx context.Context, in *AdvancePointerRequest, opts ...grpc.CallOption) (*AdvancePointerResponse, error)
-	// RevealIdentity reveals a chat member's identity if it is anonymous. A chat
-	// message will be inserted on success.
-	RevealIdentity(ctx context.Context, in *RevealIdentityRequest, opts ...grpc.CallOption) (*RevealIdentityResponse, error)
-	// SetMuteState configures a chat member's mute state
+	// SetMuteState configures a chat member's mute state.
 	SetMuteState(ctx context.Context, in *SetMuteStateRequest, opts ...grpc.CallOption) (*SetMuteStateResponse, error)
-	// SetSubscriptionState configures a chat member's susbscription state
-	SetSubscriptionState(ctx context.Context, in *SetSubscriptionStateRequest, opts ...grpc.CallOption) (*SetSubscriptionStateResponse, error)
 	// NotifyIsTypingRequest notifies a chat that the sending member is typing.
 	//
 	// These requests are transient, and may be dropped at any point.
@@ -162,27 +157,9 @@ func (c *chatClient) AdvancePointer(ctx context.Context, in *AdvancePointerReque
 	return out, nil
 }
 
-func (c *chatClient) RevealIdentity(ctx context.Context, in *RevealIdentityRequest, opts ...grpc.CallOption) (*RevealIdentityResponse, error) {
-	out := new(RevealIdentityResponse)
-	err := c.cc.Invoke(ctx, "/code.chat.v2.Chat/RevealIdentity", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *chatClient) SetMuteState(ctx context.Context, in *SetMuteStateRequest, opts ...grpc.CallOption) (*SetMuteStateResponse, error) {
 	out := new(SetMuteStateResponse)
 	err := c.cc.Invoke(ctx, "/code.chat.v2.Chat/SetMuteState", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *chatClient) SetSubscriptionState(ctx context.Context, in *SetSubscriptionStateRequest, opts ...grpc.CallOption) (*SetSubscriptionStateResponse, error) {
-	out := new(SetSubscriptionStateResponse)
-	err := c.cc.Invoke(ctx, "/code.chat.v2.Chat/SetSubscriptionState", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -241,17 +218,12 @@ type ChatServer interface {
 	// StartChat starts a chat. The RPC call is idempotent and will use existing
 	// chats whenever applicable within the context of message routing.
 	StartChat(context.Context, *StartChatRequest) (*StartChatResponse, error)
-	// SendMessage sends a message to a chat
+	// SendMessage sends a message to a chat.
 	SendMessage(context.Context, *SendMessageRequest) (*SendMessageResponse, error)
-	// AdvancePointer advances a pointer in message history for a chat member
+	// AdvancePointer advances a pointer in message history for a chat member.
 	AdvancePointer(context.Context, *AdvancePointerRequest) (*AdvancePointerResponse, error)
-	// RevealIdentity reveals a chat member's identity if it is anonymous. A chat
-	// message will be inserted on success.
-	RevealIdentity(context.Context, *RevealIdentityRequest) (*RevealIdentityResponse, error)
-	// SetMuteState configures a chat member's mute state
+	// SetMuteState configures a chat member's mute state.
 	SetMuteState(context.Context, *SetMuteStateRequest) (*SetMuteStateResponse, error)
-	// SetSubscriptionState configures a chat member's susbscription state
-	SetSubscriptionState(context.Context, *SetSubscriptionStateRequest) (*SetSubscriptionStateResponse, error)
 	// NotifyIsTypingRequest notifies a chat that the sending member is typing.
 	//
 	// These requests are transient, and may be dropped at any point.
@@ -281,14 +253,8 @@ func (UnimplementedChatServer) SendMessage(context.Context, *SendMessageRequest)
 func (UnimplementedChatServer) AdvancePointer(context.Context, *AdvancePointerRequest) (*AdvancePointerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AdvancePointer not implemented")
 }
-func (UnimplementedChatServer) RevealIdentity(context.Context, *RevealIdentityRequest) (*RevealIdentityResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RevealIdentity not implemented")
-}
 func (UnimplementedChatServer) SetMuteState(context.Context, *SetMuteStateRequest) (*SetMuteStateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetMuteState not implemented")
-}
-func (UnimplementedChatServer) SetSubscriptionState(context.Context, *SetSubscriptionStateRequest) (*SetSubscriptionStateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetSubscriptionState not implemented")
 }
 func (UnimplementedChatServer) NotifyIsTyping(context.Context, *NotifyIsTypingRequest) (*NotifyIsTypingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method NotifyIsTyping not implemented")
@@ -422,24 +388,6 @@ func _Chat_AdvancePointer_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Chat_RevealIdentity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RevealIdentityRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ChatServer).RevealIdentity(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/code.chat.v2.Chat/RevealIdentity",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChatServer).RevealIdentity(ctx, req.(*RevealIdentityRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Chat_SetMuteState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SetMuteStateRequest)
 	if err := dec(in); err != nil {
@@ -454,24 +402,6 @@ func _Chat_SetMuteState_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ChatServer).SetMuteState(ctx, req.(*SetMuteStateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Chat_SetSubscriptionState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetSubscriptionStateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ChatServer).SetSubscriptionState(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/code.chat.v2.Chat/SetSubscriptionState",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChatServer).SetSubscriptionState(ctx, req.(*SetSubscriptionStateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -522,16 +452,8 @@ var Chat_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Chat_AdvancePointer_Handler,
 		},
 		{
-			MethodName: "RevealIdentity",
-			Handler:    _Chat_RevealIdentity_Handler,
-		},
-		{
 			MethodName: "SetMuteState",
 			Handler:    _Chat_SetMuteState_Handler,
-		},
-		{
-			MethodName: "SetSubscriptionState",
-			Handler:    _Chat_SetSubscriptionState_Handler,
 		},
 		{
 			MethodName: "NotifyIsTyping",

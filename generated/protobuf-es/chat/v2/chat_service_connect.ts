@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { AdvancePointerRequest, AdvancePointerResponse, GetChatsRequest, GetChatsResponse, GetMessagesRequest, GetMessagesResponse, NotifyIsTypingRequest, NotifyIsTypingResponse, RevealIdentityRequest, RevealIdentityResponse, SendMessageRequest, SendMessageResponse, SetMuteStateRequest, SetMuteStateResponse, SetSubscriptionStateRequest, SetSubscriptionStateResponse, StartChatRequest, StartChatResponse, StreamChatEventsRequest, StreamChatEventsResponse } from "./chat_service_pb";
+import { AdvancePointerRequest, AdvancePointerResponse, GetChatsRequest, GetChatsResponse, GetMessagesRequest, GetMessagesResponse, NotifyIsTypingRequest, NotifyIsTypingResponse, SendMessageRequest, SendMessageResponse, SetMuteStateRequest, SetMuteStateResponse, StartChatRequest, StartChatResponse, StreamChatEventsRequest, StreamChatEventsResponse } from "./chat_service_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -88,7 +88,7 @@ export const Chat = {
       kind: MethodKind.Unary,
     },
     /**
-     * SendMessage sends a message to a chat
+     * SendMessage sends a message to a chat.
      *
      * @generated from rpc code.chat.v2.Chat.SendMessage
      */
@@ -99,7 +99,7 @@ export const Chat = {
       kind: MethodKind.Unary,
     },
     /**
-     * AdvancePointer advances a pointer in message history for a chat member
+     * AdvancePointer advances a pointer in message history for a chat member.
      *
      * @generated from rpc code.chat.v2.Chat.AdvancePointer
      */
@@ -110,19 +110,7 @@ export const Chat = {
       kind: MethodKind.Unary,
     },
     /**
-     * RevealIdentity reveals a chat member's identity if it is anonymous. A chat
-     * message will be inserted on success.
-     *
-     * @generated from rpc code.chat.v2.Chat.RevealIdentity
-     */
-    revealIdentity: {
-      name: "RevealIdentity",
-      I: RevealIdentityRequest,
-      O: RevealIdentityResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * SetMuteState configures a chat member's mute state
+     * SetMuteState configures a chat member's mute state.
      *
      * @generated from rpc code.chat.v2.Chat.SetMuteState
      */
@@ -130,17 +118,6 @@ export const Chat = {
       name: "SetMuteState",
       I: SetMuteStateRequest,
       O: SetMuteStateResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * SetSubscriptionState configures a chat member's susbscription state
-     *
-     * @generated from rpc code.chat.v2.Chat.SetSubscriptionState
-     */
-    setSubscriptionState: {
-      name: "SetSubscriptionState",
-      I: SetSubscriptionStateRequest,
-      O: SetSubscriptionStateResponse,
       kind: MethodKind.Unary,
     },
     /**

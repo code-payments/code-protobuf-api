@@ -4,7 +4,7 @@
 // @ts-nocheck
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3, Timestamp } from "@bufbuild/protobuf";
+import { Message as Message$1, proto3, Timestamp } from "@bufbuild/protobuf";
 import { ChatId, ClientPong, IntentId, ServerPing, Signature, SolanaAccountId } from "../../common/v1/model_pb";
 import { ExchangeData, ExchangeDataWithoutRate } from "../../transaction/v2/transaction_service_pb";
 
@@ -18,22 +18,16 @@ export enum ChatType {
   UNKNOWN_CHAT_TYPE = 0,
 
   /**
-   * @generated from enum value: NOTIFICATION = 1;
-   */
-  NOTIFICATION = 1,
-
-  /**
    * GROUP             = 3;
    *
-   * @generated from enum value: TWO_WAY = 2;
+   * @generated from enum value: TWO_WAY = 1;
    */
-  TWO_WAY = 2,
+  TWO_WAY = 1,
 }
 // Retrieve enum metadata with: proto3.getEnumType(ChatType)
 proto3.util.setEnumType(ChatType, "code.chat.v2.ChatType", [
   { no: 0, name: "UNKNOWN_CHAT_TYPE" },
-  { no: 1, name: "NOTIFICATION" },
-  { no: 2, name: "TWO_WAY" },
+  { no: 1, name: "TWO_WAY" },
 ]);
 
 /**
@@ -93,7 +87,7 @@ proto3.util.setEnumType(PointerType, "code.chat.v2.PointerType", [
 /**
  * @generated from message code.chat.v2.GetChatsRequest
  */
-export class GetChatsRequest extends Message<GetChatsRequest> {
+export class GetChatsRequest extends Message$1<GetChatsRequest> {
   /**
    * @generated from field: code.common.v1.SolanaAccountId owner = 1;
    */
@@ -174,16 +168,16 @@ proto3.util.setEnumType(GetChatsRequest_Direction, "code.chat.v2.GetChatsRequest
 /**
  * @generated from message code.chat.v2.GetChatsResponse
  */
-export class GetChatsResponse extends Message<GetChatsResponse> {
+export class GetChatsResponse extends Message$1<GetChatsResponse> {
   /**
    * @generated from field: code.chat.v2.GetChatsResponse.Result result = 1;
    */
   result = GetChatsResponse_Result.OK;
 
   /**
-   * @generated from field: repeated code.chat.v2.ChatMetadata chats = 2;
+   * @generated from field: repeated code.chat.v2.Metadata chats = 2;
    */
-  chats: ChatMetadata[] = [];
+  chats: Metadata[] = [];
 
   constructor(data?: PartialMessage<GetChatsResponse>) {
     super();
@@ -194,7 +188,7 @@ export class GetChatsResponse extends Message<GetChatsResponse> {
   static readonly typeName = "code.chat.v2.GetChatsResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "result", kind: "enum", T: proto3.getEnumType(GetChatsResponse_Result) },
-    { no: 2, name: "chats", kind: "message", T: ChatMetadata, repeated: true },
+    { no: 2, name: "chats", kind: "message", T: Metadata, repeated: true },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetChatsResponse {
@@ -222,54 +216,43 @@ export enum GetChatsResponse_Result {
    * @generated from enum value: OK = 0;
    */
   OK = 0,
-
-  /**
-   * @generated from enum value: NOT_FOUND = 1;
-   */
-  NOT_FOUND = 1,
 }
 // Retrieve enum metadata with: proto3.getEnumType(GetChatsResponse_Result)
 proto3.util.setEnumType(GetChatsResponse_Result, "code.chat.v2.GetChatsResponse.Result", [
   { no: 0, name: "OK" },
-  { no: 1, name: "NOT_FOUND" },
 ]);
 
 /**
  * @generated from message code.chat.v2.GetMessagesRequest
  */
-export class GetMessagesRequest extends Message<GetMessagesRequest> {
+export class GetMessagesRequest extends Message$1<GetMessagesRequest> {
   /**
    * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
   /**
-   * @generated from field: code.chat.v2.ChatMemberId member_id = 2;
-   */
-  memberId?: ChatMemberId;
-
-  /**
-   * @generated from field: code.common.v1.SolanaAccountId owner = 3;
+   * @generated from field: code.common.v1.SolanaAccountId owner = 2;
    */
   owner?: SolanaAccountId;
 
   /**
-   * @generated from field: code.common.v1.Signature signature = 4;
+   * @generated from field: code.common.v1.Signature signature = 3;
    */
   signature?: Signature;
 
   /**
-   * @generated from field: uint32 page_size = 5;
+   * @generated from field: uint32 page_size = 4;
    */
   pageSize = 0;
 
   /**
-   * @generated from field: code.chat.v2.Cursor cursor = 6;
+   * @generated from field: code.chat.v2.Cursor cursor = 5;
    */
   cursor?: Cursor;
 
   /**
-   * @generated from field: code.chat.v2.GetMessagesRequest.Direction direction = 7;
+   * @generated from field: code.chat.v2.GetMessagesRequest.Direction direction = 6;
    */
   direction = GetMessagesRequest_Direction.ASC;
 
@@ -282,12 +265,11 @@ export class GetMessagesRequest extends Message<GetMessagesRequest> {
   static readonly typeName = "code.chat.v2.GetMessagesRequest";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "chat_id", kind: "message", T: ChatId },
-    { no: 2, name: "member_id", kind: "message", T: ChatMemberId },
-    { no: 3, name: "owner", kind: "message", T: SolanaAccountId },
-    { no: 4, name: "signature", kind: "message", T: Signature },
-    { no: 5, name: "page_size", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-    { no: 6, name: "cursor", kind: "message", T: Cursor },
-    { no: 7, name: "direction", kind: "enum", T: proto3.getEnumType(GetMessagesRequest_Direction) },
+    { no: 2, name: "owner", kind: "message", T: SolanaAccountId },
+    { no: 3, name: "signature", kind: "message", T: Signature },
+    { no: 4, name: "page_size", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
+    { no: 5, name: "cursor", kind: "message", T: Cursor },
+    { no: 6, name: "direction", kind: "enum", T: proto3.getEnumType(GetMessagesRequest_Direction) },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetMessagesRequest {
@@ -330,16 +312,16 @@ proto3.util.setEnumType(GetMessagesRequest_Direction, "code.chat.v2.GetMessagesR
 /**
  * @generated from message code.chat.v2.GetMessagesResponse
  */
-export class GetMessagesResponse extends Message<GetMessagesResponse> {
+export class GetMessagesResponse extends Message$1<GetMessagesResponse> {
   /**
    * @generated from field: code.chat.v2.GetMessagesResponse.Result result = 1;
    */
   result = GetMessagesResponse_Result.OK;
 
   /**
-   * @generated from field: repeated code.chat.v2.ChatMessage messages = 2;
+   * @generated from field: repeated code.chat.v2.Message messages = 2;
    */
-  messages: ChatMessage[] = [];
+  messages: Message[] = [];
 
   constructor(data?: PartialMessage<GetMessagesResponse>) {
     super();
@@ -350,7 +332,7 @@ export class GetMessagesResponse extends Message<GetMessagesResponse> {
   static readonly typeName = "code.chat.v2.GetMessagesResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "result", kind: "enum", T: proto3.getEnumType(GetMessagesResponse_Result) },
-    { no: 2, name: "messages", kind: "message", T: ChatMessage, repeated: true },
+    { no: 2, name: "messages", kind: "message", T: Message, repeated: true },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetMessagesResponse {
@@ -383,46 +365,29 @@ export enum GetMessagesResponse_Result {
    * @generated from enum value: DENIED = 1;
    */
   DENIED = 1,
-
-  /**
-   * @generated from enum value: CHAT_NOT_FOUND = 2;
-   */
-  CHAT_NOT_FOUND = 2,
-
-  /**
-   * @generated from enum value: MESSAGE_NOT_FOUND = 3;
-   */
-  MESSAGE_NOT_FOUND = 3,
 }
 // Retrieve enum metadata with: proto3.getEnumType(GetMessagesResponse_Result)
 proto3.util.setEnumType(GetMessagesResponse_Result, "code.chat.v2.GetMessagesResponse.Result", [
   { no: 0, name: "OK" },
   { no: 1, name: "DENIED" },
-  { no: 2, name: "CHAT_NOT_FOUND" },
-  { no: 3, name: "MESSAGE_NOT_FOUND" },
 ]);
 
 /**
  * @generated from message code.chat.v2.OpenChatEventStream
  */
-export class OpenChatEventStream extends Message<OpenChatEventStream> {
+export class OpenChatEventStream extends Message$1<OpenChatEventStream> {
   /**
    * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
   /**
-   * @generated from field: code.chat.v2.ChatMemberId member_id = 2;
-   */
-  memberId?: ChatMemberId;
-
-  /**
-   * @generated from field: code.common.v1.SolanaAccountId owner = 3;
+   * @generated from field: code.common.v1.SolanaAccountId owner = 2;
    */
   owner?: SolanaAccountId;
 
   /**
-   * @generated from field: code.common.v1.Signature signature = 4;
+   * @generated from field: code.common.v1.Signature signature = 3;
    */
   signature?: Signature;
 
@@ -435,9 +400,8 @@ export class OpenChatEventStream extends Message<OpenChatEventStream> {
   static readonly typeName = "code.chat.v2.OpenChatEventStream";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "chat_id", kind: "message", T: ChatId },
-    { no: 2, name: "member_id", kind: "message", T: ChatMemberId },
-    { no: 3, name: "owner", kind: "message", T: SolanaAccountId },
-    { no: 4, name: "signature", kind: "message", T: Signature },
+    { no: 2, name: "owner", kind: "message", T: SolanaAccountId },
+    { no: 3, name: "signature", kind: "message", T: Signature },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): OpenChatEventStream {
@@ -460,15 +424,15 @@ export class OpenChatEventStream extends Message<OpenChatEventStream> {
 /**
  * @generated from message code.chat.v2.ChatStreamEvent
  */
-export class ChatStreamEvent extends Message<ChatStreamEvent> {
+export class ChatStreamEvent extends Message$1<ChatStreamEvent> {
   /**
    * @generated from oneof code.chat.v2.ChatStreamEvent.type
    */
   type: {
     /**
-     * @generated from field: code.chat.v2.ChatMessage message = 1;
+     * @generated from field: code.chat.v2.Message message = 1;
      */
-    value: ChatMessage;
+    value: Message;
     case: "message";
   } | {
     /**
@@ -492,7 +456,7 @@ export class ChatStreamEvent extends Message<ChatStreamEvent> {
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "code.chat.v2.ChatStreamEvent";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "message", kind: "message", T: ChatMessage, oneof: "type" },
+    { no: 1, name: "message", kind: "message", T: Message, oneof: "type" },
     { no: 2, name: "pointer", kind: "message", T: Pointer, oneof: "type" },
     { no: 3, name: "is_typing", kind: "message", T: IsTyping, oneof: "type" },
   ]);
@@ -517,7 +481,7 @@ export class ChatStreamEvent extends Message<ChatStreamEvent> {
 /**
  * @generated from message code.chat.v2.ChatStreamEventBatch
  */
-export class ChatStreamEventBatch extends Message<ChatStreamEventBatch> {
+export class ChatStreamEventBatch extends Message$1<ChatStreamEventBatch> {
   /**
    * @generated from field: repeated code.chat.v2.ChatStreamEvent events = 2;
    */
@@ -554,7 +518,7 @@ export class ChatStreamEventBatch extends Message<ChatStreamEventBatch> {
 /**
  * @generated from message code.chat.v2.ChatStreamEventError
  */
-export class ChatStreamEventError extends Message<ChatStreamEventError> {
+export class ChatStreamEventError extends Message$1<ChatStreamEventError> {
   /**
    * @generated from field: code.chat.v2.ChatStreamEventError.Code code = 1;
    */
@@ -596,22 +560,16 @@ export enum ChatStreamEventError_Code {
    * @generated from enum value: DENIED = 0;
    */
   DENIED = 0,
-
-  /**
-   * @generated from enum value: CHAT_NOT_FOUND = 1;
-   */
-  CHAT_NOT_FOUND = 1,
 }
 // Retrieve enum metadata with: proto3.getEnumType(ChatStreamEventError_Code)
 proto3.util.setEnumType(ChatStreamEventError_Code, "code.chat.v2.ChatStreamEventError.Code", [
   { no: 0, name: "DENIED" },
-  { no: 1, name: "CHAT_NOT_FOUND" },
 ]);
 
 /**
  * @generated from message code.chat.v2.StreamChatEventsRequest
  */
-export class StreamChatEventsRequest extends Message<StreamChatEventsRequest> {
+export class StreamChatEventsRequest extends Message$1<StreamChatEventsRequest> {
   /**
    * @generated from oneof code.chat.v2.StreamChatEventsRequest.type
    */
@@ -661,7 +619,7 @@ export class StreamChatEventsRequest extends Message<StreamChatEventsRequest> {
 /**
  * @generated from message code.chat.v2.StreamChatEventsResponse
  */
-export class StreamChatEventsResponse extends Message<StreamChatEventsResponse> {
+export class StreamChatEventsResponse extends Message$1<StreamChatEventsResponse> {
   /**
    * @generated from oneof code.chat.v2.StreamChatEventsResponse.type
    */
@@ -718,7 +676,7 @@ export class StreamChatEventsResponse extends Message<StreamChatEventsResponse> 
 /**
  * @generated from message code.chat.v2.StartChatRequest
  */
-export class StartChatRequest extends Message<StartChatRequest> {
+export class StartChatRequest extends Message$1<StartChatRequest> {
   /**
    * @generated from field: code.common.v1.SolanaAccountId owner = 1;
    */
@@ -730,18 +688,11 @@ export class StartChatRequest extends Message<StartChatRequest> {
   signature?: Signature;
 
   /**
-   * @generated from field: code.chat.v2.ChatMemberIdentity self = 3;
-   */
-  self?: ChatMemberIdentity;
-
-  /**
    * @generated from oneof code.chat.v2.StartChatRequest.parameters
    */
   parameters: {
     /**
-     * GroupChatParameters group_chat  = 4;
-     *
-     * @generated from field: code.chat.v2.StartTwoWayChatParameters two_way_chat = 4;
+     * @generated from field: code.chat.v2.StartTwoWayChatParameters two_way_chat = 3;
      */
     value: StartTwoWayChatParameters;
     case: "twoWayChat";
@@ -757,8 +708,7 @@ export class StartChatRequest extends Message<StartChatRequest> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "owner", kind: "message", T: SolanaAccountId },
     { no: 2, name: "signature", kind: "message", T: Signature },
-    { no: 3, name: "self", kind: "message", T: ChatMemberIdentity },
-    { no: 4, name: "two_way_chat", kind: "message", T: StartTwoWayChatParameters, oneof: "parameters" },
+    { no: 3, name: "two_way_chat", kind: "message", T: StartTwoWayChatParameters, oneof: "parameters" },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StartChatRequest {
@@ -787,7 +737,7 @@ export class StartChatRequest extends Message<StartChatRequest> {
  *
  * @generated from message code.chat.v2.StartTwoWayChatParameters
  */
-export class StartTwoWayChatParameters extends Message<StartTwoWayChatParameters> {
+export class StartTwoWayChatParameters extends Message$1<StartTwoWayChatParameters> {
   /**
    * The account id of the user the caller wishes to chat with.
    *
@@ -811,15 +761,6 @@ export class StartTwoWayChatParameters extends Message<StartTwoWayChatParameters
    */
   intentId?: IntentId;
 
-  /**
-   * The identity of the other user.
-   *
-   * Note: This can/should be removed with proper intent plumbing.
-   *
-   * @generated from field: code.chat.v2.ChatMemberIdentity identity = 3;
-   */
-  identity?: ChatMemberIdentity;
-
   constructor(data?: PartialMessage<StartTwoWayChatParameters>) {
     super();
     proto3.util.initPartial(data, this);
@@ -830,7 +771,6 @@ export class StartTwoWayChatParameters extends Message<StartTwoWayChatParameters
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "other_user", kind: "message", T: SolanaAccountId },
     { no: 2, name: "intent_id", kind: "message", T: IntentId },
-    { no: 3, name: "identity", kind: "message", T: ChatMemberIdentity },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StartTwoWayChatParameters {
@@ -853,7 +793,7 @@ export class StartTwoWayChatParameters extends Message<StartTwoWayChatParameters
 /**
  * @generated from message code.chat.v2.StartChatResponse
  */
-export class StartChatResponse extends Message<StartChatResponse> {
+export class StartChatResponse extends Message$1<StartChatResponse> {
   /**
    * @generated from field: code.chat.v2.StartChatResponse.Result result = 1;
    */
@@ -862,9 +802,9 @@ export class StartChatResponse extends Message<StartChatResponse> {
   /**
    * The chat to use if the RPC was successful.
    *
-   * @generated from field: code.chat.v2.ChatMetadata chat = 2;
+   * @generated from field: code.chat.v2.Metadata chat = 2;
    */
-  chat?: ChatMetadata;
+  chat?: Metadata;
 
   constructor(data?: PartialMessage<StartChatResponse>) {
     super();
@@ -875,7 +815,7 @@ export class StartChatResponse extends Message<StartChatResponse> {
   static readonly typeName = "code.chat.v2.StartChatResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "result", kind: "enum", T: proto3.getEnumType(StartChatResponse_Result) },
-    { no: 2, name: "chat", kind: "message", T: ChatMetadata },
+    { no: 2, name: "chat", kind: "message", T: Metadata },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StartChatResponse {
@@ -926,6 +866,20 @@ export enum StartChatResponse_Result {
    * @generated from enum value: PENDING = 3;
    */
   PENDING = 3,
+
+  /**
+   * MISSING_IDENTITY indicates that there is no identity for the user (creator).
+   *
+   * @generated from enum value: MISSING_IDENTITY = 4;
+   */
+  MISSING_IDENTITY = 4,
+
+  /**
+   * USER_NOT_FOUND indicates that (one of) the target user's was not found.
+   *
+   * @generated from enum value: USER_NOT_FOUND = 5;
+   */
+  USER_NOT_FOUND = 5,
 }
 // Retrieve enum metadata with: proto3.getEnumType(StartChatResponse_Result)
 proto3.util.setEnumType(StartChatResponse_Result, "code.chat.v2.StartChatResponse.Result", [
@@ -933,38 +887,35 @@ proto3.util.setEnumType(StartChatResponse_Result, "code.chat.v2.StartChatRespons
   { no: 1, name: "DENIED" },
   { no: 2, name: "INVALID_PARAMETER" },
   { no: 3, name: "PENDING" },
+  { no: 4, name: "MISSING_IDENTITY" },
+  { no: 5, name: "USER_NOT_FOUND" },
 ]);
 
 /**
  * @generated from message code.chat.v2.SendMessageRequest
  */
-export class SendMessageRequest extends Message<SendMessageRequest> {
+export class SendMessageRequest extends Message$1<SendMessageRequest> {
   /**
    * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
   /**
-   * @generated from field: code.chat.v2.ChatMemberId member_id = 2;
-   */
-  memberId?: ChatMemberId;
-
-  /**
    * Allowed content types that can be sent by client:
    *  - TextContent
    *  - ThankYouContent
    *
-   * @generated from field: repeated code.chat.v2.Content content = 3;
+   * @generated from field: repeated code.chat.v2.Content content = 2;
    */
   content: Content[] = [];
 
   /**
-   * @generated from field: code.common.v1.SolanaAccountId owner = 4;
+   * @generated from field: code.common.v1.SolanaAccountId owner = 3;
    */
   owner?: SolanaAccountId;
 
   /**
-   * @generated from field: code.common.v1.Signature signature = 5;
+   * @generated from field: code.common.v1.Signature signature = 4;
    */
   signature?: Signature;
 
@@ -977,10 +928,9 @@ export class SendMessageRequest extends Message<SendMessageRequest> {
   static readonly typeName = "code.chat.v2.SendMessageRequest";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "chat_id", kind: "message", T: ChatId },
-    { no: 2, name: "member_id", kind: "message", T: ChatMemberId },
-    { no: 3, name: "content", kind: "message", T: Content, repeated: true },
-    { no: 4, name: "owner", kind: "message", T: SolanaAccountId },
-    { no: 5, name: "signature", kind: "message", T: Signature },
+    { no: 2, name: "content", kind: "message", T: Content, repeated: true },
+    { no: 3, name: "owner", kind: "message", T: SolanaAccountId },
+    { no: 4, name: "signature", kind: "message", T: Signature },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SendMessageRequest {
@@ -1003,7 +953,7 @@ export class SendMessageRequest extends Message<SendMessageRequest> {
 /**
  * @generated from message code.chat.v2.SendMessageResponse
  */
-export class SendMessageResponse extends Message<SendMessageResponse> {
+export class SendMessageResponse extends Message$1<SendMessageResponse> {
   /**
    * @generated from field: code.chat.v2.SendMessageResponse.Result result = 1;
    */
@@ -1013,9 +963,9 @@ export class SendMessageResponse extends Message<SendMessageResponse> {
    * The chat message that was sent if the RPC was succesful, which includes
    * server-side metadata like the generated message ID and official timestamp
    *
-   * @generated from field: code.chat.v2.ChatMessage message = 2;
+   * @generated from field: code.chat.v2.Message message = 2;
    */
-  message?: ChatMessage;
+  message?: Message;
 
   constructor(data?: PartialMessage<SendMessageResponse>) {
     super();
@@ -1026,7 +976,7 @@ export class SendMessageResponse extends Message<SendMessageResponse> {
   static readonly typeName = "code.chat.v2.SendMessageResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "result", kind: "enum", T: proto3.getEnumType(SendMessageResponse_Result) },
-    { no: 2, name: "message", kind: "message", T: ChatMessage },
+    { no: 2, name: "message", kind: "message", T: Message },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SendMessageResponse {
@@ -1061,33 +1011,21 @@ export enum SendMessageResponse_Result {
   DENIED = 1,
 
   /**
-   * @generated from enum value: CHAT_NOT_FOUND = 2;
+   * @generated from enum value: INVALID_CONTENT_TYPE = 2;
    */
-  CHAT_NOT_FOUND = 2,
-
-  /**
-   * @generated from enum value: INVALID_CHAT_TYPE = 3;
-   */
-  INVALID_CHAT_TYPE = 3,
-
-  /**
-   * @generated from enum value: INVALID_CONTENT_TYPE = 4;
-   */
-  INVALID_CONTENT_TYPE = 4,
+  INVALID_CONTENT_TYPE = 2,
 }
 // Retrieve enum metadata with: proto3.getEnumType(SendMessageResponse_Result)
 proto3.util.setEnumType(SendMessageResponse_Result, "code.chat.v2.SendMessageResponse.Result", [
   { no: 0, name: "OK" },
   { no: 1, name: "DENIED" },
-  { no: 2, name: "CHAT_NOT_FOUND" },
-  { no: 3, name: "INVALID_CHAT_TYPE" },
-  { no: 4, name: "INVALID_CONTENT_TYPE" },
+  { no: 2, name: "INVALID_CONTENT_TYPE" },
 ]);
 
 /**
  * @generated from message code.chat.v2.AdvancePointerRequest
  */
-export class AdvancePointerRequest extends Message<AdvancePointerRequest> {
+export class AdvancePointerRequest extends Message$1<AdvancePointerRequest> {
   /**
    * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
@@ -1142,7 +1080,7 @@ export class AdvancePointerRequest extends Message<AdvancePointerRequest> {
 /**
  * @generated from message code.chat.v2.AdvancePointerResponse
  */
-export class AdvancePointerResponse extends Message<AdvancePointerResponse> {
+export class AdvancePointerResponse extends Message$1<AdvancePointerResponse> {
   /**
    * @generated from field: code.chat.v2.AdvancePointerResponse.Result result = 1;
    */
@@ -1191,193 +1129,38 @@ export enum AdvancePointerResponse_Result {
   DENIED = 1,
 
   /**
-   * @generated from enum value: CHAT_NOT_FOUND = 2;
+   * @generated from enum value: MESSAGE_NOT_FOUND = 2;
    */
-  CHAT_NOT_FOUND = 2,
-
-  /**
-   * @generated from enum value: MESSAGE_NOT_FOUND = 3;
-   */
-  MESSAGE_NOT_FOUND = 3,
-
-  /**
-   * @generated from enum value: INVALID_POINTER_TYPE = 4;
-   */
-  INVALID_POINTER_TYPE = 4,
+  MESSAGE_NOT_FOUND = 2,
 }
 // Retrieve enum metadata with: proto3.getEnumType(AdvancePointerResponse_Result)
 proto3.util.setEnumType(AdvancePointerResponse_Result, "code.chat.v2.AdvancePointerResponse.Result", [
   { no: 0, name: "OK" },
   { no: 1, name: "DENIED" },
-  { no: 2, name: "CHAT_NOT_FOUND" },
-  { no: 3, name: "MESSAGE_NOT_FOUND" },
-  { no: 4, name: "INVALID_POINTER_TYPE" },
-]);
-
-/**
- * @generated from message code.chat.v2.RevealIdentityRequest
- */
-export class RevealIdentityRequest extends Message<RevealIdentityRequest> {
-  /**
-   * @generated from field: code.common.v1.ChatId chat_id = 1;
-   */
-  chatId?: ChatId;
-
-  /**
-   * @generated from field: code.chat.v2.ChatMemberId member_id = 2;
-   */
-  memberId?: ChatMemberId;
-
-  /**
-   * @generated from field: code.chat.v2.ChatMemberIdentity identity = 3;
-   */
-  identity?: ChatMemberIdentity;
-
-  /**
-   * @generated from field: code.common.v1.SolanaAccountId owner = 4;
-   */
-  owner?: SolanaAccountId;
-
-  /**
-   * @generated from field: code.common.v1.Signature signature = 5;
-   */
-  signature?: Signature;
-
-  constructor(data?: PartialMessage<RevealIdentityRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.RevealIdentityRequest";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "chat_id", kind: "message", T: ChatId },
-    { no: 2, name: "member_id", kind: "message", T: ChatMemberId },
-    { no: 3, name: "identity", kind: "message", T: ChatMemberIdentity },
-    { no: 4, name: "owner", kind: "message", T: SolanaAccountId },
-    { no: 5, name: "signature", kind: "message", T: Signature },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RevealIdentityRequest {
-    return new RevealIdentityRequest().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): RevealIdentityRequest {
-    return new RevealIdentityRequest().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): RevealIdentityRequest {
-    return new RevealIdentityRequest().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: RevealIdentityRequest | PlainMessage<RevealIdentityRequest> | undefined, b: RevealIdentityRequest | PlainMessage<RevealIdentityRequest> | undefined): boolean {
-    return proto3.util.equals(RevealIdentityRequest, a, b);
-  }
-}
-
-/**
- * @generated from message code.chat.v2.RevealIdentityResponse
- */
-export class RevealIdentityResponse extends Message<RevealIdentityResponse> {
-  /**
-   * @generated from field: code.chat.v2.RevealIdentityResponse.Result result = 1;
-   */
-  result = RevealIdentityResponse_Result.OK;
-
-  /**
-   * The chat message that was sent if the RPC was successful
-   *
-   * @generated from field: code.chat.v2.ChatMessage message = 2;
-   */
-  message?: ChatMessage;
-
-  constructor(data?: PartialMessage<RevealIdentityResponse>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.RevealIdentityResponse";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "result", kind: "enum", T: proto3.getEnumType(RevealIdentityResponse_Result) },
-    { no: 2, name: "message", kind: "message", T: ChatMessage },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RevealIdentityResponse {
-    return new RevealIdentityResponse().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): RevealIdentityResponse {
-    return new RevealIdentityResponse().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): RevealIdentityResponse {
-    return new RevealIdentityResponse().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: RevealIdentityResponse | PlainMessage<RevealIdentityResponse> | undefined, b: RevealIdentityResponse | PlainMessage<RevealIdentityResponse> | undefined): boolean {
-    return proto3.util.equals(RevealIdentityResponse, a, b);
-  }
-}
-
-/**
- * @generated from enum code.chat.v2.RevealIdentityResponse.Result
- */
-export enum RevealIdentityResponse_Result {
-  /**
-   * @generated from enum value: OK = 0;
-   */
-  OK = 0,
-
-  /**
-   * @generated from enum value: DENIED = 1;
-   */
-  DENIED = 1,
-
-  /**
-   * @generated from enum value: CHAT_NOT_FOUND = 2;
-   */
-  CHAT_NOT_FOUND = 2,
-
-  /**
-   * @generated from enum value: DIFFERENT_IDENTITY_REVEALED = 3;
-   */
-  DIFFERENT_IDENTITY_REVEALED = 3,
-}
-// Retrieve enum metadata with: proto3.getEnumType(RevealIdentityResponse_Result)
-proto3.util.setEnumType(RevealIdentityResponse_Result, "code.chat.v2.RevealIdentityResponse.Result", [
-  { no: 0, name: "OK" },
-  { no: 1, name: "DENIED" },
-  { no: 2, name: "CHAT_NOT_FOUND" },
-  { no: 3, name: "DIFFERENT_IDENTITY_REVEALED" },
+  { no: 2, name: "MESSAGE_NOT_FOUND" },
 ]);
 
 /**
  * @generated from message code.chat.v2.SetMuteStateRequest
  */
-export class SetMuteStateRequest extends Message<SetMuteStateRequest> {
+export class SetMuteStateRequest extends Message$1<SetMuteStateRequest> {
   /**
    * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
   /**
-   * @generated from field: code.chat.v2.ChatMemberId member_id = 2;
-   */
-  memberId?: ChatMemberId;
-
-  /**
-   * @generated from field: bool is_muted = 3;
+   * @generated from field: bool is_muted = 2;
    */
   isMuted = false;
 
   /**
-   * @generated from field: code.common.v1.SolanaAccountId owner = 4;
+   * @generated from field: code.common.v1.SolanaAccountId owner = 3;
    */
   owner?: SolanaAccountId;
 
   /**
-   * @generated from field: code.common.v1.Signature signature = 5;
+   * @generated from field: code.common.v1.Signature signature = 4;
    */
   signature?: Signature;
 
@@ -1390,10 +1173,9 @@ export class SetMuteStateRequest extends Message<SetMuteStateRequest> {
   static readonly typeName = "code.chat.v2.SetMuteStateRequest";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "chat_id", kind: "message", T: ChatId },
-    { no: 2, name: "member_id", kind: "message", T: ChatMemberId },
-    { no: 3, name: "is_muted", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 4, name: "owner", kind: "message", T: SolanaAccountId },
-    { no: 5, name: "signature", kind: "message", T: Signature },
+    { no: 2, name: "is_muted", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 3, name: "owner", kind: "message", T: SolanaAccountId },
+    { no: 4, name: "signature", kind: "message", T: Signature },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SetMuteStateRequest {
@@ -1416,7 +1198,7 @@ export class SetMuteStateRequest extends Message<SetMuteStateRequest> {
 /**
  * @generated from message code.chat.v2.SetMuteStateResponse
  */
-export class SetMuteStateResponse extends Message<SetMuteStateResponse> {
+export class SetMuteStateResponse extends Message$1<SetMuteStateResponse> {
   /**
    * @generated from field: code.chat.v2.SetMuteStateResponse.Result result = 1;
    */
@@ -1465,179 +1247,38 @@ export enum SetMuteStateResponse_Result {
   DENIED = 1,
 
   /**
-   * @generated from enum value: CHAT_NOT_FOUND = 2;
+   * @generated from enum value: CANT_MUTE = 2;
    */
-  CHAT_NOT_FOUND = 2,
-
-  /**
-   * @generated from enum value: CANT_MUTE = 3;
-   */
-  CANT_MUTE = 3,
+  CANT_MUTE = 2,
 }
 // Retrieve enum metadata with: proto3.getEnumType(SetMuteStateResponse_Result)
 proto3.util.setEnumType(SetMuteStateResponse_Result, "code.chat.v2.SetMuteStateResponse.Result", [
   { no: 0, name: "OK" },
   { no: 1, name: "DENIED" },
-  { no: 2, name: "CHAT_NOT_FOUND" },
-  { no: 3, name: "CANT_MUTE" },
-]);
-
-/**
- * @generated from message code.chat.v2.SetSubscriptionStateRequest
- */
-export class SetSubscriptionStateRequest extends Message<SetSubscriptionStateRequest> {
-  /**
-   * @generated from field: code.common.v1.ChatId chat_id = 1;
-   */
-  chatId?: ChatId;
-
-  /**
-   * @generated from field: code.chat.v2.ChatMemberId member_id = 2;
-   */
-  memberId?: ChatMemberId;
-
-  /**
-   * @generated from field: bool is_subscribed = 3;
-   */
-  isSubscribed = false;
-
-  /**
-   * @generated from field: code.common.v1.SolanaAccountId owner = 4;
-   */
-  owner?: SolanaAccountId;
-
-  /**
-   * @generated from field: code.common.v1.Signature signature = 5;
-   */
-  signature?: Signature;
-
-  constructor(data?: PartialMessage<SetSubscriptionStateRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.SetSubscriptionStateRequest";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "chat_id", kind: "message", T: ChatId },
-    { no: 2, name: "member_id", kind: "message", T: ChatMemberId },
-    { no: 3, name: "is_subscribed", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 4, name: "owner", kind: "message", T: SolanaAccountId },
-    { no: 5, name: "signature", kind: "message", T: Signature },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SetSubscriptionStateRequest {
-    return new SetSubscriptionStateRequest().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SetSubscriptionStateRequest {
-    return new SetSubscriptionStateRequest().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SetSubscriptionStateRequest {
-    return new SetSubscriptionStateRequest().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: SetSubscriptionStateRequest | PlainMessage<SetSubscriptionStateRequest> | undefined, b: SetSubscriptionStateRequest | PlainMessage<SetSubscriptionStateRequest> | undefined): boolean {
-    return proto3.util.equals(SetSubscriptionStateRequest, a, b);
-  }
-}
-
-/**
- * @generated from message code.chat.v2.SetSubscriptionStateResponse
- */
-export class SetSubscriptionStateResponse extends Message<SetSubscriptionStateResponse> {
-  /**
-   * @generated from field: code.chat.v2.SetSubscriptionStateResponse.Result result = 1;
-   */
-  result = SetSubscriptionStateResponse_Result.OK;
-
-  constructor(data?: PartialMessage<SetSubscriptionStateResponse>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.SetSubscriptionStateResponse";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "result", kind: "enum", T: proto3.getEnumType(SetSubscriptionStateResponse_Result) },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SetSubscriptionStateResponse {
-    return new SetSubscriptionStateResponse().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SetSubscriptionStateResponse {
-    return new SetSubscriptionStateResponse().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SetSubscriptionStateResponse {
-    return new SetSubscriptionStateResponse().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: SetSubscriptionStateResponse | PlainMessage<SetSubscriptionStateResponse> | undefined, b: SetSubscriptionStateResponse | PlainMessage<SetSubscriptionStateResponse> | undefined): boolean {
-    return proto3.util.equals(SetSubscriptionStateResponse, a, b);
-  }
-}
-
-/**
- * @generated from enum code.chat.v2.SetSubscriptionStateResponse.Result
- */
-export enum SetSubscriptionStateResponse_Result {
-  /**
-   * @generated from enum value: OK = 0;
-   */
-  OK = 0,
-
-  /**
-   * @generated from enum value: DENIED = 1;
-   */
-  DENIED = 1,
-
-  /**
-   * @generated from enum value: CHAT_NOT_FOUND = 2;
-   */
-  CHAT_NOT_FOUND = 2,
-
-  /**
-   * @generated from enum value: CANT_UNSUBSCRIBE = 3;
-   */
-  CANT_UNSUBSCRIBE = 3,
-}
-// Retrieve enum metadata with: proto3.getEnumType(SetSubscriptionStateResponse_Result)
-proto3.util.setEnumType(SetSubscriptionStateResponse_Result, "code.chat.v2.SetSubscriptionStateResponse.Result", [
-  { no: 0, name: "OK" },
-  { no: 1, name: "DENIED" },
-  { no: 2, name: "CHAT_NOT_FOUND" },
-  { no: 3, name: "CANT_UNSUBSCRIBE" },
+  { no: 2, name: "CANT_MUTE" },
 ]);
 
 /**
  * @generated from message code.chat.v2.NotifyIsTypingRequest
  */
-export class NotifyIsTypingRequest extends Message<NotifyIsTypingRequest> {
+export class NotifyIsTypingRequest extends Message$1<NotifyIsTypingRequest> {
   /**
    * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
 
   /**
-   * @generated from field: code.chat.v2.ChatMemberId member_id = 2;
-   */
-  memberId?: ChatMemberId;
-
-  /**
-   * @generated from field: bool is_typing = 3;
+   * @generated from field: bool is_typing = 2;
    */
   isTyping = false;
 
   /**
-   * @generated from field: code.common.v1.SolanaAccountId owner = 4;
+   * @generated from field: code.common.v1.SolanaAccountId owner = 3;
    */
   owner?: SolanaAccountId;
 
   /**
-   * @generated from field: code.common.v1.Signature signature = 5;
+   * @generated from field: code.common.v1.Signature signature = 4;
    */
   signature?: Signature;
 
@@ -1650,10 +1291,9 @@ export class NotifyIsTypingRequest extends Message<NotifyIsTypingRequest> {
   static readonly typeName = "code.chat.v2.NotifyIsTypingRequest";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "chat_id", kind: "message", T: ChatId },
-    { no: 2, name: "member_id", kind: "message", T: ChatMemberId },
-    { no: 3, name: "is_typing", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 4, name: "owner", kind: "message", T: SolanaAccountId },
-    { no: 5, name: "signature", kind: "message", T: Signature },
+    { no: 2, name: "is_typing", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 3, name: "owner", kind: "message", T: SolanaAccountId },
+    { no: 4, name: "signature", kind: "message", T: Signature },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): NotifyIsTypingRequest {
@@ -1676,7 +1316,7 @@ export class NotifyIsTypingRequest extends Message<NotifyIsTypingRequest> {
 /**
  * @generated from message code.chat.v2.NotifyIsTypingResponse
  */
-export class NotifyIsTypingResponse extends Message<NotifyIsTypingResponse> {
+export class NotifyIsTypingResponse extends Message$1<NotifyIsTypingResponse> {
   /**
    * @generated from field: code.chat.v2.NotifyIsTypingResponse.Result result = 1;
    */
@@ -1723,96 +1363,89 @@ export enum NotifyIsTypingResponse_Result {
    * @generated from enum value: DENIED = 1;
    */
   DENIED = 1,
-
-  /**
-   * @generated from enum value: CHAT_NOT_FOUND = 2;
-   */
-  CHAT_NOT_FOUND = 2,
 }
 // Retrieve enum metadata with: proto3.getEnumType(NotifyIsTypingResponse_Result)
 proto3.util.setEnumType(NotifyIsTypingResponse_Result, "code.chat.v2.NotifyIsTypingResponse.Result", [
   { no: 0, name: "OK" },
   { no: 1, name: "DENIED" },
-  { no: 2, name: "CHAT_NOT_FOUND" },
 ]);
 
 /**
- * @generated from message code.chat.v2.ChatMessageId
+ * @generated from message code.chat.v2.MessageId
  */
-export class ChatMessageId extends Message<ChatMessageId> {
+export class MessageId extends Message$1<MessageId> {
   /**
-   * Guaranteed to be a time-based UUID. This should be used to construct a
-   * consistently ordered message history based on time using a simple byte
-   * comparison.
+   * A lexicographically sortable ID that can be used to sort source of
+   * chat history.
    *
    * @generated from field: bytes value = 1;
    */
   value = new Uint8Array(0);
 
-  constructor(data?: PartialMessage<ChatMessageId>) {
+  constructor(data?: PartialMessage<MessageId>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.ChatMessageId";
+  static readonly typeName = "code.chat.v2.MessageId";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "value", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ChatMessageId {
-    return new ChatMessageId().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): MessageId {
+    return new MessageId().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ChatMessageId {
-    return new ChatMessageId().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): MessageId {
+    return new MessageId().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ChatMessageId {
-    return new ChatMessageId().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): MessageId {
+    return new MessageId().fromJsonString(jsonString, options);
   }
 
-  static equals(a: ChatMessageId | PlainMessage<ChatMessageId> | undefined, b: ChatMessageId | PlainMessage<ChatMessageId> | undefined): boolean {
-    return proto3.util.equals(ChatMessageId, a, b);
+  static equals(a: MessageId | PlainMessage<MessageId> | undefined, b: MessageId | PlainMessage<MessageId> | undefined): boolean {
+    return proto3.util.equals(MessageId, a, b);
   }
 }
 
 /**
- * @generated from message code.chat.v2.ChatMemberId
+ * @generated from message code.chat.v2.MemberId
  */
-export class ChatMemberId extends Message<ChatMemberId> {
+export class MemberId extends Message$1<MemberId> {
   /**
-   * Globally random UUID
+   * The publically available 'deposit' address of the user.
    *
    * @generated from field: bytes value = 1;
    */
   value = new Uint8Array(0);
 
-  constructor(data?: PartialMessage<ChatMemberId>) {
+  constructor(data?: PartialMessage<MemberId>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.ChatMemberId";
+  static readonly typeName = "code.chat.v2.MemberId";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "value", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ChatMemberId {
-    return new ChatMemberId().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): MemberId {
+    return new MemberId().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ChatMemberId {
-    return new ChatMemberId().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): MemberId {
+    return new MemberId().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ChatMemberId {
-    return new ChatMemberId().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): MemberId {
+    return new MemberId().fromJsonString(jsonString, options);
   }
 
-  static equals(a: ChatMemberId | PlainMessage<ChatMemberId> | undefined, b: ChatMemberId | PlainMessage<ChatMemberId> | undefined): boolean {
-    return proto3.util.equals(ChatMemberId, a, b);
+  static equals(a: MemberId | PlainMessage<MemberId> | undefined, b: MemberId | PlainMessage<MemberId> | undefined): boolean {
+    return proto3.util.equals(MemberId, a, b);
   }
 }
 
@@ -1821,12 +1454,10 @@ export class ChatMemberId extends Message<ChatMemberId> {
  *
  * todo: Support is_verified in a clean way
  *
- * @generated from message code.chat.v2.ChatMetadata
+ * @generated from message code.chat.v2.Metadata
  */
-export class ChatMetadata extends Message<ChatMetadata> {
+export class Metadata extends Message$1<Metadata> {
   /**
-   * Globally unique ID for this chat
-   *
    * @generated from field: code.common.v1.ChatId chat_id = 1;
    */
   chatId?: ChatId;
@@ -1839,101 +1470,103 @@ export class ChatMetadata extends Message<ChatMetadata> {
   type = ChatType.UNKNOWN_CHAT_TYPE;
 
   /**
-   * The chat title, which will be localized by server when applicable
+   * Cursor value for this chat for reference in subsequent GetChatsRequest
    *
-   * @generated from field: string title = 3;
+   * @generated from field: code.chat.v2.Cursor cursor = 3;
+   */
+  cursor?: Cursor;
+
+  /**
+   * The chat title, which is _only_ set by server if an explicit title
+   * was set. Otherwise, clients should fill in an appropriate chat title.
+   *
+   * @generated from field: string title = 4;
    */
   title = "";
 
   /**
-   * The members in this chat
+   * The members in this chat.
    *
-   * For NOTIFICATION chats, this list has exactly 1 item
-   * For TWO_WAY chats, this list has exactly 2 items
-   *
-   * todo: If we support group chats, then we'll likely return the first page
-   *       or a prioritized list. The remaining members would be fetched via
-   *       a new RPC.
-   *
-   * @generated from field: repeated code.chat.v2.ChatMember members = 4;
+   * @generated from field: repeated code.chat.v2.Member members = 5;
    */
-  members: ChatMember[] = [];
+  members: Member[] = [];
 
   /**
-   * Can the user mute this chat?
+   * Whether or not the chat is muted (from the perspective of the caller).
    *
-   * @generated from field: bool can_mute = 5;
+   * @generated from field: bool is_muted = 6;
    */
-  canMute = false;
+  isMuted = false;
 
   /**
-   * Can the user unsubscribe from this chat?
+   * Whether or not the chat is mutable (from the persective of the caller).
    *
-   * @generated from field: bool can_unsubscribe = 6;
+   * @generated from field: bool muteable = 7;
    */
-  canUnsubscribe = false;
+  muteable = false;
 
   /**
-   * Cursor value for this chat for reference in subsequent GetChatsRequest
+   * Number of (estimated) unread message (from the perspective of the caller).
    *
-   * @generated from field: code.chat.v2.Cursor cursor = 7;
+   * @generated from field: uint32 num_unread = 8;
    */
-  cursor?: Cursor;
+  numUnread = 0;
 
-  constructor(data?: PartialMessage<ChatMetadata>) {
+  constructor(data?: PartialMessage<Metadata>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.ChatMetadata";
+  static readonly typeName = "code.chat.v2.Metadata";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "chat_id", kind: "message", T: ChatId },
     { no: 2, name: "type", kind: "enum", T: proto3.getEnumType(ChatType) },
-    { no: 3, name: "title", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "members", kind: "message", T: ChatMember, repeated: true },
-    { no: 5, name: "can_mute", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 6, name: "can_unsubscribe", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 7, name: "cursor", kind: "message", T: Cursor },
+    { no: 3, name: "cursor", kind: "message", T: Cursor },
+    { no: 4, name: "title", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "members", kind: "message", T: Member, repeated: true },
+    { no: 6, name: "is_muted", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 7, name: "muteable", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 8, name: "num_unread", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ChatMetadata {
-    return new ChatMetadata().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Metadata {
+    return new Metadata().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ChatMetadata {
-    return new ChatMetadata().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Metadata {
+    return new Metadata().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ChatMetadata {
-    return new ChatMetadata().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Metadata {
+    return new Metadata().fromJsonString(jsonString, options);
   }
 
-  static equals(a: ChatMetadata | PlainMessage<ChatMetadata> | undefined, b: ChatMetadata | PlainMessage<ChatMetadata> | undefined): boolean {
-    return proto3.util.equals(ChatMetadata, a, b);
+  static equals(a: Metadata | PlainMessage<Metadata> | undefined, b: Metadata | PlainMessage<Metadata> | undefined): boolean {
+    return proto3.util.equals(Metadata, a, b);
   }
 }
 
 /**
  * A message in a chat
  *
- * @generated from message code.chat.v2.ChatMessage
+ * @generated from message code.chat.v2.Message
  */
-export class ChatMessage extends Message<ChatMessage> {
+export class Message extends Message$1<Message> {
   /**
    * Globally unique ID for this message
    *
-   * @generated from field: code.chat.v2.ChatMessageId message_id = 1;
+   * @generated from field: code.chat.v2.MessageId message_id = 1;
    */
-  messageId?: ChatMessageId;
+  messageId?: MessageId;
 
   /**
    * The chat member that sent the message. For NOTIFICATION chats, this field
    * is omitted since the chat has exactly 1 member.
    *
-   * @generated from field: code.chat.v2.ChatMemberId sender_id = 2;
+   * @generated from field: code.chat.v2.MemberId sender_id = 2;
    */
-  senderId?: ChatMemberId;
+  senderId?: MemberId;
 
   /**
    * Ordered message content. A message may have more than one piece of content.
@@ -1957,142 +1590,110 @@ export class ChatMessage extends Message<ChatMessage> {
    */
   cursor?: Cursor;
 
-  constructor(data?: PartialMessage<ChatMessage>) {
+  constructor(data?: PartialMessage<Message>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.ChatMessage";
+  static readonly typeName = "code.chat.v2.Message";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "message_id", kind: "message", T: ChatMessageId },
-    { no: 2, name: "sender_id", kind: "message", T: ChatMemberId },
+    { no: 1, name: "message_id", kind: "message", T: MessageId },
+    { no: 2, name: "sender_id", kind: "message", T: MemberId },
     { no: 3, name: "content", kind: "message", T: Content, repeated: true },
     { no: 4, name: "ts", kind: "message", T: Timestamp },
     { no: 5, name: "cursor", kind: "message", T: Cursor },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ChatMessage {
-    return new ChatMessage().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Message {
+    return new Message().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ChatMessage {
-    return new ChatMessage().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Message {
+    return new Message().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ChatMessage {
-    return new ChatMessage().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Message {
+    return new Message().fromJsonString(jsonString, options);
   }
 
-  static equals(a: ChatMessage | PlainMessage<ChatMessage> | undefined, b: ChatMessage | PlainMessage<ChatMessage> | undefined): boolean {
-    return proto3.util.equals(ChatMessage, a, b);
+  static equals(a: Message | PlainMessage<Message> | undefined, b: Message | PlainMessage<Message> | undefined): boolean {
+    return proto3.util.equals(Message, a, b);
   }
 }
 
 /**
  * A user in a chat
  *
- * @generated from message code.chat.v2.ChatMember
+ * @generated from message code.chat.v2.Member
  */
-export class ChatMember extends Message<ChatMember> {
+export class Member extends Message$1<Member> {
   /**
-   * Globally unique ID for this chat member
+   * Public AccountId (for is self...is derived via deposit address)
    *
-   * @generated from field: code.chat.v2.ChatMemberId member_id = 1;
+   * @generated from field: code.chat.v2.MemberId member_id = 1;
    */
-  memberId?: ChatMemberId;
-
-  /**
-   * Is this chat member yourself? This enables client to identify which member_id
-   * is themselves.
-   *
-   * @generated from field: bool is_self = 2;
-   */
-  isSelf = false;
+  memberId?: MemberId;
 
   /**
    * The chat member's identity if it has been revealed.
    *
-   * @generated from field: code.chat.v2.ChatMemberIdentity identity = 3;
+   * Multiple identities here? Well really only needs twitter/other handles
+   * Repeated PlatformHandles (where code doesn't matter)?
+   *
+   * @generated from field: code.chat.v2.MemberIdentity identity = 2;
    */
-  identity?: ChatMemberIdentity;
+  identity?: MemberIdentity;
 
   /**
-   * Chat message state for this member. This list will have DELIVERED and READ
-   * pointers, if they exist. SENT pointers should be inferred by persistence
-   * on server.
+   * Chat message state for this member.
    *
-   * @generated from field: repeated code.chat.v2.Pointer pointers = 4;
+   * If set, the list may contain DELIVERED and READ pointers. SENT pointers
+   * are only shared between the sender and server, to indicate persistence.
+   *
+   * The server may wish to omit all pointers in various types of group chats
+   * or as relief valves.
+   *
+   * @generated from field: repeated code.chat.v2.Pointer pointers = 3;
    */
   pointers: Pointer[] = [];
 
-  /**
-   * Estimated number of unread messages for the chat member in this chat
-   *
-   * Only valid when is_self = true
-   *
-   * @generated from field: uint32 num_unread = 5;
-   */
-  numUnread = 0;
-
-  /**
-   * Has the chat member muted this chat?
-   *
-   * Only valid when is_self = true
-   *
-   * @generated from field: bool is_muted = 6;
-   */
-  isMuted = false;
-
-  /**
-   * Is the chat member subscribed to this chat?
-   *
-   * Only valid when is_self = true
-   *
-   * @generated from field: bool is_subscribed = 7;
-   */
-  isSubscribed = false;
-
-  constructor(data?: PartialMessage<ChatMember>) {
+  constructor(data?: PartialMessage<Member>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.ChatMember";
+  static readonly typeName = "code.chat.v2.Member";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "member_id", kind: "message", T: ChatMemberId },
-    { no: 2, name: "is_self", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 3, name: "identity", kind: "message", T: ChatMemberIdentity },
-    { no: 4, name: "pointers", kind: "message", T: Pointer, repeated: true },
-    { no: 5, name: "num_unread", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-    { no: 6, name: "is_muted", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 7, name: "is_subscribed", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 1, name: "member_id", kind: "message", T: MemberId },
+    { no: 2, name: "identity", kind: "message", T: MemberIdentity },
+    { no: 3, name: "pointers", kind: "message", T: Pointer, repeated: true },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ChatMember {
-    return new ChatMember().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Member {
+    return new Member().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ChatMember {
-    return new ChatMember().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Member {
+    return new Member().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ChatMember {
-    return new ChatMember().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Member {
+    return new Member().fromJsonString(jsonString, options);
   }
 
-  static equals(a: ChatMember | PlainMessage<ChatMember> | undefined, b: ChatMember | PlainMessage<ChatMember> | undefined): boolean {
-    return proto3.util.equals(ChatMember, a, b);
+  static equals(a: Member | PlainMessage<Member> | undefined, b: Member | PlainMessage<Member> | undefined): boolean {
+    return proto3.util.equals(Member, a, b);
   }
 }
 
 /**
  * Identity to an external social platform that can be linked to a Code account
  *
- * @generated from message code.chat.v2.ChatMemberIdentity
+ * @generated from message code.chat.v2.MemberIdentity
  */
-export class ChatMemberIdentity extends Message<ChatMemberIdentity> {
+export class MemberIdentity extends Message$1<MemberIdentity> {
   /**
    * The external social platform linked to this chat member
    *
@@ -2101,46 +1702,54 @@ export class ChatMemberIdentity extends Message<ChatMemberIdentity> {
   platform = Platform.UNKNOWN_PLATFORM;
 
   /**
-   * The chat member's username on the external social platform
+   * The chat member's username on the external social platform.
    *
    * @generated from field: string username = 2;
    */
   username = "";
 
   /**
+   * If present, the display name of the user.
+   *
+   * @generated from field: string display_name = 3;
+   */
+  displayName = "";
+
+  /**
    * If present, the URL of the users profile pic.
    *
-   * @generated from field: string profile_pic_url = 3;
+   * @generated from field: string profile_pic_url = 4;
    */
   profilePicUrl = "";
 
-  constructor(data?: PartialMessage<ChatMemberIdentity>) {
+  constructor(data?: PartialMessage<MemberIdentity>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.ChatMemberIdentity";
+  static readonly typeName = "code.chat.v2.MemberIdentity";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "platform", kind: "enum", T: proto3.getEnumType(Platform) },
     { no: 2, name: "username", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "profile_pic_url", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "display_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "profile_pic_url", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ChatMemberIdentity {
-    return new ChatMemberIdentity().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): MemberIdentity {
+    return new MemberIdentity().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ChatMemberIdentity {
-    return new ChatMemberIdentity().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): MemberIdentity {
+    return new MemberIdentity().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ChatMemberIdentity {
-    return new ChatMemberIdentity().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): MemberIdentity {
+    return new MemberIdentity().fromJsonString(jsonString, options);
   }
 
-  static equals(a: ChatMemberIdentity | PlainMessage<ChatMemberIdentity> | undefined, b: ChatMemberIdentity | PlainMessage<ChatMemberIdentity> | undefined): boolean {
-    return proto3.util.equals(ChatMemberIdentity, a, b);
+  static equals(a: MemberIdentity | PlainMessage<MemberIdentity> | undefined, b: MemberIdentity | PlainMessage<MemberIdentity> | undefined): boolean {
+    return proto3.util.equals(MemberIdentity, a, b);
   }
 }
 
@@ -2149,7 +1758,7 @@ export class ChatMemberIdentity extends Message<ChatMemberIdentity> {
  *
  * @generated from message code.chat.v2.Pointer
  */
-export class Pointer extends Message<Pointer> {
+export class Pointer extends Message$1<Pointer> {
   /**
    * The type of pointer indicates which user's message history state can be
    * inferred from the pointer value. It is also possible to infer cross-pointer
@@ -2164,16 +1773,16 @@ export class Pointer extends Message<Pointer> {
    * Everything at or before this message ID is considered to have the state
    * inferred by the type of pointer.
    *
-   * @generated from field: code.chat.v2.ChatMessageId value = 2;
+   * @generated from field: code.chat.v2.MessageId value = 2;
    */
-  value?: ChatMessageId;
+  value?: MessageId;
 
   /**
    * The chat member associated with this pointer state
    *
-   * @generated from field: code.chat.v2.ChatMemberId member_id = 3;
+   * @generated from field: code.chat.v2.MemberId member_id = 3;
    */
-  memberId?: ChatMemberId;
+  memberId?: MemberId;
 
   constructor(data?: PartialMessage<Pointer>) {
     super();
@@ -2184,8 +1793,8 @@ export class Pointer extends Message<Pointer> {
   static readonly typeName = "code.chat.v2.Pointer";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "type", kind: "enum", T: proto3.getEnumType(PointerType) },
-    { no: 2, name: "value", kind: "message", T: ChatMessageId },
-    { no: 3, name: "member_id", kind: "message", T: ChatMemberId },
+    { no: 2, name: "value", kind: "message", T: MessageId },
+    { no: 3, name: "member_id", kind: "message", T: MemberId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Pointer {
@@ -2210,7 +1819,7 @@ export class Pointer extends Message<Pointer> {
  *
  * @generated from message code.chat.v2.Content
  */
-export class Content extends Message<Content> {
+export class Content extends Message$1<Content> {
   /**
    * @generated from oneof code.chat.v2.Content.type
    */
@@ -2238,18 +1847,6 @@ export class Content extends Message<Content> {
      */
     value: NaclBoxEncryptedContent;
     case: "naclBox";
-  } | {
-    /**
-     * @generated from field: code.chat.v2.ThankYouContent thank_you = 5;
-     */
-    value: ThankYouContent;
-    case: "thankYou";
-  } | {
-    /**
-     * @generated from field: code.chat.v2.IdentityRevealedContent identity_revealed = 6;
-     */
-    value: IdentityRevealedContent;
-    case: "identityRevealed";
   } | { case: undefined; value?: undefined } = { case: undefined };
 
   constructor(data?: PartialMessage<Content>) {
@@ -2264,8 +1861,6 @@ export class Content extends Message<Content> {
     { no: 2, name: "localized", kind: "message", T: LocalizedContent, oneof: "type" },
     { no: 3, name: "exchange_data", kind: "message", T: ExchangeDataContent, oneof: "type" },
     { no: 4, name: "nacl_box", kind: "message", T: NaclBoxEncryptedContent, oneof: "type" },
-    { no: 5, name: "thank_you", kind: "message", T: ThankYouContent, oneof: "type" },
-    { no: 6, name: "identity_revealed", kind: "message", T: IdentityRevealedContent, oneof: "type" },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Content {
@@ -2290,7 +1885,7 @@ export class Content extends Message<Content> {
  *
  * @generated from message code.chat.v2.TextContent
  */
-export class TextContent extends Message<TextContent> {
+export class TextContent extends Message$1<TextContent> {
   /**
    * @generated from field: string text = 1;
    */
@@ -2330,7 +1925,7 @@ export class TextContent extends Message<TextContent> {
  *
  * @generated from message code.chat.v2.LocalizedContent
  */
-export class LocalizedContent extends Message<LocalizedContent> {
+export class LocalizedContent extends Message$1<LocalizedContent> {
   /**
    * @generated from field: string key_or_text = 1;
    */
@@ -2369,7 +1964,7 @@ export class LocalizedContent extends Message<LocalizedContent> {
  *
  * @generated from message code.chat.v2.ExchangeDataContent
  */
-export class ExchangeDataContent extends Message<ExchangeDataContent> {
+export class ExchangeDataContent extends Message$1<ExchangeDataContent> {
   /**
    * Verb describing how the amount of Kin was exchanged
    *
@@ -2536,7 +2131,7 @@ proto3.util.setEnumType(ExchangeDataContent_Verb, "code.chat.v2.ExchangeDataCont
  *
  * @generated from message code.chat.v2.NaclBoxEncryptedContent
  */
-export class NaclBoxEncryptedContent extends Message<NaclBoxEncryptedContent> {
+export class NaclBoxEncryptedContent extends Message$1<NaclBoxEncryptedContent> {
   /**
    * The sender's public key that is used to derive the shared private key for
    * decryption for message content.
@@ -2590,104 +2185,13 @@ export class NaclBoxEncryptedContent extends Message<NaclBoxEncryptedContent> {
 }
 
 /**
- * Thank you content that is used to thank Code users for tips
- *
- * @generated from message code.chat.v2.ThankYouContent
- */
-export class ThankYouContent extends Message<ThankYouContent> {
-  /**
-   * The tip intent that is being thanked.
-   *
-   * @generated from field: code.common.v1.IntentId tip_intent = 1;
-   */
-  tipIntent?: IntentId;
-
-  constructor(data?: PartialMessage<ThankYouContent>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.ThankYouContent";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "tip_intent", kind: "message", T: IntentId },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ThankYouContent {
-    return new ThankYouContent().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ThankYouContent {
-    return new ThankYouContent().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ThankYouContent {
-    return new ThankYouContent().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: ThankYouContent | PlainMessage<ThankYouContent> | undefined, b: ThankYouContent | PlainMessage<ThankYouContent> | undefined): boolean {
-    return proto3.util.equals(ThankYouContent, a, b);
-  }
-}
-
-/**
- * Identity revealed content that is inserted into chat whenever a chat member
- * reveals their identity
- *
- * @generated from message code.chat.v2.IdentityRevealedContent
- */
-export class IdentityRevealedContent extends Message<IdentityRevealedContent> {
-  /**
-   * The chat member who revealed their identity
-   *
-   * @generated from field: code.chat.v2.ChatMemberId member_id = 1;
-   */
-  memberId?: ChatMemberId;
-
-  /**
-   * The identity that was revealed
-   *
-   * @generated from field: code.chat.v2.ChatMemberIdentity identity = 2;
-   */
-  identity?: ChatMemberIdentity;
-
-  constructor(data?: PartialMessage<IdentityRevealedContent>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.IdentityRevealedContent";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "member_id", kind: "message", T: ChatMemberId },
-    { no: 2, name: "identity", kind: "message", T: ChatMemberIdentity },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): IdentityRevealedContent {
-    return new IdentityRevealedContent().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): IdentityRevealedContent {
-    return new IdentityRevealedContent().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): IdentityRevealedContent {
-    return new IdentityRevealedContent().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: IdentityRevealedContent | PlainMessage<IdentityRevealedContent> | undefined, b: IdentityRevealedContent | PlainMessage<IdentityRevealedContent> | undefined): boolean {
-    return proto3.util.equals(IdentityRevealedContent, a, b);
-  }
-}
-
-/**
  * Opaque cursor used across paged APIs. Underlying bytes may change as paging
  * strategies evolve. Expected length value will vary based on the RPC being
  * executed.
  *
  * @generated from message code.chat.v2.Cursor
  */
-export class Cursor extends Message<Cursor> {
+export class Cursor extends Message$1<Cursor> {
   /**
    * @generated from field: bytes value = 1;
    */
@@ -2724,11 +2228,11 @@ export class Cursor extends Message<Cursor> {
 /**
  * @generated from message code.chat.v2.IsTyping
  */
-export class IsTyping extends Message<IsTyping> {
+export class IsTyping extends Message$1<IsTyping> {
   /**
-   * @generated from field: code.chat.v2.ChatMemberId member_id = 1;
+   * @generated from field: code.chat.v2.MemberId member_id = 1;
    */
-  memberId?: ChatMemberId;
+  memberId?: MemberId;
 
   /**
    * is_typing indicates whether or not the user is typing.
@@ -2746,7 +2250,7 @@ export class IsTyping extends Message<IsTyping> {
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "code.chat.v2.IsTyping";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "member_id", kind: "message", T: ChatMemberId },
+    { no: 1, name: "member_id", kind: "message", T: MemberId },
     { no: 2, name: "is_typing", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
   ]);
 
