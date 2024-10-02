@@ -556,10 +556,10 @@ func (m *ChatId) Validate() error {
 		return nil
 	}
 
-	if len(m.GetValue()) != 32 {
+	if l := len(m.GetValue()); l < 16 || l > 32 {
 		return ChatIdValidationError{
 			field:  "Value",
-			reason: "value length must be 32 bytes",
+			reason: "value length must be between 16 and 32 bytes, inclusive",
 		}
 	}
 

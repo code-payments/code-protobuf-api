@@ -1432,6 +1432,21 @@ message TippedUser {
     }];
 }
 
+message FriendedUser {
+    Platform platform = 1 [(validate.rules).enum = {
+        in: [1] // TWITTER
+    }];
+    enum Platform {
+        UNKNOWN = 0;
+        TWITTER = 1;
+    }
+
+    string username = 2 [(validate.rules).string = {
+        min_len: 1
+        max_len: 15
+    }];
+}
+
 message Cursor {
     bytes value = 1 [(validate.rules).bytes = {
         min_len: 8

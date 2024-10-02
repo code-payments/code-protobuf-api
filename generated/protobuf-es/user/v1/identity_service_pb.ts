@@ -5,9 +5,9 @@
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
 import { Message, proto3 } from "@bufbuild/protobuf";
-import { DataContainerId, IntentId, Locale, PhoneNumber, Signature, SolanaAccountId, UserId } from "../../common/v1/model_pb";
+import { ChatId, DataContainerId, IntentId, Locale, PhoneNumber, Signature, SolanaAccountId, UserId } from "../../common/v1/model_pb";
 import { PhoneLinkingToken } from "../../phone/v1/phone_verification_service_pb";
-import { AirdropType } from "../../transaction/v2/transaction_service_pb";
+import { AirdropType, ExchangeDataWithoutRate } from "../../transaction/v2/transaction_service_pb";
 
 /**
  * @generated from message code.user.v1.LinkAccountRequest
@@ -939,6 +939,19 @@ export class GetTwitterUserRequest extends Message<GetTwitterUserRequest> {
     case: "tipAddress";
   } | { case: undefined; value?: undefined } = { case: undefined };
 
+  /**
+   * An optional set of authentication information that allows for more
+   * information to be returned in the request.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId requestor = 10;
+   */
+  requestor?: SolanaAccountId;
+
+  /**
+   * @generated from field: code.common.v1.Signature signature = 11;
+   */
+  signature?: Signature;
+
   constructor(data?: PartialMessage<GetTwitterUserRequest>) {
     super();
     proto3.util.initPartial(data, this);
@@ -949,6 +962,8 @@ export class GetTwitterUserRequest extends Message<GetTwitterUserRequest> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "username", kind: "scalar", T: 9 /* ScalarType.STRING */, oneof: "query" },
     { no: 2, name: "tip_address", kind: "message", T: SolanaAccountId, oneof: "query" },
+    { no: 10, name: "requestor", kind: "message", T: SolanaAccountId },
+    { no: 11, name: "signature", kind: "message", T: Signature },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetTwitterUserRequest {
@@ -1178,6 +1193,8 @@ export class TwitterUser extends Message<TwitterUser> {
   /**
    * Public key for a token account where tips are routed
    *
+   * TODO(tip_rename): Candidate for renaming to something more generic.
+   *
    * @generated from field: code.common.v1.SolanaAccountId tip_address = 1;
    */
   tipAddress?: SolanaAccountId;
@@ -1217,6 +1234,34 @@ export class TwitterUser extends Message<TwitterUser> {
    */
   followerCount = 0;
 
+  /**
+   * The cost of establishing the friendship (regardless if caller is a friend).
+   *
+   * This should not be cached for an extended period, as exchange rate / value
+   * may change at any time.
+   *
+   * @generated from field: code.transaction.v2.ExchangeDataWithoutRate friendship_cost = 7;
+   */
+  friendshipCost?: ExchangeDataWithoutRate;
+
+  /**
+   * Indicates the user is a friend of the caller.
+   *
+   * @generated from field: bool is_friend = 10;
+   */
+  isFriend = false;
+
+  /**
+   * The ChatId used to communicate with this friend.
+   *
+   * This will always be set for authenticated users.
+   * If is_friend=false, this ChatId should be used when crafting
+   * the intent.
+   *
+   * @generated from field: code.common.v1.ChatId friend_chat_id = 11;
+   */
+  friendChatId?: ChatId;
+
   constructor(data?: PartialMessage<TwitterUser>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1231,6 +1276,9 @@ export class TwitterUser extends Message<TwitterUser> {
     { no: 4, name: "profile_pic_url", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 5, name: "verified_type", kind: "enum", T: proto3.getEnumType(TwitterUser_VerifiedType) },
     { no: 6, name: "follower_count", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
+    { no: 7, name: "friendship_cost", kind: "message", T: ExchangeDataWithoutRate },
+    { no: 10, name: "is_friend", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 11, name: "friend_chat_id", kind: "message", T: ChatId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): TwitterUser {

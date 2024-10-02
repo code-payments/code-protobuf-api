@@ -980,6 +980,52 @@ func (TippedUser_Platform) EnumDescriptor() ([]byte, []int) {
 	return file_transaction_v2_transaction_service_proto_rawDescGZIP(), []int{63, 0}
 }
 
+type FriendedUser_Platform int32
+
+const (
+	FriendedUser_UNKNOWN FriendedUser_Platform = 0
+	FriendedUser_TWITTER FriendedUser_Platform = 1
+)
+
+// Enum value maps for FriendedUser_Platform.
+var (
+	FriendedUser_Platform_name = map[int32]string{
+		0: "UNKNOWN",
+		1: "TWITTER",
+	}
+	FriendedUser_Platform_value = map[string]int32{
+		"UNKNOWN": 0,
+		"TWITTER": 1,
+	}
+)
+
+func (x FriendedUser_Platform) Enum() *FriendedUser_Platform {
+	p := new(FriendedUser_Platform)
+	*p = x
+	return p
+}
+
+func (x FriendedUser_Platform) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (FriendedUser_Platform) Descriptor() protoreflect.EnumDescriptor {
+	return file_transaction_v2_transaction_service_proto_enumTypes[19].Descriptor()
+}
+
+func (FriendedUser_Platform) Type() protoreflect.EnumType {
+	return &file_transaction_v2_transaction_service_proto_enumTypes[19]
+}
+
+func (x FriendedUser_Platform) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use FriendedUser_Platform.Descriptor instead.
+func (FriendedUser_Platform) EnumDescriptor() ([]byte, []int) {
+	return file_transaction_v2_transaction_service_proto_rawDescGZIP(), []int{64, 0}
+}
+
 type SubmitIntentRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -5847,6 +5893,61 @@ func (x *TippedUser) GetUsername() string {
 	return ""
 }
 
+type FriendedUser struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Platform FriendedUser_Platform `protobuf:"varint,1,opt,name=platform,proto3,enum=code.transaction.v2.FriendedUser_Platform" json:"platform,omitempty"`
+	Username string                `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+}
+
+func (x *FriendedUser) Reset() {
+	*x = FriendedUser{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_transaction_v2_transaction_service_proto_msgTypes[64]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *FriendedUser) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FriendedUser) ProtoMessage() {}
+
+func (x *FriendedUser) ProtoReflect() protoreflect.Message {
+	mi := &file_transaction_v2_transaction_service_proto_msgTypes[64]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FriendedUser.ProtoReflect.Descriptor instead.
+func (*FriendedUser) Descriptor() ([]byte, []int) {
+	return file_transaction_v2_transaction_service_proto_rawDescGZIP(), []int{64}
+}
+
+func (x *FriendedUser) GetPlatform() FriendedUser_Platform {
+	if x != nil {
+		return x.Platform
+	}
+	return FriendedUser_UNKNOWN
+}
+
+func (x *FriendedUser) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
 type Cursor struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -5858,7 +5959,7 @@ type Cursor struct {
 func (x *Cursor) Reset() {
 	*x = Cursor{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_transaction_v2_transaction_service_proto_msgTypes[64]
+		mi := &file_transaction_v2_transaction_service_proto_msgTypes[65]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5871,7 +5972,7 @@ func (x *Cursor) String() string {
 func (*Cursor) ProtoMessage() {}
 
 func (x *Cursor) ProtoReflect() protoreflect.Message {
-	mi := &file_transaction_v2_transaction_service_proto_msgTypes[64]
+	mi := &file_transaction_v2_transaction_service_proto_msgTypes[65]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5884,7 +5985,7 @@ func (x *Cursor) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Cursor.ProtoReflect.Descriptor instead.
 func (*Cursor) Descriptor() ([]byte, []int) {
-	return file_transaction_v2_transaction_service_proto_rawDescGZIP(), []int{64}
+	return file_transaction_v2_transaction_service_proto_rawDescGZIP(), []int{65}
 }
 
 func (x *Cursor) GetValue() []byte {
@@ -5919,7 +6020,7 @@ type SubmitIntentRequest_SubmitActions struct {
 func (x *SubmitIntentRequest_SubmitActions) Reset() {
 	*x = SubmitIntentRequest_SubmitActions{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_transaction_v2_transaction_service_proto_msgTypes[65]
+		mi := &file_transaction_v2_transaction_service_proto_msgTypes[66]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5932,7 +6033,7 @@ func (x *SubmitIntentRequest_SubmitActions) String() string {
 func (*SubmitIntentRequest_SubmitActions) ProtoMessage() {}
 
 func (x *SubmitIntentRequest_SubmitActions) ProtoReflect() protoreflect.Message {
-	mi := &file_transaction_v2_transaction_service_proto_msgTypes[65]
+	mi := &file_transaction_v2_transaction_service_proto_msgTypes[66]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6003,7 +6104,7 @@ type SubmitIntentRequest_SubmitSignatures struct {
 func (x *SubmitIntentRequest_SubmitSignatures) Reset() {
 	*x = SubmitIntentRequest_SubmitSignatures{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_transaction_v2_transaction_service_proto_msgTypes[66]
+		mi := &file_transaction_v2_transaction_service_proto_msgTypes[67]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6016,7 +6117,7 @@ func (x *SubmitIntentRequest_SubmitSignatures) String() string {
 func (*SubmitIntentRequest_SubmitSignatures) ProtoMessage() {}
 
 func (x *SubmitIntentRequest_SubmitSignatures) ProtoReflect() protoreflect.Message {
-	mi := &file_transaction_v2_transaction_service_proto_msgTypes[66]
+	mi := &file_transaction_v2_transaction_service_proto_msgTypes[67]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6053,7 +6154,7 @@ type SubmitIntentResponse_ServerParameters struct {
 func (x *SubmitIntentResponse_ServerParameters) Reset() {
 	*x = SubmitIntentResponse_ServerParameters{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_transaction_v2_transaction_service_proto_msgTypes[67]
+		mi := &file_transaction_v2_transaction_service_proto_msgTypes[68]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6066,7 +6167,7 @@ func (x *SubmitIntentResponse_ServerParameters) String() string {
 func (*SubmitIntentResponse_ServerParameters) ProtoMessage() {}
 
 func (x *SubmitIntentResponse_ServerParameters) ProtoReflect() protoreflect.Message {
-	mi := &file_transaction_v2_transaction_service_proto_msgTypes[67]
+	mi := &file_transaction_v2_transaction_service_proto_msgTypes[68]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6100,7 +6201,7 @@ type SubmitIntentResponse_Success struct {
 func (x *SubmitIntentResponse_Success) Reset() {
 	*x = SubmitIntentResponse_Success{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_transaction_v2_transaction_service_proto_msgTypes[68]
+		mi := &file_transaction_v2_transaction_service_proto_msgTypes[69]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6113,7 +6214,7 @@ func (x *SubmitIntentResponse_Success) String() string {
 func (*SubmitIntentResponse_Success) ProtoMessage() {}
 
 func (x *SubmitIntentResponse_Success) ProtoReflect() protoreflect.Message {
-	mi := &file_transaction_v2_transaction_service_proto_msgTypes[68]
+	mi := &file_transaction_v2_transaction_service_proto_msgTypes[69]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6148,7 +6249,7 @@ type SubmitIntentResponse_Error struct {
 func (x *SubmitIntentResponse_Error) Reset() {
 	*x = SubmitIntentResponse_Error{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_transaction_v2_transaction_service_proto_msgTypes[69]
+		mi := &file_transaction_v2_transaction_service_proto_msgTypes[70]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6161,7 +6262,7 @@ func (x *SubmitIntentResponse_Error) String() string {
 func (*SubmitIntentResponse_Error) ProtoMessage() {}
 
 func (x *SubmitIntentResponse_Error) ProtoReflect() protoreflect.Message {
-	mi := &file_transaction_v2_transaction_service_proto_msgTypes[69]
+	mi := &file_transaction_v2_transaction_service_proto_msgTypes[70]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6218,7 +6319,7 @@ type SwapRequest_Initiate struct {
 func (x *SwapRequest_Initiate) Reset() {
 	*x = SwapRequest_Initiate{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_transaction_v2_transaction_service_proto_msgTypes[73]
+		mi := &file_transaction_v2_transaction_service_proto_msgTypes[74]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6231,7 +6332,7 @@ func (x *SwapRequest_Initiate) String() string {
 func (*SwapRequest_Initiate) ProtoMessage() {}
 
 func (x *SwapRequest_Initiate) ProtoReflect() protoreflect.Message {
-	mi := &file_transaction_v2_transaction_service_proto_msgTypes[73]
+	mi := &file_transaction_v2_transaction_service_proto_msgTypes[74]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6294,7 +6395,7 @@ type SwapRequest_SubmitSignature struct {
 func (x *SwapRequest_SubmitSignature) Reset() {
 	*x = SwapRequest_SubmitSignature{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_transaction_v2_transaction_service_proto_msgTypes[74]
+		mi := &file_transaction_v2_transaction_service_proto_msgTypes[75]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6307,7 +6408,7 @@ func (x *SwapRequest_SubmitSignature) String() string {
 func (*SwapRequest_SubmitSignature) ProtoMessage() {}
 
 func (x *SwapRequest_SubmitSignature) ProtoReflect() protoreflect.Message {
-	mi := &file_transaction_v2_transaction_service_proto_msgTypes[74]
+	mi := &file_transaction_v2_transaction_service_proto_msgTypes[75]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6366,7 +6467,7 @@ type SwapResponse_ServerParameters struct {
 func (x *SwapResponse_ServerParameters) Reset() {
 	*x = SwapResponse_ServerParameters{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_transaction_v2_transaction_service_proto_msgTypes[75]
+		mi := &file_transaction_v2_transaction_service_proto_msgTypes[76]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6379,7 +6480,7 @@ func (x *SwapResponse_ServerParameters) String() string {
 func (*SwapResponse_ServerParameters) ProtoMessage() {}
 
 func (x *SwapResponse_ServerParameters) ProtoReflect() protoreflect.Message {
-	mi := &file_transaction_v2_transaction_service_proto_msgTypes[75]
+	mi := &file_transaction_v2_transaction_service_proto_msgTypes[76]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6476,7 +6577,7 @@ type SwapResponse_Success struct {
 func (x *SwapResponse_Success) Reset() {
 	*x = SwapResponse_Success{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_transaction_v2_transaction_service_proto_msgTypes[76]
+		mi := &file_transaction_v2_transaction_service_proto_msgTypes[77]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6489,7 +6590,7 @@ func (x *SwapResponse_Success) String() string {
 func (*SwapResponse_Success) ProtoMessage() {}
 
 func (x *SwapResponse_Success) ProtoReflect() protoreflect.Message {
-	mi := &file_transaction_v2_transaction_service_proto_msgTypes[76]
+	mi := &file_transaction_v2_transaction_service_proto_msgTypes[77]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6524,7 +6625,7 @@ type SwapResponse_Error struct {
 func (x *SwapResponse_Error) Reset() {
 	*x = SwapResponse_Error{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_transaction_v2_transaction_service_proto_msgTypes[77]
+		mi := &file_transaction_v2_transaction_service_proto_msgTypes[78]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6537,7 +6638,7 @@ func (x *SwapResponse_Error) String() string {
 func (*SwapResponse_Error) ProtoMessage() {}
 
 func (x *SwapResponse_Error) ProtoReflect() protoreflect.Message {
-	mi := &file_transaction_v2_transaction_service_proto_msgTypes[77]
+	mi := &file_transaction_v2_transaction_service_proto_msgTypes[78]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6599,7 +6700,7 @@ type UpgradeableIntent_UpgradeablePrivateAction struct {
 func (x *UpgradeableIntent_UpgradeablePrivateAction) Reset() {
 	*x = UpgradeableIntent_UpgradeablePrivateAction{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_transaction_v2_transaction_service_proto_msgTypes[78]
+		mi := &file_transaction_v2_transaction_service_proto_msgTypes[79]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6612,7 +6713,7 @@ func (x *UpgradeableIntent_UpgradeablePrivateAction) String() string {
 func (*UpgradeableIntent_UpgradeablePrivateAction) ProtoMessage() {}
 
 func (x *UpgradeableIntent_UpgradeablePrivateAction) ProtoReflect() protoreflect.Message {
-	mi := &file_transaction_v2_transaction_service_proto_msgTypes[78]
+	mi := &file_transaction_v2_transaction_service_proto_msgTypes[79]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7945,99 +8046,110 @@ var file_transaction_v2_transaction_service_proto_rawDesc = []byte{
 	0x0f, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x22, 0x24, 0x0a, 0x08, 0x50,
 	0x6c, 0x61, 0x74, 0x66, 0x6f, 0x72, 0x6d, 0x12, 0x0b, 0x0a, 0x07, 0x55, 0x4e, 0x4b, 0x4e, 0x4f,
 	0x57, 0x4e, 0x10, 0x00, 0x12, 0x0b, 0x0a, 0x07, 0x54, 0x57, 0x49, 0x54, 0x54, 0x45, 0x52, 0x10,
-	0x01, 0x22, 0x2b, 0x0a, 0x06, 0x43, 0x75, 0x72, 0x73, 0x6f, 0x72, 0x12, 0x21, 0x0a, 0x05, 0x76,
-	0x61, 0x6c, 0x75, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x42, 0x0b, 0xba, 0xe9, 0xc0, 0x03,
-	0x06, 0x7a, 0x04, 0x10, 0x08, 0x18, 0x08, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x2a, 0x41,
-	0x0a, 0x0b, 0x41, 0x69, 0x72, 0x64, 0x72, 0x6f, 0x70, 0x54, 0x79, 0x70, 0x65, 0x12, 0x0b, 0x0a,
-	0x07, 0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x00, 0x12, 0x12, 0x0a, 0x0e, 0x47, 0x49,
-	0x56, 0x45, 0x5f, 0x46, 0x49, 0x52, 0x53, 0x54, 0x5f, 0x4b, 0x49, 0x4e, 0x10, 0x01, 0x12, 0x11,
-	0x0a, 0x0d, 0x47, 0x45, 0x54, 0x5f, 0x46, 0x49, 0x52, 0x53, 0x54, 0x5f, 0x4b, 0x49, 0x4e, 0x10,
-	0x02, 0x32, 0xbb, 0x09, 0x0a, 0x0b, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f,
-	0x6e, 0x12, 0x67, 0x0a, 0x0c, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x49, 0x6e, 0x74, 0x65, 0x6e,
-	0x74, 0x12, 0x28, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63,
-	0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x49, 0x6e,
-	0x74, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x29, 0x2e, 0x63, 0x6f,
-	0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76,
-	0x32, 0x2e, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x49, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x28, 0x01, 0x30, 0x01, 0x12, 0x72, 0x0a, 0x11, 0x47, 0x65,
-	0x74, 0x49, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x12,
-	0x2d, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69,
-	0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x47, 0x65, 0x74, 0x49, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x4d,
-	0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2e,
+	0x01, 0x22, 0xb1, 0x01, 0x0a, 0x0c, 0x46, 0x72, 0x69, 0x65, 0x6e, 0x64, 0x65, 0x64, 0x55, 0x73,
+	0x65, 0x72, 0x12, 0x52, 0x0a, 0x08, 0x70, 0x6c, 0x61, 0x74, 0x66, 0x6f, 0x72, 0x6d, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x0e, 0x32, 0x2a, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e,
+	0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x46, 0x72, 0x69, 0x65, 0x6e,
+	0x64, 0x65, 0x64, 0x55, 0x73, 0x65, 0x72, 0x2e, 0x50, 0x6c, 0x61, 0x74, 0x66, 0x6f, 0x72, 0x6d,
+	0x42, 0x0a, 0xba, 0xe9, 0xc0, 0x03, 0x05, 0x82, 0x01, 0x02, 0x18, 0x01, 0x52, 0x08, 0x70, 0x6c,
+	0x61, 0x74, 0x66, 0x6f, 0x72, 0x6d, 0x12, 0x27, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61,
+	0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x0b, 0xba, 0xe9, 0xc0, 0x03, 0x06, 0x72,
+	0x04, 0x10, 0x01, 0x18, 0x0f, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x22,
+	0x24, 0x0a, 0x08, 0x50, 0x6c, 0x61, 0x74, 0x66, 0x6f, 0x72, 0x6d, 0x12, 0x0b, 0x0a, 0x07, 0x55,
+	0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x00, 0x12, 0x0b, 0x0a, 0x07, 0x54, 0x57, 0x49, 0x54,
+	0x54, 0x45, 0x52, 0x10, 0x01, 0x22, 0x2b, 0x0a, 0x06, 0x43, 0x75, 0x72, 0x73, 0x6f, 0x72, 0x12,
+	0x21, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x42, 0x0b,
+	0xba, 0xe9, 0xc0, 0x03, 0x06, 0x7a, 0x04, 0x10, 0x08, 0x18, 0x08, 0x52, 0x05, 0x76, 0x61, 0x6c,
+	0x75, 0x65, 0x2a, 0x41, 0x0a, 0x0b, 0x41, 0x69, 0x72, 0x64, 0x72, 0x6f, 0x70, 0x54, 0x79, 0x70,
+	0x65, 0x12, 0x0b, 0x0a, 0x07, 0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x10, 0x00, 0x12, 0x12,
+	0x0a, 0x0e, 0x47, 0x49, 0x56, 0x45, 0x5f, 0x46, 0x49, 0x52, 0x53, 0x54, 0x5f, 0x4b, 0x49, 0x4e,
+	0x10, 0x01, 0x12, 0x11, 0x0a, 0x0d, 0x47, 0x45, 0x54, 0x5f, 0x46, 0x49, 0x52, 0x53, 0x54, 0x5f,
+	0x4b, 0x49, 0x4e, 0x10, 0x02, 0x32, 0xbb, 0x09, 0x0a, 0x0b, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x61,
+	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x67, 0x0a, 0x0c, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x49,
+	0x6e, 0x74, 0x65, 0x6e, 0x74, 0x12, 0x28, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61,
+	0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x53, 0x75, 0x62, 0x6d,
+	0x69, 0x74, 0x49, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x29, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69,
+	0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x49, 0x6e, 0x74, 0x65,
+	0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x28, 0x01, 0x30, 0x01, 0x12, 0x72,
+	0x0a, 0x11, 0x47, 0x65, 0x74, 0x49, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x4d, 0x65, 0x74, 0x61, 0x64,
+	0x61, 0x74, 0x61, 0x12, 0x2d, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73,
+	0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x47, 0x65, 0x74, 0x49, 0x6e, 0x74,
+	0x65, 0x6e, 0x74, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x2e, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61,
+	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x47, 0x65, 0x74, 0x49, 0x6e, 0x74, 0x65,
+	0x6e, 0x74, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x84, 0x01, 0x0a, 0x17, 0x47, 0x65, 0x74, 0x50, 0x72, 0x69, 0x76, 0x61, 0x63,
+	0x79, 0x55, 0x70, 0x67, 0x72, 0x61, 0x64, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x33,
 	0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f,
-	0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x47, 0x65, 0x74, 0x49, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x4d, 0x65,
-	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x84,
-	0x01, 0x0a, 0x17, 0x47, 0x65, 0x74, 0x50, 0x72, 0x69, 0x76, 0x61, 0x63, 0x79, 0x55, 0x70, 0x67,
-	0x72, 0x61, 0x64, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x33, 0x2e, 0x63, 0x6f, 0x64,
-	0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32,
-	0x2e, 0x47, 0x65, 0x74, 0x50, 0x72, 0x69, 0x76, 0x61, 0x63, 0x79, 0x55, 0x70, 0x67, 0x72, 0x61,
-	0x64, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x34, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69,
-	0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x72, 0x69, 0x76, 0x61, 0x63, 0x79,
-	0x55, 0x70, 0x67, 0x72, 0x61, 0x64, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0xb1, 0x01, 0x0a, 0x26, 0x47, 0x65, 0x74, 0x50, 0x72, 0x69,
-	0x6f, 0x72, 0x69, 0x74, 0x69, 0x7a, 0x65, 0x64, 0x49, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x73, 0x46,
-	0x6f, 0x72, 0x50, 0x72, 0x69, 0x76, 0x61, 0x63, 0x79, 0x55, 0x70, 0x67, 0x72, 0x61, 0x64, 0x65,
-	0x12, 0x42, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74,
-	0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x72, 0x69, 0x6f, 0x72, 0x69,
-	0x74, 0x69, 0x7a, 0x65, 0x64, 0x49, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x73, 0x46, 0x6f, 0x72, 0x50,
-	0x72, 0x69, 0x76, 0x61, 0x63, 0x79, 0x55, 0x70, 0x67, 0x72, 0x61, 0x64, 0x65, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x43, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e,
+	0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x72, 0x69, 0x76, 0x61, 0x63, 0x79, 0x55,
+	0x70, 0x67, 0x72, 0x61, 0x64, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x34, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73,
+	0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x72, 0x69,
+	0x76, 0x61, 0x63, 0x79, 0x55, 0x70, 0x67, 0x72, 0x61, 0x64, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75,
+	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0xb1, 0x01, 0x0a, 0x26, 0x47, 0x65,
+	0x74, 0x50, 0x72, 0x69, 0x6f, 0x72, 0x69, 0x74, 0x69, 0x7a, 0x65, 0x64, 0x49, 0x6e, 0x74, 0x65,
+	0x6e, 0x74, 0x73, 0x46, 0x6f, 0x72, 0x50, 0x72, 0x69, 0x76, 0x61, 0x63, 0x79, 0x55, 0x70, 0x67,
+	0x72, 0x61, 0x64, 0x65, 0x12, 0x42, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e,
 	0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x72,
 	0x69, 0x6f, 0x72, 0x69, 0x74, 0x69, 0x7a, 0x65, 0x64, 0x49, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x73,
 	0x46, 0x6f, 0x72, 0x50, 0x72, 0x69, 0x76, 0x61, 0x63, 0x79, 0x55, 0x70, 0x67, 0x72, 0x61, 0x64,
-	0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5a, 0x0a, 0x09, 0x47, 0x65, 0x74,
-	0x4c, 0x69, 0x6d, 0x69, 0x74, 0x73, 0x12, 0x25, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72,
-	0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x47, 0x65, 0x74,
-	0x4c, 0x69, 0x6d, 0x69, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x26, 0x2e,
-	0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e,
-	0x2e, 0x76, 0x32, 0x2e, 0x47, 0x65, 0x74, 0x4c, 0x69, 0x6d, 0x69, 0x74, 0x73, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x72, 0x0a, 0x11, 0x47, 0x65, 0x74, 0x50, 0x61, 0x79, 0x6d,
-	0x65, 0x6e, 0x74, 0x48, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x79, 0x12, 0x2d, 0x2e, 0x63, 0x6f, 0x64,
+	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x43, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e,
+	0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x47,
+	0x65, 0x74, 0x50, 0x72, 0x69, 0x6f, 0x72, 0x69, 0x74, 0x69, 0x7a, 0x65, 0x64, 0x49, 0x6e, 0x74,
+	0x65, 0x6e, 0x74, 0x73, 0x46, 0x6f, 0x72, 0x50, 0x72, 0x69, 0x76, 0x61, 0x63, 0x79, 0x55, 0x70,
+	0x67, 0x72, 0x61, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x5a, 0x0a,
+	0x09, 0x47, 0x65, 0x74, 0x4c, 0x69, 0x6d, 0x69, 0x74, 0x73, 0x12, 0x25, 0x2e, 0x63, 0x6f, 0x64,
 	0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32,
-	0x2e, 0x47, 0x65, 0x74, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x48, 0x69, 0x73, 0x74, 0x6f,
-	0x72, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2e, 0x2e, 0x63, 0x6f, 0x64, 0x65,
-	0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e,
-	0x47, 0x65, 0x74, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x48, 0x69, 0x73, 0x74, 0x6f, 0x72,
-	0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x7b, 0x0a, 0x14, 0x43, 0x61, 0x6e,
-	0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x54, 0x6f, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e,
-	0x74, 0x12, 0x30, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63,
-	0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x43, 0x61, 0x6e, 0x57, 0x69, 0x74, 0x68, 0x64,
-	0x72, 0x61, 0x77, 0x54, 0x6f, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x31, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73,
-	0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x43, 0x61, 0x6e, 0x57, 0x69, 0x74,
-	0x68, 0x64, 0x72, 0x61, 0x77, 0x54, 0x6f, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x54, 0x0a, 0x07, 0x41, 0x69, 0x72, 0x64, 0x72, 0x6f,
-	0x70, 0x12, 0x23, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63,
-	0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x41, 0x69, 0x72, 0x64, 0x72, 0x6f, 0x70, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x24, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72,
-	0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x41, 0x69, 0x72,
-	0x64, 0x72, 0x6f, 0x70, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4f, 0x0a, 0x04,
-	0x53, 0x77, 0x61, 0x70, 0x12, 0x20, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e,
-	0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x53, 0x77, 0x61, 0x70, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x21, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72,
-	0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x53, 0x77, 0x61,
-	0x70, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x28, 0x01, 0x30, 0x01, 0x12, 0x9f, 0x01,
-	0x0a, 0x20, 0x44, 0x65, 0x63, 0x6c, 0x61, 0x72, 0x65, 0x46, 0x69, 0x61, 0x74, 0x4f, 0x6e, 0x72,
-	0x61, 0x6d, 0x70, 0x50, 0x75, 0x72, 0x63, 0x68, 0x61, 0x73, 0x65, 0x41, 0x74, 0x74, 0x65, 0x6d,
-	0x70, 0x74, 0x12, 0x3c, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61,
-	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x44, 0x65, 0x63, 0x6c, 0x61, 0x72, 0x65,
-	0x46, 0x69, 0x61, 0x74, 0x4f, 0x6e, 0x72, 0x61, 0x6d, 0x70, 0x50, 0x75, 0x72, 0x63, 0x68, 0x61,
-	0x73, 0x65, 0x41, 0x74, 0x74, 0x65, 0x6d, 0x70, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x3d, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74,
-	0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x44, 0x65, 0x63, 0x6c, 0x61, 0x72, 0x65, 0x46, 0x69,
-	0x61, 0x74, 0x4f, 0x6e, 0x72, 0x61, 0x6d, 0x70, 0x50, 0x75, 0x72, 0x63, 0x68, 0x61, 0x73, 0x65,
-	0x41, 0x74, 0x74, 0x65, 0x6d, 0x70, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42,
-	0x87, 0x01, 0x0a, 0x1e, 0x63, 0x6f, 0x6d, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x69, 0x6e, 0x63, 0x2e,
-	0x67, 0x65, 0x6e, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e,
-	0x76, 0x32, 0x5a, 0x52, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63,
-	0x6f, 0x64, 0x65, 0x2d, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x73, 0x2f, 0x63, 0x6f, 0x64,
-	0x65, 0x2d, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2d, 0x61, 0x70, 0x69, 0x2f, 0x67,
-	0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x65, 0x64, 0x2f, 0x67, 0x6f, 0x2f, 0x74, 0x72, 0x61, 0x6e,
-	0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2f, 0x76, 0x32, 0x3b, 0x74, 0x72, 0x61, 0x6e, 0x73,
-	0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0xa2, 0x02, 0x10, 0x41, 0x50, 0x42, 0x54, 0x72, 0x61, 0x6e,
-	0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x56, 0x32, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x33,
+	0x2e, 0x47, 0x65, 0x74, 0x4c, 0x69, 0x6d, 0x69, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x26, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63,
+	0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x47, 0x65, 0x74, 0x4c, 0x69, 0x6d, 0x69, 0x74,
+	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x72, 0x0a, 0x11, 0x47, 0x65, 0x74,
+	0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x48, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x79, 0x12, 0x2d,
+	0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f,
+	0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x48,
+	0x69, 0x73, 0x74, 0x6f, 0x72, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2e, 0x2e,
+	0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e,
+	0x2e, 0x76, 0x32, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x48, 0x69,
+	0x73, 0x74, 0x6f, 0x72, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x7b, 0x0a,
+	0x14, 0x43, 0x61, 0x6e, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x54, 0x6f, 0x41, 0x63,
+	0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x30, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61,
+	0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x43, 0x61, 0x6e, 0x57,
+	0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x54, 0x6f, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x31, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74,
+	0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x43, 0x61,
+	0x6e, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x54, 0x6f, 0x41, 0x63, 0x63, 0x6f, 0x75,
+	0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x54, 0x0a, 0x07, 0x41, 0x69,
+	0x72, 0x64, 0x72, 0x6f, 0x70, 0x12, 0x23, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61,
+	0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x41, 0x69, 0x72, 0x64,
+	0x72, 0x6f, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x24, 0x2e, 0x63, 0x6f, 0x64,
+	0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32,
+	0x2e, 0x41, 0x69, 0x72, 0x64, 0x72, 0x6f, 0x70, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x4f, 0x0a, 0x04, 0x53, 0x77, 0x61, 0x70, 0x12, 0x20, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e,
+	0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x53,
+	0x77, 0x61, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x21, 0x2e, 0x63, 0x6f, 0x64,
+	0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32,
+	0x2e, 0x53, 0x77, 0x61, 0x70, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x28, 0x01, 0x30,
+	0x01, 0x12, 0x9f, 0x01, 0x0a, 0x20, 0x44, 0x65, 0x63, 0x6c, 0x61, 0x72, 0x65, 0x46, 0x69, 0x61,
+	0x74, 0x4f, 0x6e, 0x72, 0x61, 0x6d, 0x70, 0x50, 0x75, 0x72, 0x63, 0x68, 0x61, 0x73, 0x65, 0x41,
+	0x74, 0x74, 0x65, 0x6d, 0x70, 0x74, 0x12, 0x3c, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72,
+	0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x44, 0x65, 0x63,
+	0x6c, 0x61, 0x72, 0x65, 0x46, 0x69, 0x61, 0x74, 0x4f, 0x6e, 0x72, 0x61, 0x6d, 0x70, 0x50, 0x75,
+	0x72, 0x63, 0x68, 0x61, 0x73, 0x65, 0x41, 0x74, 0x74, 0x65, 0x6d, 0x70, 0x74, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x3d, 0x2e, 0x63, 0x6f, 0x64, 0x65, 0x2e, 0x74, 0x72, 0x61, 0x6e,
+	0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x2e, 0x44, 0x65, 0x63, 0x6c, 0x61,
+	0x72, 0x65, 0x46, 0x69, 0x61, 0x74, 0x4f, 0x6e, 0x72, 0x61, 0x6d, 0x70, 0x50, 0x75, 0x72, 0x63,
+	0x68, 0x61, 0x73, 0x65, 0x41, 0x74, 0x74, 0x65, 0x6d, 0x70, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x42, 0x87, 0x01, 0x0a, 0x1e, 0x63, 0x6f, 0x6d, 0x2e, 0x63, 0x6f, 0x64, 0x65,
+	0x69, 0x6e, 0x63, 0x2e, 0x67, 0x65, 0x6e, 0x2e, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74,
+	0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x32, 0x5a, 0x52, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63,
+	0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x64, 0x65, 0x2d, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x73,
+	0x2f, 0x63, 0x6f, 0x64, 0x65, 0x2d, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2d, 0x61,
+	0x70, 0x69, 0x2f, 0x67, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x65, 0x64, 0x2f, 0x67, 0x6f, 0x2f,
+	0x74, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2f, 0x76, 0x32, 0x3b, 0x74,
+	0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0xa2, 0x02, 0x10, 0x41, 0x50, 0x42,
+	0x54, 0x72, 0x61, 0x6e, 0x73, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x56, 0x32, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -8052,8 +8164,8 @@ func file_transaction_v2_transaction_service_proto_rawDescGZIP() []byte {
 	return file_transaction_v2_transaction_service_proto_rawDescData
 }
 
-var file_transaction_v2_transaction_service_proto_enumTypes = make([]protoimpl.EnumInfo, 19)
-var file_transaction_v2_transaction_service_proto_msgTypes = make([]protoimpl.MessageInfo, 79)
+var file_transaction_v2_transaction_service_proto_enumTypes = make([]protoimpl.EnumInfo, 20)
+var file_transaction_v2_transaction_service_proto_msgTypes = make([]protoimpl.MessageInfo, 80)
 var file_transaction_v2_transaction_service_proto_goTypes = []interface{}{
 	(AirdropType)(0),                                           // 0: code.transaction.v2.AirdropType
 	(SubmitIntentResponse_Success_Code)(0),                     // 1: code.transaction.v2.SubmitIntentResponse.Success.Code
@@ -8074,299 +8186,302 @@ var file_transaction_v2_transaction_service_proto_goTypes = []interface{}{
 	(DeniedErrorDetails_Code)(0),                               // 16: code.transaction.v2.DeniedErrorDetails.Code
 	(PaymentHistoryItem_PaymentType)(0),                        // 17: code.transaction.v2.PaymentHistoryItem.PaymentType
 	(TippedUser_Platform)(0),                                   // 18: code.transaction.v2.TippedUser.Platform
-	(*SubmitIntentRequest)(nil),                                // 19: code.transaction.v2.SubmitIntentRequest
-	(*SubmitIntentResponse)(nil),                               // 20: code.transaction.v2.SubmitIntentResponse
-	(*GetIntentMetadataRequest)(nil),                           // 21: code.transaction.v2.GetIntentMetadataRequest
-	(*GetIntentMetadataResponse)(nil),                          // 22: code.transaction.v2.GetIntentMetadataResponse
-	(*GetPrivacyUpgradeStatusRequest)(nil),                     // 23: code.transaction.v2.GetPrivacyUpgradeStatusRequest
-	(*GetPrivacyUpgradeStatusResponse)(nil),                    // 24: code.transaction.v2.GetPrivacyUpgradeStatusResponse
-	(*GetPrioritizedIntentsForPrivacyUpgradeRequest)(nil),      // 25: code.transaction.v2.GetPrioritizedIntentsForPrivacyUpgradeRequest
-	(*GetPrioritizedIntentsForPrivacyUpgradeResponse)(nil),     // 26: code.transaction.v2.GetPrioritizedIntentsForPrivacyUpgradeResponse
-	(*GetLimitsRequest)(nil),                                   // 27: code.transaction.v2.GetLimitsRequest
-	(*GetLimitsResponse)(nil),                                  // 28: code.transaction.v2.GetLimitsResponse
-	(*GetPaymentHistoryRequest)(nil),                           // 29: code.transaction.v2.GetPaymentHistoryRequest
-	(*GetPaymentHistoryResponse)(nil),                          // 30: code.transaction.v2.GetPaymentHistoryResponse
-	(*CanWithdrawToAccountRequest)(nil),                        // 31: code.transaction.v2.CanWithdrawToAccountRequest
-	(*CanWithdrawToAccountResponse)(nil),                       // 32: code.transaction.v2.CanWithdrawToAccountResponse
-	(*AirdropRequest)(nil),                                     // 33: code.transaction.v2.AirdropRequest
-	(*AirdropResponse)(nil),                                    // 34: code.transaction.v2.AirdropResponse
-	(*SwapRequest)(nil),                                        // 35: code.transaction.v2.SwapRequest
-	(*SwapResponse)(nil),                                       // 36: code.transaction.v2.SwapResponse
-	(*DeclareFiatOnrampPurchaseAttemptRequest)(nil),            // 37: code.transaction.v2.DeclareFiatOnrampPurchaseAttemptRequest
-	(*DeclareFiatOnrampPurchaseAttemptResponse)(nil),           // 38: code.transaction.v2.DeclareFiatOnrampPurchaseAttemptResponse
-	(*Metadata)(nil),                                           // 39: code.transaction.v2.Metadata
-	(*OpenAccountsMetadata)(nil),                               // 40: code.transaction.v2.OpenAccountsMetadata
-	(*SendPrivatePaymentMetadata)(nil),                         // 41: code.transaction.v2.SendPrivatePaymentMetadata
-	(*SendPublicPaymentMetadata)(nil),                          // 42: code.transaction.v2.SendPublicPaymentMetadata
-	(*ReceivePaymentsPrivatelyMetadata)(nil),                   // 43: code.transaction.v2.ReceivePaymentsPrivatelyMetadata
-	(*ReceivePaymentsPubliclyMetadata)(nil),                    // 44: code.transaction.v2.ReceivePaymentsPubliclyMetadata
-	(*UpgradePrivacyMetadata)(nil),                             // 45: code.transaction.v2.UpgradePrivacyMetadata
-	(*MigrateToPrivacy2022Metadata)(nil),                       // 46: code.transaction.v2.MigrateToPrivacy2022Metadata
-	(*EstablishRelationshipMetadata)(nil),                      // 47: code.transaction.v2.EstablishRelationshipMetadata
-	(*Action)(nil),                                             // 48: code.transaction.v2.Action
-	(*OpenAccountAction)(nil),                                  // 49: code.transaction.v2.OpenAccountAction
-	(*CloseEmptyAccountAction)(nil),                            // 50: code.transaction.v2.CloseEmptyAccountAction
-	(*CloseDormantAccountAction)(nil),                          // 51: code.transaction.v2.CloseDormantAccountAction
-	(*NoPrivacyTransferAction)(nil),                            // 52: code.transaction.v2.NoPrivacyTransferAction
-	(*NoPrivacyWithdrawAction)(nil),                            // 53: code.transaction.v2.NoPrivacyWithdrawAction
-	(*TemporaryPrivacyTransferAction)(nil),                     // 54: code.transaction.v2.TemporaryPrivacyTransferAction
-	(*TemporaryPrivacyExchangeAction)(nil),                     // 55: code.transaction.v2.TemporaryPrivacyExchangeAction
-	(*PermanentPrivacyUpgradeAction)(nil),                      // 56: code.transaction.v2.PermanentPrivacyUpgradeAction
-	(*FeePaymentAction)(nil),                                   // 57: code.transaction.v2.FeePaymentAction
-	(*ServerParameter)(nil),                                    // 58: code.transaction.v2.ServerParameter
-	(*NoncedTransactionMetadata)(nil),                          // 59: code.transaction.v2.NoncedTransactionMetadata
-	(*OpenAccountServerParameter)(nil),                         // 60: code.transaction.v2.OpenAccountServerParameter
-	(*CloseEmptyAccountServerParameter)(nil),                   // 61: code.transaction.v2.CloseEmptyAccountServerParameter
-	(*CloseDormantAccountServerParameter)(nil),                 // 62: code.transaction.v2.CloseDormantAccountServerParameter
-	(*NoPrivacyTransferServerParameter)(nil),                   // 63: code.transaction.v2.NoPrivacyTransferServerParameter
-	(*NoPrivacyWithdrawServerParameter)(nil),                   // 64: code.transaction.v2.NoPrivacyWithdrawServerParameter
-	(*TemporaryPrivacyTransferServerParameter)(nil),            // 65: code.transaction.v2.TemporaryPrivacyTransferServerParameter
-	(*TemporaryPrivacyExchangeServerParameter)(nil),            // 66: code.transaction.v2.TemporaryPrivacyExchangeServerParameter
-	(*PermanentPrivacyUpgradeServerParameter)(nil),             // 67: code.transaction.v2.PermanentPrivacyUpgradeServerParameter
-	(*FeePaymentServerParameter)(nil),                          // 68: code.transaction.v2.FeePaymentServerParameter
-	(*ErrorDetails)(nil),                                       // 69: code.transaction.v2.ErrorDetails
-	(*ReasonStringErrorDetails)(nil),                           // 70: code.transaction.v2.ReasonStringErrorDetails
-	(*InvalidSignatureErrorDetails)(nil),                       // 71: code.transaction.v2.InvalidSignatureErrorDetails
-	(*DeniedErrorDetails)(nil),                                 // 72: code.transaction.v2.DeniedErrorDetails
-	(*UpgradeableIntent)(nil),                                  // 73: code.transaction.v2.UpgradeableIntent
-	(*PaymentHistoryItem)(nil),                                 // 74: code.transaction.v2.PaymentHistoryItem
-	(*ExchangeData)(nil),                                       // 75: code.transaction.v2.ExchangeData
-	(*ExchangeDataWithoutRate)(nil),                            // 76: code.transaction.v2.ExchangeDataWithoutRate
-	(*AdditionalFeePayment)(nil),                               // 77: code.transaction.v2.AdditionalFeePayment
-	(*SendLimit)(nil),                                          // 78: code.transaction.v2.SendLimit
-	(*DepositLimit)(nil),                                       // 79: code.transaction.v2.DepositLimit
-	(*MicroPaymentLimit)(nil),                                  // 80: code.transaction.v2.MicroPaymentLimit
-	(*BuyModuleLimit)(nil),                                     // 81: code.transaction.v2.BuyModuleLimit
-	(*TippedUser)(nil),                                         // 82: code.transaction.v2.TippedUser
-	(*Cursor)(nil),                                             // 83: code.transaction.v2.Cursor
-	(*SubmitIntentRequest_SubmitActions)(nil),                  // 84: code.transaction.v2.SubmitIntentRequest.SubmitActions
-	(*SubmitIntentRequest_SubmitSignatures)(nil),               // 85: code.transaction.v2.SubmitIntentRequest.SubmitSignatures
-	(*SubmitIntentResponse_ServerParameters)(nil),              // 86: code.transaction.v2.SubmitIntentResponse.ServerParameters
-	(*SubmitIntentResponse_Success)(nil),                       // 87: code.transaction.v2.SubmitIntentResponse.Success
-	(*SubmitIntentResponse_Error)(nil),                         // 88: code.transaction.v2.SubmitIntentResponse.Error
-	nil,                                                        // 89: code.transaction.v2.GetLimitsResponse.SendLimitsByCurrencyEntry
-	nil,                                                        // 90: code.transaction.v2.GetLimitsResponse.MicroPaymentLimitsByCurrencyEntry
-	nil,                                                        // 91: code.transaction.v2.GetLimitsResponse.BuyModuleLimitsByCurrencyEntry
-	(*SwapRequest_Initiate)(nil),                               // 92: code.transaction.v2.SwapRequest.Initiate
-	(*SwapRequest_SubmitSignature)(nil),                        // 93: code.transaction.v2.SwapRequest.SubmitSignature
-	(*SwapResponse_ServerParameters)(nil),                      // 94: code.transaction.v2.SwapResponse.ServerParameters
-	(*SwapResponse_Success)(nil),                               // 95: code.transaction.v2.SwapResponse.Success
-	(*SwapResponse_Error)(nil),                                 // 96: code.transaction.v2.SwapResponse.Error
-	(*UpgradeableIntent_UpgradeablePrivateAction)(nil),         // 97: code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction
-	(*v1.IntentId)(nil),                                        // 98: code.common.v1.IntentId
-	(*v1.SolanaAccountId)(nil),                                 // 99: code.common.v1.SolanaAccountId
-	(*v1.Signature)(nil),                                       // 100: code.common.v1.Signature
-	(*timestamppb.Timestamp)(nil),                              // 101: google.protobuf.Timestamp
-	(*v1.UUID)(nil),                                            // 102: code.common.v1.UUID
-	(*v1.ChatId)(nil),                                          // 103: code.common.v1.ChatId
-	(*v1.Relationship)(nil),                                    // 104: code.common.v1.Relationship
-	(v1.AccountType)(0),                                        // 105: code.common.v1.AccountType
-	(*v1.Blockhash)(nil),                                       // 106: code.common.v1.Blockhash
-	(*v1.Hash)(nil),                                            // 107: code.common.v1.Hash
-	(*v1.Transaction)(nil),                                     // 108: code.common.v1.Transaction
-	(*v1.DeviceToken)(nil),                                     // 109: code.common.v1.DeviceToken
-	(*v1.InstructionAccount)(nil),                              // 110: code.common.v1.InstructionAccount
+	(FriendedUser_Platform)(0),                                 // 19: code.transaction.v2.FriendedUser.Platform
+	(*SubmitIntentRequest)(nil),                                // 20: code.transaction.v2.SubmitIntentRequest
+	(*SubmitIntentResponse)(nil),                               // 21: code.transaction.v2.SubmitIntentResponse
+	(*GetIntentMetadataRequest)(nil),                           // 22: code.transaction.v2.GetIntentMetadataRequest
+	(*GetIntentMetadataResponse)(nil),                          // 23: code.transaction.v2.GetIntentMetadataResponse
+	(*GetPrivacyUpgradeStatusRequest)(nil),                     // 24: code.transaction.v2.GetPrivacyUpgradeStatusRequest
+	(*GetPrivacyUpgradeStatusResponse)(nil),                    // 25: code.transaction.v2.GetPrivacyUpgradeStatusResponse
+	(*GetPrioritizedIntentsForPrivacyUpgradeRequest)(nil),      // 26: code.transaction.v2.GetPrioritizedIntentsForPrivacyUpgradeRequest
+	(*GetPrioritizedIntentsForPrivacyUpgradeResponse)(nil),     // 27: code.transaction.v2.GetPrioritizedIntentsForPrivacyUpgradeResponse
+	(*GetLimitsRequest)(nil),                                   // 28: code.transaction.v2.GetLimitsRequest
+	(*GetLimitsResponse)(nil),                                  // 29: code.transaction.v2.GetLimitsResponse
+	(*GetPaymentHistoryRequest)(nil),                           // 30: code.transaction.v2.GetPaymentHistoryRequest
+	(*GetPaymentHistoryResponse)(nil),                          // 31: code.transaction.v2.GetPaymentHistoryResponse
+	(*CanWithdrawToAccountRequest)(nil),                        // 32: code.transaction.v2.CanWithdrawToAccountRequest
+	(*CanWithdrawToAccountResponse)(nil),                       // 33: code.transaction.v2.CanWithdrawToAccountResponse
+	(*AirdropRequest)(nil),                                     // 34: code.transaction.v2.AirdropRequest
+	(*AirdropResponse)(nil),                                    // 35: code.transaction.v2.AirdropResponse
+	(*SwapRequest)(nil),                                        // 36: code.transaction.v2.SwapRequest
+	(*SwapResponse)(nil),                                       // 37: code.transaction.v2.SwapResponse
+	(*DeclareFiatOnrampPurchaseAttemptRequest)(nil),            // 38: code.transaction.v2.DeclareFiatOnrampPurchaseAttemptRequest
+	(*DeclareFiatOnrampPurchaseAttemptResponse)(nil),           // 39: code.transaction.v2.DeclareFiatOnrampPurchaseAttemptResponse
+	(*Metadata)(nil),                                           // 40: code.transaction.v2.Metadata
+	(*OpenAccountsMetadata)(nil),                               // 41: code.transaction.v2.OpenAccountsMetadata
+	(*SendPrivatePaymentMetadata)(nil),                         // 42: code.transaction.v2.SendPrivatePaymentMetadata
+	(*SendPublicPaymentMetadata)(nil),                          // 43: code.transaction.v2.SendPublicPaymentMetadata
+	(*ReceivePaymentsPrivatelyMetadata)(nil),                   // 44: code.transaction.v2.ReceivePaymentsPrivatelyMetadata
+	(*ReceivePaymentsPubliclyMetadata)(nil),                    // 45: code.transaction.v2.ReceivePaymentsPubliclyMetadata
+	(*UpgradePrivacyMetadata)(nil),                             // 46: code.transaction.v2.UpgradePrivacyMetadata
+	(*MigrateToPrivacy2022Metadata)(nil),                       // 47: code.transaction.v2.MigrateToPrivacy2022Metadata
+	(*EstablishRelationshipMetadata)(nil),                      // 48: code.transaction.v2.EstablishRelationshipMetadata
+	(*Action)(nil),                                             // 49: code.transaction.v2.Action
+	(*OpenAccountAction)(nil),                                  // 50: code.transaction.v2.OpenAccountAction
+	(*CloseEmptyAccountAction)(nil),                            // 51: code.transaction.v2.CloseEmptyAccountAction
+	(*CloseDormantAccountAction)(nil),                          // 52: code.transaction.v2.CloseDormantAccountAction
+	(*NoPrivacyTransferAction)(nil),                            // 53: code.transaction.v2.NoPrivacyTransferAction
+	(*NoPrivacyWithdrawAction)(nil),                            // 54: code.transaction.v2.NoPrivacyWithdrawAction
+	(*TemporaryPrivacyTransferAction)(nil),                     // 55: code.transaction.v2.TemporaryPrivacyTransferAction
+	(*TemporaryPrivacyExchangeAction)(nil),                     // 56: code.transaction.v2.TemporaryPrivacyExchangeAction
+	(*PermanentPrivacyUpgradeAction)(nil),                      // 57: code.transaction.v2.PermanentPrivacyUpgradeAction
+	(*FeePaymentAction)(nil),                                   // 58: code.transaction.v2.FeePaymentAction
+	(*ServerParameter)(nil),                                    // 59: code.transaction.v2.ServerParameter
+	(*NoncedTransactionMetadata)(nil),                          // 60: code.transaction.v2.NoncedTransactionMetadata
+	(*OpenAccountServerParameter)(nil),                         // 61: code.transaction.v2.OpenAccountServerParameter
+	(*CloseEmptyAccountServerParameter)(nil),                   // 62: code.transaction.v2.CloseEmptyAccountServerParameter
+	(*CloseDormantAccountServerParameter)(nil),                 // 63: code.transaction.v2.CloseDormantAccountServerParameter
+	(*NoPrivacyTransferServerParameter)(nil),                   // 64: code.transaction.v2.NoPrivacyTransferServerParameter
+	(*NoPrivacyWithdrawServerParameter)(nil),                   // 65: code.transaction.v2.NoPrivacyWithdrawServerParameter
+	(*TemporaryPrivacyTransferServerParameter)(nil),            // 66: code.transaction.v2.TemporaryPrivacyTransferServerParameter
+	(*TemporaryPrivacyExchangeServerParameter)(nil),            // 67: code.transaction.v2.TemporaryPrivacyExchangeServerParameter
+	(*PermanentPrivacyUpgradeServerParameter)(nil),             // 68: code.transaction.v2.PermanentPrivacyUpgradeServerParameter
+	(*FeePaymentServerParameter)(nil),                          // 69: code.transaction.v2.FeePaymentServerParameter
+	(*ErrorDetails)(nil),                                       // 70: code.transaction.v2.ErrorDetails
+	(*ReasonStringErrorDetails)(nil),                           // 71: code.transaction.v2.ReasonStringErrorDetails
+	(*InvalidSignatureErrorDetails)(nil),                       // 72: code.transaction.v2.InvalidSignatureErrorDetails
+	(*DeniedErrorDetails)(nil),                                 // 73: code.transaction.v2.DeniedErrorDetails
+	(*UpgradeableIntent)(nil),                                  // 74: code.transaction.v2.UpgradeableIntent
+	(*PaymentHistoryItem)(nil),                                 // 75: code.transaction.v2.PaymentHistoryItem
+	(*ExchangeData)(nil),                                       // 76: code.transaction.v2.ExchangeData
+	(*ExchangeDataWithoutRate)(nil),                            // 77: code.transaction.v2.ExchangeDataWithoutRate
+	(*AdditionalFeePayment)(nil),                               // 78: code.transaction.v2.AdditionalFeePayment
+	(*SendLimit)(nil),                                          // 79: code.transaction.v2.SendLimit
+	(*DepositLimit)(nil),                                       // 80: code.transaction.v2.DepositLimit
+	(*MicroPaymentLimit)(nil),                                  // 81: code.transaction.v2.MicroPaymentLimit
+	(*BuyModuleLimit)(nil),                                     // 82: code.transaction.v2.BuyModuleLimit
+	(*TippedUser)(nil),                                         // 83: code.transaction.v2.TippedUser
+	(*FriendedUser)(nil),                                       // 84: code.transaction.v2.FriendedUser
+	(*Cursor)(nil),                                             // 85: code.transaction.v2.Cursor
+	(*SubmitIntentRequest_SubmitActions)(nil),                  // 86: code.transaction.v2.SubmitIntentRequest.SubmitActions
+	(*SubmitIntentRequest_SubmitSignatures)(nil),               // 87: code.transaction.v2.SubmitIntentRequest.SubmitSignatures
+	(*SubmitIntentResponse_ServerParameters)(nil),              // 88: code.transaction.v2.SubmitIntentResponse.ServerParameters
+	(*SubmitIntentResponse_Success)(nil),                       // 89: code.transaction.v2.SubmitIntentResponse.Success
+	(*SubmitIntentResponse_Error)(nil),                         // 90: code.transaction.v2.SubmitIntentResponse.Error
+	nil,                                                        // 91: code.transaction.v2.GetLimitsResponse.SendLimitsByCurrencyEntry
+	nil,                                                        // 92: code.transaction.v2.GetLimitsResponse.MicroPaymentLimitsByCurrencyEntry
+	nil,                                                        // 93: code.transaction.v2.GetLimitsResponse.BuyModuleLimitsByCurrencyEntry
+	(*SwapRequest_Initiate)(nil),                               // 94: code.transaction.v2.SwapRequest.Initiate
+	(*SwapRequest_SubmitSignature)(nil),                        // 95: code.transaction.v2.SwapRequest.SubmitSignature
+	(*SwapResponse_ServerParameters)(nil),                      // 96: code.transaction.v2.SwapResponse.ServerParameters
+	(*SwapResponse_Success)(nil),                               // 97: code.transaction.v2.SwapResponse.Success
+	(*SwapResponse_Error)(nil),                                 // 98: code.transaction.v2.SwapResponse.Error
+	(*UpgradeableIntent_UpgradeablePrivateAction)(nil),         // 99: code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction
+	(*v1.IntentId)(nil),                                        // 100: code.common.v1.IntentId
+	(*v1.SolanaAccountId)(nil),                                 // 101: code.common.v1.SolanaAccountId
+	(*v1.Signature)(nil),                                       // 102: code.common.v1.Signature
+	(*timestamppb.Timestamp)(nil),                              // 103: google.protobuf.Timestamp
+	(*v1.UUID)(nil),                                            // 104: code.common.v1.UUID
+	(*v1.ChatId)(nil),                                          // 105: code.common.v1.ChatId
+	(*v1.Relationship)(nil),                                    // 106: code.common.v1.Relationship
+	(v1.AccountType)(0),                                        // 107: code.common.v1.AccountType
+	(*v1.Blockhash)(nil),                                       // 108: code.common.v1.Blockhash
+	(*v1.Hash)(nil),                                            // 109: code.common.v1.Hash
+	(*v1.Transaction)(nil),                                     // 110: code.common.v1.Transaction
+	(*v1.DeviceToken)(nil),                                     // 111: code.common.v1.DeviceToken
+	(*v1.InstructionAccount)(nil),                              // 112: code.common.v1.InstructionAccount
 }
 var file_transaction_v2_transaction_service_proto_depIdxs = []int32{
-	84,  // 0: code.transaction.v2.SubmitIntentRequest.submit_actions:type_name -> code.transaction.v2.SubmitIntentRequest.SubmitActions
-	85,  // 1: code.transaction.v2.SubmitIntentRequest.submit_signatures:type_name -> code.transaction.v2.SubmitIntentRequest.SubmitSignatures
-	86,  // 2: code.transaction.v2.SubmitIntentResponse.server_parameters:type_name -> code.transaction.v2.SubmitIntentResponse.ServerParameters
-	87,  // 3: code.transaction.v2.SubmitIntentResponse.success:type_name -> code.transaction.v2.SubmitIntentResponse.Success
-	88,  // 4: code.transaction.v2.SubmitIntentResponse.error:type_name -> code.transaction.v2.SubmitIntentResponse.Error
-	98,  // 5: code.transaction.v2.GetIntentMetadataRequest.intent_id:type_name -> code.common.v1.IntentId
-	99,  // 6: code.transaction.v2.GetIntentMetadataRequest.owner:type_name -> code.common.v1.SolanaAccountId
-	100, // 7: code.transaction.v2.GetIntentMetadataRequest.signature:type_name -> code.common.v1.Signature
+	86,  // 0: code.transaction.v2.SubmitIntentRequest.submit_actions:type_name -> code.transaction.v2.SubmitIntentRequest.SubmitActions
+	87,  // 1: code.transaction.v2.SubmitIntentRequest.submit_signatures:type_name -> code.transaction.v2.SubmitIntentRequest.SubmitSignatures
+	88,  // 2: code.transaction.v2.SubmitIntentResponse.server_parameters:type_name -> code.transaction.v2.SubmitIntentResponse.ServerParameters
+	89,  // 3: code.transaction.v2.SubmitIntentResponse.success:type_name -> code.transaction.v2.SubmitIntentResponse.Success
+	90,  // 4: code.transaction.v2.SubmitIntentResponse.error:type_name -> code.transaction.v2.SubmitIntentResponse.Error
+	100, // 5: code.transaction.v2.GetIntentMetadataRequest.intent_id:type_name -> code.common.v1.IntentId
+	101, // 6: code.transaction.v2.GetIntentMetadataRequest.owner:type_name -> code.common.v1.SolanaAccountId
+	102, // 7: code.transaction.v2.GetIntentMetadataRequest.signature:type_name -> code.common.v1.Signature
 	3,   // 8: code.transaction.v2.GetIntentMetadataResponse.result:type_name -> code.transaction.v2.GetIntentMetadataResponse.Result
-	39,  // 9: code.transaction.v2.GetIntentMetadataResponse.metadata:type_name -> code.transaction.v2.Metadata
-	98,  // 10: code.transaction.v2.GetPrivacyUpgradeStatusRequest.intent_id:type_name -> code.common.v1.IntentId
+	40,  // 9: code.transaction.v2.GetIntentMetadataResponse.metadata:type_name -> code.transaction.v2.Metadata
+	100, // 10: code.transaction.v2.GetPrivacyUpgradeStatusRequest.intent_id:type_name -> code.common.v1.IntentId
 	4,   // 11: code.transaction.v2.GetPrivacyUpgradeStatusResponse.result:type_name -> code.transaction.v2.GetPrivacyUpgradeStatusResponse.Result
 	5,   // 12: code.transaction.v2.GetPrivacyUpgradeStatusResponse.status:type_name -> code.transaction.v2.GetPrivacyUpgradeStatusResponse.Status
-	99,  // 13: code.transaction.v2.GetPrioritizedIntentsForPrivacyUpgradeRequest.owner:type_name -> code.common.v1.SolanaAccountId
-	100, // 14: code.transaction.v2.GetPrioritizedIntentsForPrivacyUpgradeRequest.signature:type_name -> code.common.v1.Signature
+	101, // 13: code.transaction.v2.GetPrioritizedIntentsForPrivacyUpgradeRequest.owner:type_name -> code.common.v1.SolanaAccountId
+	102, // 14: code.transaction.v2.GetPrioritizedIntentsForPrivacyUpgradeRequest.signature:type_name -> code.common.v1.Signature
 	6,   // 15: code.transaction.v2.GetPrioritizedIntentsForPrivacyUpgradeResponse.result:type_name -> code.transaction.v2.GetPrioritizedIntentsForPrivacyUpgradeResponse.Result
-	73,  // 16: code.transaction.v2.GetPrioritizedIntentsForPrivacyUpgradeResponse.items:type_name -> code.transaction.v2.UpgradeableIntent
-	99,  // 17: code.transaction.v2.GetLimitsRequest.owner:type_name -> code.common.v1.SolanaAccountId
-	100, // 18: code.transaction.v2.GetLimitsRequest.signature:type_name -> code.common.v1.Signature
-	101, // 19: code.transaction.v2.GetLimitsRequest.consumed_since:type_name -> google.protobuf.Timestamp
+	74,  // 16: code.transaction.v2.GetPrioritizedIntentsForPrivacyUpgradeResponse.items:type_name -> code.transaction.v2.UpgradeableIntent
+	101, // 17: code.transaction.v2.GetLimitsRequest.owner:type_name -> code.common.v1.SolanaAccountId
+	102, // 18: code.transaction.v2.GetLimitsRequest.signature:type_name -> code.common.v1.Signature
+	103, // 19: code.transaction.v2.GetLimitsRequest.consumed_since:type_name -> google.protobuf.Timestamp
 	7,   // 20: code.transaction.v2.GetLimitsResponse.result:type_name -> code.transaction.v2.GetLimitsResponse.Result
-	89,  // 21: code.transaction.v2.GetLimitsResponse.send_limits_by_currency:type_name -> code.transaction.v2.GetLimitsResponse.SendLimitsByCurrencyEntry
-	79,  // 22: code.transaction.v2.GetLimitsResponse.deposit_limit:type_name -> code.transaction.v2.DepositLimit
-	90,  // 23: code.transaction.v2.GetLimitsResponse.micro_payment_limits_by_currency:type_name -> code.transaction.v2.GetLimitsResponse.MicroPaymentLimitsByCurrencyEntry
-	91,  // 24: code.transaction.v2.GetLimitsResponse.buy_module_limits_by_currency:type_name -> code.transaction.v2.GetLimitsResponse.BuyModuleLimitsByCurrencyEntry
-	99,  // 25: code.transaction.v2.GetPaymentHistoryRequest.owner:type_name -> code.common.v1.SolanaAccountId
-	83,  // 26: code.transaction.v2.GetPaymentHistoryRequest.cursor:type_name -> code.transaction.v2.Cursor
+	91,  // 21: code.transaction.v2.GetLimitsResponse.send_limits_by_currency:type_name -> code.transaction.v2.GetLimitsResponse.SendLimitsByCurrencyEntry
+	80,  // 22: code.transaction.v2.GetLimitsResponse.deposit_limit:type_name -> code.transaction.v2.DepositLimit
+	92,  // 23: code.transaction.v2.GetLimitsResponse.micro_payment_limits_by_currency:type_name -> code.transaction.v2.GetLimitsResponse.MicroPaymentLimitsByCurrencyEntry
+	93,  // 24: code.transaction.v2.GetLimitsResponse.buy_module_limits_by_currency:type_name -> code.transaction.v2.GetLimitsResponse.BuyModuleLimitsByCurrencyEntry
+	101, // 25: code.transaction.v2.GetPaymentHistoryRequest.owner:type_name -> code.common.v1.SolanaAccountId
+	85,  // 26: code.transaction.v2.GetPaymentHistoryRequest.cursor:type_name -> code.transaction.v2.Cursor
 	8,   // 27: code.transaction.v2.GetPaymentHistoryRequest.direction:type_name -> code.transaction.v2.GetPaymentHistoryRequest.Direction
-	100, // 28: code.transaction.v2.GetPaymentHistoryRequest.signature:type_name -> code.common.v1.Signature
+	102, // 28: code.transaction.v2.GetPaymentHistoryRequest.signature:type_name -> code.common.v1.Signature
 	9,   // 29: code.transaction.v2.GetPaymentHistoryResponse.result:type_name -> code.transaction.v2.GetPaymentHistoryResponse.Result
-	74,  // 30: code.transaction.v2.GetPaymentHistoryResponse.items:type_name -> code.transaction.v2.PaymentHistoryItem
-	99,  // 31: code.transaction.v2.CanWithdrawToAccountRequest.account:type_name -> code.common.v1.SolanaAccountId
+	75,  // 30: code.transaction.v2.GetPaymentHistoryResponse.items:type_name -> code.transaction.v2.PaymentHistoryItem
+	101, // 31: code.transaction.v2.CanWithdrawToAccountRequest.account:type_name -> code.common.v1.SolanaAccountId
 	10,  // 32: code.transaction.v2.CanWithdrawToAccountResponse.account_type:type_name -> code.transaction.v2.CanWithdrawToAccountResponse.AccountType
 	0,   // 33: code.transaction.v2.AirdropRequest.airdrop_type:type_name -> code.transaction.v2.AirdropType
-	99,  // 34: code.transaction.v2.AirdropRequest.owner:type_name -> code.common.v1.SolanaAccountId
-	100, // 35: code.transaction.v2.AirdropRequest.signature:type_name -> code.common.v1.Signature
+	101, // 34: code.transaction.v2.AirdropRequest.owner:type_name -> code.common.v1.SolanaAccountId
+	102, // 35: code.transaction.v2.AirdropRequest.signature:type_name -> code.common.v1.Signature
 	11,  // 36: code.transaction.v2.AirdropResponse.result:type_name -> code.transaction.v2.AirdropResponse.Result
-	75,  // 37: code.transaction.v2.AirdropResponse.exchange_data:type_name -> code.transaction.v2.ExchangeData
-	92,  // 38: code.transaction.v2.SwapRequest.initiate:type_name -> code.transaction.v2.SwapRequest.Initiate
-	93,  // 39: code.transaction.v2.SwapRequest.submit_signature:type_name -> code.transaction.v2.SwapRequest.SubmitSignature
-	94,  // 40: code.transaction.v2.SwapResponse.server_parameters:type_name -> code.transaction.v2.SwapResponse.ServerParameters
-	95,  // 41: code.transaction.v2.SwapResponse.success:type_name -> code.transaction.v2.SwapResponse.Success
-	96,  // 42: code.transaction.v2.SwapResponse.error:type_name -> code.transaction.v2.SwapResponse.Error
-	99,  // 43: code.transaction.v2.DeclareFiatOnrampPurchaseAttemptRequest.owner:type_name -> code.common.v1.SolanaAccountId
-	76,  // 44: code.transaction.v2.DeclareFiatOnrampPurchaseAttemptRequest.purchase_amount:type_name -> code.transaction.v2.ExchangeDataWithoutRate
-	102, // 45: code.transaction.v2.DeclareFiatOnrampPurchaseAttemptRequest.nonce:type_name -> code.common.v1.UUID
-	100, // 46: code.transaction.v2.DeclareFiatOnrampPurchaseAttemptRequest.signature:type_name -> code.common.v1.Signature
+	76,  // 37: code.transaction.v2.AirdropResponse.exchange_data:type_name -> code.transaction.v2.ExchangeData
+	94,  // 38: code.transaction.v2.SwapRequest.initiate:type_name -> code.transaction.v2.SwapRequest.Initiate
+	95,  // 39: code.transaction.v2.SwapRequest.submit_signature:type_name -> code.transaction.v2.SwapRequest.SubmitSignature
+	96,  // 40: code.transaction.v2.SwapResponse.server_parameters:type_name -> code.transaction.v2.SwapResponse.ServerParameters
+	97,  // 41: code.transaction.v2.SwapResponse.success:type_name -> code.transaction.v2.SwapResponse.Success
+	98,  // 42: code.transaction.v2.SwapResponse.error:type_name -> code.transaction.v2.SwapResponse.Error
+	101, // 43: code.transaction.v2.DeclareFiatOnrampPurchaseAttemptRequest.owner:type_name -> code.common.v1.SolanaAccountId
+	77,  // 44: code.transaction.v2.DeclareFiatOnrampPurchaseAttemptRequest.purchase_amount:type_name -> code.transaction.v2.ExchangeDataWithoutRate
+	104, // 45: code.transaction.v2.DeclareFiatOnrampPurchaseAttemptRequest.nonce:type_name -> code.common.v1.UUID
+	102, // 46: code.transaction.v2.DeclareFiatOnrampPurchaseAttemptRequest.signature:type_name -> code.common.v1.Signature
 	14,  // 47: code.transaction.v2.DeclareFiatOnrampPurchaseAttemptResponse.result:type_name -> code.transaction.v2.DeclareFiatOnrampPurchaseAttemptResponse.Result
-	40,  // 48: code.transaction.v2.Metadata.open_accounts:type_name -> code.transaction.v2.OpenAccountsMetadata
-	41,  // 49: code.transaction.v2.Metadata.send_private_payment:type_name -> code.transaction.v2.SendPrivatePaymentMetadata
-	43,  // 50: code.transaction.v2.Metadata.receive_payments_privately:type_name -> code.transaction.v2.ReceivePaymentsPrivatelyMetadata
-	45,  // 51: code.transaction.v2.Metadata.upgrade_privacy:type_name -> code.transaction.v2.UpgradePrivacyMetadata
-	46,  // 52: code.transaction.v2.Metadata.migrate_to_privacy_2022:type_name -> code.transaction.v2.MigrateToPrivacy2022Metadata
-	42,  // 53: code.transaction.v2.Metadata.send_public_payment:type_name -> code.transaction.v2.SendPublicPaymentMetadata
-	44,  // 54: code.transaction.v2.Metadata.receive_payments_publicly:type_name -> code.transaction.v2.ReceivePaymentsPubliclyMetadata
-	47,  // 55: code.transaction.v2.Metadata.establish_relationship:type_name -> code.transaction.v2.EstablishRelationshipMetadata
-	99,  // 56: code.transaction.v2.SendPrivatePaymentMetadata.destination:type_name -> code.common.v1.SolanaAccountId
-	75,  // 57: code.transaction.v2.SendPrivatePaymentMetadata.exchange_data:type_name -> code.transaction.v2.ExchangeData
-	82,  // 58: code.transaction.v2.SendPrivatePaymentMetadata.tipped_user:type_name -> code.transaction.v2.TippedUser
-	103, // 59: code.transaction.v2.SendPrivatePaymentMetadata.chat_id:type_name -> code.common.v1.ChatId
-	99,  // 60: code.transaction.v2.SendPublicPaymentMetadata.source:type_name -> code.common.v1.SolanaAccountId
-	99,  // 61: code.transaction.v2.SendPublicPaymentMetadata.destination:type_name -> code.common.v1.SolanaAccountId
-	75,  // 62: code.transaction.v2.SendPublicPaymentMetadata.exchange_data:type_name -> code.transaction.v2.ExchangeData
-	99,  // 63: code.transaction.v2.ReceivePaymentsPrivatelyMetadata.source:type_name -> code.common.v1.SolanaAccountId
-	99,  // 64: code.transaction.v2.ReceivePaymentsPubliclyMetadata.source:type_name -> code.common.v1.SolanaAccountId
-	75,  // 65: code.transaction.v2.ReceivePaymentsPubliclyMetadata.exchange_data:type_name -> code.transaction.v2.ExchangeData
-	104, // 66: code.transaction.v2.EstablishRelationshipMetadata.relationship:type_name -> code.common.v1.Relationship
-	49,  // 67: code.transaction.v2.Action.open_account:type_name -> code.transaction.v2.OpenAccountAction
-	50,  // 68: code.transaction.v2.Action.close_empty_account:type_name -> code.transaction.v2.CloseEmptyAccountAction
-	51,  // 69: code.transaction.v2.Action.close_dormant_account:type_name -> code.transaction.v2.CloseDormantAccountAction
-	52,  // 70: code.transaction.v2.Action.no_privacy_transfer:type_name -> code.transaction.v2.NoPrivacyTransferAction
-	53,  // 71: code.transaction.v2.Action.no_privacy_withdraw:type_name -> code.transaction.v2.NoPrivacyWithdrawAction
-	54,  // 72: code.transaction.v2.Action.temporary_privacy_transfer:type_name -> code.transaction.v2.TemporaryPrivacyTransferAction
-	55,  // 73: code.transaction.v2.Action.temporary_privacy_exchange:type_name -> code.transaction.v2.TemporaryPrivacyExchangeAction
-	56,  // 74: code.transaction.v2.Action.permanent_privacy_upgrade:type_name -> code.transaction.v2.PermanentPrivacyUpgradeAction
-	57,  // 75: code.transaction.v2.Action.fee_payment:type_name -> code.transaction.v2.FeePaymentAction
-	105, // 76: code.transaction.v2.OpenAccountAction.account_type:type_name -> code.common.v1.AccountType
-	99,  // 77: code.transaction.v2.OpenAccountAction.owner:type_name -> code.common.v1.SolanaAccountId
-	99,  // 78: code.transaction.v2.OpenAccountAction.authority:type_name -> code.common.v1.SolanaAccountId
-	99,  // 79: code.transaction.v2.OpenAccountAction.token:type_name -> code.common.v1.SolanaAccountId
-	100, // 80: code.transaction.v2.OpenAccountAction.authority_signature:type_name -> code.common.v1.Signature
-	105, // 81: code.transaction.v2.CloseEmptyAccountAction.account_type:type_name -> code.common.v1.AccountType
-	99,  // 82: code.transaction.v2.CloseEmptyAccountAction.authority:type_name -> code.common.v1.SolanaAccountId
-	99,  // 83: code.transaction.v2.CloseEmptyAccountAction.token:type_name -> code.common.v1.SolanaAccountId
-	105, // 84: code.transaction.v2.CloseDormantAccountAction.account_type:type_name -> code.common.v1.AccountType
-	99,  // 85: code.transaction.v2.CloseDormantAccountAction.authority:type_name -> code.common.v1.SolanaAccountId
-	99,  // 86: code.transaction.v2.CloseDormantAccountAction.token:type_name -> code.common.v1.SolanaAccountId
-	99,  // 87: code.transaction.v2.CloseDormantAccountAction.destination:type_name -> code.common.v1.SolanaAccountId
-	99,  // 88: code.transaction.v2.NoPrivacyTransferAction.authority:type_name -> code.common.v1.SolanaAccountId
-	99,  // 89: code.transaction.v2.NoPrivacyTransferAction.source:type_name -> code.common.v1.SolanaAccountId
-	99,  // 90: code.transaction.v2.NoPrivacyTransferAction.destination:type_name -> code.common.v1.SolanaAccountId
-	99,  // 91: code.transaction.v2.NoPrivacyWithdrawAction.authority:type_name -> code.common.v1.SolanaAccountId
-	99,  // 92: code.transaction.v2.NoPrivacyWithdrawAction.source:type_name -> code.common.v1.SolanaAccountId
-	99,  // 93: code.transaction.v2.NoPrivacyWithdrawAction.destination:type_name -> code.common.v1.SolanaAccountId
-	99,  // 94: code.transaction.v2.TemporaryPrivacyTransferAction.authority:type_name -> code.common.v1.SolanaAccountId
-	99,  // 95: code.transaction.v2.TemporaryPrivacyTransferAction.source:type_name -> code.common.v1.SolanaAccountId
-	99,  // 96: code.transaction.v2.TemporaryPrivacyTransferAction.destination:type_name -> code.common.v1.SolanaAccountId
-	99,  // 97: code.transaction.v2.TemporaryPrivacyExchangeAction.authority:type_name -> code.common.v1.SolanaAccountId
-	99,  // 98: code.transaction.v2.TemporaryPrivacyExchangeAction.source:type_name -> code.common.v1.SolanaAccountId
-	99,  // 99: code.transaction.v2.TemporaryPrivacyExchangeAction.destination:type_name -> code.common.v1.SolanaAccountId
+	41,  // 48: code.transaction.v2.Metadata.open_accounts:type_name -> code.transaction.v2.OpenAccountsMetadata
+	42,  // 49: code.transaction.v2.Metadata.send_private_payment:type_name -> code.transaction.v2.SendPrivatePaymentMetadata
+	44,  // 50: code.transaction.v2.Metadata.receive_payments_privately:type_name -> code.transaction.v2.ReceivePaymentsPrivatelyMetadata
+	46,  // 51: code.transaction.v2.Metadata.upgrade_privacy:type_name -> code.transaction.v2.UpgradePrivacyMetadata
+	47,  // 52: code.transaction.v2.Metadata.migrate_to_privacy_2022:type_name -> code.transaction.v2.MigrateToPrivacy2022Metadata
+	43,  // 53: code.transaction.v2.Metadata.send_public_payment:type_name -> code.transaction.v2.SendPublicPaymentMetadata
+	45,  // 54: code.transaction.v2.Metadata.receive_payments_publicly:type_name -> code.transaction.v2.ReceivePaymentsPubliclyMetadata
+	48,  // 55: code.transaction.v2.Metadata.establish_relationship:type_name -> code.transaction.v2.EstablishRelationshipMetadata
+	101, // 56: code.transaction.v2.SendPrivatePaymentMetadata.destination:type_name -> code.common.v1.SolanaAccountId
+	76,  // 57: code.transaction.v2.SendPrivatePaymentMetadata.exchange_data:type_name -> code.transaction.v2.ExchangeData
+	83,  // 58: code.transaction.v2.SendPrivatePaymentMetadata.tipped_user:type_name -> code.transaction.v2.TippedUser
+	105, // 59: code.transaction.v2.SendPrivatePaymentMetadata.chat_id:type_name -> code.common.v1.ChatId
+	101, // 60: code.transaction.v2.SendPublicPaymentMetadata.source:type_name -> code.common.v1.SolanaAccountId
+	101, // 61: code.transaction.v2.SendPublicPaymentMetadata.destination:type_name -> code.common.v1.SolanaAccountId
+	76,  // 62: code.transaction.v2.SendPublicPaymentMetadata.exchange_data:type_name -> code.transaction.v2.ExchangeData
+	101, // 63: code.transaction.v2.ReceivePaymentsPrivatelyMetadata.source:type_name -> code.common.v1.SolanaAccountId
+	101, // 64: code.transaction.v2.ReceivePaymentsPubliclyMetadata.source:type_name -> code.common.v1.SolanaAccountId
+	76,  // 65: code.transaction.v2.ReceivePaymentsPubliclyMetadata.exchange_data:type_name -> code.transaction.v2.ExchangeData
+	106, // 66: code.transaction.v2.EstablishRelationshipMetadata.relationship:type_name -> code.common.v1.Relationship
+	50,  // 67: code.transaction.v2.Action.open_account:type_name -> code.transaction.v2.OpenAccountAction
+	51,  // 68: code.transaction.v2.Action.close_empty_account:type_name -> code.transaction.v2.CloseEmptyAccountAction
+	52,  // 69: code.transaction.v2.Action.close_dormant_account:type_name -> code.transaction.v2.CloseDormantAccountAction
+	53,  // 70: code.transaction.v2.Action.no_privacy_transfer:type_name -> code.transaction.v2.NoPrivacyTransferAction
+	54,  // 71: code.transaction.v2.Action.no_privacy_withdraw:type_name -> code.transaction.v2.NoPrivacyWithdrawAction
+	55,  // 72: code.transaction.v2.Action.temporary_privacy_transfer:type_name -> code.transaction.v2.TemporaryPrivacyTransferAction
+	56,  // 73: code.transaction.v2.Action.temporary_privacy_exchange:type_name -> code.transaction.v2.TemporaryPrivacyExchangeAction
+	57,  // 74: code.transaction.v2.Action.permanent_privacy_upgrade:type_name -> code.transaction.v2.PermanentPrivacyUpgradeAction
+	58,  // 75: code.transaction.v2.Action.fee_payment:type_name -> code.transaction.v2.FeePaymentAction
+	107, // 76: code.transaction.v2.OpenAccountAction.account_type:type_name -> code.common.v1.AccountType
+	101, // 77: code.transaction.v2.OpenAccountAction.owner:type_name -> code.common.v1.SolanaAccountId
+	101, // 78: code.transaction.v2.OpenAccountAction.authority:type_name -> code.common.v1.SolanaAccountId
+	101, // 79: code.transaction.v2.OpenAccountAction.token:type_name -> code.common.v1.SolanaAccountId
+	102, // 80: code.transaction.v2.OpenAccountAction.authority_signature:type_name -> code.common.v1.Signature
+	107, // 81: code.transaction.v2.CloseEmptyAccountAction.account_type:type_name -> code.common.v1.AccountType
+	101, // 82: code.transaction.v2.CloseEmptyAccountAction.authority:type_name -> code.common.v1.SolanaAccountId
+	101, // 83: code.transaction.v2.CloseEmptyAccountAction.token:type_name -> code.common.v1.SolanaAccountId
+	107, // 84: code.transaction.v2.CloseDormantAccountAction.account_type:type_name -> code.common.v1.AccountType
+	101, // 85: code.transaction.v2.CloseDormantAccountAction.authority:type_name -> code.common.v1.SolanaAccountId
+	101, // 86: code.transaction.v2.CloseDormantAccountAction.token:type_name -> code.common.v1.SolanaAccountId
+	101, // 87: code.transaction.v2.CloseDormantAccountAction.destination:type_name -> code.common.v1.SolanaAccountId
+	101, // 88: code.transaction.v2.NoPrivacyTransferAction.authority:type_name -> code.common.v1.SolanaAccountId
+	101, // 89: code.transaction.v2.NoPrivacyTransferAction.source:type_name -> code.common.v1.SolanaAccountId
+	101, // 90: code.transaction.v2.NoPrivacyTransferAction.destination:type_name -> code.common.v1.SolanaAccountId
+	101, // 91: code.transaction.v2.NoPrivacyWithdrawAction.authority:type_name -> code.common.v1.SolanaAccountId
+	101, // 92: code.transaction.v2.NoPrivacyWithdrawAction.source:type_name -> code.common.v1.SolanaAccountId
+	101, // 93: code.transaction.v2.NoPrivacyWithdrawAction.destination:type_name -> code.common.v1.SolanaAccountId
+	101, // 94: code.transaction.v2.TemporaryPrivacyTransferAction.authority:type_name -> code.common.v1.SolanaAccountId
+	101, // 95: code.transaction.v2.TemporaryPrivacyTransferAction.source:type_name -> code.common.v1.SolanaAccountId
+	101, // 96: code.transaction.v2.TemporaryPrivacyTransferAction.destination:type_name -> code.common.v1.SolanaAccountId
+	101, // 97: code.transaction.v2.TemporaryPrivacyExchangeAction.authority:type_name -> code.common.v1.SolanaAccountId
+	101, // 98: code.transaction.v2.TemporaryPrivacyExchangeAction.source:type_name -> code.common.v1.SolanaAccountId
+	101, // 99: code.transaction.v2.TemporaryPrivacyExchangeAction.destination:type_name -> code.common.v1.SolanaAccountId
 	15,  // 100: code.transaction.v2.FeePaymentAction.type:type_name -> code.transaction.v2.FeePaymentAction.FeeType
-	99,  // 101: code.transaction.v2.FeePaymentAction.authority:type_name -> code.common.v1.SolanaAccountId
-	99,  // 102: code.transaction.v2.FeePaymentAction.source:type_name -> code.common.v1.SolanaAccountId
-	99,  // 103: code.transaction.v2.FeePaymentAction.destination:type_name -> code.common.v1.SolanaAccountId
-	59,  // 104: code.transaction.v2.ServerParameter.nonces:type_name -> code.transaction.v2.NoncedTransactionMetadata
-	60,  // 105: code.transaction.v2.ServerParameter.open_account:type_name -> code.transaction.v2.OpenAccountServerParameter
-	61,  // 106: code.transaction.v2.ServerParameter.close_empty_account:type_name -> code.transaction.v2.CloseEmptyAccountServerParameter
-	62,  // 107: code.transaction.v2.ServerParameter.close_dormant_account:type_name -> code.transaction.v2.CloseDormantAccountServerParameter
-	63,  // 108: code.transaction.v2.ServerParameter.no_privacy_transfer:type_name -> code.transaction.v2.NoPrivacyTransferServerParameter
-	64,  // 109: code.transaction.v2.ServerParameter.no_privacy_withdraw:type_name -> code.transaction.v2.NoPrivacyWithdrawServerParameter
-	65,  // 110: code.transaction.v2.ServerParameter.temporary_privacy_transfer:type_name -> code.transaction.v2.TemporaryPrivacyTransferServerParameter
-	66,  // 111: code.transaction.v2.ServerParameter.temporary_privacy_exchange:type_name -> code.transaction.v2.TemporaryPrivacyExchangeServerParameter
-	67,  // 112: code.transaction.v2.ServerParameter.permanent_privacy_upgrade:type_name -> code.transaction.v2.PermanentPrivacyUpgradeServerParameter
-	68,  // 113: code.transaction.v2.ServerParameter.fee_payment:type_name -> code.transaction.v2.FeePaymentServerParameter
-	99,  // 114: code.transaction.v2.NoncedTransactionMetadata.nonce:type_name -> code.common.v1.SolanaAccountId
-	106, // 115: code.transaction.v2.NoncedTransactionMetadata.blockhash:type_name -> code.common.v1.Blockhash
-	99,  // 116: code.transaction.v2.TemporaryPrivacyTransferServerParameter.treasury:type_name -> code.common.v1.SolanaAccountId
-	107, // 117: code.transaction.v2.TemporaryPrivacyTransferServerParameter.recent_root:type_name -> code.common.v1.Hash
-	99,  // 118: code.transaction.v2.TemporaryPrivacyExchangeServerParameter.treasury:type_name -> code.common.v1.SolanaAccountId
-	107, // 119: code.transaction.v2.TemporaryPrivacyExchangeServerParameter.recent_root:type_name -> code.common.v1.Hash
-	99,  // 120: code.transaction.v2.PermanentPrivacyUpgradeServerParameter.new_commitment:type_name -> code.common.v1.SolanaAccountId
-	107, // 121: code.transaction.v2.PermanentPrivacyUpgradeServerParameter.new_commitment_transcript:type_name -> code.common.v1.Hash
-	99,  // 122: code.transaction.v2.PermanentPrivacyUpgradeServerParameter.new_commitment_destination:type_name -> code.common.v1.SolanaAccountId
-	107, // 123: code.transaction.v2.PermanentPrivacyUpgradeServerParameter.merkle_root:type_name -> code.common.v1.Hash
-	107, // 124: code.transaction.v2.PermanentPrivacyUpgradeServerParameter.merkle_proof:type_name -> code.common.v1.Hash
-	99,  // 125: code.transaction.v2.FeePaymentServerParameter.code_destination:type_name -> code.common.v1.SolanaAccountId
-	70,  // 126: code.transaction.v2.ErrorDetails.reason_string:type_name -> code.transaction.v2.ReasonStringErrorDetails
-	71,  // 127: code.transaction.v2.ErrorDetails.invalid_signature:type_name -> code.transaction.v2.InvalidSignatureErrorDetails
-	72,  // 128: code.transaction.v2.ErrorDetails.denied:type_name -> code.transaction.v2.DeniedErrorDetails
-	108, // 129: code.transaction.v2.InvalidSignatureErrorDetails.expected_transaction:type_name -> code.common.v1.Transaction
-	100, // 130: code.transaction.v2.InvalidSignatureErrorDetails.provided_signature:type_name -> code.common.v1.Signature
+	101, // 101: code.transaction.v2.FeePaymentAction.authority:type_name -> code.common.v1.SolanaAccountId
+	101, // 102: code.transaction.v2.FeePaymentAction.source:type_name -> code.common.v1.SolanaAccountId
+	101, // 103: code.transaction.v2.FeePaymentAction.destination:type_name -> code.common.v1.SolanaAccountId
+	60,  // 104: code.transaction.v2.ServerParameter.nonces:type_name -> code.transaction.v2.NoncedTransactionMetadata
+	61,  // 105: code.transaction.v2.ServerParameter.open_account:type_name -> code.transaction.v2.OpenAccountServerParameter
+	62,  // 106: code.transaction.v2.ServerParameter.close_empty_account:type_name -> code.transaction.v2.CloseEmptyAccountServerParameter
+	63,  // 107: code.transaction.v2.ServerParameter.close_dormant_account:type_name -> code.transaction.v2.CloseDormantAccountServerParameter
+	64,  // 108: code.transaction.v2.ServerParameter.no_privacy_transfer:type_name -> code.transaction.v2.NoPrivacyTransferServerParameter
+	65,  // 109: code.transaction.v2.ServerParameter.no_privacy_withdraw:type_name -> code.transaction.v2.NoPrivacyWithdrawServerParameter
+	66,  // 110: code.transaction.v2.ServerParameter.temporary_privacy_transfer:type_name -> code.transaction.v2.TemporaryPrivacyTransferServerParameter
+	67,  // 111: code.transaction.v2.ServerParameter.temporary_privacy_exchange:type_name -> code.transaction.v2.TemporaryPrivacyExchangeServerParameter
+	68,  // 112: code.transaction.v2.ServerParameter.permanent_privacy_upgrade:type_name -> code.transaction.v2.PermanentPrivacyUpgradeServerParameter
+	69,  // 113: code.transaction.v2.ServerParameter.fee_payment:type_name -> code.transaction.v2.FeePaymentServerParameter
+	101, // 114: code.transaction.v2.NoncedTransactionMetadata.nonce:type_name -> code.common.v1.SolanaAccountId
+	108, // 115: code.transaction.v2.NoncedTransactionMetadata.blockhash:type_name -> code.common.v1.Blockhash
+	101, // 116: code.transaction.v2.TemporaryPrivacyTransferServerParameter.treasury:type_name -> code.common.v1.SolanaAccountId
+	109, // 117: code.transaction.v2.TemporaryPrivacyTransferServerParameter.recent_root:type_name -> code.common.v1.Hash
+	101, // 118: code.transaction.v2.TemporaryPrivacyExchangeServerParameter.treasury:type_name -> code.common.v1.SolanaAccountId
+	109, // 119: code.transaction.v2.TemporaryPrivacyExchangeServerParameter.recent_root:type_name -> code.common.v1.Hash
+	101, // 120: code.transaction.v2.PermanentPrivacyUpgradeServerParameter.new_commitment:type_name -> code.common.v1.SolanaAccountId
+	109, // 121: code.transaction.v2.PermanentPrivacyUpgradeServerParameter.new_commitment_transcript:type_name -> code.common.v1.Hash
+	101, // 122: code.transaction.v2.PermanentPrivacyUpgradeServerParameter.new_commitment_destination:type_name -> code.common.v1.SolanaAccountId
+	109, // 123: code.transaction.v2.PermanentPrivacyUpgradeServerParameter.merkle_root:type_name -> code.common.v1.Hash
+	109, // 124: code.transaction.v2.PermanentPrivacyUpgradeServerParameter.merkle_proof:type_name -> code.common.v1.Hash
+	101, // 125: code.transaction.v2.FeePaymentServerParameter.code_destination:type_name -> code.common.v1.SolanaAccountId
+	71,  // 126: code.transaction.v2.ErrorDetails.reason_string:type_name -> code.transaction.v2.ReasonStringErrorDetails
+	72,  // 127: code.transaction.v2.ErrorDetails.invalid_signature:type_name -> code.transaction.v2.InvalidSignatureErrorDetails
+	73,  // 128: code.transaction.v2.ErrorDetails.denied:type_name -> code.transaction.v2.DeniedErrorDetails
+	110, // 129: code.transaction.v2.InvalidSignatureErrorDetails.expected_transaction:type_name -> code.common.v1.Transaction
+	102, // 130: code.transaction.v2.InvalidSignatureErrorDetails.provided_signature:type_name -> code.common.v1.Signature
 	16,  // 131: code.transaction.v2.DeniedErrorDetails.code:type_name -> code.transaction.v2.DeniedErrorDetails.Code
-	98,  // 132: code.transaction.v2.UpgradeableIntent.id:type_name -> code.common.v1.IntentId
-	97,  // 133: code.transaction.v2.UpgradeableIntent.actions:type_name -> code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction
-	83,  // 134: code.transaction.v2.PaymentHistoryItem.cursor:type_name -> code.transaction.v2.Cursor
-	75,  // 135: code.transaction.v2.PaymentHistoryItem.exchange_data:type_name -> code.transaction.v2.ExchangeData
+	100, // 132: code.transaction.v2.UpgradeableIntent.id:type_name -> code.common.v1.IntentId
+	99,  // 133: code.transaction.v2.UpgradeableIntent.actions:type_name -> code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction
+	85,  // 134: code.transaction.v2.PaymentHistoryItem.cursor:type_name -> code.transaction.v2.Cursor
+	76,  // 135: code.transaction.v2.PaymentHistoryItem.exchange_data:type_name -> code.transaction.v2.ExchangeData
 	17,  // 136: code.transaction.v2.PaymentHistoryItem.payment_type:type_name -> code.transaction.v2.PaymentHistoryItem.PaymentType
-	101, // 137: code.transaction.v2.PaymentHistoryItem.timestamp:type_name -> google.protobuf.Timestamp
+	103, // 137: code.transaction.v2.PaymentHistoryItem.timestamp:type_name -> google.protobuf.Timestamp
 	0,   // 138: code.transaction.v2.PaymentHistoryItem.airdrop_type:type_name -> code.transaction.v2.AirdropType
-	98,  // 139: code.transaction.v2.PaymentHistoryItem.intent_id:type_name -> code.common.v1.IntentId
-	99,  // 140: code.transaction.v2.AdditionalFeePayment.destination:type_name -> code.common.v1.SolanaAccountId
+	100, // 139: code.transaction.v2.PaymentHistoryItem.intent_id:type_name -> code.common.v1.IntentId
+	101, // 140: code.transaction.v2.AdditionalFeePayment.destination:type_name -> code.common.v1.SolanaAccountId
 	18,  // 141: code.transaction.v2.TippedUser.platform:type_name -> code.transaction.v2.TippedUser.Platform
-	98,  // 142: code.transaction.v2.SubmitIntentRequest.SubmitActions.id:type_name -> code.common.v1.IntentId
-	99,  // 143: code.transaction.v2.SubmitIntentRequest.SubmitActions.owner:type_name -> code.common.v1.SolanaAccountId
-	39,  // 144: code.transaction.v2.SubmitIntentRequest.SubmitActions.metadata:type_name -> code.transaction.v2.Metadata
-	48,  // 145: code.transaction.v2.SubmitIntentRequest.SubmitActions.actions:type_name -> code.transaction.v2.Action
-	100, // 146: code.transaction.v2.SubmitIntentRequest.SubmitActions.signature:type_name -> code.common.v1.Signature
-	109, // 147: code.transaction.v2.SubmitIntentRequest.SubmitActions.device_token:type_name -> code.common.v1.DeviceToken
-	100, // 148: code.transaction.v2.SubmitIntentRequest.SubmitSignatures.signatures:type_name -> code.common.v1.Signature
-	58,  // 149: code.transaction.v2.SubmitIntentResponse.ServerParameters.server_parameters:type_name -> code.transaction.v2.ServerParameter
-	1,   // 150: code.transaction.v2.SubmitIntentResponse.Success.code:type_name -> code.transaction.v2.SubmitIntentResponse.Success.Code
-	2,   // 151: code.transaction.v2.SubmitIntentResponse.Error.code:type_name -> code.transaction.v2.SubmitIntentResponse.Error.Code
-	69,  // 152: code.transaction.v2.SubmitIntentResponse.Error.error_details:type_name -> code.transaction.v2.ErrorDetails
-	78,  // 153: code.transaction.v2.GetLimitsResponse.SendLimitsByCurrencyEntry.value:type_name -> code.transaction.v2.SendLimit
-	80,  // 154: code.transaction.v2.GetLimitsResponse.MicroPaymentLimitsByCurrencyEntry.value:type_name -> code.transaction.v2.MicroPaymentLimit
-	81,  // 155: code.transaction.v2.GetLimitsResponse.BuyModuleLimitsByCurrencyEntry.value:type_name -> code.transaction.v2.BuyModuleLimit
-	99,  // 156: code.transaction.v2.SwapRequest.Initiate.owner:type_name -> code.common.v1.SolanaAccountId
-	99,  // 157: code.transaction.v2.SwapRequest.Initiate.swap_authority:type_name -> code.common.v1.SolanaAccountId
-	100, // 158: code.transaction.v2.SwapRequest.Initiate.signature:type_name -> code.common.v1.Signature
-	100, // 159: code.transaction.v2.SwapRequest.SubmitSignature.signature:type_name -> code.common.v1.Signature
-	99,  // 160: code.transaction.v2.SwapResponse.ServerParameters.payer:type_name -> code.common.v1.SolanaAccountId
-	106, // 161: code.transaction.v2.SwapResponse.ServerParameters.recent_blockhash:type_name -> code.common.v1.Blockhash
-	99,  // 162: code.transaction.v2.SwapResponse.ServerParameters.swap_program:type_name -> code.common.v1.SolanaAccountId
-	110, // 163: code.transaction.v2.SwapResponse.ServerParameters.swap_ixn_accounts:type_name -> code.common.v1.InstructionAccount
-	99,  // 164: code.transaction.v2.SwapResponse.ServerParameters.nonce:type_name -> code.common.v1.SolanaAccountId
-	12,  // 165: code.transaction.v2.SwapResponse.Success.code:type_name -> code.transaction.v2.SwapResponse.Success.Code
-	13,  // 166: code.transaction.v2.SwapResponse.Error.code:type_name -> code.transaction.v2.SwapResponse.Error.Code
-	69,  // 167: code.transaction.v2.SwapResponse.Error.error_details:type_name -> code.transaction.v2.ErrorDetails
-	108, // 168: code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction.transaction_blob:type_name -> code.common.v1.Transaction
-	100, // 169: code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction.client_signature:type_name -> code.common.v1.Signature
-	105, // 170: code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction.source_account_type:type_name -> code.common.v1.AccountType
-	99,  // 171: code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction.original_destination:type_name -> code.common.v1.SolanaAccountId
-	99,  // 172: code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction.treasury:type_name -> code.common.v1.SolanaAccountId
-	107, // 173: code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction.recent_root:type_name -> code.common.v1.Hash
-	19,  // 174: code.transaction.v2.Transaction.SubmitIntent:input_type -> code.transaction.v2.SubmitIntentRequest
-	21,  // 175: code.transaction.v2.Transaction.GetIntentMetadata:input_type -> code.transaction.v2.GetIntentMetadataRequest
-	23,  // 176: code.transaction.v2.Transaction.GetPrivacyUpgradeStatus:input_type -> code.transaction.v2.GetPrivacyUpgradeStatusRequest
-	25,  // 177: code.transaction.v2.Transaction.GetPrioritizedIntentsForPrivacyUpgrade:input_type -> code.transaction.v2.GetPrioritizedIntentsForPrivacyUpgradeRequest
-	27,  // 178: code.transaction.v2.Transaction.GetLimits:input_type -> code.transaction.v2.GetLimitsRequest
-	29,  // 179: code.transaction.v2.Transaction.GetPaymentHistory:input_type -> code.transaction.v2.GetPaymentHistoryRequest
-	31,  // 180: code.transaction.v2.Transaction.CanWithdrawToAccount:input_type -> code.transaction.v2.CanWithdrawToAccountRequest
-	33,  // 181: code.transaction.v2.Transaction.Airdrop:input_type -> code.transaction.v2.AirdropRequest
-	35,  // 182: code.transaction.v2.Transaction.Swap:input_type -> code.transaction.v2.SwapRequest
-	37,  // 183: code.transaction.v2.Transaction.DeclareFiatOnrampPurchaseAttempt:input_type -> code.transaction.v2.DeclareFiatOnrampPurchaseAttemptRequest
-	20,  // 184: code.transaction.v2.Transaction.SubmitIntent:output_type -> code.transaction.v2.SubmitIntentResponse
-	22,  // 185: code.transaction.v2.Transaction.GetIntentMetadata:output_type -> code.transaction.v2.GetIntentMetadataResponse
-	24,  // 186: code.transaction.v2.Transaction.GetPrivacyUpgradeStatus:output_type -> code.transaction.v2.GetPrivacyUpgradeStatusResponse
-	26,  // 187: code.transaction.v2.Transaction.GetPrioritizedIntentsForPrivacyUpgrade:output_type -> code.transaction.v2.GetPrioritizedIntentsForPrivacyUpgradeResponse
-	28,  // 188: code.transaction.v2.Transaction.GetLimits:output_type -> code.transaction.v2.GetLimitsResponse
-	30,  // 189: code.transaction.v2.Transaction.GetPaymentHistory:output_type -> code.transaction.v2.GetPaymentHistoryResponse
-	32,  // 190: code.transaction.v2.Transaction.CanWithdrawToAccount:output_type -> code.transaction.v2.CanWithdrawToAccountResponse
-	34,  // 191: code.transaction.v2.Transaction.Airdrop:output_type -> code.transaction.v2.AirdropResponse
-	36,  // 192: code.transaction.v2.Transaction.Swap:output_type -> code.transaction.v2.SwapResponse
-	38,  // 193: code.transaction.v2.Transaction.DeclareFiatOnrampPurchaseAttempt:output_type -> code.transaction.v2.DeclareFiatOnrampPurchaseAttemptResponse
-	184, // [184:194] is the sub-list for method output_type
-	174, // [174:184] is the sub-list for method input_type
-	174, // [174:174] is the sub-list for extension type_name
-	174, // [174:174] is the sub-list for extension extendee
-	0,   // [0:174] is the sub-list for field type_name
+	19,  // 142: code.transaction.v2.FriendedUser.platform:type_name -> code.transaction.v2.FriendedUser.Platform
+	100, // 143: code.transaction.v2.SubmitIntentRequest.SubmitActions.id:type_name -> code.common.v1.IntentId
+	101, // 144: code.transaction.v2.SubmitIntentRequest.SubmitActions.owner:type_name -> code.common.v1.SolanaAccountId
+	40,  // 145: code.transaction.v2.SubmitIntentRequest.SubmitActions.metadata:type_name -> code.transaction.v2.Metadata
+	49,  // 146: code.transaction.v2.SubmitIntentRequest.SubmitActions.actions:type_name -> code.transaction.v2.Action
+	102, // 147: code.transaction.v2.SubmitIntentRequest.SubmitActions.signature:type_name -> code.common.v1.Signature
+	111, // 148: code.transaction.v2.SubmitIntentRequest.SubmitActions.device_token:type_name -> code.common.v1.DeviceToken
+	102, // 149: code.transaction.v2.SubmitIntentRequest.SubmitSignatures.signatures:type_name -> code.common.v1.Signature
+	59,  // 150: code.transaction.v2.SubmitIntentResponse.ServerParameters.server_parameters:type_name -> code.transaction.v2.ServerParameter
+	1,   // 151: code.transaction.v2.SubmitIntentResponse.Success.code:type_name -> code.transaction.v2.SubmitIntentResponse.Success.Code
+	2,   // 152: code.transaction.v2.SubmitIntentResponse.Error.code:type_name -> code.transaction.v2.SubmitIntentResponse.Error.Code
+	70,  // 153: code.transaction.v2.SubmitIntentResponse.Error.error_details:type_name -> code.transaction.v2.ErrorDetails
+	79,  // 154: code.transaction.v2.GetLimitsResponse.SendLimitsByCurrencyEntry.value:type_name -> code.transaction.v2.SendLimit
+	81,  // 155: code.transaction.v2.GetLimitsResponse.MicroPaymentLimitsByCurrencyEntry.value:type_name -> code.transaction.v2.MicroPaymentLimit
+	82,  // 156: code.transaction.v2.GetLimitsResponse.BuyModuleLimitsByCurrencyEntry.value:type_name -> code.transaction.v2.BuyModuleLimit
+	101, // 157: code.transaction.v2.SwapRequest.Initiate.owner:type_name -> code.common.v1.SolanaAccountId
+	101, // 158: code.transaction.v2.SwapRequest.Initiate.swap_authority:type_name -> code.common.v1.SolanaAccountId
+	102, // 159: code.transaction.v2.SwapRequest.Initiate.signature:type_name -> code.common.v1.Signature
+	102, // 160: code.transaction.v2.SwapRequest.SubmitSignature.signature:type_name -> code.common.v1.Signature
+	101, // 161: code.transaction.v2.SwapResponse.ServerParameters.payer:type_name -> code.common.v1.SolanaAccountId
+	108, // 162: code.transaction.v2.SwapResponse.ServerParameters.recent_blockhash:type_name -> code.common.v1.Blockhash
+	101, // 163: code.transaction.v2.SwapResponse.ServerParameters.swap_program:type_name -> code.common.v1.SolanaAccountId
+	112, // 164: code.transaction.v2.SwapResponse.ServerParameters.swap_ixn_accounts:type_name -> code.common.v1.InstructionAccount
+	101, // 165: code.transaction.v2.SwapResponse.ServerParameters.nonce:type_name -> code.common.v1.SolanaAccountId
+	12,  // 166: code.transaction.v2.SwapResponse.Success.code:type_name -> code.transaction.v2.SwapResponse.Success.Code
+	13,  // 167: code.transaction.v2.SwapResponse.Error.code:type_name -> code.transaction.v2.SwapResponse.Error.Code
+	70,  // 168: code.transaction.v2.SwapResponse.Error.error_details:type_name -> code.transaction.v2.ErrorDetails
+	110, // 169: code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction.transaction_blob:type_name -> code.common.v1.Transaction
+	102, // 170: code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction.client_signature:type_name -> code.common.v1.Signature
+	107, // 171: code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction.source_account_type:type_name -> code.common.v1.AccountType
+	101, // 172: code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction.original_destination:type_name -> code.common.v1.SolanaAccountId
+	101, // 173: code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction.treasury:type_name -> code.common.v1.SolanaAccountId
+	109, // 174: code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction.recent_root:type_name -> code.common.v1.Hash
+	20,  // 175: code.transaction.v2.Transaction.SubmitIntent:input_type -> code.transaction.v2.SubmitIntentRequest
+	22,  // 176: code.transaction.v2.Transaction.GetIntentMetadata:input_type -> code.transaction.v2.GetIntentMetadataRequest
+	24,  // 177: code.transaction.v2.Transaction.GetPrivacyUpgradeStatus:input_type -> code.transaction.v2.GetPrivacyUpgradeStatusRequest
+	26,  // 178: code.transaction.v2.Transaction.GetPrioritizedIntentsForPrivacyUpgrade:input_type -> code.transaction.v2.GetPrioritizedIntentsForPrivacyUpgradeRequest
+	28,  // 179: code.transaction.v2.Transaction.GetLimits:input_type -> code.transaction.v2.GetLimitsRequest
+	30,  // 180: code.transaction.v2.Transaction.GetPaymentHistory:input_type -> code.transaction.v2.GetPaymentHistoryRequest
+	32,  // 181: code.transaction.v2.Transaction.CanWithdrawToAccount:input_type -> code.transaction.v2.CanWithdrawToAccountRequest
+	34,  // 182: code.transaction.v2.Transaction.Airdrop:input_type -> code.transaction.v2.AirdropRequest
+	36,  // 183: code.transaction.v2.Transaction.Swap:input_type -> code.transaction.v2.SwapRequest
+	38,  // 184: code.transaction.v2.Transaction.DeclareFiatOnrampPurchaseAttempt:input_type -> code.transaction.v2.DeclareFiatOnrampPurchaseAttemptRequest
+	21,  // 185: code.transaction.v2.Transaction.SubmitIntent:output_type -> code.transaction.v2.SubmitIntentResponse
+	23,  // 186: code.transaction.v2.Transaction.GetIntentMetadata:output_type -> code.transaction.v2.GetIntentMetadataResponse
+	25,  // 187: code.transaction.v2.Transaction.GetPrivacyUpgradeStatus:output_type -> code.transaction.v2.GetPrivacyUpgradeStatusResponse
+	27,  // 188: code.transaction.v2.Transaction.GetPrioritizedIntentsForPrivacyUpgrade:output_type -> code.transaction.v2.GetPrioritizedIntentsForPrivacyUpgradeResponse
+	29,  // 189: code.transaction.v2.Transaction.GetLimits:output_type -> code.transaction.v2.GetLimitsResponse
+	31,  // 190: code.transaction.v2.Transaction.GetPaymentHistory:output_type -> code.transaction.v2.GetPaymentHistoryResponse
+	33,  // 191: code.transaction.v2.Transaction.CanWithdrawToAccount:output_type -> code.transaction.v2.CanWithdrawToAccountResponse
+	35,  // 192: code.transaction.v2.Transaction.Airdrop:output_type -> code.transaction.v2.AirdropResponse
+	37,  // 193: code.transaction.v2.Transaction.Swap:output_type -> code.transaction.v2.SwapResponse
+	39,  // 194: code.transaction.v2.Transaction.DeclareFiatOnrampPurchaseAttempt:output_type -> code.transaction.v2.DeclareFiatOnrampPurchaseAttemptResponse
+	185, // [185:195] is the sub-list for method output_type
+	175, // [175:185] is the sub-list for method input_type
+	175, // [175:175] is the sub-list for extension type_name
+	175, // [175:175] is the sub-list for extension extendee
+	0,   // [0:175] is the sub-list for field type_name
 }
 
 func init() { file_transaction_v2_transaction_service_proto_init() }
@@ -9144,7 +9259,7 @@ func file_transaction_v2_transaction_service_proto_init() {
 			}
 		}
 		file_transaction_v2_transaction_service_proto_msgTypes[64].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Cursor); i {
+			switch v := v.(*FriendedUser); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9156,7 +9271,7 @@ func file_transaction_v2_transaction_service_proto_init() {
 			}
 		}
 		file_transaction_v2_transaction_service_proto_msgTypes[65].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SubmitIntentRequest_SubmitActions); i {
+			switch v := v.(*Cursor); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9168,7 +9283,7 @@ func file_transaction_v2_transaction_service_proto_init() {
 			}
 		}
 		file_transaction_v2_transaction_service_proto_msgTypes[66].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SubmitIntentRequest_SubmitSignatures); i {
+			switch v := v.(*SubmitIntentRequest_SubmitActions); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9180,7 +9295,7 @@ func file_transaction_v2_transaction_service_proto_init() {
 			}
 		}
 		file_transaction_v2_transaction_service_proto_msgTypes[67].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SubmitIntentResponse_ServerParameters); i {
+			switch v := v.(*SubmitIntentRequest_SubmitSignatures); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9192,7 +9307,7 @@ func file_transaction_v2_transaction_service_proto_init() {
 			}
 		}
 		file_transaction_v2_transaction_service_proto_msgTypes[68].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SubmitIntentResponse_Success); i {
+			switch v := v.(*SubmitIntentResponse_ServerParameters); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9204,6 +9319,18 @@ func file_transaction_v2_transaction_service_proto_init() {
 			}
 		}
 		file_transaction_v2_transaction_service_proto_msgTypes[69].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SubmitIntentResponse_Success); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_transaction_v2_transaction_service_proto_msgTypes[70].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*SubmitIntentResponse_Error); i {
 			case 0:
 				return &v.state
@@ -9215,7 +9342,7 @@ func file_transaction_v2_transaction_service_proto_init() {
 				return nil
 			}
 		}
-		file_transaction_v2_transaction_service_proto_msgTypes[73].Exporter = func(v interface{}, i int) interface{} {
+		file_transaction_v2_transaction_service_proto_msgTypes[74].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*SwapRequest_Initiate); i {
 			case 0:
 				return &v.state
@@ -9227,7 +9354,7 @@ func file_transaction_v2_transaction_service_proto_init() {
 				return nil
 			}
 		}
-		file_transaction_v2_transaction_service_proto_msgTypes[74].Exporter = func(v interface{}, i int) interface{} {
+		file_transaction_v2_transaction_service_proto_msgTypes[75].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*SwapRequest_SubmitSignature); i {
 			case 0:
 				return &v.state
@@ -9239,7 +9366,7 @@ func file_transaction_v2_transaction_service_proto_init() {
 				return nil
 			}
 		}
-		file_transaction_v2_transaction_service_proto_msgTypes[75].Exporter = func(v interface{}, i int) interface{} {
+		file_transaction_v2_transaction_service_proto_msgTypes[76].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*SwapResponse_ServerParameters); i {
 			case 0:
 				return &v.state
@@ -9251,7 +9378,7 @@ func file_transaction_v2_transaction_service_proto_init() {
 				return nil
 			}
 		}
-		file_transaction_v2_transaction_service_proto_msgTypes[76].Exporter = func(v interface{}, i int) interface{} {
+		file_transaction_v2_transaction_service_proto_msgTypes[77].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*SwapResponse_Success); i {
 			case 0:
 				return &v.state
@@ -9263,7 +9390,7 @@ func file_transaction_v2_transaction_service_proto_init() {
 				return nil
 			}
 		}
-		file_transaction_v2_transaction_service_proto_msgTypes[77].Exporter = func(v interface{}, i int) interface{} {
+		file_transaction_v2_transaction_service_proto_msgTypes[78].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*SwapResponse_Error); i {
 			case 0:
 				return &v.state
@@ -9275,7 +9402,7 @@ func file_transaction_v2_transaction_service_proto_init() {
 				return nil
 			}
 		}
-		file_transaction_v2_transaction_service_proto_msgTypes[78].Exporter = func(v interface{}, i int) interface{} {
+		file_transaction_v2_transaction_service_proto_msgTypes[79].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpgradeableIntent_UpgradeablePrivateAction); i {
 			case 0:
 				return &v.state
@@ -9348,8 +9475,8 @@ func file_transaction_v2_transaction_service_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_transaction_v2_transaction_service_proto_rawDesc,
-			NumEnums:      19,
-			NumMessages:   79,
+			NumEnums:      20,
+			NumMessages:   80,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
