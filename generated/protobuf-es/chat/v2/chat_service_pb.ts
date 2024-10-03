@@ -1658,6 +1658,13 @@ export class Member extends Message$1<Member> {
    */
   pointers: Pointer[] = [];
 
+  /**
+   * If the member is the caller (where applicable), will be set to true.
+   *
+   * @generated from field: bool is_self = 4;
+   */
+  isSelf = false;
+
   constructor(data?: PartialMessage<Member>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1669,6 +1676,7 @@ export class Member extends Message$1<Member> {
     { no: 1, name: "member_id", kind: "message", T: MemberId },
     { no: 2, name: "identity", kind: "message", T: MemberIdentity },
     { no: 3, name: "pointers", kind: "message", T: Pointer, repeated: true },
+    { no: 4, name: "is_self", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Member {

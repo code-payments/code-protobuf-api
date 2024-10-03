@@ -443,6 +443,9 @@ message Member {
         min_items: 0
         max_items: 2
     }];
+
+    // If the member is the caller (where applicable), will be set to true.
+    bool is_self = 4;
 }
 
 // Identity to an external social platform that can be linked to a Code account

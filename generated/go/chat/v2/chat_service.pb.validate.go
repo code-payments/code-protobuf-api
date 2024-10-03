@@ -2629,6 +2629,8 @@ func (m *Member) Validate() error {
 
 	}
 
+	// no validation rules for IsSelf
+
 	return nil
 }
 
