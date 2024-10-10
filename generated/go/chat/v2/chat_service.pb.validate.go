@@ -33,6 +33,501 @@ var (
 	_ = ptypes.DynamicAny{}
 )
 
+// Validate checks the field values on StreamChatEventsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *StreamChatEventsRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	switch m.Type.(type) {
+
+	case *StreamChatEventsRequest_Params_:
+
+		if v, ok := interface{}(m.GetParams()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StreamChatEventsRequestValidationError{
+					field:  "Params",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *StreamChatEventsRequest_Pong:
+
+		if v, ok := interface{}(m.GetPong()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StreamChatEventsRequestValidationError{
+					field:  "Pong",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return StreamChatEventsRequestValidationError{
+			field:  "Type",
+			reason: "value is required",
+		}
+
+	}
+
+	return nil
+}
+
+// StreamChatEventsRequestValidationError is the validation error returned by
+// StreamChatEventsRequest.Validate if the designated constraints aren't met.
+type StreamChatEventsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StreamChatEventsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StreamChatEventsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StreamChatEventsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StreamChatEventsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StreamChatEventsRequestValidationError) ErrorName() string {
+	return "StreamChatEventsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StreamChatEventsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStreamChatEventsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StreamChatEventsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StreamChatEventsRequestValidationError{}
+
+// Validate checks the field values on StreamChatEventsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *StreamChatEventsResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	switch m.Type.(type) {
+
+	case *StreamChatEventsResponse_Ping:
+
+		if v, ok := interface{}(m.GetPing()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StreamChatEventsResponseValidationError{
+					field:  "Ping",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *StreamChatEventsResponse_Error:
+
+		if v, ok := interface{}(m.GetError()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StreamChatEventsResponseValidationError{
+					field:  "Error",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *StreamChatEventsResponse_Events:
+
+		if v, ok := interface{}(m.GetEvents()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StreamChatEventsResponseValidationError{
+					field:  "Events",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return StreamChatEventsResponseValidationError{
+			field:  "Type",
+			reason: "value is required",
+		}
+
+	}
+
+	return nil
+}
+
+// StreamChatEventsResponseValidationError is the validation error returned by
+// StreamChatEventsResponse.Validate if the designated constraints aren't met.
+type StreamChatEventsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StreamChatEventsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StreamChatEventsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StreamChatEventsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StreamChatEventsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StreamChatEventsResponseValidationError) ErrorName() string {
+	return "StreamChatEventsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StreamChatEventsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStreamChatEventsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StreamChatEventsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StreamChatEventsResponseValidationError{}
+
+// Validate checks the field values on StreamMessagesRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *StreamMessagesRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	switch m.Type.(type) {
+
+	case *StreamMessagesRequest_Params_:
+
+		if v, ok := interface{}(m.GetParams()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StreamMessagesRequestValidationError{
+					field:  "Params",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *StreamMessagesRequest_Pong:
+
+		if v, ok := interface{}(m.GetPong()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StreamMessagesRequestValidationError{
+					field:  "Pong",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return StreamMessagesRequestValidationError{
+			field:  "Type",
+			reason: "value is required",
+		}
+
+	}
+
+	return nil
+}
+
+// StreamMessagesRequestValidationError is the validation error returned by
+// StreamMessagesRequest.Validate if the designated constraints aren't met.
+type StreamMessagesRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StreamMessagesRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StreamMessagesRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StreamMessagesRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StreamMessagesRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StreamMessagesRequestValidationError) ErrorName() string {
+	return "StreamMessagesRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StreamMessagesRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStreamMessagesRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StreamMessagesRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StreamMessagesRequestValidationError{}
+
+// Validate checks the field values on StreamMessagesResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *StreamMessagesResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	switch m.Type.(type) {
+
+	case *StreamMessagesResponse_Ping:
+
+		if v, ok := interface{}(m.GetPing()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StreamMessagesResponseValidationError{
+					field:  "Ping",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *StreamMessagesResponse_Error:
+
+		if v, ok := interface{}(m.GetError()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StreamMessagesResponseValidationError{
+					field:  "Error",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *StreamMessagesResponse_Messages:
+
+		if v, ok := interface{}(m.GetMessages()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StreamMessagesResponseValidationError{
+					field:  "Messages",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return StreamMessagesResponseValidationError{
+			field:  "Type",
+			reason: "value is required",
+		}
+
+	}
+
+	return nil
+}
+
+// StreamMessagesResponseValidationError is the validation error returned by
+// StreamMessagesResponse.Validate if the designated constraints aren't met.
+type StreamMessagesResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StreamMessagesResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StreamMessagesResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StreamMessagesResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StreamMessagesResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StreamMessagesResponseValidationError) ErrorName() string {
+	return "StreamMessagesResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StreamMessagesResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStreamMessagesResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StreamMessagesResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StreamMessagesResponseValidationError{}
+
+// Validate checks the field values on StreamError with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *StreamError) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Code
+
+	return nil
+}
+
+// StreamErrorValidationError is the validation error returned by
+// StreamError.Validate if the designated constraints aren't met.
+type StreamErrorValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StreamErrorValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StreamErrorValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StreamErrorValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StreamErrorValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StreamErrorValidationError) ErrorName() string { return "StreamErrorValidationError" }
+
+// Error satisfies the builtin error interface
+func (e StreamErrorValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStreamError.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StreamErrorValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StreamErrorValidationError{}
+
 // Validate checks the field values on GetChatsRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, an
 // error is returned.
@@ -467,607 +962,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetMessagesResponseValidationError{}
-
-// Validate checks the field values on OpenChatEventStream with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *OpenChatEventStream) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	if m.GetChatId() == nil {
-		return OpenChatEventStreamValidationError{
-			field:  "ChatId",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetChatId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return OpenChatEventStreamValidationError{
-				field:  "ChatId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetOwner() == nil {
-		return OpenChatEventStreamValidationError{
-			field:  "Owner",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return OpenChatEventStreamValidationError{
-				field:  "Owner",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetSignature() == nil {
-		return OpenChatEventStreamValidationError{
-			field:  "Signature",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return OpenChatEventStreamValidationError{
-				field:  "Signature",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	return nil
-}
-
-// OpenChatEventStreamValidationError is the validation error returned by
-// OpenChatEventStream.Validate if the designated constraints aren't met.
-type OpenChatEventStreamValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e OpenChatEventStreamValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e OpenChatEventStreamValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e OpenChatEventStreamValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e OpenChatEventStreamValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e OpenChatEventStreamValidationError) ErrorName() string {
-	return "OpenChatEventStreamValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e OpenChatEventStreamValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sOpenChatEventStream.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = OpenChatEventStreamValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = OpenChatEventStreamValidationError{}
-
-// Validate checks the field values on ChatStreamEvent with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *ChatStreamEvent) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	switch m.Type.(type) {
-
-	case *ChatStreamEvent_Message:
-
-		if v, ok := interface{}(m.GetMessage()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ChatStreamEventValidationError{
-					field:  "Message",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	case *ChatStreamEvent_Pointer:
-
-		if v, ok := interface{}(m.GetPointer()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ChatStreamEventValidationError{
-					field:  "Pointer",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	case *ChatStreamEvent_IsTyping:
-
-		if v, ok := interface{}(m.GetIsTyping()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ChatStreamEventValidationError{
-					field:  "IsTyping",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	default:
-		return ChatStreamEventValidationError{
-			field:  "Type",
-			reason: "value is required",
-		}
-
-	}
-
-	return nil
-}
-
-// ChatStreamEventValidationError is the validation error returned by
-// ChatStreamEvent.Validate if the designated constraints aren't met.
-type ChatStreamEventValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ChatStreamEventValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ChatStreamEventValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ChatStreamEventValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ChatStreamEventValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ChatStreamEventValidationError) ErrorName() string { return "ChatStreamEventValidationError" }
-
-// Error satisfies the builtin error interface
-func (e ChatStreamEventValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sChatStreamEvent.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ChatStreamEventValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ChatStreamEventValidationError{}
-
-// Validate checks the field values on ChatStreamEventBatch with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *ChatStreamEventBatch) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	if l := len(m.GetEvents()); l < 1 || l > 1024 {
-		return ChatStreamEventBatchValidationError{
-			field:  "Events",
-			reason: "value must contain between 1 and 1024 items, inclusive",
-		}
-	}
-
-	for idx, item := range m.GetEvents() {
-		_, _ = idx, item
-
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ChatStreamEventBatchValidationError{
-					field:  fmt.Sprintf("Events[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	return nil
-}
-
-// ChatStreamEventBatchValidationError is the validation error returned by
-// ChatStreamEventBatch.Validate if the designated constraints aren't met.
-type ChatStreamEventBatchValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ChatStreamEventBatchValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ChatStreamEventBatchValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ChatStreamEventBatchValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ChatStreamEventBatchValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ChatStreamEventBatchValidationError) ErrorName() string {
-	return "ChatStreamEventBatchValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ChatStreamEventBatchValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sChatStreamEventBatch.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ChatStreamEventBatchValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ChatStreamEventBatchValidationError{}
-
-// Validate checks the field values on ChatStreamEventError with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *ChatStreamEventError) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	// no validation rules for Code
-
-	return nil
-}
-
-// ChatStreamEventErrorValidationError is the validation error returned by
-// ChatStreamEventError.Validate if the designated constraints aren't met.
-type ChatStreamEventErrorValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e ChatStreamEventErrorValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e ChatStreamEventErrorValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e ChatStreamEventErrorValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e ChatStreamEventErrorValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e ChatStreamEventErrorValidationError) ErrorName() string {
-	return "ChatStreamEventErrorValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e ChatStreamEventErrorValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sChatStreamEventError.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = ChatStreamEventErrorValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = ChatStreamEventErrorValidationError{}
-
-// Validate checks the field values on StreamChatEventsRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *StreamChatEventsRequest) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	switch m.Type.(type) {
-
-	case *StreamChatEventsRequest_OpenStream:
-
-		if v, ok := interface{}(m.GetOpenStream()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return StreamChatEventsRequestValidationError{
-					field:  "OpenStream",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	case *StreamChatEventsRequest_Pong:
-
-		if v, ok := interface{}(m.GetPong()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return StreamChatEventsRequestValidationError{
-					field:  "Pong",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	default:
-		return StreamChatEventsRequestValidationError{
-			field:  "Type",
-			reason: "value is required",
-		}
-
-	}
-
-	return nil
-}
-
-// StreamChatEventsRequestValidationError is the validation error returned by
-// StreamChatEventsRequest.Validate if the designated constraints aren't met.
-type StreamChatEventsRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e StreamChatEventsRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e StreamChatEventsRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e StreamChatEventsRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e StreamChatEventsRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e StreamChatEventsRequestValidationError) ErrorName() string {
-	return "StreamChatEventsRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e StreamChatEventsRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sStreamChatEventsRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = StreamChatEventsRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = StreamChatEventsRequestValidationError{}
-
-// Validate checks the field values on StreamChatEventsResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *StreamChatEventsResponse) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	switch m.Type.(type) {
-
-	case *StreamChatEventsResponse_Events:
-
-		if v, ok := interface{}(m.GetEvents()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return StreamChatEventsResponseValidationError{
-					field:  "Events",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	case *StreamChatEventsResponse_Ping:
-
-		if v, ok := interface{}(m.GetPing()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return StreamChatEventsResponseValidationError{
-					field:  "Ping",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	case *StreamChatEventsResponse_Error:
-
-		if v, ok := interface{}(m.GetError()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return StreamChatEventsResponseValidationError{
-					field:  "Error",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	default:
-		return StreamChatEventsResponseValidationError{
-			field:  "Type",
-			reason: "value is required",
-		}
-
-	}
-
-	return nil
-}
-
-// StreamChatEventsResponseValidationError is the validation error returned by
-// StreamChatEventsResponse.Validate if the designated constraints aren't met.
-type StreamChatEventsResponseValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e StreamChatEventsResponseValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e StreamChatEventsResponseValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e StreamChatEventsResponseValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e StreamChatEventsResponseValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e StreamChatEventsResponseValidationError) ErrorName() string {
-	return "StreamChatEventsResponseValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e StreamChatEventsResponseValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sStreamChatEventsResponse.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = StreamChatEventsResponseValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = StreamChatEventsResponseValidationError{}
 
 // Validate checks the field values on StartChatRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, an
@@ -3557,3 +3451,538 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = IsTypingValidationError{}
+
+// Validate checks the field values on StreamChatEventsRequest_Params with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *StreamChatEventsRequest_Params) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetOwner() == nil {
+		return StreamChatEventsRequest_ParamsValidationError{
+			field:  "Owner",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StreamChatEventsRequest_ParamsValidationError{
+				field:  "Owner",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetSignature() == nil {
+		return StreamChatEventsRequest_ParamsValidationError{
+			field:  "Signature",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StreamChatEventsRequest_ParamsValidationError{
+				field:  "Signature",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// StreamChatEventsRequest_ParamsValidationError is the validation error
+// returned by StreamChatEventsRequest_Params.Validate if the designated
+// constraints aren't met.
+type StreamChatEventsRequest_ParamsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StreamChatEventsRequest_ParamsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StreamChatEventsRequest_ParamsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StreamChatEventsRequest_ParamsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StreamChatEventsRequest_ParamsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StreamChatEventsRequest_ParamsValidationError) ErrorName() string {
+	return "StreamChatEventsRequest_ParamsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StreamChatEventsRequest_ParamsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStreamChatEventsRequest_Params.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StreamChatEventsRequest_ParamsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StreamChatEventsRequest_ParamsValidationError{}
+
+// Validate checks the field values on StreamChatEventsResponse_EventBatch with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, an error is returned.
+func (m *StreamChatEventsResponse_EventBatch) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if l := len(m.GetUpdates()); l < 1 || l > 1024 {
+		return StreamChatEventsResponse_EventBatchValidationError{
+			field:  "Updates",
+			reason: "value must contain between 1 and 1024 items, inclusive",
+		}
+	}
+
+	for idx, item := range m.GetUpdates() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StreamChatEventsResponse_EventBatchValidationError{
+					field:  fmt.Sprintf("Updates[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// StreamChatEventsResponse_EventBatchValidationError is the validation error
+// returned by StreamChatEventsResponse_EventBatch.Validate if the designated
+// constraints aren't met.
+type StreamChatEventsResponse_EventBatchValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StreamChatEventsResponse_EventBatchValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StreamChatEventsResponse_EventBatchValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StreamChatEventsResponse_EventBatchValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StreamChatEventsResponse_EventBatchValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StreamChatEventsResponse_EventBatchValidationError) ErrorName() string {
+	return "StreamChatEventsResponse_EventBatchValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StreamChatEventsResponse_EventBatchValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStreamChatEventsResponse_EventBatch.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StreamChatEventsResponse_EventBatchValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StreamChatEventsResponse_EventBatchValidationError{}
+
+// Validate checks the field values on StreamChatEventsResponse_ChatUpdate with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, an error is returned.
+func (m *StreamChatEventsResponse_ChatUpdate) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetChatId() == nil {
+		return StreamChatEventsResponse_ChatUpdateValidationError{
+			field:  "ChatId",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetChatId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StreamChatEventsResponse_ChatUpdateValidationError{
+				field:  "ChatId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetMetadata()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StreamChatEventsResponse_ChatUpdateValidationError{
+				field:  "Metadata",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetLastMessage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StreamChatEventsResponse_ChatUpdateValidationError{
+				field:  "LastMessage",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetIsTyping()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StreamChatEventsResponse_ChatUpdateValidationError{
+				field:  "IsTyping",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// StreamChatEventsResponse_ChatUpdateValidationError is the validation error
+// returned by StreamChatEventsResponse_ChatUpdate.Validate if the designated
+// constraints aren't met.
+type StreamChatEventsResponse_ChatUpdateValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StreamChatEventsResponse_ChatUpdateValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StreamChatEventsResponse_ChatUpdateValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StreamChatEventsResponse_ChatUpdateValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StreamChatEventsResponse_ChatUpdateValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StreamChatEventsResponse_ChatUpdateValidationError) ErrorName() string {
+	return "StreamChatEventsResponse_ChatUpdateValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StreamChatEventsResponse_ChatUpdateValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStreamChatEventsResponse_ChatUpdate.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StreamChatEventsResponse_ChatUpdateValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StreamChatEventsResponse_ChatUpdateValidationError{}
+
+// Validate checks the field values on StreamMessagesRequest_Params with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *StreamMessagesRequest_Params) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetOwner() == nil {
+		return StreamMessagesRequest_ParamsValidationError{
+			field:  "Owner",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StreamMessagesRequest_ParamsValidationError{
+				field:  "Owner",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetSignature() == nil {
+		return StreamMessagesRequest_ParamsValidationError{
+			field:  "Signature",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StreamMessagesRequest_ParamsValidationError{
+				field:  "Signature",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetChatId() == nil {
+		return StreamMessagesRequest_ParamsValidationError{
+			field:  "ChatId",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetChatId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StreamMessagesRequest_ParamsValidationError{
+				field:  "ChatId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	switch m.Resume.(type) {
+
+	case *StreamMessagesRequest_Params_LastKnownMessageId:
+
+		if v, ok := interface{}(m.GetLastKnownMessageId()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StreamMessagesRequest_ParamsValidationError{
+					field:  "LastKnownMessageId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *StreamMessagesRequest_Params_LatestOnly:
+		// no validation rules for LatestOnly
+
+	}
+
+	return nil
+}
+
+// StreamMessagesRequest_ParamsValidationError is the validation error returned
+// by StreamMessagesRequest_Params.Validate if the designated constraints
+// aren't met.
+type StreamMessagesRequest_ParamsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StreamMessagesRequest_ParamsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StreamMessagesRequest_ParamsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StreamMessagesRequest_ParamsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StreamMessagesRequest_ParamsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StreamMessagesRequest_ParamsValidationError) ErrorName() string {
+	return "StreamMessagesRequest_ParamsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StreamMessagesRequest_ParamsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStreamMessagesRequest_Params.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StreamMessagesRequest_ParamsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StreamMessagesRequest_ParamsValidationError{}
+
+// Validate checks the field values on StreamMessagesResponse_MessageBatch with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, an error is returned.
+func (m *StreamMessagesResponse_MessageBatch) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if l := len(m.GetMessages()); l < 1 || l > 1024 {
+		return StreamMessagesResponse_MessageBatchValidationError{
+			field:  "Messages",
+			reason: "value must contain between 1 and 1024 items, inclusive",
+		}
+	}
+
+	for idx, item := range m.GetMessages() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return StreamMessagesResponse_MessageBatchValidationError{
+					field:  fmt.Sprintf("Messages[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// StreamMessagesResponse_MessageBatchValidationError is the validation error
+// returned by StreamMessagesResponse_MessageBatch.Validate if the designated
+// constraints aren't met.
+type StreamMessagesResponse_MessageBatchValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StreamMessagesResponse_MessageBatchValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StreamMessagesResponse_MessageBatchValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StreamMessagesResponse_MessageBatchValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StreamMessagesResponse_MessageBatchValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StreamMessagesResponse_MessageBatchValidationError) ErrorName() string {
+	return "StreamMessagesResponse_MessageBatchValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StreamMessagesResponse_MessageBatchValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStreamMessagesResponse_MessageBatch.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StreamMessagesResponse_MessageBatchValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StreamMessagesResponse_MessageBatchValidationError{}

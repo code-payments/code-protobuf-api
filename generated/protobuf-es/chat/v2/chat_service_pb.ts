@@ -85,6 +85,522 @@ proto3.util.setEnumType(PointerType, "code.chat.v2.PointerType", [
 ]);
 
 /**
+ * @generated from message code.chat.v2.StreamChatEventsRequest
+ */
+export class StreamChatEventsRequest extends Message$1<StreamChatEventsRequest> {
+  /**
+   * @generated from oneof code.chat.v2.StreamChatEventsRequest.type
+   */
+  type: {
+    /**
+     * @generated from field: code.chat.v2.StreamChatEventsRequest.Params params = 1;
+     */
+    value: StreamChatEventsRequest_Params;
+    case: "params";
+  } | {
+    /**
+     * @generated from field: code.common.v1.ClientPong pong = 2;
+     */
+    value: ClientPong;
+    case: "pong";
+  } | { case: undefined; value?: undefined } = { case: undefined };
+
+  constructor(data?: PartialMessage<StreamChatEventsRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.chat.v2.StreamChatEventsRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "params", kind: "message", T: StreamChatEventsRequest_Params, oneof: "type" },
+    { no: 2, name: "pong", kind: "message", T: ClientPong, oneof: "type" },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StreamChatEventsRequest {
+    return new StreamChatEventsRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StreamChatEventsRequest {
+    return new StreamChatEventsRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StreamChatEventsRequest {
+    return new StreamChatEventsRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: StreamChatEventsRequest | PlainMessage<StreamChatEventsRequest> | undefined, b: StreamChatEventsRequest | PlainMessage<StreamChatEventsRequest> | undefined): boolean {
+    return proto3.util.equals(StreamChatEventsRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message code.chat.v2.StreamChatEventsRequest.Params
+ */
+export class StreamChatEventsRequest_Params extends Message$1<StreamChatEventsRequest_Params> {
+  /**
+   * @generated from field: code.common.v1.SolanaAccountId owner = 1;
+   */
+  owner?: SolanaAccountId;
+
+  /**
+   * @generated from field: code.common.v1.Signature signature = 2;
+   */
+  signature?: Signature;
+
+  constructor(data?: PartialMessage<StreamChatEventsRequest_Params>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.chat.v2.StreamChatEventsRequest.Params";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "owner", kind: "message", T: SolanaAccountId },
+    { no: 2, name: "signature", kind: "message", T: Signature },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StreamChatEventsRequest_Params {
+    return new StreamChatEventsRequest_Params().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StreamChatEventsRequest_Params {
+    return new StreamChatEventsRequest_Params().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StreamChatEventsRequest_Params {
+    return new StreamChatEventsRequest_Params().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: StreamChatEventsRequest_Params | PlainMessage<StreamChatEventsRequest_Params> | undefined, b: StreamChatEventsRequest_Params | PlainMessage<StreamChatEventsRequest_Params> | undefined): boolean {
+    return proto3.util.equals(StreamChatEventsRequest_Params, a, b);
+  }
+}
+
+/**
+ * @generated from message code.chat.v2.StreamChatEventsResponse
+ */
+export class StreamChatEventsResponse extends Message$1<StreamChatEventsResponse> {
+  /**
+   * @generated from oneof code.chat.v2.StreamChatEventsResponse.type
+   */
+  type: {
+    /**
+     * @generated from field: code.common.v1.ServerPing ping = 1;
+     */
+    value: ServerPing;
+    case: "ping";
+  } | {
+    /**
+     * @generated from field: code.chat.v2.StreamError error = 2;
+     */
+    value: StreamError;
+    case: "error";
+  } | {
+    /**
+     * @generated from field: code.chat.v2.StreamChatEventsResponse.EventBatch events = 3;
+     */
+    value: StreamChatEventsResponse_EventBatch;
+    case: "events";
+  } | { case: undefined; value?: undefined } = { case: undefined };
+
+  constructor(data?: PartialMessage<StreamChatEventsResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.chat.v2.StreamChatEventsResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "ping", kind: "message", T: ServerPing, oneof: "type" },
+    { no: 2, name: "error", kind: "message", T: StreamError, oneof: "type" },
+    { no: 3, name: "events", kind: "message", T: StreamChatEventsResponse_EventBatch, oneof: "type" },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StreamChatEventsResponse {
+    return new StreamChatEventsResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StreamChatEventsResponse {
+    return new StreamChatEventsResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StreamChatEventsResponse {
+    return new StreamChatEventsResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: StreamChatEventsResponse | PlainMessage<StreamChatEventsResponse> | undefined, b: StreamChatEventsResponse | PlainMessage<StreamChatEventsResponse> | undefined): boolean {
+    return proto3.util.equals(StreamChatEventsResponse, a, b);
+  }
+}
+
+/**
+ * @generated from message code.chat.v2.StreamChatEventsResponse.EventBatch
+ */
+export class StreamChatEventsResponse_EventBatch extends Message$1<StreamChatEventsResponse_EventBatch> {
+  /**
+   * @generated from field: repeated code.chat.v2.StreamChatEventsResponse.ChatUpdate updates = 1;
+   */
+  updates: StreamChatEventsResponse_ChatUpdate[] = [];
+
+  constructor(data?: PartialMessage<StreamChatEventsResponse_EventBatch>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.chat.v2.StreamChatEventsResponse.EventBatch";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "updates", kind: "message", T: StreamChatEventsResponse_ChatUpdate, repeated: true },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StreamChatEventsResponse_EventBatch {
+    return new StreamChatEventsResponse_EventBatch().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StreamChatEventsResponse_EventBatch {
+    return new StreamChatEventsResponse_EventBatch().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StreamChatEventsResponse_EventBatch {
+    return new StreamChatEventsResponse_EventBatch().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: StreamChatEventsResponse_EventBatch | PlainMessage<StreamChatEventsResponse_EventBatch> | undefined, b: StreamChatEventsResponse_EventBatch | PlainMessage<StreamChatEventsResponse_EventBatch> | undefined): boolean {
+    return proto3.util.equals(StreamChatEventsResponse_EventBatch, a, b);
+  }
+}
+
+/**
+ * ChatUpdate contains a set of updates for a given chat id.
+ *
+ * Only the relevant fields will be set on update. On initial
+ * stream open, all fields will be set, however.
+ *
+ * @generated from message code.chat.v2.StreamChatEventsResponse.ChatUpdate
+ */
+export class StreamChatEventsResponse_ChatUpdate extends Message$1<StreamChatEventsResponse_ChatUpdate> {
+  /**
+   * @generated from field: code.common.v1.ChatId chat_id = 1;
+   */
+  chatId?: ChatId;
+
+  /**
+   * @generated from field: code.chat.v2.Metadata metadata = 2;
+   */
+  metadata?: Metadata;
+
+  /**
+   * @generated from field: code.chat.v2.Message last_message = 3;
+   */
+  lastMessage?: Message;
+
+  /**
+   * @generated from field: code.chat.v2.IsTyping is_typing = 4;
+   */
+  isTyping?: IsTyping;
+
+  constructor(data?: PartialMessage<StreamChatEventsResponse_ChatUpdate>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.chat.v2.StreamChatEventsResponse.ChatUpdate";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "chat_id", kind: "message", T: ChatId },
+    { no: 2, name: "metadata", kind: "message", T: Metadata },
+    { no: 3, name: "last_message", kind: "message", T: Message },
+    { no: 4, name: "is_typing", kind: "message", T: IsTyping },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StreamChatEventsResponse_ChatUpdate {
+    return new StreamChatEventsResponse_ChatUpdate().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StreamChatEventsResponse_ChatUpdate {
+    return new StreamChatEventsResponse_ChatUpdate().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StreamChatEventsResponse_ChatUpdate {
+    return new StreamChatEventsResponse_ChatUpdate().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: StreamChatEventsResponse_ChatUpdate | PlainMessage<StreamChatEventsResponse_ChatUpdate> | undefined, b: StreamChatEventsResponse_ChatUpdate | PlainMessage<StreamChatEventsResponse_ChatUpdate> | undefined): boolean {
+    return proto3.util.equals(StreamChatEventsResponse_ChatUpdate, a, b);
+  }
+}
+
+/**
+ * @generated from message code.chat.v2.StreamMessagesRequest
+ */
+export class StreamMessagesRequest extends Message$1<StreamMessagesRequest> {
+  /**
+   * @generated from oneof code.chat.v2.StreamMessagesRequest.type
+   */
+  type: {
+    /**
+     * @generated from field: code.chat.v2.StreamMessagesRequest.Params params = 1;
+     */
+    value: StreamMessagesRequest_Params;
+    case: "params";
+  } | {
+    /**
+     * @generated from field: code.common.v1.ClientPong pong = 2;
+     */
+    value: ClientPong;
+    case: "pong";
+  } | { case: undefined; value?: undefined } = { case: undefined };
+
+  constructor(data?: PartialMessage<StreamMessagesRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.chat.v2.StreamMessagesRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "params", kind: "message", T: StreamMessagesRequest_Params, oneof: "type" },
+    { no: 2, name: "pong", kind: "message", T: ClientPong, oneof: "type" },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StreamMessagesRequest {
+    return new StreamMessagesRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StreamMessagesRequest {
+    return new StreamMessagesRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StreamMessagesRequest {
+    return new StreamMessagesRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: StreamMessagesRequest | PlainMessage<StreamMessagesRequest> | undefined, b: StreamMessagesRequest | PlainMessage<StreamMessagesRequest> | undefined): boolean {
+    return proto3.util.equals(StreamMessagesRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message code.chat.v2.StreamMessagesRequest.Params
+ */
+export class StreamMessagesRequest_Params extends Message$1<StreamMessagesRequest_Params> {
+  /**
+   * @generated from field: code.common.v1.SolanaAccountId owner = 1;
+   */
+  owner?: SolanaAccountId;
+
+  /**
+   * @generated from field: code.common.v1.Signature signature = 2;
+   */
+  signature?: Signature;
+
+  /**
+   * @generated from field: code.common.v1.ChatId chat_id = 3;
+   */
+  chatId?: ChatId;
+
+  /**
+   * Callers may optionally specify a resume mode other than last delivery pointer.
+   *
+   * @generated from oneof code.chat.v2.StreamMessagesRequest.Params.resume
+   */
+  resume: {
+    /**
+     * Server will return all messages newer than this message id.
+     *
+     * @generated from field: code.chat.v2.MessageId last_known_message_id = 4;
+     */
+    value: MessageId;
+    case: "lastKnownMessageId";
+  } | {
+    /**
+     * Server will not load any previous messages.
+     *
+     * @generated from field: bool latest_only = 5;
+     */
+    value: boolean;
+    case: "latestOnly";
+  } | { case: undefined; value?: undefined } = { case: undefined };
+
+  constructor(data?: PartialMessage<StreamMessagesRequest_Params>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.chat.v2.StreamMessagesRequest.Params";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "owner", kind: "message", T: SolanaAccountId },
+    { no: 2, name: "signature", kind: "message", T: Signature },
+    { no: 3, name: "chat_id", kind: "message", T: ChatId },
+    { no: 4, name: "last_known_message_id", kind: "message", T: MessageId, oneof: "resume" },
+    { no: 5, name: "latest_only", kind: "scalar", T: 8 /* ScalarType.BOOL */, oneof: "resume" },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StreamMessagesRequest_Params {
+    return new StreamMessagesRequest_Params().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StreamMessagesRequest_Params {
+    return new StreamMessagesRequest_Params().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StreamMessagesRequest_Params {
+    return new StreamMessagesRequest_Params().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: StreamMessagesRequest_Params | PlainMessage<StreamMessagesRequest_Params> | undefined, b: StreamMessagesRequest_Params | PlainMessage<StreamMessagesRequest_Params> | undefined): boolean {
+    return proto3.util.equals(StreamMessagesRequest_Params, a, b);
+  }
+}
+
+/**
+ * @generated from message code.chat.v2.StreamMessagesResponse
+ */
+export class StreamMessagesResponse extends Message$1<StreamMessagesResponse> {
+  /**
+   * @generated from oneof code.chat.v2.StreamMessagesResponse.type
+   */
+  type: {
+    /**
+     * @generated from field: code.common.v1.ServerPing ping = 1;
+     */
+    value: ServerPing;
+    case: "ping";
+  } | {
+    /**
+     * @generated from field: code.chat.v2.StreamError error = 2;
+     */
+    value: StreamError;
+    case: "error";
+  } | {
+    /**
+     * @generated from field: code.chat.v2.StreamMessagesResponse.MessageBatch messages = 3;
+     */
+    value: StreamMessagesResponse_MessageBatch;
+    case: "messages";
+  } | { case: undefined; value?: undefined } = { case: undefined };
+
+  constructor(data?: PartialMessage<StreamMessagesResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.chat.v2.StreamMessagesResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "ping", kind: "message", T: ServerPing, oneof: "type" },
+    { no: 2, name: "error", kind: "message", T: StreamError, oneof: "type" },
+    { no: 3, name: "messages", kind: "message", T: StreamMessagesResponse_MessageBatch, oneof: "type" },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StreamMessagesResponse {
+    return new StreamMessagesResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StreamMessagesResponse {
+    return new StreamMessagesResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StreamMessagesResponse {
+    return new StreamMessagesResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: StreamMessagesResponse | PlainMessage<StreamMessagesResponse> | undefined, b: StreamMessagesResponse | PlainMessage<StreamMessagesResponse> | undefined): boolean {
+    return proto3.util.equals(StreamMessagesResponse, a, b);
+  }
+}
+
+/**
+ * @generated from message code.chat.v2.StreamMessagesResponse.MessageBatch
+ */
+export class StreamMessagesResponse_MessageBatch extends Message$1<StreamMessagesResponse_MessageBatch> {
+  /**
+   * @generated from field: repeated code.chat.v2.Message messages = 1;
+   */
+  messages: Message[] = [];
+
+  constructor(data?: PartialMessage<StreamMessagesResponse_MessageBatch>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.chat.v2.StreamMessagesResponse.MessageBatch";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "messages", kind: "message", T: Message, repeated: true },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StreamMessagesResponse_MessageBatch {
+    return new StreamMessagesResponse_MessageBatch().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StreamMessagesResponse_MessageBatch {
+    return new StreamMessagesResponse_MessageBatch().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StreamMessagesResponse_MessageBatch {
+    return new StreamMessagesResponse_MessageBatch().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: StreamMessagesResponse_MessageBatch | PlainMessage<StreamMessagesResponse_MessageBatch> | undefined, b: StreamMessagesResponse_MessageBatch | PlainMessage<StreamMessagesResponse_MessageBatch> | undefined): boolean {
+    return proto3.util.equals(StreamMessagesResponse_MessageBatch, a, b);
+  }
+}
+
+/**
+ * @generated from message code.chat.v2.StreamError
+ */
+export class StreamError extends Message$1<StreamError> {
+  /**
+   * @generated from field: code.chat.v2.StreamError.Code code = 1;
+   */
+  code = StreamError_Code.DENIED;
+
+  constructor(data?: PartialMessage<StreamError>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.chat.v2.StreamError";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "code", kind: "enum", T: proto3.getEnumType(StreamError_Code) },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StreamError {
+    return new StreamError().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StreamError {
+    return new StreamError().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StreamError {
+    return new StreamError().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: StreamError | PlainMessage<StreamError> | undefined, b: StreamError | PlainMessage<StreamError> | undefined): boolean {
+    return proto3.util.equals(StreamError, a, b);
+  }
+}
+
+/**
+ * @generated from enum code.chat.v2.StreamError.Code
+ */
+export enum StreamError_Code {
+  /**
+   * @generated from enum value: DENIED = 0;
+   */
+  DENIED = 0,
+}
+// Retrieve enum metadata with: proto3.getEnumType(StreamError_Code)
+proto3.util.setEnumType(StreamError_Code, "code.chat.v2.StreamError.Code", [
+  { no: 0, name: "DENIED" },
+]);
+
+/**
  * @generated from message code.chat.v2.GetChatsRequest
  */
 export class GetChatsRequest extends Message$1<GetChatsRequest> {
@@ -371,307 +887,6 @@ proto3.util.setEnumType(GetMessagesResponse_Result, "code.chat.v2.GetMessagesRes
   { no: 0, name: "OK" },
   { no: 1, name: "DENIED" },
 ]);
-
-/**
- * @generated from message code.chat.v2.OpenChatEventStream
- */
-export class OpenChatEventStream extends Message$1<OpenChatEventStream> {
-  /**
-   * @generated from field: code.common.v1.ChatId chat_id = 1;
-   */
-  chatId?: ChatId;
-
-  /**
-   * @generated from field: code.common.v1.SolanaAccountId owner = 2;
-   */
-  owner?: SolanaAccountId;
-
-  /**
-   * @generated from field: code.common.v1.Signature signature = 3;
-   */
-  signature?: Signature;
-
-  constructor(data?: PartialMessage<OpenChatEventStream>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.OpenChatEventStream";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "chat_id", kind: "message", T: ChatId },
-    { no: 2, name: "owner", kind: "message", T: SolanaAccountId },
-    { no: 3, name: "signature", kind: "message", T: Signature },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): OpenChatEventStream {
-    return new OpenChatEventStream().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): OpenChatEventStream {
-    return new OpenChatEventStream().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): OpenChatEventStream {
-    return new OpenChatEventStream().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: OpenChatEventStream | PlainMessage<OpenChatEventStream> | undefined, b: OpenChatEventStream | PlainMessage<OpenChatEventStream> | undefined): boolean {
-    return proto3.util.equals(OpenChatEventStream, a, b);
-  }
-}
-
-/**
- * @generated from message code.chat.v2.ChatStreamEvent
- */
-export class ChatStreamEvent extends Message$1<ChatStreamEvent> {
-  /**
-   * @generated from oneof code.chat.v2.ChatStreamEvent.type
-   */
-  type: {
-    /**
-     * @generated from field: code.chat.v2.Message message = 1;
-     */
-    value: Message;
-    case: "message";
-  } | {
-    /**
-     * @generated from field: code.chat.v2.Pointer pointer = 2;
-     */
-    value: Pointer;
-    case: "pointer";
-  } | {
-    /**
-     * @generated from field: code.chat.v2.IsTyping is_typing = 3;
-     */
-    value: IsTyping;
-    case: "isTyping";
-  } | { case: undefined; value?: undefined } = { case: undefined };
-
-  constructor(data?: PartialMessage<ChatStreamEvent>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.ChatStreamEvent";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "message", kind: "message", T: Message, oneof: "type" },
-    { no: 2, name: "pointer", kind: "message", T: Pointer, oneof: "type" },
-    { no: 3, name: "is_typing", kind: "message", T: IsTyping, oneof: "type" },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ChatStreamEvent {
-    return new ChatStreamEvent().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ChatStreamEvent {
-    return new ChatStreamEvent().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ChatStreamEvent {
-    return new ChatStreamEvent().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: ChatStreamEvent | PlainMessage<ChatStreamEvent> | undefined, b: ChatStreamEvent | PlainMessage<ChatStreamEvent> | undefined): boolean {
-    return proto3.util.equals(ChatStreamEvent, a, b);
-  }
-}
-
-/**
- * @generated from message code.chat.v2.ChatStreamEventBatch
- */
-export class ChatStreamEventBatch extends Message$1<ChatStreamEventBatch> {
-  /**
-   * @generated from field: repeated code.chat.v2.ChatStreamEvent events = 2;
-   */
-  events: ChatStreamEvent[] = [];
-
-  constructor(data?: PartialMessage<ChatStreamEventBatch>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.ChatStreamEventBatch";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 2, name: "events", kind: "message", T: ChatStreamEvent, repeated: true },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ChatStreamEventBatch {
-    return new ChatStreamEventBatch().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ChatStreamEventBatch {
-    return new ChatStreamEventBatch().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ChatStreamEventBatch {
-    return new ChatStreamEventBatch().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: ChatStreamEventBatch | PlainMessage<ChatStreamEventBatch> | undefined, b: ChatStreamEventBatch | PlainMessage<ChatStreamEventBatch> | undefined): boolean {
-    return proto3.util.equals(ChatStreamEventBatch, a, b);
-  }
-}
-
-/**
- * @generated from message code.chat.v2.ChatStreamEventError
- */
-export class ChatStreamEventError extends Message$1<ChatStreamEventError> {
-  /**
-   * @generated from field: code.chat.v2.ChatStreamEventError.Code code = 1;
-   */
-  code = ChatStreamEventError_Code.DENIED;
-
-  constructor(data?: PartialMessage<ChatStreamEventError>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.ChatStreamEventError";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "code", kind: "enum", T: proto3.getEnumType(ChatStreamEventError_Code) },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ChatStreamEventError {
-    return new ChatStreamEventError().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ChatStreamEventError {
-    return new ChatStreamEventError().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ChatStreamEventError {
-    return new ChatStreamEventError().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: ChatStreamEventError | PlainMessage<ChatStreamEventError> | undefined, b: ChatStreamEventError | PlainMessage<ChatStreamEventError> | undefined): boolean {
-    return proto3.util.equals(ChatStreamEventError, a, b);
-  }
-}
-
-/**
- * @generated from enum code.chat.v2.ChatStreamEventError.Code
- */
-export enum ChatStreamEventError_Code {
-  /**
-   * @generated from enum value: DENIED = 0;
-   */
-  DENIED = 0,
-}
-// Retrieve enum metadata with: proto3.getEnumType(ChatStreamEventError_Code)
-proto3.util.setEnumType(ChatStreamEventError_Code, "code.chat.v2.ChatStreamEventError.Code", [
-  { no: 0, name: "DENIED" },
-]);
-
-/**
- * @generated from message code.chat.v2.StreamChatEventsRequest
- */
-export class StreamChatEventsRequest extends Message$1<StreamChatEventsRequest> {
-  /**
-   * @generated from oneof code.chat.v2.StreamChatEventsRequest.type
-   */
-  type: {
-    /**
-     * @generated from field: code.chat.v2.OpenChatEventStream open_stream = 1;
-     */
-    value: OpenChatEventStream;
-    case: "openStream";
-  } | {
-    /**
-     * @generated from field: code.common.v1.ClientPong pong = 2;
-     */
-    value: ClientPong;
-    case: "pong";
-  } | { case: undefined; value?: undefined } = { case: undefined };
-
-  constructor(data?: PartialMessage<StreamChatEventsRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.StreamChatEventsRequest";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "open_stream", kind: "message", T: OpenChatEventStream, oneof: "type" },
-    { no: 2, name: "pong", kind: "message", T: ClientPong, oneof: "type" },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StreamChatEventsRequest {
-    return new StreamChatEventsRequest().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StreamChatEventsRequest {
-    return new StreamChatEventsRequest().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StreamChatEventsRequest {
-    return new StreamChatEventsRequest().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: StreamChatEventsRequest | PlainMessage<StreamChatEventsRequest> | undefined, b: StreamChatEventsRequest | PlainMessage<StreamChatEventsRequest> | undefined): boolean {
-    return proto3.util.equals(StreamChatEventsRequest, a, b);
-  }
-}
-
-/**
- * @generated from message code.chat.v2.StreamChatEventsResponse
- */
-export class StreamChatEventsResponse extends Message$1<StreamChatEventsResponse> {
-  /**
-   * @generated from oneof code.chat.v2.StreamChatEventsResponse.type
-   */
-  type: {
-    /**
-     * @generated from field: code.chat.v2.ChatStreamEventBatch events = 1;
-     */
-    value: ChatStreamEventBatch;
-    case: "events";
-  } | {
-    /**
-     * @generated from field: code.common.v1.ServerPing ping = 2;
-     */
-    value: ServerPing;
-    case: "ping";
-  } | {
-    /**
-     * @generated from field: code.chat.v2.ChatStreamEventError error = 3;
-     */
-    value: ChatStreamEventError;
-    case: "error";
-  } | { case: undefined; value?: undefined } = { case: undefined };
-
-  constructor(data?: PartialMessage<StreamChatEventsResponse>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.chat.v2.StreamChatEventsResponse";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "events", kind: "message", T: ChatStreamEventBatch, oneof: "type" },
-    { no: 2, name: "ping", kind: "message", T: ServerPing, oneof: "type" },
-    { no: 3, name: "error", kind: "message", T: ChatStreamEventError, oneof: "type" },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StreamChatEventsResponse {
-    return new StreamChatEventsResponse().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StreamChatEventsResponse {
-    return new StreamChatEventsResponse().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StreamChatEventsResponse {
-    return new StreamChatEventsResponse().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: StreamChatEventsResponse | PlainMessage<StreamChatEventsResponse> | undefined, b: StreamChatEventsResponse | PlainMessage<StreamChatEventsResponse> | undefined): boolean {
-    return proto3.util.equals(StreamChatEventsResponse, a, b);
-  }
-}
 
 /**
  * @generated from message code.chat.v2.StartChatRequest
