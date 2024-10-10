@@ -99,9 +99,19 @@ message StreamChatEventsResponse {
     message ChatUpdate {
         common.v1.ChatId chat_id = 1 [(validate.rules).message.required = true];
 
+        // metadata contains the latest (full) metadata of the chat.
         Metadata metadata = 2;
+
+        // Message contains the last known message of the chat.
         Message last_message = 3;
-        IsTyping is_typing = 4;
+
+        // Pointer contians the last known relevant pointer of the chat.
+        // where 'relevant' means "relevant to UI updates". For example,
+        // when a user has read the latest message.
+        Pointer pointer = 4;
+
+        // IsTyping indicates whether or not someone is typing in the group.
+        IsTyping is_typing = 5;
     }
 }
 

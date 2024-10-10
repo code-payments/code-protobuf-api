@@ -3689,6 +3689,16 @@ func (m *StreamChatEventsResponse_ChatUpdate) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetPointer()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StreamChatEventsResponse_ChatUpdateValidationError{
+				field:  "Pointer",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if v, ok := interface{}(m.GetIsTyping()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return StreamChatEventsResponse_ChatUpdateValidationError{

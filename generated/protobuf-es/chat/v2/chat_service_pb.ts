@@ -286,17 +286,32 @@ export class StreamChatEventsResponse_ChatUpdate extends Message$1<StreamChatEve
   chatId?: ChatId;
 
   /**
+   * metadata contains the latest (full) metadata of the chat.
+   *
    * @generated from field: code.chat.v2.Metadata metadata = 2;
    */
   metadata?: Metadata;
 
   /**
+   * Message contains the last known message of the chat.
+   *
    * @generated from field: code.chat.v2.Message last_message = 3;
    */
   lastMessage?: Message;
 
   /**
-   * @generated from field: code.chat.v2.IsTyping is_typing = 4;
+   * Pointer contians the last known relevant pointer of the chat.
+   * where 'relevant' means "relevant to UI updates". For example,
+   * when a user has read the latest message.
+   *
+   * @generated from field: code.chat.v2.Pointer pointer = 4;
+   */
+  pointer?: Pointer;
+
+  /**
+   * IsTyping indicates whether or not someone is typing in the group.
+   *
+   * @generated from field: code.chat.v2.IsTyping is_typing = 5;
    */
   isTyping?: IsTyping;
 
@@ -311,7 +326,8 @@ export class StreamChatEventsResponse_ChatUpdate extends Message$1<StreamChatEve
     { no: 1, name: "chat_id", kind: "message", T: ChatId },
     { no: 2, name: "metadata", kind: "message", T: Metadata },
     { no: 3, name: "last_message", kind: "message", T: Message },
-    { no: 4, name: "is_typing", kind: "message", T: IsTyping },
+    { no: 4, name: "pointer", kind: "message", T: Pointer },
+    { no: 5, name: "is_typing", kind: "message", T: IsTyping },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StreamChatEventsResponse_ChatUpdate {
