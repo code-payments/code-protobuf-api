@@ -22,56 +22,42 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ChatClient interface {
+	// StreamChatEvents streams all chat events for the requesting user.
+	//
+	// Chat events will include any update to a chat, including:
+	//  1. Metadata changes.
+	//  2. Membership changes.
+	//  3. Latest messages.
+	//
+	// The server will optionally filter out some events depending on load
+	// and chat type. For example, Broadcast chats will not receive latest
+	// messages.
+	//
+	// Clients should use GetMessages to backfill in any historical messages
+	// for a chat. It should be sufficient to rely on ChatEvents for some types
+	// of chats, but using StreamMessages provides a guarentee of message events
+	// for all chats.
+	StreamChatEvents(ctx context.Context, opts ...grpc.CallOption) (Chat_StreamChatEventsClient, error)
+	// StreamMessages streams all messages/message states for the requested chat.
+	//
+	// By default, streams will resume messages from the last acknowledged delivery
+	// pointer of the caller. This can be overridden by setting 'last_message',
+	// 'latest_only'.
+	StreamMessages(ctx context.Context, opts ...grpc.CallOption) (Chat_StreamMessagesClient, error)
 	// GetChats gets the set of chats for an owner account using a paged API.
 	// This RPC is aware of all identities tied to the owner account.
 	GetChats(ctx context.Context, in *GetChatsRequest, opts ...grpc.CallOption) (*GetChatsResponse, error)
 	// GetMessages gets the set of messages for a chat member using a paged API
 	GetMessages(ctx context.Context, in *GetMessagesRequest, opts ...grpc.CallOption) (*GetMessagesResponse, error)
-	// StreamChatEvents streams chat events in real-time. Chat events include
-	// messages, pointer updates, etc.
-	//
-	// The streaming protocol is follows:
-	//  1. Client initiates a stream by sending an OpenChatEventStream message.
-	//  2. If an error is encoutered, a ChatStreamEventError message will be
-	//     returned by server and the stream will be closed.
-	//  3. Server will immediately flush initial chat state.
-	//  4. New chat events will be pushed to the stream in real time as they
-	//     are received.
-	//
-	// This RPC supports a keepalive protocol as follows:
-	//  1. Client initiates a stream by sending an OpenChatEventStream message.
-	//  2. Upon stream initialization, server begins the keepalive protocol.
-	//  3. Server sends a ping to the client.
-	//  4. Client responds with a pong as fast as possible, making note of
-	//     the delay for when to expect the next ping.
-	//  5. Steps 3 and 4 are repeated until the stream is explicitly terminated
-	//     or is deemed to be unhealthy.
-	//
-	// Client notes:
-	//   - Client should be careful to process events async, so any responses to pings are
-	//     not delayed.
-	//   - Clients should implement a reasonable backoff strategy upon continued timeout
-	//     failures.
-	//   - Clients that abuse pong messages may have their streams terminated by server.
-	//
-	// At any point in the stream, server will respond with events in real time as
-	// they are observed. Events sent over the stream should not affect the ping/pong
-	// protocol timings.
-	StreamChatEvents(ctx context.Context, opts ...grpc.CallOption) (Chat_StreamChatEventsClient, error)
 	// StartChat starts a chat. The RPC call is idempotent and will use existing
 	// chats whenever applicable within the context of message routing.
 	StartChat(ctx context.Context, in *StartChatRequest, opts ...grpc.CallOption) (*StartChatResponse, error)
-	// SendMessage sends a message to a chat
+	// SendMessage sends a message to a chat.
 	SendMessage(ctx context.Context, in *SendMessageRequest, opts ...grpc.CallOption) (*SendMessageResponse, error)
-	// AdvancePointer advances a pointer in message history for a chat member
+	// AdvancePointer advances a pointer in message history for a chat member.
 	AdvancePointer(ctx context.Context, in *AdvancePointerRequest, opts ...grpc.CallOption) (*AdvancePointerResponse, error)
-	// RevealIdentity reveals a chat member's identity if it is anonymous. A chat
-	// message will be inserted on success.
-	RevealIdentity(ctx context.Context, in *RevealIdentityRequest, opts ...grpc.CallOption) (*RevealIdentityResponse, error)
-	// SetMuteState configures a chat member's mute state
+	// SetMuteState configures a chat member's mute state.
 	SetMuteState(ctx context.Context, in *SetMuteStateRequest, opts ...grpc.CallOption) (*SetMuteStateResponse, error)
-	// SetSubscriptionState configures a chat member's susbscription state
-	SetSubscriptionState(ctx context.Context, in *SetSubscriptionStateRequest, opts ...grpc.CallOption) (*SetSubscriptionStateResponse, error)
 	// NotifyIsTypingRequest notifies a chat that the sending member is typing.
 	//
 	// These requests are transient, and may be dropped at any point.
@@ -84,24 +70,6 @@ type chatClient struct {
 
 func NewChatClient(cc grpc.ClientConnInterface) ChatClient {
 	return &chatClient{cc}
-}
-
-func (c *chatClient) GetChats(ctx context.Context, in *GetChatsRequest, opts ...grpc.CallOption) (*GetChatsResponse, error) {
-	out := new(GetChatsResponse)
-	err := c.cc.Invoke(ctx, "/code.chat.v2.Chat/GetChats", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *chatClient) GetMessages(ctx context.Context, in *GetMessagesRequest, opts ...grpc.CallOption) (*GetMessagesResponse, error) {
-	out := new(GetMessagesResponse)
-	err := c.cc.Invoke(ctx, "/code.chat.v2.Chat/GetMessages", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *chatClient) StreamChatEvents(ctx context.Context, opts ...grpc.CallOption) (Chat_StreamChatEventsClient, error) {
@@ -135,6 +103,55 @@ func (x *chatStreamChatEventsClient) Recv() (*StreamChatEventsResponse, error) {
 	return m, nil
 }
 
+func (c *chatClient) StreamMessages(ctx context.Context, opts ...grpc.CallOption) (Chat_StreamMessagesClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Chat_ServiceDesc.Streams[1], "/code.chat.v2.Chat/StreamMessages", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &chatStreamMessagesClient{stream}
+	return x, nil
+}
+
+type Chat_StreamMessagesClient interface {
+	Send(*StreamMessagesRequest) error
+	Recv() (*StreamMessagesResponse, error)
+	grpc.ClientStream
+}
+
+type chatStreamMessagesClient struct {
+	grpc.ClientStream
+}
+
+func (x *chatStreamMessagesClient) Send(m *StreamMessagesRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *chatStreamMessagesClient) Recv() (*StreamMessagesResponse, error) {
+	m := new(StreamMessagesResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *chatClient) GetChats(ctx context.Context, in *GetChatsRequest, opts ...grpc.CallOption) (*GetChatsResponse, error) {
+	out := new(GetChatsResponse)
+	err := c.cc.Invoke(ctx, "/code.chat.v2.Chat/GetChats", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *chatClient) GetMessages(ctx context.Context, in *GetMessagesRequest, opts ...grpc.CallOption) (*GetMessagesResponse, error) {
+	out := new(GetMessagesResponse)
+	err := c.cc.Invoke(ctx, "/code.chat.v2.Chat/GetMessages", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *chatClient) StartChat(ctx context.Context, in *StartChatRequest, opts ...grpc.CallOption) (*StartChatResponse, error) {
 	out := new(StartChatResponse)
 	err := c.cc.Invoke(ctx, "/code.chat.v2.Chat/StartChat", in, out, opts...)
@@ -162,27 +179,9 @@ func (c *chatClient) AdvancePointer(ctx context.Context, in *AdvancePointerReque
 	return out, nil
 }
 
-func (c *chatClient) RevealIdentity(ctx context.Context, in *RevealIdentityRequest, opts ...grpc.CallOption) (*RevealIdentityResponse, error) {
-	out := new(RevealIdentityResponse)
-	err := c.cc.Invoke(ctx, "/code.chat.v2.Chat/RevealIdentity", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *chatClient) SetMuteState(ctx context.Context, in *SetMuteStateRequest, opts ...grpc.CallOption) (*SetMuteStateResponse, error) {
 	out := new(SetMuteStateResponse)
 	err := c.cc.Invoke(ctx, "/code.chat.v2.Chat/SetMuteState", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *chatClient) SetSubscriptionState(ctx context.Context, in *SetSubscriptionStateRequest, opts ...grpc.CallOption) (*SetSubscriptionStateResponse, error) {
-	out := new(SetSubscriptionStateResponse)
-	err := c.cc.Invoke(ctx, "/code.chat.v2.Chat/SetSubscriptionState", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -202,56 +201,42 @@ func (c *chatClient) NotifyIsTyping(ctx context.Context, in *NotifyIsTypingReque
 // All implementations must embed UnimplementedChatServer
 // for forward compatibility
 type ChatServer interface {
+	// StreamChatEvents streams all chat events for the requesting user.
+	//
+	// Chat events will include any update to a chat, including:
+	//  1. Metadata changes.
+	//  2. Membership changes.
+	//  3. Latest messages.
+	//
+	// The server will optionally filter out some events depending on load
+	// and chat type. For example, Broadcast chats will not receive latest
+	// messages.
+	//
+	// Clients should use GetMessages to backfill in any historical messages
+	// for a chat. It should be sufficient to rely on ChatEvents for some types
+	// of chats, but using StreamMessages provides a guarentee of message events
+	// for all chats.
+	StreamChatEvents(Chat_StreamChatEventsServer) error
+	// StreamMessages streams all messages/message states for the requested chat.
+	//
+	// By default, streams will resume messages from the last acknowledged delivery
+	// pointer of the caller. This can be overridden by setting 'last_message',
+	// 'latest_only'.
+	StreamMessages(Chat_StreamMessagesServer) error
 	// GetChats gets the set of chats for an owner account using a paged API.
 	// This RPC is aware of all identities tied to the owner account.
 	GetChats(context.Context, *GetChatsRequest) (*GetChatsResponse, error)
 	// GetMessages gets the set of messages for a chat member using a paged API
 	GetMessages(context.Context, *GetMessagesRequest) (*GetMessagesResponse, error)
-	// StreamChatEvents streams chat events in real-time. Chat events include
-	// messages, pointer updates, etc.
-	//
-	// The streaming protocol is follows:
-	//  1. Client initiates a stream by sending an OpenChatEventStream message.
-	//  2. If an error is encoutered, a ChatStreamEventError message will be
-	//     returned by server and the stream will be closed.
-	//  3. Server will immediately flush initial chat state.
-	//  4. New chat events will be pushed to the stream in real time as they
-	//     are received.
-	//
-	// This RPC supports a keepalive protocol as follows:
-	//  1. Client initiates a stream by sending an OpenChatEventStream message.
-	//  2. Upon stream initialization, server begins the keepalive protocol.
-	//  3. Server sends a ping to the client.
-	//  4. Client responds with a pong as fast as possible, making note of
-	//     the delay for when to expect the next ping.
-	//  5. Steps 3 and 4 are repeated until the stream is explicitly terminated
-	//     or is deemed to be unhealthy.
-	//
-	// Client notes:
-	//   - Client should be careful to process events async, so any responses to pings are
-	//     not delayed.
-	//   - Clients should implement a reasonable backoff strategy upon continued timeout
-	//     failures.
-	//   - Clients that abuse pong messages may have their streams terminated by server.
-	//
-	// At any point in the stream, server will respond with events in real time as
-	// they are observed. Events sent over the stream should not affect the ping/pong
-	// protocol timings.
-	StreamChatEvents(Chat_StreamChatEventsServer) error
 	// StartChat starts a chat. The RPC call is idempotent and will use existing
 	// chats whenever applicable within the context of message routing.
 	StartChat(context.Context, *StartChatRequest) (*StartChatResponse, error)
-	// SendMessage sends a message to a chat
+	// SendMessage sends a message to a chat.
 	SendMessage(context.Context, *SendMessageRequest) (*SendMessageResponse, error)
-	// AdvancePointer advances a pointer in message history for a chat member
+	// AdvancePointer advances a pointer in message history for a chat member.
 	AdvancePointer(context.Context, *AdvancePointerRequest) (*AdvancePointerResponse, error)
-	// RevealIdentity reveals a chat member's identity if it is anonymous. A chat
-	// message will be inserted on success.
-	RevealIdentity(context.Context, *RevealIdentityRequest) (*RevealIdentityResponse, error)
-	// SetMuteState configures a chat member's mute state
+	// SetMuteState configures a chat member's mute state.
 	SetMuteState(context.Context, *SetMuteStateRequest) (*SetMuteStateResponse, error)
-	// SetSubscriptionState configures a chat member's susbscription state
-	SetSubscriptionState(context.Context, *SetSubscriptionStateRequest) (*SetSubscriptionStateResponse, error)
 	// NotifyIsTypingRequest notifies a chat that the sending member is typing.
 	//
 	// These requests are transient, and may be dropped at any point.
@@ -263,14 +248,17 @@ type ChatServer interface {
 type UnimplementedChatServer struct {
 }
 
+func (UnimplementedChatServer) StreamChatEvents(Chat_StreamChatEventsServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamChatEvents not implemented")
+}
+func (UnimplementedChatServer) StreamMessages(Chat_StreamMessagesServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamMessages not implemented")
+}
 func (UnimplementedChatServer) GetChats(context.Context, *GetChatsRequest) (*GetChatsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetChats not implemented")
 }
 func (UnimplementedChatServer) GetMessages(context.Context, *GetMessagesRequest) (*GetMessagesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMessages not implemented")
-}
-func (UnimplementedChatServer) StreamChatEvents(Chat_StreamChatEventsServer) error {
-	return status.Errorf(codes.Unimplemented, "method StreamChatEvents not implemented")
 }
 func (UnimplementedChatServer) StartChat(context.Context, *StartChatRequest) (*StartChatResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StartChat not implemented")
@@ -281,14 +269,8 @@ func (UnimplementedChatServer) SendMessage(context.Context, *SendMessageRequest)
 func (UnimplementedChatServer) AdvancePointer(context.Context, *AdvancePointerRequest) (*AdvancePointerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AdvancePointer not implemented")
 }
-func (UnimplementedChatServer) RevealIdentity(context.Context, *RevealIdentityRequest) (*RevealIdentityResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RevealIdentity not implemented")
-}
 func (UnimplementedChatServer) SetMuteState(context.Context, *SetMuteStateRequest) (*SetMuteStateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetMuteState not implemented")
-}
-func (UnimplementedChatServer) SetSubscriptionState(context.Context, *SetSubscriptionStateRequest) (*SetSubscriptionStateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetSubscriptionState not implemented")
 }
 func (UnimplementedChatServer) NotifyIsTyping(context.Context, *NotifyIsTypingRequest) (*NotifyIsTypingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method NotifyIsTyping not implemented")
@@ -304,6 +286,58 @@ type UnsafeChatServer interface {
 
 func RegisterChatServer(s grpc.ServiceRegistrar, srv ChatServer) {
 	s.RegisterService(&Chat_ServiceDesc, srv)
+}
+
+func _Chat_StreamChatEvents_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(ChatServer).StreamChatEvents(&chatStreamChatEventsServer{stream})
+}
+
+type Chat_StreamChatEventsServer interface {
+	Send(*StreamChatEventsResponse) error
+	Recv() (*StreamChatEventsRequest, error)
+	grpc.ServerStream
+}
+
+type chatStreamChatEventsServer struct {
+	grpc.ServerStream
+}
+
+func (x *chatStreamChatEventsServer) Send(m *StreamChatEventsResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *chatStreamChatEventsServer) Recv() (*StreamChatEventsRequest, error) {
+	m := new(StreamChatEventsRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func _Chat_StreamMessages_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(ChatServer).StreamMessages(&chatStreamMessagesServer{stream})
+}
+
+type Chat_StreamMessagesServer interface {
+	Send(*StreamMessagesResponse) error
+	Recv() (*StreamMessagesRequest, error)
+	grpc.ServerStream
+}
+
+type chatStreamMessagesServer struct {
+	grpc.ServerStream
+}
+
+func (x *chatStreamMessagesServer) Send(m *StreamMessagesResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *chatStreamMessagesServer) Recv() (*StreamMessagesRequest, error) {
+	m := new(StreamMessagesRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func _Chat_GetChats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -340,32 +374,6 @@ func _Chat_GetMessages_Handler(srv interface{}, ctx context.Context, dec func(in
 		return srv.(ChatServer).GetMessages(ctx, req.(*GetMessagesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
-}
-
-func _Chat_StreamChatEvents_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(ChatServer).StreamChatEvents(&chatStreamChatEventsServer{stream})
-}
-
-type Chat_StreamChatEventsServer interface {
-	Send(*StreamChatEventsResponse) error
-	Recv() (*StreamChatEventsRequest, error)
-	grpc.ServerStream
-}
-
-type chatStreamChatEventsServer struct {
-	grpc.ServerStream
-}
-
-func (x *chatStreamChatEventsServer) Send(m *StreamChatEventsResponse) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func (x *chatStreamChatEventsServer) Recv() (*StreamChatEventsRequest, error) {
-	m := new(StreamChatEventsRequest)
-	if err := x.ServerStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
 }
 
 func _Chat_StartChat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -422,24 +430,6 @@ func _Chat_AdvancePointer_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Chat_RevealIdentity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RevealIdentityRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ChatServer).RevealIdentity(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/code.chat.v2.Chat/RevealIdentity",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChatServer).RevealIdentity(ctx, req.(*RevealIdentityRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Chat_SetMuteState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SetMuteStateRequest)
 	if err := dec(in); err != nil {
@@ -454,24 +444,6 @@ func _Chat_SetMuteState_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ChatServer).SetMuteState(ctx, req.(*SetMuteStateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Chat_SetSubscriptionState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetSubscriptionStateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ChatServer).SetSubscriptionState(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/code.chat.v2.Chat/SetSubscriptionState",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChatServer).SetSubscriptionState(ctx, req.(*SetSubscriptionStateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -522,16 +494,8 @@ var Chat_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Chat_AdvancePointer_Handler,
 		},
 		{
-			MethodName: "RevealIdentity",
-			Handler:    _Chat_RevealIdentity_Handler,
-		},
-		{
 			MethodName: "SetMuteState",
 			Handler:    _Chat_SetMuteState_Handler,
-		},
-		{
-			MethodName: "SetSubscriptionState",
-			Handler:    _Chat_SetSubscriptionState_Handler,
 		},
 		{
 			MethodName: "NotifyIsTyping",
@@ -542,6 +506,12 @@ var Chat_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "StreamChatEvents",
 			Handler:       _Chat_StreamChatEvents_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "StreamMessages",
+			Handler:       _Chat_StreamMessages_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},

@@ -1298,6 +1298,26 @@ func (m *GetTwitterUserRequest) Validate() error {
 		return nil
 	}
 
+	if v, ok := interface{}(m.GetRequestor()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetTwitterUserRequestValidationError{
+				field:  "Requestor",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetTwitterUserRequestValidationError{
+				field:  "Signature",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	switch m.Query.(type) {
 
 	case *GetTwitterUserRequest_Username:
@@ -1762,6 +1782,28 @@ func (m *TwitterUser) Validate() error {
 	// no validation rules for VerifiedType
 
 	// no validation rules for FollowerCount
+
+	if v, ok := interface{}(m.GetFriendshipCost()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return TwitterUserValidationError{
+				field:  "FriendshipCost",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for IsFriend
+
+	if v, ok := interface{}(m.GetFriendChatId()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return TwitterUserValidationError{
+				field:  "FriendChatId",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	return nil
 }

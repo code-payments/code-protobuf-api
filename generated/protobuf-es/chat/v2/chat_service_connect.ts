@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { AdvancePointerRequest, AdvancePointerResponse, GetChatsRequest, GetChatsResponse, GetMessagesRequest, GetMessagesResponse, NotifyIsTypingRequest, NotifyIsTypingResponse, RevealIdentityRequest, RevealIdentityResponse, SendMessageRequest, SendMessageResponse, SetMuteStateRequest, SetMuteStateResponse, SetSubscriptionStateRequest, SetSubscriptionStateResponse, StartChatRequest, StartChatResponse, StreamChatEventsRequest, StreamChatEventsResponse } from "./chat_service_pb";
+import { AdvancePointerRequest, AdvancePointerResponse, GetChatsRequest, GetChatsResponse, GetMessagesRequest, GetMessagesResponse, NotifyIsTypingRequest, NotifyIsTypingResponse, SendMessageRequest, SendMessageResponse, SetMuteStateRequest, SetMuteStateResponse, StartChatRequest, StartChatResponse, StreamChatEventsRequest, StreamChatEventsResponse, StreamMessagesRequest, StreamMessagesResponse } from "./chat_service_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -12,6 +12,46 @@ import { MethodKind } from "@bufbuild/protobuf";
 export const Chat = {
   typeName: "code.chat.v2.Chat",
   methods: {
+    /**
+     * StreamChatEvents streams all chat events for the requesting user.
+     *
+     * Chat events will include any update to a chat, including:
+     *   1. Metadata changes.
+     *   2. Membership changes.
+     *   3. Latest messages.
+     *
+     * The server will optionally filter out some events depending on load
+     * and chat type. For example, Broadcast chats will not receive latest
+     * messages.
+     *
+     * Clients should use GetMessages to backfill in any historical messages
+     * for a chat. It should be sufficient to rely on ChatEvents for some types
+     * of chats, but using StreamMessages provides a guarentee of message events
+     * for all chats.
+     *
+     * @generated from rpc code.chat.v2.Chat.StreamChatEvents
+     */
+    streamChatEvents: {
+      name: "StreamChatEvents",
+      I: StreamChatEventsRequest,
+      O: StreamChatEventsResponse,
+      kind: MethodKind.BiDiStreaming,
+    },
+    /**
+     * StreamMessages streams all messages/message states for the requested chat.
+     *
+     * By default, streams will resume messages from the last acknowledged delivery
+     * pointer of the caller. This can be overridden by setting 'last_message',
+     * 'latest_only'.
+     *
+     * @generated from rpc code.chat.v2.Chat.StreamMessages
+     */
+    streamMessages: {
+      name: "StreamMessages",
+      I: StreamMessagesRequest,
+      O: StreamMessagesResponse,
+      kind: MethodKind.BiDiStreaming,
+    },
     /**
      * GetChats gets the set of chats for an owner account using a paged API.
      * This RPC is aware of all identities tied to the owner account.
@@ -36,46 +76,6 @@ export const Chat = {
       kind: MethodKind.Unary,
     },
     /**
-     * StreamChatEvents streams chat events in real-time. Chat events include
-     * messages, pointer updates, etc.
-     *
-     * The streaming protocol is follows:
-     *  1. Client initiates a stream by sending an OpenChatEventStream message.
-     *  2. If an error is encoutered, a ChatStreamEventError message will be
-     *     returned by server and the stream will be closed.
-     *  3. Server will immediately flush initial chat state.
-     *  4. New chat events will be pushed to the stream in real time as they
-     *     are received.
-     *
-     * This RPC supports a keepalive protocol as follows:
-     *   1. Client initiates a stream by sending an OpenChatEventStream message.
-     *   2. Upon stream initialization, server begins the keepalive protocol.
-     *   3. Server sends a ping to the client.
-     *   4. Client responds with a pong as fast as possible, making note of
-     *      the delay for when to expect the next ping.
-     *   5. Steps 3 and 4 are repeated until the stream is explicitly terminated
-     *      or is deemed to be unhealthy.
-     *
-     * Client notes:
-     * * Client should be careful to process events async, so any responses to pings are
-     *   not delayed.
-     * * Clients should implement a reasonable backoff strategy upon continued timeout
-     *   failures.
-     * * Clients that abuse pong messages may have their streams terminated by server.
-     *
-     * At any point in the stream, server will respond with events in real time as
-     * they are observed. Events sent over the stream should not affect the ping/pong
-     * protocol timings.
-     *
-     * @generated from rpc code.chat.v2.Chat.StreamChatEvents
-     */
-    streamChatEvents: {
-      name: "StreamChatEvents",
-      I: StreamChatEventsRequest,
-      O: StreamChatEventsResponse,
-      kind: MethodKind.BiDiStreaming,
-    },
-    /**
      * StartChat starts a chat. The RPC call is idempotent and will use existing
      * chats whenever applicable within the context of message routing.
      *
@@ -88,7 +88,7 @@ export const Chat = {
       kind: MethodKind.Unary,
     },
     /**
-     * SendMessage sends a message to a chat
+     * SendMessage sends a message to a chat.
      *
      * @generated from rpc code.chat.v2.Chat.SendMessage
      */
@@ -99,7 +99,7 @@ export const Chat = {
       kind: MethodKind.Unary,
     },
     /**
-     * AdvancePointer advances a pointer in message history for a chat member
+     * AdvancePointer advances a pointer in message history for a chat member.
      *
      * @generated from rpc code.chat.v2.Chat.AdvancePointer
      */
@@ -110,19 +110,7 @@ export const Chat = {
       kind: MethodKind.Unary,
     },
     /**
-     * RevealIdentity reveals a chat member's identity if it is anonymous. A chat
-     * message will be inserted on success.
-     *
-     * @generated from rpc code.chat.v2.Chat.RevealIdentity
-     */
-    revealIdentity: {
-      name: "RevealIdentity",
-      I: RevealIdentityRequest,
-      O: RevealIdentityResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * SetMuteState configures a chat member's mute state
+     * SetMuteState configures a chat member's mute state.
      *
      * @generated from rpc code.chat.v2.Chat.SetMuteState
      */
@@ -130,17 +118,6 @@ export const Chat = {
       name: "SetMuteState",
       I: SetMuteStateRequest,
       O: SetMuteStateResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * SetSubscriptionState configures a chat member's susbscription state
-     *
-     * @generated from rpc code.chat.v2.Chat.SetSubscriptionState
-     */
-    setSubscriptionState: {
-      name: "SetSubscriptionState",
-      I: SetSubscriptionStateRequest,
-      O: SetSubscriptionStateResponse,
       kind: MethodKind.Unary,
     },
     /**
