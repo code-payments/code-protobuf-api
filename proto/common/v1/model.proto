@@ -82,25 +82,6 @@ message IntentId {
     }];
 }
 
-// UserId is a globally unique identifier for a user within Code
-//
-// Note: Users outside Code are modelled as relationship accounts
-message UserId {
-    bytes value = 1 [(validate.rules).bytes = {
-        min_len: 16
-        max_len: 16
-    }];
-}
-
-// DataContainerId is a globally unique identifier for a container where a user
-// can store a copy of their data
-message DataContainerId {
-    bytes value = 1 [(validate.rules).bytes = {
-        min_len: 16
-        max_len: 16
-    }];
-}
-
 // DeviceToken is an opaque token used to verify whether a device real
 message DeviceToken {
     string value = 1 [(validate.rules).string = {
@@ -117,12 +98,6 @@ message AppInstallId {
         min_len: 1
         max_len: 256 // todo: What's a reasonable size
     }];
-}
-
-// PhoneNumber is an E.164 phone number
-message PhoneNumber {
-    // Regex provided by Twilio here: https://www.twilio.com/docs/glossary/what-e164#regex-matching-for-e164
-    string value = 1 [(validate.rules).string.pattern = "^\\+[1-9]\\d{1,14}$"];
 }
 
 // Domain is a hostname
