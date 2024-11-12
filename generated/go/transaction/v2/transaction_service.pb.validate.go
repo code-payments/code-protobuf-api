@@ -1922,6 +1922,90 @@ var _ interface {
 	ErrorName() string
 } = MetadataValidationError{}
 
+// Validate checks the field values on ExtendedPaymentMetadata with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ExtendedPaymentMetadata) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetValue() == nil {
+		return ExtendedPaymentMetadataValidationError{
+			field:  "Value",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetValue()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ExtendedPaymentMetadataValidationError{
+				field:  "Value",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// ExtendedPaymentMetadataValidationError is the validation error returned by
+// ExtendedPaymentMetadata.Validate if the designated constraints aren't met.
+type ExtendedPaymentMetadataValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ExtendedPaymentMetadataValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ExtendedPaymentMetadataValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ExtendedPaymentMetadataValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ExtendedPaymentMetadataValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ExtendedPaymentMetadataValidationError) ErrorName() string {
+	return "ExtendedPaymentMetadataValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ExtendedPaymentMetadataValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sExtendedPaymentMetadata.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ExtendedPaymentMetadataValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ExtendedPaymentMetadataValidationError{}
+
 // Validate checks the field values on OpenAccountsMetadata with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -2162,6 +2246,16 @@ func (m *SendPublicPaymentMetadata) Validate() error {
 		return SendPublicPaymentMetadataValidationError{
 			field:  "IsWithdrawal",
 			reason: "value must equal true",
+		}
+	}
+
+	if v, ok := interface{}(m.GetExtendedMetadata()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SendPublicPaymentMetadataValidationError{
+				field:  "ExtendedMetadata",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
 	}
 

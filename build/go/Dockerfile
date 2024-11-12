@@ -5,6 +5,7 @@ FROM golang:1.21
 # Base libraries
 RUN apt-get update
 RUN apt-get install -y protobuf-compiler
+RUN apt-get install -y libprotobuf-dev
 
 # Go protoc dependencies
 RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.1

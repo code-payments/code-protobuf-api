@@ -4,7 +4,7 @@
 // @ts-nocheck
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3, protoInt64, Timestamp } from "@bufbuild/protobuf";
+import { Any, Message, proto3, protoInt64, Timestamp } from "@bufbuild/protobuf";
 import { AccountType, Blockhash, DeviceToken, Hash, InstructionAccount, IntentId, Relationship, Signature, SolanaAccountId, Transaction, UUID } from "../../common/v1/model_pb";
 
 /**
@@ -1989,6 +1989,46 @@ export class Metadata extends Message<Metadata> {
 }
 
 /**
+ * ExtendedPaymentMetadata is additional metadata that can be used for custom
+ * payment types
+ *
+ * @generated from message code.transaction.v2.ExtendedPaymentMetadata
+ */
+export class ExtendedPaymentMetadata extends Message<ExtendedPaymentMetadata> {
+  /**
+   * @generated from field: google.protobuf.Any value = 1;
+   */
+  value?: Any;
+
+  constructor(data?: PartialMessage<ExtendedPaymentMetadata>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.transaction.v2.ExtendedPaymentMetadata";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "value", kind: "message", T: Any },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ExtendedPaymentMetadata {
+    return new ExtendedPaymentMetadata().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ExtendedPaymentMetadata {
+    return new ExtendedPaymentMetadata().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ExtendedPaymentMetadata {
+    return new ExtendedPaymentMetadata().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: ExtendedPaymentMetadata | PlainMessage<ExtendedPaymentMetadata> | undefined, b: ExtendedPaymentMetadata | PlainMessage<ExtendedPaymentMetadata> | undefined): boolean {
+    return proto3.util.equals(ExtendedPaymentMetadata, a, b);
+  }
+}
+
+/**
  * Open a set of accounts. Currently, clients should only use this for new users
  * to open all required accounts up front (buckets, incoming, and outgoing).
  *
@@ -2226,6 +2266,11 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
    */
   isWithdrawal = false;
 
+  /**
+   * @generated from field: code.transaction.v2.ExtendedPaymentMetadata extended_metadata = 5;
+   */
+  extendedMetadata?: ExtendedPaymentMetadata;
+
   constructor(data?: PartialMessage<SendPublicPaymentMetadata>) {
     super();
     proto3.util.initPartial(data, this);
@@ -2238,6 +2283,7 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
     { no: 1, name: "destination", kind: "message", T: SolanaAccountId },
     { no: 2, name: "exchange_data", kind: "message", T: ExchangeData },
     { no: 3, name: "is_withdrawal", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 5, name: "extended_metadata", kind: "message", T: ExtendedPaymentMetadata },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SendPublicPaymentMetadata {

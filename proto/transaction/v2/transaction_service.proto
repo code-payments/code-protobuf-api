@@ -7,6 +7,7 @@ option java_package = "com.codeinc.gen.transaction.v2";
 option objc_class_prefix = "APBTransactionV2";
 
 import "common/v1/model.proto";
+import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
@@ -544,6 +545,12 @@ message Metadata {
     reserved 5; // Deprecated MigrateToPrivacy2022Metadata
 }
 
+// ExtendedPaymentMetadata is additional metadata that can be used for custom
+// payment types
+message ExtendedPaymentMetadata {
+    google.protobuf.Any value = 1 [(validate.rules).message.required = true];;
+}
+
 // Open a set of accounts. Currently, clients should only use this for new users
 // to open all required accounts up front (buckets, incoming, and outgoing).
 //
@@ -671,6 +678,8 @@ message SendPublicPaymentMetadata {
 
     // Is the payment a withdrawal? Currently, this is always true.
     bool is_withdrawal = 3 [(validate.rules).bool.const = true];
+
+    ExtendedPaymentMetadata extended_metadata = 5;
 }
 
 // Receive funds into an organizer with initial temporary privacy. Clients should
