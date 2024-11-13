@@ -11,11 +11,12 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,25 +31,63 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on SendVerificationCodeRequest with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *SendVerificationCodeRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SendVerificationCodeRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SendVerificationCodeRequestMultiError, or nil if none found.
+func (m *SendVerificationCodeRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SendVerificationCodeRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetPhoneNumber() == nil {
-		return SendVerificationCodeRequestValidationError{
+		err := SendVerificationCodeRequestValidationError{
 			field:  "PhoneNumber",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetPhoneNumber()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetPhoneNumber()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SendVerificationCodeRequestValidationError{
+					field:  "PhoneNumber",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SendVerificationCodeRequestValidationError{
+					field:  "PhoneNumber",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPhoneNumber()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SendVerificationCodeRequestValidationError{
 				field:  "PhoneNumber",
@@ -58,7 +97,26 @@ func (m *SendVerificationCodeRequest) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetDeviceToken()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetDeviceToken()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SendVerificationCodeRequestValidationError{
+					field:  "DeviceToken",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SendVerificationCodeRequestValidationError{
+					field:  "DeviceToken",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDeviceToken()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SendVerificationCodeRequestValidationError{
 				field:  "DeviceToken",
@@ -68,8 +126,29 @@ func (m *SendVerificationCodeRequest) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return SendVerificationCodeRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// SendVerificationCodeRequestMultiError is an error wrapping multiple
+// validation errors returned by SendVerificationCodeRequest.ValidateAll() if
+// the designated constraints aren't met.
+type SendVerificationCodeRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SendVerificationCodeRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SendVerificationCodeRequestMultiError) AllErrors() []error { return m }
 
 // SendVerificationCodeRequestValidationError is the validation error returned
 // by SendVerificationCodeRequest.Validate if the designated constraints
@@ -130,16 +209,51 @@ var _ interface {
 
 // Validate checks the field values on SendVerificationCodeResponse with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *SendVerificationCodeResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SendVerificationCodeResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SendVerificationCodeResponseMultiError, or nil if none found.
+func (m *SendVerificationCodeResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SendVerificationCodeResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Result
+
+	if len(errors) > 0 {
+		return SendVerificationCodeResponseMultiError(errors)
+	}
 
 	return nil
 }
+
+// SendVerificationCodeResponseMultiError is an error wrapping multiple
+// validation errors returned by SendVerificationCodeResponse.ValidateAll() if
+// the designated constraints aren't met.
+type SendVerificationCodeResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SendVerificationCodeResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SendVerificationCodeResponseMultiError) AllErrors() []error { return m }
 
 // SendVerificationCodeResponseValidationError is the validation error returned
 // by SendVerificationCodeResponse.Validate if the designated constraints
@@ -200,20 +314,57 @@ var _ interface {
 
 // Validate checks the field values on CheckVerificationCodeRequest with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *CheckVerificationCodeRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CheckVerificationCodeRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CheckVerificationCodeRequestMultiError, or nil if none found.
+func (m *CheckVerificationCodeRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CheckVerificationCodeRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetPhoneNumber() == nil {
-		return CheckVerificationCodeRequestValidationError{
+		err := CheckVerificationCodeRequestValidationError{
 			field:  "PhoneNumber",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetPhoneNumber()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetPhoneNumber()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CheckVerificationCodeRequestValidationError{
+					field:  "PhoneNumber",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CheckVerificationCodeRequestValidationError{
+					field:  "PhoneNumber",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPhoneNumber()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return CheckVerificationCodeRequestValidationError{
 				field:  "PhoneNumber",
@@ -224,13 +375,36 @@ func (m *CheckVerificationCodeRequest) Validate() error {
 	}
 
 	if m.GetCode() == nil {
-		return CheckVerificationCodeRequestValidationError{
+		err := CheckVerificationCodeRequestValidationError{
 			field:  "Code",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetCode()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetCode()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CheckVerificationCodeRequestValidationError{
+					field:  "Code",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CheckVerificationCodeRequestValidationError{
+					field:  "Code",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCode()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return CheckVerificationCodeRequestValidationError{
 				field:  "Code",
@@ -240,8 +414,29 @@ func (m *CheckVerificationCodeRequest) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return CheckVerificationCodeRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// CheckVerificationCodeRequestMultiError is an error wrapping multiple
+// validation errors returned by CheckVerificationCodeRequest.ValidateAll() if
+// the designated constraints aren't met.
+type CheckVerificationCodeRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CheckVerificationCodeRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CheckVerificationCodeRequestMultiError) AllErrors() []error { return m }
 
 // CheckVerificationCodeRequestValidationError is the validation error returned
 // by CheckVerificationCodeRequest.Validate if the designated constraints
@@ -302,15 +497,48 @@ var _ interface {
 
 // Validate checks the field values on CheckVerificationCodeResponse with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *CheckVerificationCodeResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CheckVerificationCodeResponse with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// CheckVerificationCodeResponseMultiError, or nil if none found.
+func (m *CheckVerificationCodeResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CheckVerificationCodeResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Result
 
-	if v, ok := interface{}(m.GetLinkingToken()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetLinkingToken()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CheckVerificationCodeResponseValidationError{
+					field:  "LinkingToken",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CheckVerificationCodeResponseValidationError{
+					field:  "LinkingToken",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetLinkingToken()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return CheckVerificationCodeResponseValidationError{
 				field:  "LinkingToken",
@@ -320,8 +548,29 @@ func (m *CheckVerificationCodeResponse) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return CheckVerificationCodeResponseMultiError(errors)
+	}
+
 	return nil
 }
+
+// CheckVerificationCodeResponseMultiError is an error wrapping multiple
+// validation errors returned by CheckVerificationCodeResponse.ValidateAll()
+// if the designated constraints aren't met.
+type CheckVerificationCodeResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CheckVerificationCodeResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CheckVerificationCodeResponseMultiError) AllErrors() []error { return m }
 
 // CheckVerificationCodeResponseValidationError is the validation error
 // returned by CheckVerificationCodeResponse.Validate if the designated
@@ -382,20 +631,57 @@ var _ interface {
 
 // Validate checks the field values on GetAssociatedPhoneNumberRequest with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *GetAssociatedPhoneNumberRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetAssociatedPhoneNumberRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// GetAssociatedPhoneNumberRequestMultiError, or nil if none found.
+func (m *GetAssociatedPhoneNumberRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetAssociatedPhoneNumberRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetOwnerAccountId() == nil {
-		return GetAssociatedPhoneNumberRequestValidationError{
+		err := GetAssociatedPhoneNumberRequestValidationError{
 			field:  "OwnerAccountId",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetOwnerAccountId()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetOwnerAccountId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetAssociatedPhoneNumberRequestValidationError{
+					field:  "OwnerAccountId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetAssociatedPhoneNumberRequestValidationError{
+					field:  "OwnerAccountId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetOwnerAccountId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetAssociatedPhoneNumberRequestValidationError{
 				field:  "OwnerAccountId",
@@ -406,13 +692,36 @@ func (m *GetAssociatedPhoneNumberRequest) Validate() error {
 	}
 
 	if m.GetSignature() == nil {
-		return GetAssociatedPhoneNumberRequestValidationError{
+		err := GetAssociatedPhoneNumberRequestValidationError{
 			field:  "Signature",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetSignature()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetAssociatedPhoneNumberRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetAssociatedPhoneNumberRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetAssociatedPhoneNumberRequestValidationError{
 				field:  "Signature",
@@ -422,8 +731,29 @@ func (m *GetAssociatedPhoneNumberRequest) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return GetAssociatedPhoneNumberRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// GetAssociatedPhoneNumberRequestMultiError is an error wrapping multiple
+// validation errors returned by GetAssociatedPhoneNumberRequest.ValidateAll()
+// if the designated constraints aren't met.
+type GetAssociatedPhoneNumberRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetAssociatedPhoneNumberRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetAssociatedPhoneNumberRequestMultiError) AllErrors() []error { return m }
 
 // GetAssociatedPhoneNumberRequestValidationError is the validation error
 // returned by GetAssociatedPhoneNumberRequest.Validate if the designated
@@ -484,15 +814,49 @@ var _ interface {
 
 // Validate checks the field values on GetAssociatedPhoneNumberResponse with
 // the rules defined in the proto definition for this message. If any rules
-// are violated, an error is returned.
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
 func (m *GetAssociatedPhoneNumberResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetAssociatedPhoneNumberResponse with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// GetAssociatedPhoneNumberResponseMultiError, or nil if none found.
+func (m *GetAssociatedPhoneNumberResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetAssociatedPhoneNumberResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Result
 
-	if v, ok := interface{}(m.GetPhoneNumber()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetPhoneNumber()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetAssociatedPhoneNumberResponseValidationError{
+					field:  "PhoneNumber",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetAssociatedPhoneNumberResponseValidationError{
+					field:  "PhoneNumber",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPhoneNumber()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetAssociatedPhoneNumberResponseValidationError{
 				field:  "PhoneNumber",
@@ -504,8 +868,30 @@ func (m *GetAssociatedPhoneNumberResponse) Validate() error {
 
 	// no validation rules for IsLinked
 
+	if len(errors) > 0 {
+		return GetAssociatedPhoneNumberResponseMultiError(errors)
+	}
+
 	return nil
 }
+
+// GetAssociatedPhoneNumberResponseMultiError is an error wrapping multiple
+// validation errors returned by
+// GetAssociatedPhoneNumberResponse.ValidateAll() if the designated
+// constraints aren't met.
+type GetAssociatedPhoneNumberResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetAssociatedPhoneNumberResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetAssociatedPhoneNumberResponseMultiError) AllErrors() []error { return m }
 
 // GetAssociatedPhoneNumberResponseValidationError is the validation error
 // returned by GetAssociatedPhoneNumberResponse.Validate if the designated
@@ -565,22 +951,61 @@ var _ interface {
 } = GetAssociatedPhoneNumberResponseValidationError{}
 
 // Validate checks the field values on VerificationCode with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
 func (m *VerificationCode) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on VerificationCode with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// VerificationCodeMultiError, or nil if none found.
+func (m *VerificationCode) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *VerificationCode) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if !_VerificationCode_Value_Pattern.MatchString(m.GetValue()) {
-		return VerificationCodeValidationError{
+		err := VerificationCodeValidationError{
 			field:  "Value",
 			reason: "value does not match regex pattern \"^[0-9]{4,10}$\"",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return VerificationCodeMultiError(errors)
 	}
 
 	return nil
 }
+
+// VerificationCodeMultiError is an error wrapping multiple validation errors
+// returned by VerificationCode.ValidateAll() if the designated constraints
+// aren't met.
+type VerificationCodeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m VerificationCodeMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m VerificationCodeMultiError) AllErrors() []error { return m }
 
 // VerificationCodeValidationError is the validation error returned by
 // VerificationCode.Validate if the designated constraints aren't met.
@@ -639,21 +1064,58 @@ var _ interface {
 var _VerificationCode_Value_Pattern = regexp.MustCompile("^[0-9]{4,10}$")
 
 // Validate checks the field values on PhoneLinkingToken with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
 func (m *PhoneLinkingToken) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PhoneLinkingToken with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// PhoneLinkingTokenMultiError, or nil if none found.
+func (m *PhoneLinkingToken) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PhoneLinkingToken) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetPhoneNumber() == nil {
-		return PhoneLinkingTokenValidationError{
+		err := PhoneLinkingTokenValidationError{
 			field:  "PhoneNumber",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetPhoneNumber()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetPhoneNumber()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PhoneLinkingTokenValidationError{
+					field:  "PhoneNumber",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PhoneLinkingTokenValidationError{
+					field:  "PhoneNumber",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPhoneNumber()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return PhoneLinkingTokenValidationError{
 				field:  "PhoneNumber",
@@ -664,13 +1126,36 @@ func (m *PhoneLinkingToken) Validate() error {
 	}
 
 	if m.GetCode() == nil {
-		return PhoneLinkingTokenValidationError{
+		err := PhoneLinkingTokenValidationError{
 			field:  "Code",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetCode()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetCode()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PhoneLinkingTokenValidationError{
+					field:  "Code",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PhoneLinkingTokenValidationError{
+					field:  "Code",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCode()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return PhoneLinkingTokenValidationError{
 				field:  "Code",
@@ -680,8 +1165,29 @@ func (m *PhoneLinkingToken) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return PhoneLinkingTokenMultiError(errors)
+	}
+
 	return nil
 }
+
+// PhoneLinkingTokenMultiError is an error wrapping multiple validation errors
+// returned by PhoneLinkingToken.ValidateAll() if the designated constraints
+// aren't met.
+type PhoneLinkingTokenMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PhoneLinkingTokenMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PhoneLinkingTokenMultiError) AllErrors() []error { return m }
 
 // PhoneLinkingTokenValidationError is the validation error returned by
 // PhoneLinkingToken.Validate if the designated constraints aren't met.

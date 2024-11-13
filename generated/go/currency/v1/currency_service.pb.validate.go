@@ -11,11 +11,12 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,18 +31,52 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on GetAllRatesRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *GetAllRatesRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetAllRatesRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetAllRatesRequestMultiError, or nil if none found.
+func (m *GetAllRatesRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetAllRatesRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetTimestamp()).(interface{ Validate() error }); ok {
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetTimestamp()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetAllRatesRequestValidationError{
+					field:  "Timestamp",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetAllRatesRequestValidationError{
+					field:  "Timestamp",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetTimestamp()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetAllRatesRequestValidationError{
 				field:  "Timestamp",
@@ -51,8 +86,29 @@ func (m *GetAllRatesRequest) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return GetAllRatesRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// GetAllRatesRequestMultiError is an error wrapping multiple validation errors
+// returned by GetAllRatesRequest.ValidateAll() if the designated constraints
+// aren't met.
+type GetAllRatesRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetAllRatesRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetAllRatesRequestMultiError) AllErrors() []error { return m }
 
 // GetAllRatesRequestValidationError is the validation error returned by
 // GetAllRatesRequest.Validate if the designated constraints aren't met.
@@ -112,36 +168,89 @@ var _ interface {
 
 // Validate checks the field values on GetAllRatesResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *GetAllRatesResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetAllRatesResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetAllRatesResponseMultiError, or nil if none found.
+func (m *GetAllRatesResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetAllRatesResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Result
 
 	if m.GetAsOf() == nil {
-		return GetAllRatesResponseValidationError{
+		err := GetAllRatesResponseValidationError{
 			field:  "AsOf",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	for key, val := range m.GetRates() {
-		_ = val
-
-		if !_GetAllRatesResponse_Rates_Pattern.MatchString(key) {
-			return GetAllRatesResponseValidationError{
-				field:  fmt.Sprintf("Rates[%v]", key),
-				reason: "value does not match regex pattern \"^[a-z]{3,4}$\"",
-			}
+	{
+		sorted_keys := make([]string, len(m.GetRates()))
+		i := 0
+		for key := range m.GetRates() {
+			sorted_keys[i] = key
+			i++
 		}
+		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
+		for _, key := range sorted_keys {
+			val := m.GetRates()[key]
+			_ = val
 
-		// no validation rules for Rates[key]
+			if !_GetAllRatesResponse_Rates_Pattern.MatchString(key) {
+				err := GetAllRatesResponseValidationError{
+					field:  fmt.Sprintf("Rates[%v]", key),
+					reason: "value does not match regex pattern \"^[a-z]{3,4}$\"",
+				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
+			}
+
+			// no validation rules for Rates[key]
+		}
+	}
+
+	if len(errors) > 0 {
+		return GetAllRatesResponseMultiError(errors)
 	}
 
 	return nil
 }
+
+// GetAllRatesResponseMultiError is an error wrapping multiple validation
+// errors returned by GetAllRatesResponse.ValidateAll() if the designated
+// constraints aren't met.
+type GetAllRatesResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetAllRatesResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetAllRatesResponseMultiError) AllErrors() []error { return m }
 
 // GetAllRatesResponseValidationError is the validation error returned by
 // GetAllRatesResponse.Validate if the designated constraints aren't met.

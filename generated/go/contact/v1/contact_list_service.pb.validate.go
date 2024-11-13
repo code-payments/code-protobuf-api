@@ -11,11 +11,12 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,25 +31,63 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on AddContactsRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *AddContactsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AddContactsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AddContactsRequestMultiError, or nil if none found.
+func (m *AddContactsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AddContactsRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetOwnerAccountId() == nil {
-		return AddContactsRequestValidationError{
+		err := AddContactsRequestValidationError{
 			field:  "OwnerAccountId",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetOwnerAccountId()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetOwnerAccountId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, AddContactsRequestValidationError{
+					field:  "OwnerAccountId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, AddContactsRequestValidationError{
+					field:  "OwnerAccountId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetOwnerAccountId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return AddContactsRequestValidationError{
 				field:  "OwnerAccountId",
@@ -59,13 +98,36 @@ func (m *AddContactsRequest) Validate() error {
 	}
 
 	if m.GetSignature() == nil {
-		return AddContactsRequestValidationError{
+		err := AddContactsRequestValidationError{
 			field:  "Signature",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetSignature()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, AddContactsRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, AddContactsRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return AddContactsRequestValidationError{
 				field:  "Signature",
@@ -76,13 +138,36 @@ func (m *AddContactsRequest) Validate() error {
 	}
 
 	if m.GetContainerId() == nil {
-		return AddContactsRequestValidationError{
+		err := AddContactsRequestValidationError{
 			field:  "ContainerId",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetContainerId()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetContainerId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, AddContactsRequestValidationError{
+					field:  "ContainerId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, AddContactsRequestValidationError{
+					field:  "ContainerId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetContainerId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return AddContactsRequestValidationError{
 				field:  "ContainerId",
@@ -93,16 +178,39 @@ func (m *AddContactsRequest) Validate() error {
 	}
 
 	if l := len(m.GetContacts()); l < 1 || l > 1024 {
-		return AddContactsRequestValidationError{
+		err := AddContactsRequestValidationError{
 			field:  "Contacts",
 			reason: "value must contain between 1 and 1024 items, inclusive",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	for idx, item := range m.GetContacts() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, AddContactsRequestValidationError{
+						field:  fmt.Sprintf("Contacts[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, AddContactsRequestValidationError{
+						field:  fmt.Sprintf("Contacts[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return AddContactsRequestValidationError{
 					field:  fmt.Sprintf("Contacts[%v]", idx),
@@ -114,8 +222,29 @@ func (m *AddContactsRequest) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return AddContactsRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// AddContactsRequestMultiError is an error wrapping multiple validation errors
+// returned by AddContactsRequest.ValidateAll() if the designated constraints
+// aren't met.
+type AddContactsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AddContactsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AddContactsRequestMultiError) AllErrors() []error { return m }
 
 // AddContactsRequestValidationError is the validation error returned by
 // AddContactsRequest.Validate if the designated constraints aren't met.
@@ -175,18 +304,97 @@ var _ interface {
 
 // Validate checks the field values on AddContactsResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *AddContactsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AddContactsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AddContactsResponseMultiError, or nil if none found.
+func (m *AddContactsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AddContactsResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Result
 
-	// no validation rules for ContactStatus
+	{
+		sorted_keys := make([]string, len(m.GetContactStatus()))
+		i := 0
+		for key := range m.GetContactStatus() {
+			sorted_keys[i] = key
+			i++
+		}
+		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
+		for _, key := range sorted_keys {
+			val := m.GetContactStatus()[key]
+			_ = val
+
+			// no validation rules for ContactStatus[key]
+
+			if all {
+				switch v := interface{}(val).(type) {
+				case interface{ ValidateAll() error }:
+					if err := v.ValidateAll(); err != nil {
+						errors = append(errors, AddContactsResponseValidationError{
+							field:  fmt.Sprintf("ContactStatus[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				case interface{ Validate() error }:
+					if err := v.Validate(); err != nil {
+						errors = append(errors, AddContactsResponseValidationError{
+							field:  fmt.Sprintf("ContactStatus[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				}
+			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+				if err := v.Validate(); err != nil {
+					return AddContactsResponseValidationError{
+						field:  fmt.Sprintf("ContactStatus[%v]", key),
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		}
+	}
+
+	if len(errors) > 0 {
+		return AddContactsResponseMultiError(errors)
+	}
 
 	return nil
 }
+
+// AddContactsResponseMultiError is an error wrapping multiple validation
+// errors returned by AddContactsResponse.ValidateAll() if the designated
+// constraints aren't met.
+type AddContactsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AddContactsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AddContactsResponseMultiError) AllErrors() []error { return m }
 
 // AddContactsResponseValidationError is the validation error returned by
 // AddContactsResponse.Validate if the designated constraints aren't met.
@@ -246,20 +454,57 @@ var _ interface {
 
 // Validate checks the field values on RemoveContactsRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *RemoveContactsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RemoveContactsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RemoveContactsRequestMultiError, or nil if none found.
+func (m *RemoveContactsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RemoveContactsRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetOwnerAccountId() == nil {
-		return RemoveContactsRequestValidationError{
+		err := RemoveContactsRequestValidationError{
 			field:  "OwnerAccountId",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetOwnerAccountId()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetOwnerAccountId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RemoveContactsRequestValidationError{
+					field:  "OwnerAccountId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RemoveContactsRequestValidationError{
+					field:  "OwnerAccountId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetOwnerAccountId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RemoveContactsRequestValidationError{
 				field:  "OwnerAccountId",
@@ -270,13 +515,36 @@ func (m *RemoveContactsRequest) Validate() error {
 	}
 
 	if m.GetSignature() == nil {
-		return RemoveContactsRequestValidationError{
+		err := RemoveContactsRequestValidationError{
 			field:  "Signature",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetSignature()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RemoveContactsRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RemoveContactsRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RemoveContactsRequestValidationError{
 				field:  "Signature",
@@ -287,13 +555,36 @@ func (m *RemoveContactsRequest) Validate() error {
 	}
 
 	if m.GetContainerId() == nil {
-		return RemoveContactsRequestValidationError{
+		err := RemoveContactsRequestValidationError{
 			field:  "ContainerId",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetContainerId()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetContainerId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RemoveContactsRequestValidationError{
+					field:  "ContainerId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RemoveContactsRequestValidationError{
+					field:  "ContainerId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetContainerId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RemoveContactsRequestValidationError{
 				field:  "ContainerId",
@@ -304,16 +595,39 @@ func (m *RemoveContactsRequest) Validate() error {
 	}
 
 	if l := len(m.GetContacts()); l < 1 || l > 1024 {
-		return RemoveContactsRequestValidationError{
+		err := RemoveContactsRequestValidationError{
 			field:  "Contacts",
 			reason: "value must contain between 1 and 1024 items, inclusive",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	for idx, item := range m.GetContacts() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, RemoveContactsRequestValidationError{
+						field:  fmt.Sprintf("Contacts[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, RemoveContactsRequestValidationError{
+						field:  fmt.Sprintf("Contacts[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return RemoveContactsRequestValidationError{
 					field:  fmt.Sprintf("Contacts[%v]", idx),
@@ -325,8 +639,29 @@ func (m *RemoveContactsRequest) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return RemoveContactsRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// RemoveContactsRequestMultiError is an error wrapping multiple validation
+// errors returned by RemoveContactsRequest.ValidateAll() if the designated
+// constraints aren't met.
+type RemoveContactsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RemoveContactsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RemoveContactsRequestMultiError) AllErrors() []error { return m }
 
 // RemoveContactsRequestValidationError is the validation error returned by
 // RemoveContactsRequest.Validate if the designated constraints aren't met.
@@ -386,16 +721,51 @@ var _ interface {
 
 // Validate checks the field values on RemoveContactsResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *RemoveContactsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RemoveContactsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RemoveContactsResponseMultiError, or nil if none found.
+func (m *RemoveContactsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RemoveContactsResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Result
+
+	if len(errors) > 0 {
+		return RemoveContactsResponseMultiError(errors)
+	}
 
 	return nil
 }
+
+// RemoveContactsResponseMultiError is an error wrapping multiple validation
+// errors returned by RemoveContactsResponse.ValidateAll() if the designated
+// constraints aren't met.
+type RemoveContactsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RemoveContactsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RemoveContactsResponseMultiError) AllErrors() []error { return m }
 
 // RemoveContactsResponseValidationError is the validation error returned by
 // RemoveContactsResponse.Validate if the designated constraints aren't met.
@@ -455,20 +825,57 @@ var _ interface {
 
 // Validate checks the field values on GetContactsRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *GetContactsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetContactsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetContactsRequestMultiError, or nil if none found.
+func (m *GetContactsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetContactsRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetOwnerAccountId() == nil {
-		return GetContactsRequestValidationError{
+		err := GetContactsRequestValidationError{
 			field:  "OwnerAccountId",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetOwnerAccountId()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetOwnerAccountId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetContactsRequestValidationError{
+					field:  "OwnerAccountId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetContactsRequestValidationError{
+					field:  "OwnerAccountId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetOwnerAccountId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetContactsRequestValidationError{
 				field:  "OwnerAccountId",
@@ -479,13 +886,36 @@ func (m *GetContactsRequest) Validate() error {
 	}
 
 	if m.GetSignature() == nil {
-		return GetContactsRequestValidationError{
+		err := GetContactsRequestValidationError{
 			field:  "Signature",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetSignature()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetContactsRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetContactsRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetContactsRequestValidationError{
 				field:  "Signature",
@@ -496,13 +926,36 @@ func (m *GetContactsRequest) Validate() error {
 	}
 
 	if m.GetContainerId() == nil {
-		return GetContactsRequestValidationError{
+		err := GetContactsRequestValidationError{
 			field:  "ContainerId",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetContainerId()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetContainerId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetContactsRequestValidationError{
+					field:  "ContainerId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetContactsRequestValidationError{
+					field:  "ContainerId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetContainerId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetContactsRequestValidationError{
 				field:  "ContainerId",
@@ -512,7 +965,26 @@ func (m *GetContactsRequest) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetPageToken()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetPageToken()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetContactsRequestValidationError{
+					field:  "PageToken",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetContactsRequestValidationError{
+					field:  "PageToken",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPageToken()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetContactsRequestValidationError{
 				field:  "PageToken",
@@ -524,8 +996,29 @@ func (m *GetContactsRequest) Validate() error {
 
 	// no validation rules for IncludeOnlyInAppContacts
 
+	if len(errors) > 0 {
+		return GetContactsRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// GetContactsRequestMultiError is an error wrapping multiple validation errors
+// returned by GetContactsRequest.ValidateAll() if the designated constraints
+// aren't met.
+type GetContactsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetContactsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetContactsRequestMultiError) AllErrors() []error { return m }
 
 // GetContactsRequestValidationError is the validation error returned by
 // GetContactsRequest.Validate if the designated constraints aren't met.
@@ -585,25 +1078,62 @@ var _ interface {
 
 // Validate checks the field values on GetContactsResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *GetContactsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetContactsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetContactsResponseMultiError, or nil if none found.
+func (m *GetContactsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetContactsResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Result
 
 	if len(m.GetContacts()) > 1024 {
-		return GetContactsResponseValidationError{
+		err := GetContactsResponseValidationError{
 			field:  "Contacts",
 			reason: "value must contain no more than 1024 item(s)",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	for idx, item := range m.GetContacts() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, GetContactsResponseValidationError{
+						field:  fmt.Sprintf("Contacts[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, GetContactsResponseValidationError{
+						field:  fmt.Sprintf("Contacts[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return GetContactsResponseValidationError{
 					field:  fmt.Sprintf("Contacts[%v]", idx),
@@ -615,7 +1145,26 @@ func (m *GetContactsResponse) Validate() error {
 
 	}
 
-	if v, ok := interface{}(m.GetNextPageToken()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetNextPageToken()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetContactsResponseValidationError{
+					field:  "NextPageToken",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetContactsResponseValidationError{
+					field:  "NextPageToken",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetNextPageToken()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetContactsResponseValidationError{
 				field:  "NextPageToken",
@@ -625,8 +1174,29 @@ func (m *GetContactsResponse) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return GetContactsResponseMultiError(errors)
+	}
+
 	return nil
 }
+
+// GetContactsResponseMultiError is an error wrapping multiple validation
+// errors returned by GetContactsResponse.ValidateAll() if the designated
+// constraints aren't met.
+type GetContactsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetContactsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetContactsResponseMultiError) AllErrors() []error { return m }
 
 // GetContactsResponseValidationError is the validation error returned by
 // GetContactsResponse.Validate if the designated constraints aren't met.
@@ -685,20 +1255,57 @@ var _ interface {
 } = GetContactsResponseValidationError{}
 
 // Validate checks the field values on Contact with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Contact) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Contact with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in ContactMultiError, or nil if none found.
+func (m *Contact) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Contact) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetPhoneNumber() == nil {
-		return ContactValidationError{
+		err := ContactValidationError{
 			field:  "PhoneNumber",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetPhoneNumber()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetPhoneNumber()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ContactValidationError{
+					field:  "PhoneNumber",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ContactValidationError{
+					field:  "PhoneNumber",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPhoneNumber()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ContactValidationError{
 				field:  "PhoneNumber",
@@ -709,13 +1316,36 @@ func (m *Contact) Validate() error {
 	}
 
 	if m.GetStatus() == nil {
-		return ContactValidationError{
+		err := ContactValidationError{
 			field:  "Status",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetStatus()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetStatus()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ContactValidationError{
+					field:  "Status",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ContactValidationError{
+					field:  "Status",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetStatus()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ContactValidationError{
 				field:  "Status",
@@ -725,8 +1355,28 @@ func (m *Contact) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return ContactMultiError(errors)
+	}
+
 	return nil
 }
+
+// ContactMultiError is an error wrapping multiple validation errors returned
+// by Contact.ValidateAll() if the designated constraints aren't met.
+type ContactMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ContactMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ContactMultiError) AllErrors() []error { return m }
 
 // ContactValidationError is the validation error returned by Contact.Validate
 // if the designated constraints aren't met.
@@ -783,12 +1433,26 @@ var _ interface {
 } = ContactValidationError{}
 
 // Validate checks the field values on ContactStatus with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *ContactStatus) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ContactStatus with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ContactStatusMultiError, or
+// nil if none found.
+func (m *ContactStatus) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ContactStatus) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for IsRegistered
 
@@ -796,8 +1460,29 @@ func (m *ContactStatus) Validate() error {
 
 	// no validation rules for IsInviteRevoked
 
+	if len(errors) > 0 {
+		return ContactStatusMultiError(errors)
+	}
+
 	return nil
 }
+
+// ContactStatusMultiError is an error wrapping multiple validation errors
+// returned by ContactStatus.ValidateAll() if the designated constraints
+// aren't met.
+type ContactStatusMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ContactStatusMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ContactStatusMultiError) AllErrors() []error { return m }
 
 // ContactStatusValidationError is the validation error returned by
 // ContactStatus.Validate if the designated constraints aren't met.
@@ -854,21 +1539,60 @@ var _ interface {
 } = ContactStatusValidationError{}
 
 // Validate checks the field values on PageToken with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *PageToken) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PageToken with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PageTokenMultiError, or nil
+// if none found.
+func (m *PageToken) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PageToken) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if l := len(m.GetValue()); l < 1 || l > 128 {
-		return PageTokenValidationError{
+		err := PageTokenValidationError{
 			field:  "Value",
 			reason: "value length must be between 1 and 128 bytes, inclusive",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return PageTokenMultiError(errors)
 	}
 
 	return nil
 }
+
+// PageTokenMultiError is an error wrapping multiple validation errors returned
+// by PageToken.ValidateAll() if the designated constraints aren't met.
+type PageTokenMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PageTokenMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PageTokenMultiError) AllErrors() []error { return m }
 
 // PageTokenValidationError is the validation error returned by
 // PageToken.Validate if the designated constraints aren't met.

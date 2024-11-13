@@ -548,7 +548,7 @@ message Metadata {
 // ExtendedPaymentMetadata is additional metadata that can be used for custom
 // payment types
 message ExtendedPaymentMetadata {
-    google.protobuf.Any value = 1 [(validate.rules).message.required = true];;
+    google.protobuf.Any value = 1 [(validate.rules).any.required = true];;
 }
 
 // Open a set of accounts. Currently, clients should only use this for new users

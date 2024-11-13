@@ -8,12 +8,12 @@ RUN apt-get install -y protobuf-compiler
 RUN apt-get install -y libprotobuf-dev
 
 # Go protoc dependencies
-RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.1
-RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2.0
+RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.35.1
+RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1
 
 # Common base proto dependencies
-RUN go install github.com/envoyproxy/protoc-gen-validate@v0.1.0
-RUN git clone --branch v0.1.0 https://github.com/envoyproxy/protoc-gen-validate
+RUN go install github.com/envoyproxy/protoc-gen-validate@v1.1.0
+RUN git clone --branch v1.1.0 https://github.com/envoyproxy/protoc-gen-validate
 RUN git clone https://github.com/googleapis/googleapis
 
 RUN mkdir /proto-common

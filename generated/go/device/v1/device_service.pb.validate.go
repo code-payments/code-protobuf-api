@@ -11,11 +11,12 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,25 +31,63 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on RegisterLoggedInAccountsRequest with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *RegisterLoggedInAccountsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RegisterLoggedInAccountsRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// RegisterLoggedInAccountsRequestMultiError, or nil if none found.
+func (m *RegisterLoggedInAccountsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RegisterLoggedInAccountsRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetAppInstall() == nil {
-		return RegisterLoggedInAccountsRequestValidationError{
+		err := RegisterLoggedInAccountsRequestValidationError{
 			field:  "AppInstall",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetAppInstall()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetAppInstall()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RegisterLoggedInAccountsRequestValidationError{
+					field:  "AppInstall",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RegisterLoggedInAccountsRequestValidationError{
+					field:  "AppInstall",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetAppInstall()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RegisterLoggedInAccountsRequestValidationError{
 				field:  "AppInstall",
@@ -59,16 +98,39 @@ func (m *RegisterLoggedInAccountsRequest) Validate() error {
 	}
 
 	if len(m.GetOwners()) > 1 {
-		return RegisterLoggedInAccountsRequestValidationError{
+		err := RegisterLoggedInAccountsRequestValidationError{
 			field:  "Owners",
 			reason: "value must contain no more than 1 item(s)",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	for idx, item := range m.GetOwners() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, RegisterLoggedInAccountsRequestValidationError{
+						field:  fmt.Sprintf("Owners[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, RegisterLoggedInAccountsRequestValidationError{
+						field:  fmt.Sprintf("Owners[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return RegisterLoggedInAccountsRequestValidationError{
 					field:  fmt.Sprintf("Owners[%v]", idx),
@@ -81,16 +143,39 @@ func (m *RegisterLoggedInAccountsRequest) Validate() error {
 	}
 
 	if len(m.GetSignatures()) > 1 {
-		return RegisterLoggedInAccountsRequestValidationError{
+		err := RegisterLoggedInAccountsRequestValidationError{
 			field:  "Signatures",
 			reason: "value must contain no more than 1 item(s)",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	for idx, item := range m.GetSignatures() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, RegisterLoggedInAccountsRequestValidationError{
+						field:  fmt.Sprintf("Signatures[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, RegisterLoggedInAccountsRequestValidationError{
+						field:  fmt.Sprintf("Signatures[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return RegisterLoggedInAccountsRequestValidationError{
 					field:  fmt.Sprintf("Signatures[%v]", idx),
@@ -102,8 +187,29 @@ func (m *RegisterLoggedInAccountsRequest) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return RegisterLoggedInAccountsRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// RegisterLoggedInAccountsRequestMultiError is an error wrapping multiple
+// validation errors returned by RegisterLoggedInAccountsRequest.ValidateAll()
+// if the designated constraints aren't met.
+type RegisterLoggedInAccountsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RegisterLoggedInAccountsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RegisterLoggedInAccountsRequestMultiError) AllErrors() []error { return m }
 
 // RegisterLoggedInAccountsRequestValidationError is the validation error
 // returned by RegisterLoggedInAccountsRequest.Validate if the designated
@@ -164,25 +270,63 @@ var _ interface {
 
 // Validate checks the field values on RegisterLoggedInAccountsResponse with
 // the rules defined in the proto definition for this message. If any rules
-// are violated, an error is returned.
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
 func (m *RegisterLoggedInAccountsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RegisterLoggedInAccountsResponse with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// RegisterLoggedInAccountsResponseMultiError, or nil if none found.
+func (m *RegisterLoggedInAccountsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RegisterLoggedInAccountsResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Result
 
 	if len(m.GetInvalidOwners()) > 1 {
-		return RegisterLoggedInAccountsResponseValidationError{
+		err := RegisterLoggedInAccountsResponseValidationError{
 			field:  "InvalidOwners",
 			reason: "value must contain no more than 1 item(s)",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	for idx, item := range m.GetInvalidOwners() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, RegisterLoggedInAccountsResponseValidationError{
+						field:  fmt.Sprintf("InvalidOwners[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, RegisterLoggedInAccountsResponseValidationError{
+						field:  fmt.Sprintf("InvalidOwners[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return RegisterLoggedInAccountsResponseValidationError{
 					field:  fmt.Sprintf("InvalidOwners[%v]", idx),
@@ -194,8 +338,30 @@ func (m *RegisterLoggedInAccountsResponse) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return RegisterLoggedInAccountsResponseMultiError(errors)
+	}
+
 	return nil
 }
+
+// RegisterLoggedInAccountsResponseMultiError is an error wrapping multiple
+// validation errors returned by
+// RegisterLoggedInAccountsResponse.ValidateAll() if the designated
+// constraints aren't met.
+type RegisterLoggedInAccountsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RegisterLoggedInAccountsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RegisterLoggedInAccountsResponseMultiError) AllErrors() []error { return m }
 
 // RegisterLoggedInAccountsResponseValidationError is the validation error
 // returned by RegisterLoggedInAccountsResponse.Validate if the designated
@@ -256,20 +422,57 @@ var _ interface {
 
 // Validate checks the field values on GetLoggedInAccountsRequest with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *GetLoggedInAccountsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetLoggedInAccountsRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetLoggedInAccountsRequestMultiError, or nil if none found.
+func (m *GetLoggedInAccountsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetLoggedInAccountsRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetAppInstall() == nil {
-		return GetLoggedInAccountsRequestValidationError{
+		err := GetLoggedInAccountsRequestValidationError{
 			field:  "AppInstall",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetAppInstall()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetAppInstall()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetLoggedInAccountsRequestValidationError{
+					field:  "AppInstall",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetLoggedInAccountsRequestValidationError{
+					field:  "AppInstall",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetAppInstall()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetLoggedInAccountsRequestValidationError{
 				field:  "AppInstall",
@@ -279,8 +482,29 @@ func (m *GetLoggedInAccountsRequest) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return GetLoggedInAccountsRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// GetLoggedInAccountsRequestMultiError is an error wrapping multiple
+// validation errors returned by GetLoggedInAccountsRequest.ValidateAll() if
+// the designated constraints aren't met.
+type GetLoggedInAccountsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetLoggedInAccountsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetLoggedInAccountsRequestMultiError) AllErrors() []error { return m }
 
 // GetLoggedInAccountsRequestValidationError is the validation error returned
 // by GetLoggedInAccountsRequest.Validate if the designated constraints aren't met.
@@ -340,25 +564,62 @@ var _ interface {
 
 // Validate checks the field values on GetLoggedInAccountsResponse with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *GetLoggedInAccountsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetLoggedInAccountsResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetLoggedInAccountsResponseMultiError, or nil if none found.
+func (m *GetLoggedInAccountsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetLoggedInAccountsResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Result
 
 	if len(m.GetOwners()) > 1 {
-		return GetLoggedInAccountsResponseValidationError{
+		err := GetLoggedInAccountsResponseValidationError{
 			field:  "Owners",
 			reason: "value must contain no more than 1 item(s)",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	for idx, item := range m.GetOwners() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, GetLoggedInAccountsResponseValidationError{
+						field:  fmt.Sprintf("Owners[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, GetLoggedInAccountsResponseValidationError{
+						field:  fmt.Sprintf("Owners[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return GetLoggedInAccountsResponseValidationError{
 					field:  fmt.Sprintf("Owners[%v]", idx),
@@ -370,8 +631,29 @@ func (m *GetLoggedInAccountsResponse) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return GetLoggedInAccountsResponseMultiError(errors)
+	}
+
 	return nil
 }
+
+// GetLoggedInAccountsResponseMultiError is an error wrapping multiple
+// validation errors returned by GetLoggedInAccountsResponse.ValidateAll() if
+// the designated constraints aren't met.
+type GetLoggedInAccountsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetLoggedInAccountsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetLoggedInAccountsResponseMultiError) AllErrors() []error { return m }
 
 // GetLoggedInAccountsResponseValidationError is the validation error returned
 // by GetLoggedInAccountsResponse.Validate if the designated constraints
