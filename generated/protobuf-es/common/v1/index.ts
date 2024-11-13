@@ -1,1 +1,1 @@
-export * from './model_pb';
+export * from './code_model_pb';
