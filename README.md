@@ -28,6 +28,8 @@ The APIs and models for communication between Code clients and server.
 Generated code can be found under the `generated/` directory. The following languages are directly supported:
 - Go
 - TypeScript/JavaScript (via [Protobuf-ES](https://github.com/bufbuild/protobuf-es))
+- Php
+- Python
 
 To generate all code, run:
 
@@ -38,7 +40,7 @@ make
 Or to generate a specific language, run:
 
 ```bash
-make {go, protobuf-es}
+make {go, protobuf-es, php, go}
 ```
 
 ## Getting Help
