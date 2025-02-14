@@ -71,4 +71,4 @@ generate-python:
 	@mkdir -p $(PROTO_OUT_PYTHON_DIR)
 	@docker run --rm -v $(PWD)/$(PROTO_DIR):/proto -v $(PWD)/$(PROTO_OUT_PYTHON_DIR):/genproto --user $(USER_ID):$(GROUP_ID) $(DOCKER_PYTHON_BUILDER_IMAGE)
 
-.PHONY: all clean go protobuf-es php python docker-build docker-build-go docker-build-protobuf-es docker-build-php docker-build-python generate generate-go generate-protobuf-es generate-php generate-python
+.PHONY: all clean go protobuf-es docker-build docker-build-go docker-build-protobuf-es generate generate-go generate-protobuf-es
