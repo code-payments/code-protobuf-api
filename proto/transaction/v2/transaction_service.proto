@@ -1214,8 +1214,8 @@ message Cursor {
 
 enum AirdropType {
     UNKNOWN = 0;
-    // Reward for giving someone else their first Kin
-    GIVE_FIRST_KIN = 1;
-    // Airdrop for getting a user started with first Kin balance
-    GET_FIRST_KIN = 2;
+    // Reward for giving someone else their first crypto
+    GIVE_FIRST_CRYPTO = 1;
+    // Airdrop for getting a user started with first crypto balance
+    GET_FIRST_CRYPTO = 2;
 }

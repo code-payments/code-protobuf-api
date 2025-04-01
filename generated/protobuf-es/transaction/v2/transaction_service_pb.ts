@@ -17,24 +17,24 @@ export enum AirdropType {
   UNKNOWN = 0,
 
   /**
-   * Reward for giving someone else their first Kin
+   * Reward for giving someone else their first crypto
    *
-   * @generated from enum value: GIVE_FIRST_KIN = 1;
+   * @generated from enum value: GIVE_FIRST_CRYPTO = 1;
    */
-  GIVE_FIRST_KIN = 1,
+  GIVE_FIRST_CRYPTO = 1,
 
   /**
-   * Airdrop for getting a user started with first Kin balance
+   * Airdrop for getting a user started with first crypto balance
    *
-   * @generated from enum value: GET_FIRST_KIN = 2;
+   * @generated from enum value: GET_FIRST_CRYPTO = 2;
    */
-  GET_FIRST_KIN = 2,
+  GET_FIRST_CRYPTO = 2,
 }
 // Retrieve enum metadata with: proto3.getEnumType(AirdropType)
 proto3.util.setEnumType(AirdropType, "code.transaction.v2.AirdropType", [
   { no: 0, name: "UNKNOWN" },
-  { no: 1, name: "GIVE_FIRST_KIN" },
-  { no: 2, name: "GET_FIRST_KIN" },
+  { no: 1, name: "GIVE_FIRST_CRYPTO" },
+  { no: 2, name: "GET_FIRST_CRYPTO" },
 ]);
 
 /**

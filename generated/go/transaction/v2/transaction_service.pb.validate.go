@@ -1568,7 +1568,7 @@ func (m *AirdropRequest) validate(all bool) error {
 	if _, ok := _AirdropRequest_AirdropType_NotInLookup[m.GetAirdropType()]; ok {
 		err := AirdropRequestValidationError{
 			field:  "AirdropType",
-			reason: "value must not be in list [UNKNOWN GIVE_FIRST_KIN]",
+			reason: "value must not be in list [UNKNOWN GIVE_FIRST_CRYPTO]",
 		}
 		if !all {
 			return err
