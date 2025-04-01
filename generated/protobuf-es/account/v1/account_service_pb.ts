@@ -5,7 +5,7 @@
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
 import { Message, proto3, protoInt64, Timestamp } from "@bufbuild/protobuf";
-import { AccountType, Relationship, Signature, SolanaAccountId } from "../../common/v1/model_pb";
+import { AccountType, Signature, SolanaAccountId } from "../../common/v1/model_pb";
 import { ExchangeData } from "../../transaction/v2/transaction_service_pb";
 
 /**
@@ -483,14 +483,6 @@ export class TokenAccountInfo extends Message<TokenAccountInfo> {
   mint?: SolanaAccountId;
 
   /**
-   * The relationship with a third party that this account has established with.
-   * This only applies to relevant account types (eg. RELATIONSHIP).
-   *
-   * @generated from field: code.common.v1.Relationship relationship = 16;
-   */
-  relationship?: Relationship;
-
-  /**
    * Time the account was created, if available. For Code accounts, this is
    * the time of intent submission. Otherwise, for external accounts, it is
    * the tiem created on the blockchain.
@@ -520,7 +512,6 @@ export class TokenAccountInfo extends Message<TokenAccountInfo> {
     { no: 11, name: "claim_state", kind: "enum", T: proto3.getEnumType(TokenAccountInfo_ClaimState) },
     { no: 12, name: "original_exchange_data", kind: "message", T: ExchangeData },
     { no: 13, name: "mint", kind: "message", T: SolanaAccountId },
-    { no: 16, name: "relationship", kind: "message", T: Relationship },
     { no: 17, name: "created_at", kind: "message", T: Timestamp },
   ]);
 

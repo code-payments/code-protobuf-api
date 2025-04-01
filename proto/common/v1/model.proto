@@ -82,14 +82,6 @@ message IntentId {
     }];
 }
 
-// DeviceToken is an opaque token used to verify whether a device real
-message DeviceToken {
-    string value = 1 [(validate.rules).string = {
-        min_len: 1
-        max_len: 16348 // todo: What's a reasonable size
-    }];
-}
-
 // Domain is a hostname
 message Domain {
     string value = 1 [(validate.rules).string = {
@@ -97,14 +89,6 @@ message Domain {
         max_len: 253
         hostname: true
     }];
-}
-
-// Relationship is a set of identifiers that a user can establish a relationship
-// with.
-message Relationship {
-    oneof type {
-        common.v1.Domain domain = 1 [(validate.rules).message.required = true];
-    }
 }
 
 // Hash is a raw binary 32 byte hash value

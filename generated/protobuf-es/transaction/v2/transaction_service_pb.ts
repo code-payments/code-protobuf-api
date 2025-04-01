@@ -5,7 +5,7 @@
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
 import { Message, proto3, protoInt64, Timestamp } from "@bufbuild/protobuf";
-import { AccountType, Blockhash, DeviceToken, Hash, InstructionAccount, IntentId, Relationship, Signature, SolanaAccountId, Transaction, UUID } from "../../common/v1/model_pb";
+import { AccountType, Blockhash, Hash, InstructionAccount, IntentId, Signature, SolanaAccountId, Transaction, UUID } from "../../common/v1/model_pb";
 
 /**
  * @generated from enum code.transaction.v2.AirdropType
@@ -129,13 +129,6 @@ export class SubmitIntentRequest_SubmitActions extends Message<SubmitIntentReque
    */
   signature?: Signature;
 
-  /**
-   * Device token for antispam measures against fake devices
-   *
-   * @generated from field: code.common.v1.DeviceToken device_token = 6;
-   */
-  deviceToken?: DeviceToken;
-
   constructor(data?: PartialMessage<SubmitIntentRequest_SubmitActions>) {
     super();
     proto3.util.initPartial(data, this);
@@ -149,7 +142,6 @@ export class SubmitIntentRequest_SubmitActions extends Message<SubmitIntentReque
     { no: 3, name: "metadata", kind: "message", T: Metadata },
     { no: 4, name: "actions", kind: "message", T: Action, repeated: true },
     { no: 5, name: "signature", kind: "message", T: Signature },
-    { no: 6, name: "device_token", kind: "message", T: DeviceToken },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SubmitIntentRequest_SubmitActions {
@@ -1620,24 +1612,6 @@ export class Metadata extends Message<Metadata> {
     case: "openAccounts";
   } | {
     /**
-     * @generated from field: code.transaction.v2.SendPrivatePaymentMetadata send_private_payment = 2;
-     */
-    value: SendPrivatePaymentMetadata;
-    case: "sendPrivatePayment";
-  } | {
-    /**
-     * @generated from field: code.transaction.v2.ReceivePaymentsPrivatelyMetadata receive_payments_privately = 3;
-     */
-    value: ReceivePaymentsPrivatelyMetadata;
-    case: "receivePaymentsPrivately";
-  } | {
-    /**
-     * @generated from field: code.transaction.v2.UpgradePrivacyMetadata upgrade_privacy = 4;
-     */
-    value: UpgradePrivacyMetadata;
-    case: "upgradePrivacy";
-  } | {
-    /**
      * @generated from field: code.transaction.v2.SendPublicPaymentMetadata send_public_payment = 6;
      */
     value: SendPublicPaymentMetadata;
@@ -1648,12 +1622,6 @@ export class Metadata extends Message<Metadata> {
      */
     value: ReceivePaymentsPubliclyMetadata;
     case: "receivePaymentsPublicly";
-  } | {
-    /**
-     * @generated from field: code.transaction.v2.EstablishRelationshipMetadata establish_relationship = 8;
-     */
-    value: EstablishRelationshipMetadata;
-    case: "establishRelationship";
   } | { case: undefined; value?: undefined } = { case: undefined };
 
   constructor(data?: PartialMessage<Metadata>) {
@@ -1665,12 +1633,8 @@ export class Metadata extends Message<Metadata> {
   static readonly typeName = "code.transaction.v2.Metadata";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "open_accounts", kind: "message", T: OpenAccountsMetadata, oneof: "type" },
-    { no: 2, name: "send_private_payment", kind: "message", T: SendPrivatePaymentMetadata, oneof: "type" },
-    { no: 3, name: "receive_payments_privately", kind: "message", T: ReceivePaymentsPrivatelyMetadata, oneof: "type" },
-    { no: 4, name: "upgrade_privacy", kind: "message", T: UpgradePrivacyMetadata, oneof: "type" },
     { no: 6, name: "send_public_payment", kind: "message", T: SendPublicPaymentMetadata, oneof: "type" },
     { no: 7, name: "receive_payments_publicly", kind: "message", T: ReceivePaymentsPubliclyMetadata, oneof: "type" },
-    { no: 8, name: "establish_relationship", kind: "message", T: EstablishRelationshipMetadata, oneof: "type" },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Metadata {
@@ -1696,7 +1660,7 @@ export class Metadata extends Message<Metadata> {
  *
  * Action Spec:
  *
- * for account in [PRIMARY, TEMPORARY_INCOMING, TEMPORARY_OUTGOING, BUCKET_1_KIN, ... , BUCKET_1_000_000_KIN]
+ * for account in [PRIMARY]
  *   actions.push_back(OpenAccountAction(account))
  *
  * Nothing is currently required
@@ -1732,167 +1696,11 @@ export class OpenAccountsMetadata extends Message<OpenAccountsMetadata> {
 }
 
 /**
- * Sends a payment to a destination account with initial temporary privacy. Clients
- * should also reorganize their bucket accounts and rotate their temporary outgoing
- * account.
- *
- * Action Spec (In Person Cash Payment or Withdrawal or Tip):
- *
- * actions = [
- *   // Section 1: Transfer ExchangeData.Quarks from BUCKET_X_KIN accounts to TEMPORARY_OUTGOING account with reogranizations
- *
- *   TemporaryPrivacyExchangeAction(BUCKET_X_KIN, BUCKET_X_KIN, multiple * bucketSize),
- *   TemporaryPrivacyTransferAction(BUCKET_X_KIN, TEMPORARY_OUTGOING[index], multiple * bucketSize),
- *   ...,
- *   TemporaryPrivacyExchangeAction(BUCKET_X_KIN, BUCKET_X_KIN, multiple * bucketSize),
- *   TemporaryPrivacyTransferAction(BUCKET_X_KIN, TEMPORARY_OUTGOING[index], multiple * bucketSize),
- *
- *   // Section 2: Rotate TEMPORARY_OUTGOING account
- *
- *   // Below must appear last in this exact order
- *   NoPrivacyWithdrawAction(TEMPORARY_OUTGOING[index], destination, ExchangeData.Quarks),
- *   OpenAccountAction(TEMPORARY_OUTGOING[index + 1]),
- * ]
- *
- * Action Spec (Remote Send):
- *
- * actions = [
- *   // Section 1: Open REMOTE_SEND_GIFT_CARD account
- *
- *   OpenAccountAction(REMOTE_SEND_GIFT_CARD),
- *
- *   // Section 2: Transfer ExchangeData.Quarks from BUCKET_X_KIN accounts to TEMPORARY_OUTGOING account with reogranizations
- *
- *   TemporaryPrivacyExchangeAction(BUCKET_X_KIN, BUCKET_X_KIN, multiple * bucketSize),
- *   TemporaryPrivacyTransferAction(BUCKET_X_KIN, TEMPORARY_OUTGOING[index], multiple * bucketSize),
- *   ...,
- *   TemporaryPrivacyExchangeAction(BUCKET_X_KIN, BUCKET_X_KIN, multiple * bucketSize),
- *   TemporaryPrivacyTransferAction(BUCKET_X_KIN, TEMPORARY_OUTGOING[index], multiple * bucketSize),
- *
- *   // Section 3: Rotate TEMPORARY_OUTGOING account
- *
- *   // Below must appear last in this exact order
- *   NoPrivacyWithdrawAction(TEMPORARY_OUTGOING[index], REMOTE_SEND_GIFT_CARD, ExchangeData.Quarks),
- *   OpenAccountAction(TEMPORARY_OUTGOING[index + 1]),
- *
- *   // Section 4: Close REMOTE_SEND_GIFT_CARD if not redeemed after period of time
- *
- *   todo: We need a new mechanism that doesn't rely on the deprecated CloseDormantAccountAction
- *
- * Action Spec (Micro Payment):
- *
- * actions = [
- *   // Section 1: Transfer ExchangeData.Quarks from BUCKET_X_KIN accounts to TEMPORARY_OUTGOING account with reogranizations
- *
- *   TemporaryPrivacyExchangeAction(BUCKET_X_KIN, BUCKET_X_KIN, multiple * bucketSize),
- *   TemporaryPrivacyTransferAction(BUCKET_X_KIN, TEMPORARY_OUTGOING[index], multiple * bucketSize),
- *   ...,
- *   TemporaryPrivacyExchangeAction(BUCKET_X_KIN, BUCKET_X_KIN, multiple * bucketSize),
- *   TemporaryPrivacyTransferAction(BUCKET_X_KIN, TEMPORARY_OUTGOING[index], multiple * bucketSize),
- *
- *   // Section 2: Fee payments
- *
- *   // Hard-coded Code $0.01 USD fee to a dynamic fee account
- *   FeePayment(TEMPORARY_OUTGOING[index], codeFeeAccount, $0.01 USD of Kin),
- *
- *   // Additional fees, exactly as specified in the original payment request
- *   FeePayment(TEMPORARY_OUTGOING[index], additionalFeeAccount0, additionalFeeQuarks0),
- *   ...
- *   FeePayment(TEMPORARY_OUTGOING[index], additionalFeeAccountN, additionalFeeQuarksN),
- *
- *   // Section 3: Rotate TEMPORARY_OUTGOING account
- *
- *   // Below must appear last in this exact order
- *   NoPrivacyWithdrawAction(TEMPORARY_OUTGOING[index], destination, ExchangeData.Quarks - $0.01 USD of Kin - additionalFeeQuarks0 - ... - additionalFeeQuarksN),
- *   OpenAccountAction(TEMPORARY_OUTGOING[index + 1]),
- * ]
- *
- * @generated from message code.transaction.v2.SendPrivatePaymentMetadata
- */
-export class SendPrivatePaymentMetadata extends Message<SendPrivatePaymentMetadata> {
-  /**
-   * The destination token account to send funds to
-   *
-   * @generated from field: code.common.v1.SolanaAccountId destination = 1;
-   */
-  destination?: SolanaAccountId;
-
-  /**
-   * The exchange data of total funds being sent to the destination
-   *
-   * @generated from field: code.transaction.v2.ExchangeData exchange_data = 2;
-   */
-  exchangeData?: ExchangeData;
-
-  /**
-   * Is the payment a withdrawal? For destinations that are not Code temporary
-   * accounts, this must be set to true.
-   *
-   * @generated from field: bool is_withdrawal = 3;
-   */
-  isWithdrawal = false;
-
-  /**
-   * Is the payment for a remote send?
-   *
-   * @generated from field: bool is_remote_send = 4;
-   */
-  isRemoteSend = false;
-
-  /**
-   * Is the payment for a tip?
-   *
-   * @generated from field: bool is_tip = 5;
-   */
-  isTip = false;
-
-  /**
-   * If is_tip is true, the user being tipped
-   *
-   * @generated from field: code.transaction.v2.TippedUser tipped_user = 6;
-   */
-  tippedUser?: TippedUser;
-
-  constructor(data?: PartialMessage<SendPrivatePaymentMetadata>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.SendPrivatePaymentMetadata";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "destination", kind: "message", T: SolanaAccountId },
-    { no: 2, name: "exchange_data", kind: "message", T: ExchangeData },
-    { no: 3, name: "is_withdrawal", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 4, name: "is_remote_send", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 5, name: "is_tip", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 6, name: "tipped_user", kind: "message", T: TippedUser },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SendPrivatePaymentMetadata {
-    return new SendPrivatePaymentMetadata().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SendPrivatePaymentMetadata {
-    return new SendPrivatePaymentMetadata().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SendPrivatePaymentMetadata {
-    return new SendPrivatePaymentMetadata().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: SendPrivatePaymentMetadata | PlainMessage<SendPrivatePaymentMetadata> | undefined, b: SendPrivatePaymentMetadata | PlainMessage<SendPrivatePaymentMetadata> | undefined): boolean {
-    return proto3.util.equals(SendPrivatePaymentMetadata, a, b);
-  }
-}
-
-/**
  * Send a payment to a destination account publicly.
  *
  * Action Spec:
  *
- * source = PRIMARY or RELATIONSHIP
- * actions = [NoPrivacyTransferAction(source, destination, ExchangeData.Quarks)]
+ * actions = [NoPrivacyTransferAction(PRIMARY, destination, ExchangeData.Quarks)]
  *
  * @generated from message code.transaction.v2.SendPublicPaymentMetadata
  */
@@ -1922,7 +1730,7 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
   exchangeData?: ExchangeData;
 
   /**
-   * Is the payment a withdrawal? Currently, this is always true.
+   * Is the payment a withdrawal?
    *
    * @generated from field: bool is_withdrawal = 3;
    */
@@ -1960,96 +1768,6 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
 }
 
 /**
- * Receive funds into an organizer with initial temporary privacy. Clients should
- * also reorganize their bucket accounts and rotate their temporary incoming account
- * as applicable. Only accounts owned and derived by a user's 12 words should operate
- * as a source in this intent type to guarantee privacy upgradeability.
- *
- * Action Spec (Payment):
- *
- * actions = [
- *   // Section 1: Transfer Quarks from TEMPORARY_INCOMING account to BUCKET_X_KIN accounts with reorganizations
- *
- *   TemporaryPrivacyTransferAction(TEMPORARY_INCOMING[index], BUCKET_X_KIN, multiple * bucketSize),
- *   TemporaryPrivacyExchangeAction(BUCKET_X_KIN, BUCKET_X_KIN, multiple * bucketSize),
- *   ...,
- *   TemporaryPrivacyTransferAction(TEMPORARY_INCOMING[index], BUCKET_X_KIN, multiple * bucketSize),
- *   TemporaryPrivacyExchangeAction(BUCKET_X_KIN, BUCKET_X_KIN, multiple * bucketSize),
- *
- *   // Section 2: Rotate TEMPORARY_INCOMING account
- *
- *   // Below must appear last in this exact order
- *   OpenAccountAction(TEMPORARY_INCOMING[index + 1])
- * ]
- *
- * Action Spec (Deposit):
- *
- * source = PRIMARY or RELATIONSHIP
- * actions = [
- *   TemporaryPrivacyTransferAction(source, BUCKET_X_KIN, multiple * bucketSize),
- *   TemporaryPrivacyExchangeAction(BUCKET_X_KIN, BUCKET_X_KIN, multiple * bucketSize),
- *   ...,
- *   TemporaryPrivacyTransferAction(source, BUCKET_X_KIN, multiple * bucketSize),
- *   TemporaryPrivacyExchangeAction(BUCKET_X_KIN, BUCKET_X_KIN, multiple * bucketSize),
- * ]
- *
- * @generated from message code.transaction.v2.ReceivePaymentsPrivatelyMetadata
- */
-export class ReceivePaymentsPrivatelyMetadata extends Message<ReceivePaymentsPrivatelyMetadata> {
-  /**
-   * The temporary incoming, primary or relationship account to receive funds from
-   *
-   * @generated from field: code.common.v1.SolanaAccountId source = 1;
-   */
-  source?: SolanaAccountId;
-
-  /**
-   * The exact amount of Kin in quarks being received
-   *
-   * @generated from field: uint64 quarks = 2;
-   */
-  quarks = protoInt64.zero;
-
-  /**
-   * Is the receipt of funds from a deposit? If true, the source account must
-   * be a primary or relationship account. Otherwise, it must be from a temporary
-   * incoming account.
-   *
-   * @generated from field: bool is_deposit = 3;
-   */
-  isDeposit = false;
-
-  constructor(data?: PartialMessage<ReceivePaymentsPrivatelyMetadata>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.ReceivePaymentsPrivatelyMetadata";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "source", kind: "message", T: SolanaAccountId },
-    { no: 2, name: "quarks", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 3, name: "is_deposit", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ReceivePaymentsPrivatelyMetadata {
-    return new ReceivePaymentsPrivatelyMetadata().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ReceivePaymentsPrivatelyMetadata {
-    return new ReceivePaymentsPrivatelyMetadata().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ReceivePaymentsPrivatelyMetadata {
-    return new ReceivePaymentsPrivatelyMetadata().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: ReceivePaymentsPrivatelyMetadata | PlainMessage<ReceivePaymentsPrivatelyMetadata> | undefined, b: ReceivePaymentsPrivatelyMetadata | PlainMessage<ReceivePaymentsPrivatelyMetadata> | undefined): boolean {
-    return proto3.util.equals(ReceivePaymentsPrivatelyMetadata, a, b);
-  }
-}
-
-/**
  * Receive funds into a user-owned account publicly. All use cases of this intent
  * close the account, so all funds must be moved. Use this intent to receive payments
  * from an account not owned by a user's 12 words into a temporary incoming account,
@@ -2058,6 +1776,8 @@ export class ReceivePaymentsPrivatelyMetadata extends Message<ReceivePaymentsPri
  * Action Spec (Remote Send):
  *
  * actions = [NoPrivacyWithdrawAction(REMOTE_SEND_GIFT_CARD, TEMPORARY_INCOMING[latest_index], quarks)]
+ *
+ * TODO: This requires a new implementation for the VM
  *
  * @generated from message code.transaction.v2.ReceivePaymentsPubliclyMetadata
  */
@@ -2136,88 +1856,6 @@ export class ReceivePaymentsPubliclyMetadata extends Message<ReceivePaymentsPubl
 }
 
 /**
- * Upgrade existing private virtual instructions from temporary to permanent privacy.
- *
- * Nothing is currently required
- *
- * @generated from message code.transaction.v2.UpgradePrivacyMetadata
- */
-export class UpgradePrivacyMetadata extends Message<UpgradePrivacyMetadata> {
-  constructor(data?: PartialMessage<UpgradePrivacyMetadata>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.UpgradePrivacyMetadata";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): UpgradePrivacyMetadata {
-    return new UpgradePrivacyMetadata().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): UpgradePrivacyMetadata {
-    return new UpgradePrivacyMetadata().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): UpgradePrivacyMetadata {
-    return new UpgradePrivacyMetadata().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: UpgradePrivacyMetadata | PlainMessage<UpgradePrivacyMetadata> | undefined, b: UpgradePrivacyMetadata | PlainMessage<UpgradePrivacyMetadata> | undefined): boolean {
-    return proto3.util.equals(UpgradePrivacyMetadata, a, b);
-  }
-}
-
-/**
- * Establishes a long-lived private relationship between a user and another
- * entity.
- *
- * Prereqs:
- *  - OpenAccounts intent has been submitted
- *
- * Action spec:
- *
- * actions = [OpenAccountAction(RELATIONSHIP)]
- *
- * @generated from message code.transaction.v2.EstablishRelationshipMetadata
- */
-export class EstablishRelationshipMetadata extends Message<EstablishRelationshipMetadata> {
-  /**
-   * @generated from field: code.common.v1.Relationship relationship = 1;
-   */
-  relationship?: Relationship;
-
-  constructor(data?: PartialMessage<EstablishRelationshipMetadata>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.EstablishRelationshipMetadata";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "relationship", kind: "message", T: Relationship },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): EstablishRelationshipMetadata {
-    return new EstablishRelationshipMetadata().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): EstablishRelationshipMetadata {
-    return new EstablishRelationshipMetadata().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): EstablishRelationshipMetadata {
-    return new EstablishRelationshipMetadata().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: EstablishRelationshipMetadata | PlainMessage<EstablishRelationshipMetadata> | undefined, b: EstablishRelationshipMetadata | PlainMessage<EstablishRelationshipMetadata> | undefined): boolean {
-    return proto3.util.equals(EstablishRelationshipMetadata, a, b);
-  }
-}
-
-/**
  * Action is a well-defined, ordered and small set of transactions or virtual instructions
  * for a unit of work that the client wants to perform on the blockchain. Clients provide
  * parameters known to them in the action.
@@ -2258,24 +1896,6 @@ export class Action extends Message<Action> {
     case: "noPrivacyWithdraw";
   } | {
     /**
-     * @generated from field: code.transaction.v2.TemporaryPrivacyTransferAction temporary_privacy_transfer = 7;
-     */
-    value: TemporaryPrivacyTransferAction;
-    case: "temporaryPrivacyTransfer";
-  } | {
-    /**
-     * @generated from field: code.transaction.v2.TemporaryPrivacyExchangeAction temporary_privacy_exchange = 8;
-     */
-    value: TemporaryPrivacyExchangeAction;
-    case: "temporaryPrivacyExchange";
-  } | {
-    /**
-     * @generated from field: code.transaction.v2.PermanentPrivacyUpgradeAction permanent_privacy_upgrade = 9;
-     */
-    value: PermanentPrivacyUpgradeAction;
-    case: "permanentPrivacyUpgrade";
-  } | {
-    /**
      * @generated from field: code.transaction.v2.FeePaymentAction fee_payment = 10;
      */
     value: FeePaymentAction;
@@ -2294,9 +1914,6 @@ export class Action extends Message<Action> {
     { no: 2, name: "open_account", kind: "message", T: OpenAccountAction, oneof: "type" },
     { no: 5, name: "no_privacy_transfer", kind: "message", T: NoPrivacyTransferAction, oneof: "type" },
     { no: 6, name: "no_privacy_withdraw", kind: "message", T: NoPrivacyWithdrawAction, oneof: "type" },
-    { no: 7, name: "temporary_privacy_transfer", kind: "message", T: TemporaryPrivacyTransferAction, oneof: "type" },
-    { no: 8, name: "temporary_privacy_exchange", kind: "message", T: TemporaryPrivacyExchangeAction, oneof: "type" },
-    { no: 9, name: "permanent_privacy_upgrade", kind: "message", T: PermanentPrivacyUpgradeAction, oneof: "type" },
     { no: 10, name: "fee_payment", kind: "message", T: FeePaymentAction, oneof: "type" },
   ]);
 
@@ -2563,206 +2180,6 @@ export class NoPrivacyWithdrawAction extends Message<NoPrivacyWithdrawAction> {
  *  Instructions:
  *    1. system::AdvanceNonce
  *    2. memo::Memo
- *    3. splitter::TransferWithCommitment (treasury -> destination)
- *  Client Signature Required: No
- *
- * Virtual Instruction 2
- *  Instructions:
- *    1. system::AdvanceNonce
- *    2. memo::Memo
- *    3. timelock::TransferWithAuthority (source -> commitment)
- *  Client Signature Required: Yes
- *
- * @generated from message code.transaction.v2.TemporaryPrivacyTransferAction
- */
-export class TemporaryPrivacyTransferAction extends Message<TemporaryPrivacyTransferAction> {
-  /**
-   * The public key of the private key that has authority over source
-   *
-   * @generated from field: code.common.v1.SolanaAccountId authority = 1;
-   */
-  authority?: SolanaAccountId;
-
-  /**
-   * The source account where funds are transferred from
-   *
-   * @generated from field: code.common.v1.SolanaAccountId source = 2;
-   */
-  source?: SolanaAccountId;
-
-  /**
-   * The destination account where funds are transferred to
-   *
-   * @generated from field: code.common.v1.SolanaAccountId destination = 3;
-   */
-  destination?: SolanaAccountId;
-
-  /**
-   * The Kin quark amount to transfer
-   *
-   * @generated from field: uint64 amount = 4;
-   */
-  amount = protoInt64.zero;
-
-  constructor(data?: PartialMessage<TemporaryPrivacyTransferAction>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.TemporaryPrivacyTransferAction";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "authority", kind: "message", T: SolanaAccountId },
-    { no: 2, name: "source", kind: "message", T: SolanaAccountId },
-    { no: 3, name: "destination", kind: "message", T: SolanaAccountId },
-    { no: 4, name: "amount", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): TemporaryPrivacyTransferAction {
-    return new TemporaryPrivacyTransferAction().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): TemporaryPrivacyTransferAction {
-    return new TemporaryPrivacyTransferAction().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): TemporaryPrivacyTransferAction {
-    return new TemporaryPrivacyTransferAction().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: TemporaryPrivacyTransferAction | PlainMessage<TemporaryPrivacyTransferAction> | undefined, b: TemporaryPrivacyTransferAction | PlainMessage<TemporaryPrivacyTransferAction> | undefined): boolean {
-    return proto3.util.equals(TemporaryPrivacyTransferAction, a, b);
-  }
-}
-
-/**
- * Virtual Instruction 1
- *  Instructions:
- *    1. system::AdvanceNonce
- *    2. memo::Memo
- *    3. splitter::TransferWithCommitment (treasury -> destination)
- *  Client Signature Required: No
- *
- * Virtual Instruction 2
- *  Instructions:
- *    1. system::AdvanceNonce
- *    2. memo::Memo
- *    3. timelock::TransferWithAuthority (source -> commitment)
- *  Client Signature Required: Yes
- *
- * @generated from message code.transaction.v2.TemporaryPrivacyExchangeAction
- */
-export class TemporaryPrivacyExchangeAction extends Message<TemporaryPrivacyExchangeAction> {
-  /**
-   * The public key of the private key that has authority over source
-   *
-   * @generated from field: code.common.v1.SolanaAccountId authority = 1;
-   */
-  authority?: SolanaAccountId;
-
-  /**
-   * The source account where funds are exchanged from
-   *
-   * @generated from field: code.common.v1.SolanaAccountId source = 2;
-   */
-  source?: SolanaAccountId;
-
-  /**
-   * The destination account where funds are exchanged to
-   *
-   * @generated from field: code.common.v1.SolanaAccountId destination = 3;
-   */
-  destination?: SolanaAccountId;
-
-  /**
-   * The Kin quark amount to exchange
-   *
-   * @generated from field: uint64 amount = 4;
-   */
-  amount = protoInt64.zero;
-
-  constructor(data?: PartialMessage<TemporaryPrivacyExchangeAction>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.TemporaryPrivacyExchangeAction";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "authority", kind: "message", T: SolanaAccountId },
-    { no: 2, name: "source", kind: "message", T: SolanaAccountId },
-    { no: 3, name: "destination", kind: "message", T: SolanaAccountId },
-    { no: 4, name: "amount", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): TemporaryPrivacyExchangeAction {
-    return new TemporaryPrivacyExchangeAction().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): TemporaryPrivacyExchangeAction {
-    return new TemporaryPrivacyExchangeAction().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): TemporaryPrivacyExchangeAction {
-    return new TemporaryPrivacyExchangeAction().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: TemporaryPrivacyExchangeAction | PlainMessage<TemporaryPrivacyExchangeAction> | undefined, b: TemporaryPrivacyExchangeAction | PlainMessage<TemporaryPrivacyExchangeAction> | undefined): boolean {
-    return proto3.util.equals(TemporaryPrivacyExchangeAction, a, b);
-  }
-}
-
-/**
- * Virtual Instruction 1
- *  Instructions:
- *    1. system::AdvanceNonce
- *    2. memo::Memo
- *    3. timelock::TransferWithAuthority (source -> different commitment)
- *  Client Signature Required: Yes
- *
- * @generated from message code.transaction.v2.PermanentPrivacyUpgradeAction
- */
-export class PermanentPrivacyUpgradeAction extends Message<PermanentPrivacyUpgradeAction> {
-  /**
-   * The action ID of the temporary private transfer or exchange to upgrade
-   *
-   * @generated from field: uint32 action_id = 1;
-   */
-  actionId = 0;
-
-  constructor(data?: PartialMessage<PermanentPrivacyUpgradeAction>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.PermanentPrivacyUpgradeAction";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "action_id", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PermanentPrivacyUpgradeAction {
-    return new PermanentPrivacyUpgradeAction().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): PermanentPrivacyUpgradeAction {
-    return new PermanentPrivacyUpgradeAction().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): PermanentPrivacyUpgradeAction {
-    return new PermanentPrivacyUpgradeAction().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: PermanentPrivacyUpgradeAction | PlainMessage<PermanentPrivacyUpgradeAction> | undefined, b: PermanentPrivacyUpgradeAction | PlainMessage<PermanentPrivacyUpgradeAction> | undefined): boolean {
-    return proto3.util.equals(PermanentPrivacyUpgradeAction, a, b);
-  }
-}
-
-/**
- * Virtual Instruction 1
- *  Instructions:
- *    1. system::AdvanceNonce
- *    2. memo::Memo
  *    3. timelock::TransferWithAuthority (source -> fee account)
  *  Client Signature Required: Yes
  *
@@ -2913,24 +2330,6 @@ export class ServerParameter extends Message<ServerParameter> {
     case: "noPrivacyWithdraw";
   } | {
     /**
-     * @generated from field: code.transaction.v2.TemporaryPrivacyTransferServerParameter temporary_privacy_transfer = 8;
-     */
-    value: TemporaryPrivacyTransferServerParameter;
-    case: "temporaryPrivacyTransfer";
-  } | {
-    /**
-     * @generated from field: code.transaction.v2.TemporaryPrivacyExchangeServerParameter temporary_privacy_exchange = 9;
-     */
-    value: TemporaryPrivacyExchangeServerParameter;
-    case: "temporaryPrivacyExchange";
-  } | {
-    /**
-     * @generated from field: code.transaction.v2.PermanentPrivacyUpgradeServerParameter permanent_privacy_upgrade = 10;
-     */
-    value: PermanentPrivacyUpgradeServerParameter;
-    case: "permanentPrivacyUpgrade";
-  } | {
-    /**
      * @generated from field: code.transaction.v2.FeePaymentServerParameter fee_payment = 11;
      */
     value: FeePaymentServerParameter;
@@ -2950,9 +2349,6 @@ export class ServerParameter extends Message<ServerParameter> {
     { no: 3, name: "open_account", kind: "message", T: OpenAccountServerParameter, oneof: "type" },
     { no: 6, name: "no_privacy_transfer", kind: "message", T: NoPrivacyTransferServerParameter, oneof: "type" },
     { no: 7, name: "no_privacy_withdraw", kind: "message", T: NoPrivacyWithdrawServerParameter, oneof: "type" },
-    { no: 8, name: "temporary_privacy_transfer", kind: "message", T: TemporaryPrivacyTransferServerParameter, oneof: "type" },
-    { no: 9, name: "temporary_privacy_exchange", kind: "message", T: TemporaryPrivacyExchangeServerParameter, oneof: "type" },
-    { no: 10, name: "permanent_privacy_upgrade", kind: "message", T: PermanentPrivacyUpgradeServerParameter, oneof: "type" },
     { no: 11, name: "fee_payment", kind: "message", T: FeePaymentServerParameter, oneof: "type" },
   ]);
 
@@ -3119,183 +2515,6 @@ export class NoPrivacyWithdrawServerParameter extends Message<NoPrivacyWithdrawS
 
   static equals(a: NoPrivacyWithdrawServerParameter | PlainMessage<NoPrivacyWithdrawServerParameter> | undefined, b: NoPrivacyWithdrawServerParameter | PlainMessage<NoPrivacyWithdrawServerParameter> | undefined): boolean {
     return proto3.util.equals(NoPrivacyWithdrawServerParameter, a, b);
-  }
-}
-
-/**
- * @generated from message code.transaction.v2.TemporaryPrivacyTransferServerParameter
- */
-export class TemporaryPrivacyTransferServerParameter extends Message<TemporaryPrivacyTransferServerParameter> {
-  /**
-   * The treasury that will be used to split payments and provide a level of privacy
-   *
-   * @generated from field: code.common.v1.SolanaAccountId treasury = 1;
-   */
-  treasury?: SolanaAccountId;
-
-  /**
-   * A recent root server observed from the treasury
-   *
-   * @generated from field: code.common.v1.Hash recent_root = 2;
-   */
-  recentRoot?: Hash;
-
-  constructor(data?: PartialMessage<TemporaryPrivacyTransferServerParameter>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.TemporaryPrivacyTransferServerParameter";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "treasury", kind: "message", T: SolanaAccountId },
-    { no: 2, name: "recent_root", kind: "message", T: Hash },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): TemporaryPrivacyTransferServerParameter {
-    return new TemporaryPrivacyTransferServerParameter().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): TemporaryPrivacyTransferServerParameter {
-    return new TemporaryPrivacyTransferServerParameter().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): TemporaryPrivacyTransferServerParameter {
-    return new TemporaryPrivacyTransferServerParameter().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: TemporaryPrivacyTransferServerParameter | PlainMessage<TemporaryPrivacyTransferServerParameter> | undefined, b: TemporaryPrivacyTransferServerParameter | PlainMessage<TemporaryPrivacyTransferServerParameter> | undefined): boolean {
-    return proto3.util.equals(TemporaryPrivacyTransferServerParameter, a, b);
-  }
-}
-
-/**
- * @generated from message code.transaction.v2.TemporaryPrivacyExchangeServerParameter
- */
-export class TemporaryPrivacyExchangeServerParameter extends Message<TemporaryPrivacyExchangeServerParameter> {
-  /**
-   * The treasury that will be used to split payments and provide a level of privacy
-   *
-   * @generated from field: code.common.v1.SolanaAccountId treasury = 1;
-   */
-  treasury?: SolanaAccountId;
-
-  /**
-   * A recent root server observed from the treasury
-   *
-   * @generated from field: code.common.v1.Hash recent_root = 2;
-   */
-  recentRoot?: Hash;
-
-  constructor(data?: PartialMessage<TemporaryPrivacyExchangeServerParameter>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.TemporaryPrivacyExchangeServerParameter";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "treasury", kind: "message", T: SolanaAccountId },
-    { no: 2, name: "recent_root", kind: "message", T: Hash },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): TemporaryPrivacyExchangeServerParameter {
-    return new TemporaryPrivacyExchangeServerParameter().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): TemporaryPrivacyExchangeServerParameter {
-    return new TemporaryPrivacyExchangeServerParameter().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): TemporaryPrivacyExchangeServerParameter {
-    return new TemporaryPrivacyExchangeServerParameter().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: TemporaryPrivacyExchangeServerParameter | PlainMessage<TemporaryPrivacyExchangeServerParameter> | undefined, b: TemporaryPrivacyExchangeServerParameter | PlainMessage<TemporaryPrivacyExchangeServerParameter> | undefined): boolean {
-    return proto3.util.equals(TemporaryPrivacyExchangeServerParameter, a, b);
-  }
-}
-
-/**
- * @generated from message code.transaction.v2.PermanentPrivacyUpgradeServerParameter
- */
-export class PermanentPrivacyUpgradeServerParameter extends Message<PermanentPrivacyUpgradeServerParameter> {
-  /**
-   * The new commitment that is being paid
-   *
-   * @generated from field: code.common.v1.SolanaAccountId new_commitment = 1;
-   */
-  newCommitment?: SolanaAccountId;
-
-  /**
-   * The new commitment account's transcript. This is purely needed by client
-   * to validate merkle_root with commitment PDA logic.
-   *
-   * @generated from field: code.common.v1.Hash new_commitment_transcript = 2;
-   */
-  newCommitmentTranscript?: Hash;
-
-  /**
-   * The new commitment account's destination. This is purely needed by client
-   * to validate merkle_root with commitment PDA logic.
-   *
-   * @generated from field: code.common.v1.SolanaAccountId new_commitment_destination = 3;
-   */
-  newCommitmentDestination?: SolanaAccountId;
-
-  /**
-   * The new commitment account's payment amount. This is purely needed by client
-   * to validate merkle_root with commitment PDA logic.
-   *
-   * @generated from field: uint64 new_commitment_amount = 4;
-   */
-  newCommitmentAmount = protoInt64.zero;
-
-  /**
-   * The merkle root, which was the recent root used in the new commitment account
-   *
-   * @generated from field: code.common.v1.Hash merkle_root = 5;
-   */
-  merkleRoot?: Hash;
-
-  /**
-   * The merkle proof that validates the original commitment occurred prior to
-   * the new commitment server is asking client to pay
-   *
-   * @generated from field: repeated code.common.v1.Hash merkle_proof = 6;
-   */
-  merkleProof: Hash[] = [];
-
-  constructor(data?: PartialMessage<PermanentPrivacyUpgradeServerParameter>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.PermanentPrivacyUpgradeServerParameter";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "new_commitment", kind: "message", T: SolanaAccountId },
-    { no: 2, name: "new_commitment_transcript", kind: "message", T: Hash },
-    { no: 3, name: "new_commitment_destination", kind: "message", T: SolanaAccountId },
-    { no: 4, name: "new_commitment_amount", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 5, name: "merkle_root", kind: "message", T: Hash },
-    { no: 6, name: "merkle_proof", kind: "message", T: Hash, repeated: true },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PermanentPrivacyUpgradeServerParameter {
-    return new PermanentPrivacyUpgradeServerParameter().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): PermanentPrivacyUpgradeServerParameter {
-    return new PermanentPrivacyUpgradeServerParameter().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): PermanentPrivacyUpgradeServerParameter {
-    return new PermanentPrivacyUpgradeServerParameter().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: PermanentPrivacyUpgradeServerParameter | PlainMessage<PermanentPrivacyUpgradeServerParameter> | undefined, b: PermanentPrivacyUpgradeServerParameter | PlainMessage<PermanentPrivacyUpgradeServerParameter> | undefined): boolean {
-    return proto3.util.equals(PermanentPrivacyUpgradeServerParameter, a, b);
   }
 }
 
@@ -3560,200 +2779,11 @@ export enum DeniedErrorDetails_Code {
    * @generated from enum value: UNSPECIFIED = 0;
    */
   UNSPECIFIED = 0,
-
-  /**
-   * Phone number has exceeded its free account allocation
-   *
-   * @generated from enum value: TOO_MANY_FREE_ACCOUNTS_FOR_PHONE_NUMBER = 1;
-   */
-  TOO_MANY_FREE_ACCOUNTS_FOR_PHONE_NUMBER = 1,
-
-  /**
-   * Device has exceeded its free account allocation
-   *
-   * @generated from enum value: TOO_MANY_FREE_ACCOUNTS_FOR_DEVICE = 2;
-   */
-  TOO_MANY_FREE_ACCOUNTS_FOR_DEVICE = 2,
-
-  /**
-   * The country associated with the phone number with the account is not
-   * supported (eg. it is on the sanctioned list).
-   *
-   * @generated from enum value: UNSUPPORTED_COUNTRY = 3;
-   */
-  UNSUPPORTED_COUNTRY = 3,
-
-  /**
-   * The device is not supported (eg. it fails device attestation checks)
-   *
-   * @generated from enum value: UNSUPPORTED_DEVICE = 4;
-   */
-  UNSUPPORTED_DEVICE = 4,
 }
 // Retrieve enum metadata with: proto3.getEnumType(DeniedErrorDetails_Code)
 proto3.util.setEnumType(DeniedErrorDetails_Code, "code.transaction.v2.DeniedErrorDetails.Code", [
   { no: 0, name: "UNSPECIFIED" },
-  { no: 1, name: "TOO_MANY_FREE_ACCOUNTS_FOR_PHONE_NUMBER" },
-  { no: 2, name: "TOO_MANY_FREE_ACCOUNTS_FOR_DEVICE" },
-  { no: 3, name: "UNSUPPORTED_COUNTRY" },
-  { no: 4, name: "UNSUPPORTED_DEVICE" },
 ]);
-
-/**
- * UpgradeableIntent is an intent whose actions can be upgraded.
- *
- * @generated from message code.transaction.v2.UpgradeableIntent
- */
-export class UpgradeableIntent extends Message<UpgradeableIntent> {
-  /**
-   * The intent ID
-   *
-   * @generated from field: code.common.v1.IntentId id = 1;
-   */
-  id?: IntentId;
-
-  /**
-   * The set of private actions that can be upgraded
-   *
-   * @generated from field: repeated code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction actions = 2;
-   */
-  actions: UpgradeableIntent_UpgradeablePrivateAction[] = [];
-
-  constructor(data?: PartialMessage<UpgradeableIntent>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.UpgradeableIntent";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "id", kind: "message", T: IntentId },
-    { no: 2, name: "actions", kind: "message", T: UpgradeableIntent_UpgradeablePrivateAction, repeated: true },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): UpgradeableIntent {
-    return new UpgradeableIntent().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): UpgradeableIntent {
-    return new UpgradeableIntent().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): UpgradeableIntent {
-    return new UpgradeableIntent().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: UpgradeableIntent | PlainMessage<UpgradeableIntent> | undefined, b: UpgradeableIntent | PlainMessage<UpgradeableIntent> | undefined): boolean {
-    return proto3.util.equals(UpgradeableIntent, a, b);
-  }
-}
-
-/**
- * @generated from message code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction
- */
-export class UpgradeableIntent_UpgradeablePrivateAction extends Message<UpgradeableIntent_UpgradeablePrivateAction> {
-  /**
-   * The blob that was hashed and signed by the client for a virtual instruction.
-   * Clients *MUST* use the source and destination accounts in the timelock::TransferWithAuthority
-   * instruction to validate all fields provided by server by locally computing the expected
-   * addresses.
-   *
-   * @generated from field: code.common.v1.Transaction transaction_blob = 1;
-   */
-  transactionBlob?: Transaction;
-
-  /**
-   * The client's signature for the virtual instruction. Clients MUST use this to
-   * locally validate the virtual instruction blob provided by server.
-   *
-   * @generated from field: code.common.v1.Signature client_signature = 2;
-   */
-  clientSignature?: Signature;
-
-  /**
-   * The action ID of this virtual instruction
-   *
-   * @generated from field: uint32 action_id = 3;
-   */
-  actionId = 0;
-
-  /**
-   * The source account's type, which hints how to efficiently derive source
-   *
-   * @generated from field: code.common.v1.AccountType source_account_type = 4;
-   */
-  sourceAccountType = AccountType.UNKNOWN;
-
-  /**
-   * The source account's derivation index, which hints how to efficiently derive source
-   *
-   * @generated from field: uint64 source_derivation_index = 5;
-   */
-  sourceDerivationIndex = protoInt64.zero;
-
-  /**
-   * The original destination account that was paid by the treasury
-   *
-   * @generated from field: code.common.v1.SolanaAccountId original_destination = 6;
-   */
-  originalDestination?: SolanaAccountId;
-
-  /**
-   * The original quark amount for the action
-   *
-   * @generated from field: uint64 original_amount = 7;
-   */
-  originalAmount = protoInt64.zero;
-
-  /**
-   * The treasury used for this the private action
-   *
-   * @generated from field: code.common.v1.SolanaAccountId treasury = 8;
-   */
-  treasury?: SolanaAccountId;
-
-  /**
-   * The recent root observed at the time of intent creation for this private action
-   *
-   * @generated from field: code.common.v1.Hash recent_root = 9;
-   */
-  recentRoot?: Hash;
-
-  constructor(data?: PartialMessage<UpgradeableIntent_UpgradeablePrivateAction>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.UpgradeableIntent.UpgradeablePrivateAction";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "transaction_blob", kind: "message", T: Transaction },
-    { no: 2, name: "client_signature", kind: "message", T: Signature },
-    { no: 3, name: "action_id", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-    { no: 4, name: "source_account_type", kind: "enum", T: proto3.getEnumType(AccountType) },
-    { no: 5, name: "source_derivation_index", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 6, name: "original_destination", kind: "message", T: SolanaAccountId },
-    { no: 7, name: "original_amount", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 8, name: "treasury", kind: "message", T: SolanaAccountId },
-    { no: 9, name: "recent_root", kind: "message", T: Hash },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): UpgradeableIntent_UpgradeablePrivateAction {
-    return new UpgradeableIntent_UpgradeablePrivateAction().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): UpgradeableIntent_UpgradeablePrivateAction {
-    return new UpgradeableIntent_UpgradeablePrivateAction().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): UpgradeableIntent_UpgradeablePrivateAction {
-    return new UpgradeableIntent_UpgradeablePrivateAction().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: UpgradeableIntent_UpgradeablePrivateAction | PlainMessage<UpgradeableIntent_UpgradeablePrivateAction> | undefined, b: UpgradeableIntent_UpgradeablePrivateAction | PlainMessage<UpgradeableIntent_UpgradeablePrivateAction> | undefined): boolean {
-    return proto3.util.equals(UpgradeableIntent_UpgradeablePrivateAction, a, b);
-  }
-}
 
 /**
  * ExchangeData defines an amount of Kin with currency exchange data
@@ -4108,69 +3138,6 @@ export class BuyModuleLimit extends Message<BuyModuleLimit> {
     return proto3.util.equals(BuyModuleLimit, a, b);
   }
 }
-
-/**
- * @generated from message code.transaction.v2.TippedUser
- */
-export class TippedUser extends Message<TippedUser> {
-  /**
-   * @generated from field: code.transaction.v2.TippedUser.Platform platform = 1;
-   */
-  platform = TippedUser_Platform.UNKNOWN;
-
-  /**
-   * @generated from field: string username = 2;
-   */
-  username = "";
-
-  constructor(data?: PartialMessage<TippedUser>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.TippedUser";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "platform", kind: "enum", T: proto3.getEnumType(TippedUser_Platform) },
-    { no: 2, name: "username", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): TippedUser {
-    return new TippedUser().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): TippedUser {
-    return new TippedUser().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): TippedUser {
-    return new TippedUser().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: TippedUser | PlainMessage<TippedUser> | undefined, b: TippedUser | PlainMessage<TippedUser> | undefined): boolean {
-    return proto3.util.equals(TippedUser, a, b);
-  }
-}
-
-/**
- * @generated from enum code.transaction.v2.TippedUser.Platform
- */
-export enum TippedUser_Platform {
-  /**
-   * @generated from enum value: UNKNOWN = 0;
-   */
-  UNKNOWN = 0,
-
-  /**
-   * @generated from enum value: TWITTER = 1;
-   */
-  TWITTER = 1,
-}
-// Retrieve enum metadata with: proto3.getEnumType(TippedUser_Platform)
-proto3.util.setEnumType(TippedUser_Platform, "code.transaction.v2.TippedUser.Platform", [
-  { no: 0, name: "UNKNOWN" },
-  { no: 1, name: "TWITTER" },
-]);
 
 /**
  * @generated from message code.transaction.v2.Cursor

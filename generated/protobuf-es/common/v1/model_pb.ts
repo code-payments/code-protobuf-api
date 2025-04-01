@@ -358,45 +358,6 @@ export class IntentId extends Message<IntentId> {
 }
 
 /**
- * DeviceToken is an opaque token used to verify whether a device real
- *
- * @generated from message code.common.v1.DeviceToken
- */
-export class DeviceToken extends Message<DeviceToken> {
-  /**
-   * @generated from field: string value = 1;
-   */
-  value = "";
-
-  constructor(data?: PartialMessage<DeviceToken>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.common.v1.DeviceToken";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DeviceToken {
-    return new DeviceToken().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DeviceToken {
-    return new DeviceToken().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DeviceToken {
-    return new DeviceToken().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: DeviceToken | PlainMessage<DeviceToken> | undefined, b: DeviceToken | PlainMessage<DeviceToken> | undefined): boolean {
-    return proto3.util.equals(DeviceToken, a, b);
-  }
-}
-
-/**
  * Domain is a hostname
  *
  * @generated from message code.common.v1.Domain
@@ -432,52 +393,6 @@ export class Domain extends Message<Domain> {
 
   static equals(a: Domain | PlainMessage<Domain> | undefined, b: Domain | PlainMessage<Domain> | undefined): boolean {
     return proto3.util.equals(Domain, a, b);
-  }
-}
-
-/**
- * Relationship is a set of identifiers that a user can establish a relationship
- * with.
- *
- * @generated from message code.common.v1.Relationship
- */
-export class Relationship extends Message<Relationship> {
-  /**
-   * @generated from oneof code.common.v1.Relationship.type
-   */
-  type: {
-    /**
-     * @generated from field: code.common.v1.Domain domain = 1;
-     */
-    value: Domain;
-    case: "domain";
-  } | { case: undefined; value?: undefined } = { case: undefined };
-
-  constructor(data?: PartialMessage<Relationship>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.common.v1.Relationship";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "domain", kind: "message", T: Domain, oneof: "type" },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Relationship {
-    return new Relationship().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Relationship {
-    return new Relationship().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Relationship {
-    return new Relationship().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: Relationship | PlainMessage<Relationship> | undefined, b: Relationship | PlainMessage<Relationship> | undefined): boolean {
-    return proto3.util.equals(Relationship, a, b);
   }
 }
 
