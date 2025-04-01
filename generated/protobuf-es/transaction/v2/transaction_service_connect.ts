@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { AirdropRequest, AirdropResponse, CanWithdrawToAccountRequest, CanWithdrawToAccountResponse, DeclareFiatOnrampPurchaseAttemptRequest, DeclareFiatOnrampPurchaseAttemptResponse, GetIntentMetadataRequest, GetIntentMetadataResponse, GetLimitsRequest, GetLimitsResponse, GetPrioritizedIntentsForPrivacyUpgradeRequest, GetPrioritizedIntentsForPrivacyUpgradeResponse, GetPrivacyUpgradeStatusRequest, GetPrivacyUpgradeStatusResponse, SubmitIntentRequest, SubmitIntentResponse, SwapRequest, SwapResponse } from "./transaction_service_pb";
+import { AirdropRequest, AirdropResponse, CanWithdrawToAccountRequest, CanWithdrawToAccountResponse, DeclareFiatOnrampPurchaseAttemptRequest, DeclareFiatOnrampPurchaseAttemptResponse, GetIntentMetadataRequest, GetIntentMetadataResponse, GetLimitsRequest, GetLimitsResponse, SubmitIntentRequest, SubmitIntentResponse, SwapRequest, SwapResponse } from "./transaction_service_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -65,30 +65,6 @@ export const Transaction = {
       name: "GetIntentMetadata",
       I: GetIntentMetadataRequest,
       O: GetIntentMetadataResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * GetPrivacyUpgradeStatus gets the status of a private transaction and the
-     * ability to upgrade it to permanent privacy.
-     *
-     * @generated from rpc code.transaction.v2.Transaction.GetPrivacyUpgradeStatus
-     */
-    getPrivacyUpgradeStatus: {
-      name: "GetPrivacyUpgradeStatus",
-      I: GetPrivacyUpgradeStatusRequest,
-      O: GetPrivacyUpgradeStatusResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * GetPrioritizedIntentsForPrivacyUpgrade allows clients to get private
-     * intent actions that can be upgraded in a secure and verifiable manner.
-     *
-     * @generated from rpc code.transaction.v2.Transaction.GetPrioritizedIntentsForPrivacyUpgrade
-     */
-    getPrioritizedIntentsForPrivacyUpgrade: {
-      name: "GetPrioritizedIntentsForPrivacyUpgrade",
-      I: GetPrioritizedIntentsForPrivacyUpgradeRequest,
-      O: GetPrioritizedIntentsForPrivacyUpgradeResponse,
       kind: MethodKind.Unary,
     },
     /**

@@ -19,15 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Transaction_SubmitIntent_FullMethodName                           = "/code.transaction.v2.Transaction/SubmitIntent"
-	Transaction_GetIntentMetadata_FullMethodName                      = "/code.transaction.v2.Transaction/GetIntentMetadata"
-	Transaction_GetPrivacyUpgradeStatus_FullMethodName                = "/code.transaction.v2.Transaction/GetPrivacyUpgradeStatus"
-	Transaction_GetPrioritizedIntentsForPrivacyUpgrade_FullMethodName = "/code.transaction.v2.Transaction/GetPrioritizedIntentsForPrivacyUpgrade"
-	Transaction_GetLimits_FullMethodName                              = "/code.transaction.v2.Transaction/GetLimits"
-	Transaction_CanWithdrawToAccount_FullMethodName                   = "/code.transaction.v2.Transaction/CanWithdrawToAccount"
-	Transaction_Airdrop_FullMethodName                                = "/code.transaction.v2.Transaction/Airdrop"
-	Transaction_Swap_FullMethodName                                   = "/code.transaction.v2.Transaction/Swap"
-	Transaction_DeclareFiatOnrampPurchaseAttempt_FullMethodName       = "/code.transaction.v2.Transaction/DeclareFiatOnrampPurchaseAttempt"
+	Transaction_SubmitIntent_FullMethodName                     = "/code.transaction.v2.Transaction/SubmitIntent"
+	Transaction_GetIntentMetadata_FullMethodName                = "/code.transaction.v2.Transaction/GetIntentMetadata"
+	Transaction_GetLimits_FullMethodName                        = "/code.transaction.v2.Transaction/GetLimits"
+	Transaction_CanWithdrawToAccount_FullMethodName             = "/code.transaction.v2.Transaction/CanWithdrawToAccount"
+	Transaction_Airdrop_FullMethodName                          = "/code.transaction.v2.Transaction/Airdrop"
+	Transaction_Swap_FullMethodName                             = "/code.transaction.v2.Transaction/Swap"
+	Transaction_DeclareFiatOnrampPurchaseAttempt_FullMethodName = "/code.transaction.v2.Transaction/DeclareFiatOnrampPurchaseAttempt"
 )
 
 // TransactionClient is the client API for Transaction service.
@@ -72,12 +70,6 @@ type TransactionClient interface {
 	// to fetch the status of submitted intents. Metadata exists only for intents
 	// that have been successfully submitted.
 	GetIntentMetadata(ctx context.Context, in *GetIntentMetadataRequest, opts ...grpc.CallOption) (*GetIntentMetadataResponse, error)
-	// GetPrivacyUpgradeStatus gets the status of a private transaction and the
-	// ability to upgrade it to permanent privacy.
-	GetPrivacyUpgradeStatus(ctx context.Context, in *GetPrivacyUpgradeStatusRequest, opts ...grpc.CallOption) (*GetPrivacyUpgradeStatusResponse, error)
-	// GetPrioritizedIntentsForPrivacyUpgrade allows clients to get private
-	// intent actions that can be upgraded in a secure and verifiable manner.
-	GetPrioritizedIntentsForPrivacyUpgrade(ctx context.Context, in *GetPrioritizedIntentsForPrivacyUpgradeRequest, opts ...grpc.CallOption) (*GetPrioritizedIntentsForPrivacyUpgradeResponse, error)
 	// GetLimits gets limits for money moving intents for an owner account in an
 	// identity-aware manner
 	GetLimits(ctx context.Context, in *GetLimitsRequest, opts ...grpc.CallOption) (*GetLimitsResponse, error)
@@ -138,26 +130,6 @@ func (c *transactionClient) GetIntentMetadata(ctx context.Context, in *GetIntent
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetIntentMetadataResponse)
 	err := c.cc.Invoke(ctx, Transaction_GetIntentMetadata_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *transactionClient) GetPrivacyUpgradeStatus(ctx context.Context, in *GetPrivacyUpgradeStatusRequest, opts ...grpc.CallOption) (*GetPrivacyUpgradeStatusResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetPrivacyUpgradeStatusResponse)
-	err := c.cc.Invoke(ctx, Transaction_GetPrivacyUpgradeStatus_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *transactionClient) GetPrioritizedIntentsForPrivacyUpgrade(ctx context.Context, in *GetPrioritizedIntentsForPrivacyUpgradeRequest, opts ...grpc.CallOption) (*GetPrioritizedIntentsForPrivacyUpgradeResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetPrioritizedIntentsForPrivacyUpgradeResponse)
-	err := c.cc.Invoke(ctx, Transaction_GetPrioritizedIntentsForPrivacyUpgrade_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -259,12 +231,6 @@ type TransactionServer interface {
 	// to fetch the status of submitted intents. Metadata exists only for intents
 	// that have been successfully submitted.
 	GetIntentMetadata(context.Context, *GetIntentMetadataRequest) (*GetIntentMetadataResponse, error)
-	// GetPrivacyUpgradeStatus gets the status of a private transaction and the
-	// ability to upgrade it to permanent privacy.
-	GetPrivacyUpgradeStatus(context.Context, *GetPrivacyUpgradeStatusRequest) (*GetPrivacyUpgradeStatusResponse, error)
-	// GetPrioritizedIntentsForPrivacyUpgrade allows clients to get private
-	// intent actions that can be upgraded in a secure and verifiable manner.
-	GetPrioritizedIntentsForPrivacyUpgrade(context.Context, *GetPrioritizedIntentsForPrivacyUpgradeRequest) (*GetPrioritizedIntentsForPrivacyUpgradeResponse, error)
 	// GetLimits gets limits for money moving intents for an owner account in an
 	// identity-aware manner
 	GetLimits(context.Context, *GetLimitsRequest) (*GetLimitsResponse, error)
@@ -313,12 +279,6 @@ func (UnimplementedTransactionServer) SubmitIntent(grpc.BidiStreamingServer[Subm
 }
 func (UnimplementedTransactionServer) GetIntentMetadata(context.Context, *GetIntentMetadataRequest) (*GetIntentMetadataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetIntentMetadata not implemented")
-}
-func (UnimplementedTransactionServer) GetPrivacyUpgradeStatus(context.Context, *GetPrivacyUpgradeStatusRequest) (*GetPrivacyUpgradeStatusResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPrivacyUpgradeStatus not implemented")
-}
-func (UnimplementedTransactionServer) GetPrioritizedIntentsForPrivacyUpgrade(context.Context, *GetPrioritizedIntentsForPrivacyUpgradeRequest) (*GetPrioritizedIntentsForPrivacyUpgradeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPrioritizedIntentsForPrivacyUpgrade not implemented")
 }
 func (UnimplementedTransactionServer) GetLimits(context.Context, *GetLimitsRequest) (*GetLimitsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLimits not implemented")
@@ -377,42 +337,6 @@ func _Transaction_GetIntentMetadata_Handler(srv interface{}, ctx context.Context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TransactionServer).GetIntentMetadata(ctx, req.(*GetIntentMetadataRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Transaction_GetPrivacyUpgradeStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPrivacyUpgradeStatusRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TransactionServer).GetPrivacyUpgradeStatus(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Transaction_GetPrivacyUpgradeStatus_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TransactionServer).GetPrivacyUpgradeStatus(ctx, req.(*GetPrivacyUpgradeStatusRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Transaction_GetPrioritizedIntentsForPrivacyUpgrade_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPrioritizedIntentsForPrivacyUpgradeRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TransactionServer).GetPrioritizedIntentsForPrivacyUpgrade(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Transaction_GetPrioritizedIntentsForPrivacyUpgrade_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TransactionServer).GetPrioritizedIntentsForPrivacyUpgrade(ctx, req.(*GetPrioritizedIntentsForPrivacyUpgradeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -506,14 +430,6 @@ var Transaction_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetIntentMetadata",
 			Handler:    _Transaction_GetIntentMetadata_Handler,
-		},
-		{
-			MethodName: "GetPrivacyUpgradeStatus",
-			Handler:    _Transaction_GetPrivacyUpgradeStatus_Handler,
-		},
-		{
-			MethodName: "GetPrioritizedIntentsForPrivacyUpgrade",
-			Handler:    _Transaction_GetPrioritizedIntentsForPrivacyUpgrade_Handler,
 		},
 		{
 			MethodName: "GetLimits",
