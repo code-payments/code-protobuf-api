@@ -11,11 +11,12 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,25 +31,63 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on AddTokenRequest with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
 func (m *AddTokenRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AddTokenRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AddTokenRequestMultiError, or nil if none found.
+func (m *AddTokenRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AddTokenRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetOwnerAccountId() == nil {
-		return AddTokenRequestValidationError{
+		err := AddTokenRequestValidationError{
 			field:  "OwnerAccountId",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetOwnerAccountId()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetOwnerAccountId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, AddTokenRequestValidationError{
+					field:  "OwnerAccountId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, AddTokenRequestValidationError{
+					field:  "OwnerAccountId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetOwnerAccountId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return AddTokenRequestValidationError{
 				field:  "OwnerAccountId",
@@ -59,13 +98,36 @@ func (m *AddTokenRequest) Validate() error {
 	}
 
 	if m.GetSignature() == nil {
-		return AddTokenRequestValidationError{
+		err := AddTokenRequestValidationError{
 			field:  "Signature",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetSignature()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, AddTokenRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, AddTokenRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return AddTokenRequestValidationError{
 				field:  "Signature",
@@ -76,13 +138,36 @@ func (m *AddTokenRequest) Validate() error {
 	}
 
 	if m.GetContainerId() == nil {
-		return AddTokenRequestValidationError{
+		err := AddTokenRequestValidationError{
 			field:  "ContainerId",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetContainerId()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetContainerId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, AddTokenRequestValidationError{
+					field:  "ContainerId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, AddTokenRequestValidationError{
+					field:  "ContainerId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetContainerId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return AddTokenRequestValidationError{
 				field:  "ContainerId",
@@ -93,20 +178,47 @@ func (m *AddTokenRequest) Validate() error {
 	}
 
 	if l := utf8.RuneCountInString(m.GetPushToken()); l < 1 || l > 4096 {
-		return AddTokenRequestValidationError{
+		err := AddTokenRequestValidationError{
 			field:  "PushToken",
 			reason: "value length must be between 1 and 4096 runes, inclusive",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if _, ok := _AddTokenRequest_TokenType_InLookup[m.GetTokenType()]; !ok {
-		return AddTokenRequestValidationError{
+		err := AddTokenRequestValidationError{
 			field:  "TokenType",
-			reason: "value must be in list [1 2]",
+			reason: "value must be in list [FCM_ANDROID FCM_APNS]",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetAppInstall()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetAppInstall()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, AddTokenRequestValidationError{
+					field:  "AppInstall",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, AddTokenRequestValidationError{
+					field:  "AppInstall",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetAppInstall()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return AddTokenRequestValidationError{
 				field:  "AppInstall",
@@ -116,8 +228,29 @@ func (m *AddTokenRequest) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return AddTokenRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// AddTokenRequestMultiError is an error wrapping multiple validation errors
+// returned by AddTokenRequest.ValidateAll() if the designated constraints
+// aren't met.
+type AddTokenRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AddTokenRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AddTokenRequestMultiError) AllErrors() []error { return m }
 
 // AddTokenRequestValidationError is the validation error returned by
 // AddTokenRequest.Validate if the designated constraints aren't met.
@@ -179,17 +312,52 @@ var _AddTokenRequest_TokenType_InLookup = map[TokenType]struct{}{
 }
 
 // Validate checks the field values on AddTokenResponse with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
 func (m *AddTokenResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AddTokenResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AddTokenResponseMultiError, or nil if none found.
+func (m *AddTokenResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AddTokenResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Result
+
+	if len(errors) > 0 {
+		return AddTokenResponseMultiError(errors)
+	}
 
 	return nil
 }
+
+// AddTokenResponseMultiError is an error wrapping multiple validation errors
+// returned by AddTokenResponse.ValidateAll() if the designated constraints
+// aren't met.
+type AddTokenResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AddTokenResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AddTokenResponseMultiError) AllErrors() []error { return m }
 
 // AddTokenResponseValidationError is the validation error returned by
 // AddTokenResponse.Validate if the designated constraints aren't met.
@@ -247,20 +415,57 @@ var _ interface {
 
 // Validate checks the field values on RemoveTokenRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *RemoveTokenRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RemoveTokenRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RemoveTokenRequestMultiError, or nil if none found.
+func (m *RemoveTokenRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RemoveTokenRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetOwnerAccountId() == nil {
-		return RemoveTokenRequestValidationError{
+		err := RemoveTokenRequestValidationError{
 			field:  "OwnerAccountId",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetOwnerAccountId()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetOwnerAccountId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RemoveTokenRequestValidationError{
+					field:  "OwnerAccountId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RemoveTokenRequestValidationError{
+					field:  "OwnerAccountId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetOwnerAccountId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RemoveTokenRequestValidationError{
 				field:  "OwnerAccountId",
@@ -271,13 +476,36 @@ func (m *RemoveTokenRequest) Validate() error {
 	}
 
 	if m.GetSignature() == nil {
-		return RemoveTokenRequestValidationError{
+		err := RemoveTokenRequestValidationError{
 			field:  "Signature",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetSignature()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RemoveTokenRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RemoveTokenRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RemoveTokenRequestValidationError{
 				field:  "Signature",
@@ -288,13 +516,36 @@ func (m *RemoveTokenRequest) Validate() error {
 	}
 
 	if m.GetContainerId() == nil {
-		return RemoveTokenRequestValidationError{
+		err := RemoveTokenRequestValidationError{
 			field:  "ContainerId",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetContainerId()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetContainerId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RemoveTokenRequestValidationError{
+					field:  "ContainerId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RemoveTokenRequestValidationError{
+					field:  "ContainerId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetContainerId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RemoveTokenRequestValidationError{
 				field:  "ContainerId",
@@ -305,21 +556,50 @@ func (m *RemoveTokenRequest) Validate() error {
 	}
 
 	if l := utf8.RuneCountInString(m.GetPushToken()); l < 1 || l > 4096 {
-		return RemoveTokenRequestValidationError{
+		err := RemoveTokenRequestValidationError{
 			field:  "PushToken",
 			reason: "value length must be between 1 and 4096 runes, inclusive",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if _, ok := _RemoveTokenRequest_TokenType_InLookup[m.GetTokenType()]; !ok {
-		return RemoveTokenRequestValidationError{
+		err := RemoveTokenRequestValidationError{
 			field:  "TokenType",
-			reason: "value must be in list [1 2]",
+			reason: "value must be in list [FCM_ANDROID FCM_APNS]",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return RemoveTokenRequestMultiError(errors)
 	}
 
 	return nil
 }
+
+// RemoveTokenRequestMultiError is an error wrapping multiple validation errors
+// returned by RemoveTokenRequest.ValidateAll() if the designated constraints
+// aren't met.
+type RemoveTokenRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RemoveTokenRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RemoveTokenRequestMultiError) AllErrors() []error { return m }
 
 // RemoveTokenRequestValidationError is the validation error returned by
 // RemoveTokenRequest.Validate if the designated constraints aren't met.
@@ -384,16 +664,51 @@ var _RemoveTokenRequest_TokenType_InLookup = map[TokenType]struct{}{
 
 // Validate checks the field values on RemoveTokenResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *RemoveTokenResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RemoveTokenResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RemoveTokenResponseMultiError, or nil if none found.
+func (m *RemoveTokenResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RemoveTokenResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Result
+
+	if len(errors) > 0 {
+		return RemoveTokenResponseMultiError(errors)
+	}
 
 	return nil
 }
+
+// RemoveTokenResponseMultiError is an error wrapping multiple validation
+// errors returned by RemoveTokenResponse.ValidateAll() if the designated
+// constraints aren't met.
+type RemoveTokenResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RemoveTokenResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RemoveTokenResponseMultiError) AllErrors() []error { return m }
 
 // RemoveTokenResponseValidationError is the validation error returned by
 // RemoveTokenResponse.Validate if the designated constraints aren't met.

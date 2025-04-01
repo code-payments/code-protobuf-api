@@ -11,11 +11,12 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	transaction "github.com/code-payments/code-protobuf-api/generated/go/transaction/v2"
 )
@@ -32,27 +33,65 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
+	_ = sort.Sort
 
 	_ = transaction.AirdropType(0)
 )
 
 // Validate checks the field values on OpenMessageStreamRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *OpenMessageStreamRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on OpenMessageStreamRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// OpenMessageStreamRequestMultiError, or nil if none found.
+func (m *OpenMessageStreamRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *OpenMessageStreamRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetRendezvousKey() == nil {
-		return OpenMessageStreamRequestValidationError{
+		err := OpenMessageStreamRequestValidationError{
 			field:  "RendezvousKey",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetRendezvousKey()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetRendezvousKey()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, OpenMessageStreamRequestValidationError{
+					field:  "RendezvousKey",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, OpenMessageStreamRequestValidationError{
+					field:  "RendezvousKey",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetRendezvousKey()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return OpenMessageStreamRequestValidationError{
 				field:  "RendezvousKey",
@@ -62,7 +101,26 @@ func (m *OpenMessageStreamRequest) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetSignature()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, OpenMessageStreamRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, OpenMessageStreamRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return OpenMessageStreamRequestValidationError{
 				field:  "Signature",
@@ -72,8 +130,29 @@ func (m *OpenMessageStreamRequest) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return OpenMessageStreamRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// OpenMessageStreamRequestMultiError is an error wrapping multiple validation
+// errors returned by OpenMessageStreamRequest.ValidateAll() if the designated
+// constraints aren't met.
+type OpenMessageStreamRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m OpenMessageStreamRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m OpenMessageStreamRequestMultiError) AllErrors() []error { return m }
 
 // OpenMessageStreamRequestValidationError is the validation error returned by
 // OpenMessageStreamRequest.Validate if the designated constraints aren't met.
@@ -133,23 +212,60 @@ var _ interface {
 
 // Validate checks the field values on OpenMessageStreamResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *OpenMessageStreamResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on OpenMessageStreamResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// OpenMessageStreamResponseMultiError, or nil if none found.
+func (m *OpenMessageStreamResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *OpenMessageStreamResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if l := len(m.GetMessages()); l < 1 || l > 1024 {
-		return OpenMessageStreamResponseValidationError{
+		err := OpenMessageStreamResponseValidationError{
 			field:  "Messages",
 			reason: "value must contain between 1 and 1024 items, inclusive",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	for idx, item := range m.GetMessages() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, OpenMessageStreamResponseValidationError{
+						field:  fmt.Sprintf("Messages[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, OpenMessageStreamResponseValidationError{
+						field:  fmt.Sprintf("Messages[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return OpenMessageStreamResponseValidationError{
 					field:  fmt.Sprintf("Messages[%v]", idx),
@@ -161,8 +277,29 @@ func (m *OpenMessageStreamResponse) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return OpenMessageStreamResponseMultiError(errors)
+	}
+
 	return nil
 }
+
+// OpenMessageStreamResponseMultiError is an error wrapping multiple validation
+// errors returned by OpenMessageStreamResponse.ValidateAll() if the
+// designated constraints aren't met.
+type OpenMessageStreamResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m OpenMessageStreamResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m OpenMessageStreamResponseMultiError) AllErrors() []error { return m }
 
 // OpenMessageStreamResponseValidationError is the validation error returned by
 // OpenMessageStreamResponse.Validate if the designated constraints aren't met.
@@ -222,17 +359,62 @@ var _ interface {
 
 // Validate checks the field values on OpenMessageStreamWithKeepAliveRequest
 // with the rules defined in the proto definition for this message. If any
-// rules are violated, an error is returned.
+// rules are violated, the first error encountered is returned, or nil if
+// there are no violations.
 func (m *OpenMessageStreamWithKeepAliveRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on OpenMessageStreamWithKeepAliveRequest
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
+// OpenMessageStreamWithKeepAliveRequestMultiError, or nil if none found.
+func (m *OpenMessageStreamWithKeepAliveRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *OpenMessageStreamWithKeepAliveRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	switch m.RequestOrPong.(type) {
+	var errors []error
 
+	oneofRequestOrPongPresent := false
+	switch v := m.RequestOrPong.(type) {
 	case *OpenMessageStreamWithKeepAliveRequest_Request:
+		if v == nil {
+			err := OpenMessageStreamWithKeepAliveRequestValidationError{
+				field:  "RequestOrPong",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofRequestOrPongPresent = true
 
-		if v, ok := interface{}(m.GetRequest()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetRequest()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, OpenMessageStreamWithKeepAliveRequestValidationError{
+						field:  "Request",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, OpenMessageStreamWithKeepAliveRequestValidationError{
+						field:  "Request",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetRequest()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return OpenMessageStreamWithKeepAliveRequestValidationError{
 					field:  "Request",
@@ -243,8 +425,38 @@ func (m *OpenMessageStreamWithKeepAliveRequest) Validate() error {
 		}
 
 	case *OpenMessageStreamWithKeepAliveRequest_Pong:
+		if v == nil {
+			err := OpenMessageStreamWithKeepAliveRequestValidationError{
+				field:  "RequestOrPong",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofRequestOrPongPresent = true
 
-		if v, ok := interface{}(m.GetPong()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetPong()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, OpenMessageStreamWithKeepAliveRequestValidationError{
+						field:  "Pong",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, OpenMessageStreamWithKeepAliveRequestValidationError{
+						field:  "Pong",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetPong()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return OpenMessageStreamWithKeepAliveRequestValidationError{
 					field:  "Pong",
@@ -255,15 +467,43 @@ func (m *OpenMessageStreamWithKeepAliveRequest) Validate() error {
 		}
 
 	default:
-		return OpenMessageStreamWithKeepAliveRequestValidationError{
+		_ = v // ensures v is used
+	}
+	if !oneofRequestOrPongPresent {
+		err := OpenMessageStreamWithKeepAliveRequestValidationError{
 			field:  "RequestOrPong",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
+	if len(errors) > 0 {
+		return OpenMessageStreamWithKeepAliveRequestMultiError(errors)
 	}
 
 	return nil
 }
+
+// OpenMessageStreamWithKeepAliveRequestMultiError is an error wrapping
+// multiple validation errors returned by
+// OpenMessageStreamWithKeepAliveRequest.ValidateAll() if the designated
+// constraints aren't met.
+type OpenMessageStreamWithKeepAliveRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m OpenMessageStreamWithKeepAliveRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m OpenMessageStreamWithKeepAliveRequestMultiError) AllErrors() []error { return m }
 
 // OpenMessageStreamWithKeepAliveRequestValidationError is the validation error
 // returned by OpenMessageStreamWithKeepAliveRequest.Validate if the
@@ -324,17 +564,63 @@ var _ interface {
 
 // Validate checks the field values on OpenMessageStreamWithKeepAliveResponse
 // with the rules defined in the proto definition for this message. If any
-// rules are violated, an error is returned.
+// rules are violated, the first error encountered is returned, or nil if
+// there are no violations.
 func (m *OpenMessageStreamWithKeepAliveResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// OpenMessageStreamWithKeepAliveResponse with the rules defined in the proto
+// definition for this message. If any rules are violated, the result is a
+// list of violation errors wrapped in
+// OpenMessageStreamWithKeepAliveResponseMultiError, or nil if none found.
+func (m *OpenMessageStreamWithKeepAliveResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *OpenMessageStreamWithKeepAliveResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	switch m.ResponseOrPing.(type) {
+	var errors []error
 
+	oneofResponseOrPingPresent := false
+	switch v := m.ResponseOrPing.(type) {
 	case *OpenMessageStreamWithKeepAliveResponse_Response:
+		if v == nil {
+			err := OpenMessageStreamWithKeepAliveResponseValidationError{
+				field:  "ResponseOrPing",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofResponseOrPingPresent = true
 
-		if v, ok := interface{}(m.GetResponse()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetResponse()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, OpenMessageStreamWithKeepAliveResponseValidationError{
+						field:  "Response",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, OpenMessageStreamWithKeepAliveResponseValidationError{
+						field:  "Response",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetResponse()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return OpenMessageStreamWithKeepAliveResponseValidationError{
 					field:  "Response",
@@ -345,8 +631,38 @@ func (m *OpenMessageStreamWithKeepAliveResponse) Validate() error {
 		}
 
 	case *OpenMessageStreamWithKeepAliveResponse_Ping:
+		if v == nil {
+			err := OpenMessageStreamWithKeepAliveResponseValidationError{
+				field:  "ResponseOrPing",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofResponseOrPingPresent = true
 
-		if v, ok := interface{}(m.GetPing()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetPing()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, OpenMessageStreamWithKeepAliveResponseValidationError{
+						field:  "Ping",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, OpenMessageStreamWithKeepAliveResponseValidationError{
+						field:  "Ping",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetPing()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return OpenMessageStreamWithKeepAliveResponseValidationError{
 					field:  "Ping",
@@ -357,15 +673,43 @@ func (m *OpenMessageStreamWithKeepAliveResponse) Validate() error {
 		}
 
 	default:
-		return OpenMessageStreamWithKeepAliveResponseValidationError{
+		_ = v // ensures v is used
+	}
+	if !oneofResponseOrPingPresent {
+		err := OpenMessageStreamWithKeepAliveResponseValidationError{
 			field:  "ResponseOrPing",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
+	if len(errors) > 0 {
+		return OpenMessageStreamWithKeepAliveResponseMultiError(errors)
 	}
 
 	return nil
 }
+
+// OpenMessageStreamWithKeepAliveResponseMultiError is an error wrapping
+// multiple validation errors returned by
+// OpenMessageStreamWithKeepAliveResponse.ValidateAll() if the designated
+// constraints aren't met.
+type OpenMessageStreamWithKeepAliveResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m OpenMessageStreamWithKeepAliveResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m OpenMessageStreamWithKeepAliveResponseMultiError) AllErrors() []error { return m }
 
 // OpenMessageStreamWithKeepAliveResponseValidationError is the validation
 // error returned by OpenMessageStreamWithKeepAliveResponse.Validate if the
@@ -426,20 +770,57 @@ var _ interface {
 
 // Validate checks the field values on PollMessagesRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *PollMessagesRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PollMessagesRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// PollMessagesRequestMultiError, or nil if none found.
+func (m *PollMessagesRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PollMessagesRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetRendezvousKey() == nil {
-		return PollMessagesRequestValidationError{
+		err := PollMessagesRequestValidationError{
 			field:  "RendezvousKey",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetRendezvousKey()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetRendezvousKey()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PollMessagesRequestValidationError{
+					field:  "RendezvousKey",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PollMessagesRequestValidationError{
+					field:  "RendezvousKey",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetRendezvousKey()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return PollMessagesRequestValidationError{
 				field:  "RendezvousKey",
@@ -450,13 +831,36 @@ func (m *PollMessagesRequest) Validate() error {
 	}
 
 	if m.GetSignature() == nil {
-		return PollMessagesRequestValidationError{
+		err := PollMessagesRequestValidationError{
 			field:  "Signature",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetSignature()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, PollMessagesRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, PollMessagesRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return PollMessagesRequestValidationError{
 				field:  "Signature",
@@ -466,8 +870,29 @@ func (m *PollMessagesRequest) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return PollMessagesRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// PollMessagesRequestMultiError is an error wrapping multiple validation
+// errors returned by PollMessagesRequest.ValidateAll() if the designated
+// constraints aren't met.
+type PollMessagesRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PollMessagesRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PollMessagesRequestMultiError) AllErrors() []error { return m }
 
 // PollMessagesRequestValidationError is the validation error returned by
 // PollMessagesRequest.Validate if the designated constraints aren't met.
@@ -527,23 +952,60 @@ var _ interface {
 
 // Validate checks the field values on PollMessagesResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *PollMessagesResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PollMessagesResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// PollMessagesResponseMultiError, or nil if none found.
+func (m *PollMessagesResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PollMessagesResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetMessages()) > 1024 {
-		return PollMessagesResponseValidationError{
+		err := PollMessagesResponseValidationError{
 			field:  "Messages",
 			reason: "value must contain no more than 1024 item(s)",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	for idx, item := range m.GetMessages() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, PollMessagesResponseValidationError{
+						field:  fmt.Sprintf("Messages[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, PollMessagesResponseValidationError{
+						field:  fmt.Sprintf("Messages[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return PollMessagesResponseValidationError{
 					field:  fmt.Sprintf("Messages[%v]", idx),
@@ -555,8 +1017,29 @@ func (m *PollMessagesResponse) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return PollMessagesResponseMultiError(errors)
+	}
+
 	return nil
 }
+
+// PollMessagesResponseMultiError is an error wrapping multiple validation
+// errors returned by PollMessagesResponse.ValidateAll() if the designated
+// constraints aren't met.
+type PollMessagesResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PollMessagesResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PollMessagesResponseMultiError) AllErrors() []error { return m }
 
 // PollMessagesResponseValidationError is the validation error returned by
 // PollMessagesResponse.Validate if the designated constraints aren't met.
@@ -616,20 +1099,57 @@ var _ interface {
 
 // Validate checks the field values on AckMessagesRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *AckMessagesRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AckMessagesRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AckMessagesRequestMultiError, or nil if none found.
+func (m *AckMessagesRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AckMessagesRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetRendezvousKey() == nil {
-		return AckMessagesRequestValidationError{
+		err := AckMessagesRequestValidationError{
 			field:  "RendezvousKey",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetRendezvousKey()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetRendezvousKey()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, AckMessagesRequestValidationError{
+					field:  "RendezvousKey",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, AckMessagesRequestValidationError{
+					field:  "RendezvousKey",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetRendezvousKey()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return AckMessagesRequestValidationError{
 				field:  "RendezvousKey",
@@ -640,16 +1160,39 @@ func (m *AckMessagesRequest) Validate() error {
 	}
 
 	if l := len(m.GetMessageIds()); l < 1 || l > 1024 {
-		return AckMessagesRequestValidationError{
+		err := AckMessagesRequestValidationError{
 			field:  "MessageIds",
 			reason: "value must contain between 1 and 1024 items, inclusive",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	for idx, item := range m.GetMessageIds() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, AckMessagesRequestValidationError{
+						field:  fmt.Sprintf("MessageIds[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, AckMessagesRequestValidationError{
+						field:  fmt.Sprintf("MessageIds[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return AckMessagesRequestValidationError{
 					field:  fmt.Sprintf("MessageIds[%v]", idx),
@@ -661,8 +1204,29 @@ func (m *AckMessagesRequest) Validate() error {
 
 	}
 
+	if len(errors) > 0 {
+		return AckMessagesRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// AckMessagesRequestMultiError is an error wrapping multiple validation errors
+// returned by AckMessagesRequest.ValidateAll() if the designated constraints
+// aren't met.
+type AckMessagesRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AckMessagesRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AckMessagesRequestMultiError) AllErrors() []error { return m }
 
 // AckMessagesRequestValidationError is the validation error returned by
 // AckMessagesRequest.Validate if the designated constraints aren't met.
@@ -722,16 +1286,51 @@ var _ interface {
 
 // Validate checks the field values on AckMesssagesResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *AckMesssagesResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AckMesssagesResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AckMesssagesResponseMultiError, or nil if none found.
+func (m *AckMesssagesResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AckMesssagesResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Result
+
+	if len(errors) > 0 {
+		return AckMesssagesResponseMultiError(errors)
+	}
 
 	return nil
 }
+
+// AckMesssagesResponseMultiError is an error wrapping multiple validation
+// errors returned by AckMesssagesResponse.ValidateAll() if the designated
+// constraints aren't met.
+type AckMesssagesResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AckMesssagesResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AckMesssagesResponseMultiError) AllErrors() []error { return m }
 
 // AckMesssagesResponseValidationError is the validation error returned by
 // AckMesssagesResponse.Validate if the designated constraints aren't met.
@@ -791,20 +1390,57 @@ var _ interface {
 
 // Validate checks the field values on SendMessageRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *SendMessageRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SendMessageRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SendMessageRequestMultiError, or nil if none found.
+func (m *SendMessageRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SendMessageRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetMessage() == nil {
-		return SendMessageRequestValidationError{
+		err := SendMessageRequestValidationError{
 			field:  "Message",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetMessage()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetMessage()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SendMessageRequestValidationError{
+					field:  "Message",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SendMessageRequestValidationError{
+					field:  "Message",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetMessage()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SendMessageRequestValidationError{
 				field:  "Message",
@@ -815,13 +1451,36 @@ func (m *SendMessageRequest) Validate() error {
 	}
 
 	if m.GetRendezvousKey() == nil {
-		return SendMessageRequestValidationError{
+		err := SendMessageRequestValidationError{
 			field:  "RendezvousKey",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetRendezvousKey()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetRendezvousKey()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SendMessageRequestValidationError{
+					field:  "RendezvousKey",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SendMessageRequestValidationError{
+					field:  "RendezvousKey",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetRendezvousKey()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SendMessageRequestValidationError{
 				field:  "RendezvousKey",
@@ -832,13 +1491,36 @@ func (m *SendMessageRequest) Validate() error {
 	}
 
 	if m.GetSignature() == nil {
-		return SendMessageRequestValidationError{
+		err := SendMessageRequestValidationError{
 			field:  "Signature",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetSignature()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SendMessageRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SendMessageRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SendMessageRequestValidationError{
 				field:  "Signature",
@@ -848,8 +1530,29 @@ func (m *SendMessageRequest) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return SendMessageRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// SendMessageRequestMultiError is an error wrapping multiple validation errors
+// returned by SendMessageRequest.ValidateAll() if the designated constraints
+// aren't met.
+type SendMessageRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SendMessageRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SendMessageRequestMultiError) AllErrors() []error { return m }
 
 // SendMessageRequestValidationError is the validation error returned by
 // SendMessageRequest.Validate if the designated constraints aren't met.
@@ -909,15 +1612,48 @@ var _ interface {
 
 // Validate checks the field values on SendMessageResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *SendMessageResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SendMessageResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SendMessageResponseMultiError, or nil if none found.
+func (m *SendMessageResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SendMessageResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Result
 
-	if v, ok := interface{}(m.GetMessageId()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetMessageId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SendMessageResponseValidationError{
+					field:  "MessageId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SendMessageResponseValidationError{
+					field:  "MessageId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetMessageId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SendMessageResponseValidationError{
 				field:  "MessageId",
@@ -927,8 +1663,29 @@ func (m *SendMessageResponse) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return SendMessageResponseMultiError(errors)
+	}
+
 	return nil
 }
+
+// SendMessageResponseMultiError is an error wrapping multiple validation
+// errors returned by SendMessageResponse.ValidateAll() if the designated
+// constraints aren't met.
+type SendMessageResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SendMessageResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SendMessageResponseMultiError) AllErrors() []error { return m }
 
 // SendMessageResponseValidationError is the validation error returned by
 // SendMessageResponse.Validate if the designated constraints aren't met.
@@ -987,22 +1744,61 @@ var _ interface {
 } = SendMessageResponseValidationError{}
 
 // Validate checks the field values on RendezvousKey with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *RendezvousKey) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RendezvousKey with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in RendezvousKeyMultiError, or
+// nil if none found.
+func (m *RendezvousKey) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RendezvousKey) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetValue()) != 32 {
-		return RendezvousKeyValidationError{
+		err := RendezvousKeyValidationError{
 			field:  "Value",
 			reason: "value length must be 32 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return RendezvousKeyMultiError(errors)
 	}
 
 	return nil
 }
+
+// RendezvousKeyMultiError is an error wrapping multiple validation errors
+// returned by RendezvousKey.ValidateAll() if the designated constraints
+// aren't met.
+type RendezvousKeyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RendezvousKeyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RendezvousKeyMultiError) AllErrors() []error { return m }
 
 // RendezvousKeyValidationError is the validation error returned by
 // RendezvousKey.Validate if the designated constraints aren't met.
@@ -1059,21 +1855,60 @@ var _ interface {
 } = RendezvousKeyValidationError{}
 
 // Validate checks the field values on MessageId with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *MessageId) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on MessageId with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in MessageIdMultiError, or nil
+// if none found.
+func (m *MessageId) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *MessageId) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if len(m.GetValue()) != 16 {
-		return MessageIdValidationError{
+		err := MessageIdValidationError{
 			field:  "Value",
 			reason: "value length must be 16 bytes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return MessageIdMultiError(errors)
 	}
 
 	return nil
 }
+
+// MessageIdMultiError is an error wrapping multiple validation errors returned
+// by MessageId.ValidateAll() if the designated constraints aren't met.
+type MessageIdMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m MessageIdMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m MessageIdMultiError) AllErrors() []error { return m }
 
 // MessageIdValidationError is the validation error returned by
 // MessageId.Validate if the designated constraints aren't met.
@@ -1130,21 +1965,58 @@ var _ interface {
 } = MessageIdValidationError{}
 
 // Validate checks the field values on RequestToGrabBill with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
 func (m *RequestToGrabBill) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RequestToGrabBill with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RequestToGrabBillMultiError, or nil if none found.
+func (m *RequestToGrabBill) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RequestToGrabBill) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetRequestorAccount() == nil {
-		return RequestToGrabBillValidationError{
+		err := RequestToGrabBillValidationError{
 			field:  "RequestorAccount",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetRequestorAccount()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetRequestorAccount()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RequestToGrabBillValidationError{
+					field:  "RequestorAccount",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RequestToGrabBillValidationError{
+					field:  "RequestorAccount",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetRequestorAccount()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RequestToGrabBillValidationError{
 				field:  "RequestorAccount",
@@ -1154,8 +2026,29 @@ func (m *RequestToGrabBill) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return RequestToGrabBillMultiError(errors)
+	}
+
 	return nil
 }
+
+// RequestToGrabBillMultiError is an error wrapping multiple validation errors
+// returned by RequestToGrabBill.ValidateAll() if the designated constraints
+// aren't met.
+type RequestToGrabBillMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RequestToGrabBillMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RequestToGrabBillMultiError) AllErrors() []error { return m }
 
 // RequestToGrabBillValidationError is the validation error returned by
 // RequestToGrabBill.Validate if the designated constraints aren't met.
@@ -1215,20 +2108,57 @@ var _ interface {
 
 // Validate checks the field values on RequestToReceiveBill with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *RequestToReceiveBill) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RequestToReceiveBill with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RequestToReceiveBillMultiError, or nil if none found.
+func (m *RequestToReceiveBill) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RequestToReceiveBill) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetRequestorAccount() == nil {
-		return RequestToReceiveBillValidationError{
+		err := RequestToReceiveBillValidationError{
 			field:  "RequestorAccount",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetRequestorAccount()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetRequestorAccount()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RequestToReceiveBillValidationError{
+					field:  "RequestorAccount",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RequestToReceiveBillValidationError{
+					field:  "RequestorAccount",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetRequestorAccount()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RequestToReceiveBillValidationError{
 				field:  "RequestorAccount",
@@ -1238,7 +2168,26 @@ func (m *RequestToReceiveBill) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetDomain()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetDomain()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RequestToReceiveBillValidationError{
+					field:  "Domain",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RequestToReceiveBillValidationError{
+					field:  "Domain",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDomain()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RequestToReceiveBillValidationError{
 				field:  "Domain",
@@ -1248,7 +2197,26 @@ func (m *RequestToReceiveBill) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetVerifier()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetVerifier()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RequestToReceiveBillValidationError{
+					field:  "Verifier",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RequestToReceiveBillValidationError{
+					field:  "Verifier",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetVerifier()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RequestToReceiveBillValidationError{
 				field:  "Verifier",
@@ -1258,7 +2226,26 @@ func (m *RequestToReceiveBill) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetSignature()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RequestToReceiveBillValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RequestToReceiveBillValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RequestToReceiveBillValidationError{
 				field:  "Signature",
@@ -1268,7 +2255,26 @@ func (m *RequestToReceiveBill) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetRendezvousKey()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetRendezvousKey()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RequestToReceiveBillValidationError{
+					field:  "RendezvousKey",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RequestToReceiveBillValidationError{
+					field:  "RendezvousKey",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetRendezvousKey()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RequestToReceiveBillValidationError{
 				field:  "RendezvousKey",
@@ -1279,16 +2285,39 @@ func (m *RequestToReceiveBill) Validate() error {
 	}
 
 	if len(m.GetAdditionalFees()) > 3 {
-		return RequestToReceiveBillValidationError{
+		err := RequestToReceiveBillValidationError{
 			field:  "AdditionalFees",
 			reason: "value must contain no more than 3 item(s)",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	for idx, item := range m.GetAdditionalFees() {
 		_, _ = idx, item
 
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, RequestToReceiveBillValidationError{
+						field:  fmt.Sprintf("AdditionalFees[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, RequestToReceiveBillValidationError{
+						field:  fmt.Sprintf("AdditionalFees[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return RequestToReceiveBillValidationError{
 					field:  fmt.Sprintf("AdditionalFees[%v]", idx),
@@ -1300,11 +2329,41 @@ func (m *RequestToReceiveBill) Validate() error {
 
 	}
 
-	switch m.ExchangeData.(type) {
-
+	oneofExchangeDataPresent := false
+	switch v := m.ExchangeData.(type) {
 	case *RequestToReceiveBill_Exact:
+		if v == nil {
+			err := RequestToReceiveBillValidationError{
+				field:  "ExchangeData",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofExchangeDataPresent = true
 
-		if v, ok := interface{}(m.GetExact()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetExact()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, RequestToReceiveBillValidationError{
+						field:  "Exact",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, RequestToReceiveBillValidationError{
+						field:  "Exact",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetExact()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return RequestToReceiveBillValidationError{
 					field:  "Exact",
@@ -1315,8 +2374,38 @@ func (m *RequestToReceiveBill) Validate() error {
 		}
 
 	case *RequestToReceiveBill_Partial:
+		if v == nil {
+			err := RequestToReceiveBillValidationError{
+				field:  "ExchangeData",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofExchangeDataPresent = true
 
-		if v, ok := interface{}(m.GetPartial()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetPartial()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, RequestToReceiveBillValidationError{
+						field:  "Partial",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, RequestToReceiveBillValidationError{
+						field:  "Partial",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetPartial()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return RequestToReceiveBillValidationError{
 					field:  "Partial",
@@ -1327,15 +2416,42 @@ func (m *RequestToReceiveBill) Validate() error {
 		}
 
 	default:
-		return RequestToReceiveBillValidationError{
+		_ = v // ensures v is used
+	}
+	if !oneofExchangeDataPresent {
+		err := RequestToReceiveBillValidationError{
 			field:  "ExchangeData",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
+	if len(errors) > 0 {
+		return RequestToReceiveBillMultiError(errors)
 	}
 
 	return nil
 }
+
+// RequestToReceiveBillMultiError is an error wrapping multiple validation
+// errors returned by RequestToReceiveBill.ValidateAll() if the designated
+// constraints aren't met.
+type RequestToReceiveBillMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RequestToReceiveBillMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RequestToReceiveBillMultiError) AllErrors() []error { return m }
 
 // RequestToReceiveBillValidationError is the validation error returned by
 // RequestToReceiveBill.Validate if the designated constraints aren't met.
@@ -1394,22 +2510,60 @@ var _ interface {
 } = RequestToReceiveBillValidationError{}
 
 // Validate checks the field values on CodeScanned with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *CodeScanned) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CodeScanned with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in CodeScannedMultiError, or
+// nil if none found.
+func (m *CodeScanned) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CodeScanned) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetTimestamp() == nil {
-		return CodeScannedValidationError{
+		err := CodeScannedValidationError{
 			field:  "Timestamp",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return CodeScannedMultiError(errors)
 	}
 
 	return nil
 }
+
+// CodeScannedMultiError is an error wrapping multiple validation errors
+// returned by CodeScanned.ValidateAll() if the designated constraints aren't met.
+type CodeScannedMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CodeScannedMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CodeScannedMultiError) AllErrors() []error { return m }
 
 // CodeScannedValidationError is the validation error returned by
 // CodeScanned.Validate if the designated constraints aren't met.
@@ -1467,20 +2621,57 @@ var _ interface {
 
 // Validate checks the field values on ClientRejectedPayment with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *ClientRejectedPayment) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ClientRejectedPayment with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ClientRejectedPaymentMultiError, or nil if none found.
+func (m *ClientRejectedPayment) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ClientRejectedPayment) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetIntentId() == nil {
-		return ClientRejectedPaymentValidationError{
+		err := ClientRejectedPaymentValidationError{
 			field:  "IntentId",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetIntentId()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetIntentId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ClientRejectedPaymentValidationError{
+					field:  "IntentId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ClientRejectedPaymentValidationError{
+					field:  "IntentId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetIntentId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ClientRejectedPaymentValidationError{
 				field:  "IntentId",
@@ -1490,8 +2681,29 @@ func (m *ClientRejectedPayment) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return ClientRejectedPaymentMultiError(errors)
+	}
+
 	return nil
 }
+
+// ClientRejectedPaymentMultiError is an error wrapping multiple validation
+// errors returned by ClientRejectedPayment.ValidateAll() if the designated
+// constraints aren't met.
+type ClientRejectedPaymentMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ClientRejectedPaymentMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ClientRejectedPaymentMultiError) AllErrors() []error { return m }
 
 // ClientRejectedPaymentValidationError is the validation error returned by
 // ClientRejectedPayment.Validate if the designated constraints aren't met.
@@ -1550,21 +2762,58 @@ var _ interface {
 } = ClientRejectedPaymentValidationError{}
 
 // Validate checks the field values on IntentSubmitted with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
 func (m *IntentSubmitted) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on IntentSubmitted with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// IntentSubmittedMultiError, or nil if none found.
+func (m *IntentSubmitted) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *IntentSubmitted) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetIntentId() == nil {
-		return IntentSubmittedValidationError{
+		err := IntentSubmittedValidationError{
 			field:  "IntentId",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetIntentId()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetIntentId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, IntentSubmittedValidationError{
+					field:  "IntentId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, IntentSubmittedValidationError{
+					field:  "IntentId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetIntentId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return IntentSubmittedValidationError{
 				field:  "IntentId",
@@ -1574,7 +2823,26 @@ func (m *IntentSubmitted) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetMetadata()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetMetadata()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, IntentSubmittedValidationError{
+					field:  "Metadata",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, IntentSubmittedValidationError{
+					field:  "Metadata",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetMetadata()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return IntentSubmittedValidationError{
 				field:  "Metadata",
@@ -1584,8 +2852,29 @@ func (m *IntentSubmitted) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return IntentSubmittedMultiError(errors)
+	}
+
 	return nil
 }
+
+// IntentSubmittedMultiError is an error wrapping multiple validation errors
+// returned by IntentSubmitted.ValidateAll() if the designated constraints
+// aren't met.
+type IntentSubmittedMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m IntentSubmittedMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m IntentSubmittedMultiError) AllErrors() []error { return m }
 
 // IntentSubmittedValidationError is the validation error returned by
 // IntentSubmitted.Validate if the designated constraints aren't met.
@@ -1642,22 +2931,61 @@ var _ interface {
 } = IntentSubmittedValidationError{}
 
 // Validate checks the field values on WebhookCalled with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *WebhookCalled) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on WebhookCalled with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in WebhookCalledMultiError, or
+// nil if none found.
+func (m *WebhookCalled) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *WebhookCalled) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetTimestamp() == nil {
-		return WebhookCalledValidationError{
+		err := WebhookCalledValidationError{
 			field:  "Timestamp",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return WebhookCalledMultiError(errors)
 	}
 
 	return nil
 }
+
+// WebhookCalledMultiError is an error wrapping multiple validation errors
+// returned by WebhookCalled.ValidateAll() if the designated constraints
+// aren't met.
+type WebhookCalledMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m WebhookCalledMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m WebhookCalledMultiError) AllErrors() []error { return m }
 
 // WebhookCalledValidationError is the validation error returned by
 // WebhookCalled.Validate if the designated constraints aren't met.
@@ -1714,21 +3042,58 @@ var _ interface {
 } = WebhookCalledValidationError{}
 
 // Validate checks the field values on RequestToLogin with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *RequestToLogin) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RequestToLogin with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in RequestToLoginMultiError,
+// or nil if none found.
+func (m *RequestToLogin) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RequestToLogin) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetDomain() == nil {
-		return RequestToLoginValidationError{
+		err := RequestToLoginValidationError{
 			field:  "Domain",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetDomain()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetDomain()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RequestToLoginValidationError{
+					field:  "Domain",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RequestToLoginValidationError{
+					field:  "Domain",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDomain()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RequestToLoginValidationError{
 				field:  "Domain",
@@ -1739,13 +3104,36 @@ func (m *RequestToLogin) Validate() error {
 	}
 
 	if m.GetVerifier() == nil {
-		return RequestToLoginValidationError{
+		err := RequestToLoginValidationError{
 			field:  "Verifier",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetVerifier()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetVerifier()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RequestToLoginValidationError{
+					field:  "Verifier",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RequestToLoginValidationError{
+					field:  "Verifier",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetVerifier()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RequestToLoginValidationError{
 				field:  "Verifier",
@@ -1756,13 +3144,36 @@ func (m *RequestToLogin) Validate() error {
 	}
 
 	if m.GetSignature() == nil {
-		return RequestToLoginValidationError{
+		err := RequestToLoginValidationError{
 			field:  "Signature",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetSignature()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RequestToLoginValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RequestToLoginValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RequestToLoginValidationError{
 				field:  "Signature",
@@ -1773,13 +3184,36 @@ func (m *RequestToLogin) Validate() error {
 	}
 
 	if m.GetRendezvousKey() == nil {
-		return RequestToLoginValidationError{
+		err := RequestToLoginValidationError{
 			field:  "RendezvousKey",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetRendezvousKey()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetRendezvousKey()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RequestToLoginValidationError{
+					field:  "RendezvousKey",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RequestToLoginValidationError{
+					field:  "RendezvousKey",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetRendezvousKey()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RequestToLoginValidationError{
 				field:  "RendezvousKey",
@@ -1789,8 +3223,29 @@ func (m *RequestToLogin) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return RequestToLoginMultiError(errors)
+	}
+
 	return nil
 }
+
+// RequestToLoginMultiError is an error wrapping multiple validation errors
+// returned by RequestToLogin.ValidateAll() if the designated constraints
+// aren't met.
+type RequestToLoginMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RequestToLoginMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RequestToLoginMultiError) AllErrors() []error { return m }
 
 // RequestToLoginValidationError is the validation error returned by
 // RequestToLogin.Validate if the designated constraints aren't met.
@@ -1848,21 +3303,60 @@ var _ interface {
 
 // Validate checks the field values on ClientRejectedLogin with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *ClientRejectedLogin) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ClientRejectedLogin with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ClientRejectedLoginMultiError, or nil if none found.
+func (m *ClientRejectedLogin) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ClientRejectedLogin) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetTimestamp() == nil {
-		return ClientRejectedLoginValidationError{
+		err := ClientRejectedLoginValidationError{
 			field:  "Timestamp",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return ClientRejectedLoginMultiError(errors)
 	}
 
 	return nil
 }
+
+// ClientRejectedLoginMultiError is an error wrapping multiple validation
+// errors returned by ClientRejectedLogin.ValidateAll() if the designated
+// constraints aren't met.
+type ClientRejectedLoginMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ClientRejectedLoginMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ClientRejectedLoginMultiError) AllErrors() []error { return m }
 
 // ClientRejectedLoginValidationError is the validation error returned by
 // ClientRejectedLogin.Validate if the designated constraints aren't met.
@@ -1921,28 +3415,69 @@ var _ interface {
 } = ClientRejectedLoginValidationError{}
 
 // Validate checks the field values on AirdropReceived with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
 func (m *AirdropReceived) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AirdropReceived with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AirdropReceivedMultiError, or nil if none found.
+func (m *AirdropReceived) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AirdropReceived) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if _, ok := _AirdropReceived_AirdropType_NotInLookup[m.GetAirdropType()]; ok {
-		return AirdropReceivedValidationError{
+		err := AirdropReceivedValidationError{
 			field:  "AirdropType",
-			reason: "value must not be in list [0]",
+			reason: "value must not be in list [UNKNOWN]",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetExchangeData() == nil {
-		return AirdropReceivedValidationError{
+		err := AirdropReceivedValidationError{
 			field:  "ExchangeData",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetExchangeData()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetExchangeData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, AirdropReceivedValidationError{
+					field:  "ExchangeData",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, AirdropReceivedValidationError{
+					field:  "ExchangeData",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetExchangeData()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return AirdropReceivedValidationError{
 				field:  "ExchangeData",
@@ -1953,14 +3488,39 @@ func (m *AirdropReceived) Validate() error {
 	}
 
 	if m.GetTimestamp() == nil {
-		return AirdropReceivedValidationError{
+		err := AirdropReceivedValidationError{
 			field:  "Timestamp",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return AirdropReceivedMultiError(errors)
 	}
 
 	return nil
 }
+
+// AirdropReceivedMultiError is an error wrapping multiple validation errors
+// returned by AirdropReceived.ValidateAll() if the designated constraints
+// aren't met.
+type AirdropReceivedMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AirdropReceivedMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AirdropReceivedMultiError) AllErrors() []error { return m }
 
 // AirdropReceivedValidationError is the validation error returned by
 // AirdropReceived.Validate if the designated constraints aren't met.
@@ -2021,13 +3581,46 @@ var _AirdropReceived_AirdropType_NotInLookup = map[transaction.AirdropType]struc
 }
 
 // Validate checks the field values on Message with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *Message) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Message with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in MessageMultiError, or nil if none found.
+func (m *Message) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Message) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetId()).(interface{ Validate() error }); ok {
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, MessageValidationError{
+					field:  "Id",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, MessageValidationError{
+					field:  "Id",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return MessageValidationError{
 				field:  "Id",
@@ -2037,7 +3630,26 @@ func (m *Message) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetSendMessageRequestSignature()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetSendMessageRequestSignature()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, MessageValidationError{
+					field:  "SendMessageRequestSignature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, MessageValidationError{
+					field:  "SendMessageRequestSignature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSendMessageRequestSignature()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return MessageValidationError{
 				field:  "SendMessageRequestSignature",
@@ -2047,11 +3659,41 @@ func (m *Message) Validate() error {
 		}
 	}
 
-	switch m.Kind.(type) {
-
+	oneofKindPresent := false
+	switch v := m.Kind.(type) {
 	case *Message_RequestToGrabBill:
+		if v == nil {
+			err := MessageValidationError{
+				field:  "Kind",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofKindPresent = true
 
-		if v, ok := interface{}(m.GetRequestToGrabBill()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetRequestToGrabBill()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, MessageValidationError{
+						field:  "RequestToGrabBill",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, MessageValidationError{
+						field:  "RequestToGrabBill",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetRequestToGrabBill()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return MessageValidationError{
 					field:  "RequestToGrabBill",
@@ -2062,8 +3704,38 @@ func (m *Message) Validate() error {
 		}
 
 	case *Message_RequestToReceiveBill:
+		if v == nil {
+			err := MessageValidationError{
+				field:  "Kind",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofKindPresent = true
 
-		if v, ok := interface{}(m.GetRequestToReceiveBill()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetRequestToReceiveBill()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, MessageValidationError{
+						field:  "RequestToReceiveBill",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, MessageValidationError{
+						field:  "RequestToReceiveBill",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetRequestToReceiveBill()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return MessageValidationError{
 					field:  "RequestToReceiveBill",
@@ -2074,8 +3746,38 @@ func (m *Message) Validate() error {
 		}
 
 	case *Message_CodeScanned:
+		if v == nil {
+			err := MessageValidationError{
+				field:  "Kind",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofKindPresent = true
 
-		if v, ok := interface{}(m.GetCodeScanned()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetCodeScanned()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, MessageValidationError{
+						field:  "CodeScanned",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, MessageValidationError{
+						field:  "CodeScanned",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetCodeScanned()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return MessageValidationError{
 					field:  "CodeScanned",
@@ -2086,8 +3788,38 @@ func (m *Message) Validate() error {
 		}
 
 	case *Message_ClientRejectedPayment:
+		if v == nil {
+			err := MessageValidationError{
+				field:  "Kind",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofKindPresent = true
 
-		if v, ok := interface{}(m.GetClientRejectedPayment()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetClientRejectedPayment()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, MessageValidationError{
+						field:  "ClientRejectedPayment",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, MessageValidationError{
+						field:  "ClientRejectedPayment",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetClientRejectedPayment()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return MessageValidationError{
 					field:  "ClientRejectedPayment",
@@ -2098,8 +3830,38 @@ func (m *Message) Validate() error {
 		}
 
 	case *Message_IntentSubmitted:
+		if v == nil {
+			err := MessageValidationError{
+				field:  "Kind",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofKindPresent = true
 
-		if v, ok := interface{}(m.GetIntentSubmitted()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetIntentSubmitted()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, MessageValidationError{
+						field:  "IntentSubmitted",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, MessageValidationError{
+						field:  "IntentSubmitted",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetIntentSubmitted()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return MessageValidationError{
 					field:  "IntentSubmitted",
@@ -2110,8 +3872,38 @@ func (m *Message) Validate() error {
 		}
 
 	case *Message_WebhookCalled:
+		if v == nil {
+			err := MessageValidationError{
+				field:  "Kind",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofKindPresent = true
 
-		if v, ok := interface{}(m.GetWebhookCalled()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetWebhookCalled()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, MessageValidationError{
+						field:  "WebhookCalled",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, MessageValidationError{
+						field:  "WebhookCalled",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetWebhookCalled()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return MessageValidationError{
 					field:  "WebhookCalled",
@@ -2122,8 +3914,38 @@ func (m *Message) Validate() error {
 		}
 
 	case *Message_RequestToLogin:
+		if v == nil {
+			err := MessageValidationError{
+				field:  "Kind",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofKindPresent = true
 
-		if v, ok := interface{}(m.GetRequestToLogin()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetRequestToLogin()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, MessageValidationError{
+						field:  "RequestToLogin",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, MessageValidationError{
+						field:  "RequestToLogin",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetRequestToLogin()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return MessageValidationError{
 					field:  "RequestToLogin",
@@ -2134,8 +3956,38 @@ func (m *Message) Validate() error {
 		}
 
 	case *Message_ClientRejectedLogin:
+		if v == nil {
+			err := MessageValidationError{
+				field:  "Kind",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofKindPresent = true
 
-		if v, ok := interface{}(m.GetClientRejectedLogin()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetClientRejectedLogin()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, MessageValidationError{
+						field:  "ClientRejectedLogin",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, MessageValidationError{
+						field:  "ClientRejectedLogin",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetClientRejectedLogin()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return MessageValidationError{
 					field:  "ClientRejectedLogin",
@@ -2146,8 +3998,38 @@ func (m *Message) Validate() error {
 		}
 
 	case *Message_AirdropReceived:
+		if v == nil {
+			err := MessageValidationError{
+				field:  "Kind",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+		oneofKindPresent = true
 
-		if v, ok := interface{}(m.GetAirdropReceived()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetAirdropReceived()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, MessageValidationError{
+						field:  "AirdropReceived",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, MessageValidationError{
+						field:  "AirdropReceived",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetAirdropReceived()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return MessageValidationError{
 					field:  "AirdropReceived",
@@ -2158,15 +4040,41 @@ func (m *Message) Validate() error {
 		}
 
 	default:
-		return MessageValidationError{
+		_ = v // ensures v is used
+	}
+	if !oneofKindPresent {
+		err := MessageValidationError{
 			field:  "Kind",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
+	if len(errors) > 0 {
+		return MessageMultiError(errors)
 	}
 
 	return nil
 }
+
+// MessageMultiError is an error wrapping multiple validation errors returned
+// by Message.ValidateAll() if the designated constraints aren't met.
+type MessageMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m MessageMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m MessageMultiError) AllErrors() []error { return m }
 
 // MessageValidationError is the validation error returned by Message.Validate
 // if the designated constraints aren't met.

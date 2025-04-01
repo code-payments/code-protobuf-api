@@ -11,11 +11,12 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,25 +31,63 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on ResetBadgeCountRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *ResetBadgeCountRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ResetBadgeCountRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ResetBadgeCountRequestMultiError, or nil if none found.
+func (m *ResetBadgeCountRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ResetBadgeCountRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetOwner() == nil {
-		return ResetBadgeCountRequestValidationError{
+		err := ResetBadgeCountRequestValidationError{
 			field:  "Owner",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetOwner()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ResetBadgeCountRequestValidationError{
+					field:  "Owner",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ResetBadgeCountRequestValidationError{
+					field:  "Owner",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ResetBadgeCountRequestValidationError{
 				field:  "Owner",
@@ -59,13 +98,36 @@ func (m *ResetBadgeCountRequest) Validate() error {
 	}
 
 	if m.GetSignature() == nil {
-		return ResetBadgeCountRequestValidationError{
+		err := ResetBadgeCountRequestValidationError{
 			field:  "Signature",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetSignature()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ResetBadgeCountRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ResetBadgeCountRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ResetBadgeCountRequestValidationError{
 				field:  "Signature",
@@ -75,8 +137,29 @@ func (m *ResetBadgeCountRequest) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return ResetBadgeCountRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// ResetBadgeCountRequestMultiError is an error wrapping multiple validation
+// errors returned by ResetBadgeCountRequest.ValidateAll() if the designated
+// constraints aren't met.
+type ResetBadgeCountRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ResetBadgeCountRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ResetBadgeCountRequestMultiError) AllErrors() []error { return m }
 
 // ResetBadgeCountRequestValidationError is the validation error returned by
 // ResetBadgeCountRequest.Validate if the designated constraints aren't met.
@@ -136,16 +219,51 @@ var _ interface {
 
 // Validate checks the field values on ResetBadgeCountResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *ResetBadgeCountResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ResetBadgeCountResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ResetBadgeCountResponseMultiError, or nil if none found.
+func (m *ResetBadgeCountResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ResetBadgeCountResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Result
+
+	if len(errors) > 0 {
+		return ResetBadgeCountResponseMultiError(errors)
+	}
 
 	return nil
 }
+
+// ResetBadgeCountResponseMultiError is an error wrapping multiple validation
+// errors returned by ResetBadgeCountResponse.ValidateAll() if the designated
+// constraints aren't met.
+type ResetBadgeCountResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ResetBadgeCountResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ResetBadgeCountResponseMultiError) AllErrors() []error { return m }
 
 // ResetBadgeCountResponseValidationError is the validation error returned by
 // ResetBadgeCountResponse.Validate if the designated constraints aren't met.

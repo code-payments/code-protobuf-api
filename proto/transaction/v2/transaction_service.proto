@@ -1190,7 +1190,7 @@ message UpgradeableIntent {
 // ExchangeData defines an amount of Kin with currency exchange data
 message ExchangeData {
     // ISO 4217 alpha-3 currency code.
-    string currency = 1 [(validate.rules).string = { pattern: "^[a-z]{3}$" }];
+    string currency = 1 [(validate.rules).string = { pattern: "^[a-z]{3,4}$" }];
 
     // The agreed upon exchange rate. This might not be the same as the
     // actual exchange rate at the time of intent or fund transfer.
@@ -1207,7 +1207,7 @@ message ExchangeData {
 
 message ExchangeDataWithoutRate {
     // ISO 4217 alpha-3 currency code.
-    string currency = 1 [(validate.rules).string = { pattern: "^[a-z]{3}$" }];
+    string currency = 1 [(validate.rules).string = { pattern: "^[a-z]{3,4}$" }];
 
     // The agreed upon transfer amount in the currency the payment was made
     // in.

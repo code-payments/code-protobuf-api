@@ -11,11 +11,12 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,25 +31,63 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on GetInviteCountRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *GetInviteCountRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetInviteCountRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetInviteCountRequestMultiError, or nil if none found.
+func (m *GetInviteCountRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetInviteCountRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetUserId() == nil {
-		return GetInviteCountRequestValidationError{
+		err := GetInviteCountRequestValidationError{
 			field:  "UserId",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetUserId()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetUserId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetInviteCountRequestValidationError{
+					field:  "UserId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetInviteCountRequestValidationError{
+					field:  "UserId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUserId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetInviteCountRequestValidationError{
 				field:  "UserId",
@@ -58,8 +97,29 @@ func (m *GetInviteCountRequest) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return GetInviteCountRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// GetInviteCountRequestMultiError is an error wrapping multiple validation
+// errors returned by GetInviteCountRequest.ValidateAll() if the designated
+// constraints aren't met.
+type GetInviteCountRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetInviteCountRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetInviteCountRequestMultiError) AllErrors() []error { return m }
 
 // GetInviteCountRequestValidationError is the validation error returned by
 // GetInviteCountRequest.Validate if the designated constraints aren't met.
@@ -119,18 +179,53 @@ var _ interface {
 
 // Validate checks the field values on GetInviteCountResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *GetInviteCountResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetInviteCountResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetInviteCountResponseMultiError, or nil if none found.
+func (m *GetInviteCountResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetInviteCountResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Result
 
 	// no validation rules for InviteCount
 
+	if len(errors) > 0 {
+		return GetInviteCountResponseMultiError(errors)
+	}
+
 	return nil
 }
+
+// GetInviteCountResponseMultiError is an error wrapping multiple validation
+// errors returned by GetInviteCountResponse.ValidateAll() if the designated
+// constraints aren't met.
+type GetInviteCountResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetInviteCountResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetInviteCountResponseMultiError) AllErrors() []error { return m }
 
 // GetInviteCountResponseValidationError is the validation error returned by
 // GetInviteCountResponse.Validate if the designated constraints aren't met.
@@ -190,20 +285,57 @@ var _ interface {
 
 // Validate checks the field values on InvitePhoneNumberRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *InvitePhoneNumberRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on InvitePhoneNumberRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// InvitePhoneNumberRequestMultiError, or nil if none found.
+func (m *InvitePhoneNumberRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *InvitePhoneNumberRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetReceiver() == nil {
-		return InvitePhoneNumberRequestValidationError{
+		err := InvitePhoneNumberRequestValidationError{
 			field:  "Receiver",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetReceiver()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetReceiver()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, InvitePhoneNumberRequestValidationError{
+					field:  "Receiver",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, InvitePhoneNumberRequestValidationError{
+					field:  "Receiver",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetReceiver()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return InvitePhoneNumberRequestValidationError{
 				field:  "Receiver",
@@ -213,11 +345,39 @@ func (m *InvitePhoneNumberRequest) Validate() error {
 		}
 	}
 
-	switch m.Source.(type) {
-
+	switch v := m.Source.(type) {
 	case *InvitePhoneNumberRequest_User:
+		if v == nil {
+			err := InvitePhoneNumberRequestValidationError{
+				field:  "Source",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
-		if v, ok := interface{}(m.GetUser()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetUser()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, InvitePhoneNumberRequestValidationError{
+						field:  "User",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, InvitePhoneNumberRequestValidationError{
+						field:  "User",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetUser()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return InvitePhoneNumberRequestValidationError{
 					field:  "User",
@@ -228,8 +388,37 @@ func (m *InvitePhoneNumberRequest) Validate() error {
 		}
 
 	case *InvitePhoneNumberRequest_InviteCode:
+		if v == nil {
+			err := InvitePhoneNumberRequestValidationError{
+				field:  "Source",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
 
-		if v, ok := interface{}(m.GetInviteCode()).(interface{ Validate() error }); ok {
+		if all {
+			switch v := interface{}(m.GetInviteCode()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, InvitePhoneNumberRequestValidationError{
+						field:  "InviteCode",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, InvitePhoneNumberRequestValidationError{
+						field:  "InviteCode",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetInviteCode()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return InvitePhoneNumberRequestValidationError{
 					field:  "InviteCode",
@@ -239,10 +428,33 @@ func (m *InvitePhoneNumberRequest) Validate() error {
 			}
 		}
 
+	default:
+		_ = v // ensures v is used
+	}
+
+	if len(errors) > 0 {
+		return InvitePhoneNumberRequestMultiError(errors)
 	}
 
 	return nil
 }
+
+// InvitePhoneNumberRequestMultiError is an error wrapping multiple validation
+// errors returned by InvitePhoneNumberRequest.ValidateAll() if the designated
+// constraints aren't met.
+type InvitePhoneNumberRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m InvitePhoneNumberRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m InvitePhoneNumberRequestMultiError) AllErrors() []error { return m }
 
 // InvitePhoneNumberRequestValidationError is the validation error returned by
 // InvitePhoneNumberRequest.Validate if the designated constraints aren't met.
@@ -302,16 +514,51 @@ var _ interface {
 
 // Validate checks the field values on InvitePhoneNumberResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *InvitePhoneNumberResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on InvitePhoneNumberResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// InvitePhoneNumberResponseMultiError, or nil if none found.
+func (m *InvitePhoneNumberResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *InvitePhoneNumberResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Result
+
+	if len(errors) > 0 {
+		return InvitePhoneNumberResponseMultiError(errors)
+	}
 
 	return nil
 }
+
+// InvitePhoneNumberResponseMultiError is an error wrapping multiple validation
+// errors returned by InvitePhoneNumberResponse.ValidateAll() if the
+// designated constraints aren't met.
+type InvitePhoneNumberResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m InvitePhoneNumberResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m InvitePhoneNumberResponseMultiError) AllErrors() []error { return m }
 
 // InvitePhoneNumberResponseValidationError is the validation error returned by
 // InvitePhoneNumberResponse.Validate if the designated constraints aren't met.
@@ -371,20 +618,57 @@ var _ interface {
 
 // Validate checks the field values on GetInvitationStatusRequest with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *GetInvitationStatusRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetInvitationStatusRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetInvitationStatusRequestMultiError, or nil if none found.
+func (m *GetInvitationStatusRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetInvitationStatusRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetUserId() == nil {
-		return GetInvitationStatusRequestValidationError{
+		err := GetInvitationStatusRequestValidationError{
 			field:  "UserId",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetUserId()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetUserId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetInvitationStatusRequestValidationError{
+					field:  "UserId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetInvitationStatusRequestValidationError{
+					field:  "UserId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUserId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetInvitationStatusRequestValidationError{
 				field:  "UserId",
@@ -394,8 +678,29 @@ func (m *GetInvitationStatusRequest) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return GetInvitationStatusRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// GetInvitationStatusRequestMultiError is an error wrapping multiple
+// validation errors returned by GetInvitationStatusRequest.ValidateAll() if
+// the designated constraints aren't met.
+type GetInvitationStatusRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetInvitationStatusRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetInvitationStatusRequestMultiError) AllErrors() []error { return m }
 
 // GetInvitationStatusRequestValidationError is the validation error returned
 // by GetInvitationStatusRequest.Validate if the designated constraints aren't met.
@@ -455,18 +760,53 @@ var _ interface {
 
 // Validate checks the field values on GetInvitationStatusResponse with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *GetInvitationStatusResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetInvitationStatusResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetInvitationStatusResponseMultiError, or nil if none found.
+func (m *GetInvitationStatusResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetInvitationStatusResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Result
 
 	// no validation rules for Status
 
+	if len(errors) > 0 {
+		return GetInvitationStatusResponseMultiError(errors)
+	}
+
 	return nil
 }
+
+// GetInvitationStatusResponseMultiError is an error wrapping multiple
+// validation errors returned by GetInvitationStatusResponse.ValidateAll() if
+// the designated constraints aren't met.
+type GetInvitationStatusResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetInvitationStatusResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetInvitationStatusResponseMultiError) AllErrors() []error { return m }
 
 // GetInvitationStatusResponseValidationError is the validation error returned
 // by GetInvitationStatusResponse.Validate if the designated constraints
@@ -526,28 +866,71 @@ var _ interface {
 } = GetInvitationStatusResponseValidationError{}
 
 // Validate checks the field values on InviteCode with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *InviteCode) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on InviteCode with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in InviteCodeMultiError, or
+// nil if none found.
+func (m *InviteCode) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *InviteCode) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if l := utf8.RuneCountInString(m.GetValue()); l < 3 || l > 32 {
-		return InviteCodeValidationError{
+		err := InviteCodeValidationError{
 			field:  "Value",
 			reason: "value length must be between 3 and 32 runes, inclusive",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if !_InviteCode_Value_Pattern.MatchString(m.GetValue()) {
-		return InviteCodeValidationError{
+		err := InviteCodeValidationError{
 			field:  "Value",
 			reason: "value does not match regex pattern \"^[A-z0-9]{3,32}$\"",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return InviteCodeMultiError(errors)
 	}
 
 	return nil
 }
+
+// InviteCodeMultiError is an error wrapping multiple validation errors
+// returned by InviteCode.ValidateAll() if the designated constraints aren't met.
+type InviteCodeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m InviteCodeMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m InviteCodeMultiError) AllErrors() []error { return m }
 
 // InviteCodeValidationError is the validation error returned by
 // InviteCode.Validate if the designated constraints aren't met.
@@ -606,21 +989,60 @@ var _ interface {
 var _InviteCode_Value_Pattern = regexp.MustCompile("^[A-z0-9]{3,32}$")
 
 // Validate checks the field values on PageToken with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *PageToken) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PageToken with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PageTokenMultiError, or nil
+// if none found.
+func (m *PageToken) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PageToken) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if l := len(m.GetValue()); l < 1 || l > 128 {
-		return PageTokenValidationError{
+		err := PageTokenValidationError{
 			field:  "Value",
 			reason: "value length must be between 1 and 128 bytes, inclusive",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return PageTokenMultiError(errors)
 	}
 
 	return nil
 }
+
+// PageTokenMultiError is an error wrapping multiple validation errors returned
+// by PageToken.ValidateAll() if the designated constraints aren't met.
+type PageTokenMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PageTokenMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PageTokenMultiError) AllErrors() []error { return m }
 
 // PageTokenValidationError is the validation error returned by
 // PageToken.Validate if the designated constraints aren't met.

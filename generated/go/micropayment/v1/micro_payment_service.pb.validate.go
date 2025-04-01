@@ -11,11 +11,12 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // ensure the imports are used
@@ -30,25 +31,63 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = ptypes.DynamicAny{}
+	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on GetStatusRequest with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
 func (m *GetStatusRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetStatusRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetStatusRequestMultiError, or nil if none found.
+func (m *GetStatusRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetStatusRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetIntentId() == nil {
-		return GetStatusRequestValidationError{
+		err := GetStatusRequestValidationError{
 			field:  "IntentId",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetIntentId()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetIntentId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetStatusRequestValidationError{
+					field:  "IntentId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetStatusRequestValidationError{
+					field:  "IntentId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetIntentId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetStatusRequestValidationError{
 				field:  "IntentId",
@@ -58,8 +97,29 @@ func (m *GetStatusRequest) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return GetStatusRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// GetStatusRequestMultiError is an error wrapping multiple validation errors
+// returned by GetStatusRequest.ValidateAll() if the designated constraints
+// aren't met.
+type GetStatusRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetStatusRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetStatusRequestMultiError) AllErrors() []error { return m }
 
 // GetStatusRequestValidationError is the validation error returned by
 // GetStatusRequest.Validate if the designated constraints aren't met.
@@ -116,12 +176,26 @@ var _ interface {
 } = GetStatusRequestValidationError{}
 
 // Validate checks the field values on GetStatusResponse with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
 func (m *GetStatusResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetStatusResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetStatusResponseMultiError, or nil if none found.
+func (m *GetStatusResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetStatusResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for Exists
 
@@ -129,8 +203,29 @@ func (m *GetStatusResponse) Validate() error {
 
 	// no validation rules for IntentSubmitted
 
+	if len(errors) > 0 {
+		return GetStatusResponseMultiError(errors)
+	}
+
 	return nil
 }
+
+// GetStatusResponseMultiError is an error wrapping multiple validation errors
+// returned by GetStatusResponse.ValidateAll() if the designated constraints
+// aren't met.
+type GetStatusResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetStatusResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetStatusResponseMultiError) AllErrors() []error { return m }
 
 // GetStatusResponseValidationError is the validation error returned by
 // GetStatusResponse.Validate if the designated constraints aren't met.
@@ -190,20 +285,57 @@ var _ interface {
 
 // Validate checks the field values on RegisterWebhookRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *RegisterWebhookRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RegisterWebhookRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RegisterWebhookRequestMultiError, or nil if none found.
+func (m *RegisterWebhookRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RegisterWebhookRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if m.GetIntentId() == nil {
-		return RegisterWebhookRequestValidationError{
+		err := RegisterWebhookRequestValidationError{
 			field:  "IntentId",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetIntentId()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetIntentId()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RegisterWebhookRequestValidationError{
+					field:  "IntentId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RegisterWebhookRequestValidationError{
+					field:  "IntentId",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetIntentId()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return RegisterWebhookRequestValidationError{
 				field:  "IntentId",
@@ -214,34 +346,71 @@ func (m *RegisterWebhookRequest) Validate() error {
 	}
 
 	if l := utf8.RuneCountInString(m.GetUrl()); l < 1 || l > 1024 {
-		return RegisterWebhookRequestValidationError{
+		err := RegisterWebhookRequestValidationError{
 			field:  "Url",
 			reason: "value length must be between 1 and 1024 runes, inclusive",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if !strings.HasPrefix(m.GetUrl(), "http") {
-		return RegisterWebhookRequestValidationError{
+		err := RegisterWebhookRequestValidationError{
 			field:  "Url",
 			reason: "value does not have prefix \"http\"",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if uri, err := url.Parse(m.GetUrl()); err != nil {
-		return RegisterWebhookRequestValidationError{
+		err = RegisterWebhookRequestValidationError{
 			field:  "Url",
 			reason: "value must be a valid URI",
 			cause:  err,
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	} else if !uri.IsAbs() {
-		return RegisterWebhookRequestValidationError{
+		err := RegisterWebhookRequestValidationError{
 			field:  "Url",
 			reason: "value must be absolute",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return RegisterWebhookRequestMultiError(errors)
 	}
 
 	return nil
 }
+
+// RegisterWebhookRequestMultiError is an error wrapping multiple validation
+// errors returned by RegisterWebhookRequest.ValidateAll() if the designated
+// constraints aren't met.
+type RegisterWebhookRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RegisterWebhookRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RegisterWebhookRequestMultiError) AllErrors() []error { return m }
 
 // RegisterWebhookRequestValidationError is the validation error returned by
 // RegisterWebhookRequest.Validate if the designated constraints aren't met.
@@ -301,16 +470,51 @@ var _ interface {
 
 // Validate checks the field values on RegisterWebhookResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *RegisterWebhookResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RegisterWebhookResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RegisterWebhookResponseMultiError, or nil if none found.
+func (m *RegisterWebhookResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RegisterWebhookResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Result
+
+	if len(errors) > 0 {
+		return RegisterWebhookResponseMultiError(errors)
+	}
 
 	return nil
 }
+
+// RegisterWebhookResponseMultiError is an error wrapping multiple validation
+// errors returned by RegisterWebhookResponse.ValidateAll() if the designated
+// constraints aren't met.
+type RegisterWebhookResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RegisterWebhookResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RegisterWebhookResponseMultiError) AllErrors() []error { return m }
 
 // RegisterWebhookResponseValidationError is the validation error returned by
 // RegisterWebhookResponse.Validate if the designated constraints aren't met.
@@ -369,62 +573,123 @@ var _ interface {
 } = RegisterWebhookResponseValidationError{}
 
 // Validate checks the field values on CodifyRequest with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *CodifyRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CodifyRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in CodifyRequestMultiError, or
+// nil if none found.
+func (m *CodifyRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CodifyRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if l := utf8.RuneCountInString(m.GetUrl()); l < 1 || l > 512 {
-		return CodifyRequestValidationError{
+		err := CodifyRequestValidationError{
 			field:  "Url",
 			reason: "value length must be between 1 and 512 runes, inclusive",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if !strings.HasPrefix(m.GetUrl(), "http") {
-		return CodifyRequestValidationError{
+		err := CodifyRequestValidationError{
 			field:  "Url",
 			reason: "value does not have prefix \"http\"",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if uri, err := url.Parse(m.GetUrl()); err != nil {
-		return CodifyRequestValidationError{
+		err = CodifyRequestValidationError{
 			field:  "Url",
 			reason: "value must be a valid URI",
 			cause:  err,
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	} else if !uri.IsAbs() {
-		return CodifyRequestValidationError{
+		err := CodifyRequestValidationError{
 			field:  "Url",
 			reason: "value must be absolute",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if !_CodifyRequest_Currency_Pattern.MatchString(m.GetCurrency()) {
-		return CodifyRequestValidationError{
+		err := CodifyRequestValidationError{
 			field:  "Currency",
 			reason: "value does not match regex pattern \"^[a-z]{3}$\"",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetNativeAmount() <= 0 {
-		return CodifyRequestValidationError{
+		err := CodifyRequestValidationError{
 			field:  "NativeAmount",
 			reason: "value must be greater than 0",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if m.GetOwnerAccount() == nil {
-		return CodifyRequestValidationError{
+		err := CodifyRequestValidationError{
 			field:  "OwnerAccount",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetOwnerAccount()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetOwnerAccount()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CodifyRequestValidationError{
+					field:  "OwnerAccount",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CodifyRequestValidationError{
+					field:  "OwnerAccount",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetOwnerAccount()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return CodifyRequestValidationError{
 				field:  "OwnerAccount",
@@ -435,13 +700,36 @@ func (m *CodifyRequest) Validate() error {
 	}
 
 	if m.GetPrimaryAccount() == nil {
-		return CodifyRequestValidationError{
+		err := CodifyRequestValidationError{
 			field:  "PrimaryAccount",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetPrimaryAccount()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetPrimaryAccount()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CodifyRequestValidationError{
+					field:  "PrimaryAccount",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CodifyRequestValidationError{
+					field:  "PrimaryAccount",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPrimaryAccount()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return CodifyRequestValidationError{
 				field:  "PrimaryAccount",
@@ -452,13 +740,36 @@ func (m *CodifyRequest) Validate() error {
 	}
 
 	if m.GetSignature() == nil {
-		return CodifyRequestValidationError{
+		err := CodifyRequestValidationError{
 			field:  "Signature",
 			reason: "value is required",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
-	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetSignature()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CodifyRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CodifyRequestValidationError{
+					field:  "Signature",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return CodifyRequestValidationError{
 				field:  "Signature",
@@ -468,8 +779,29 @@ func (m *CodifyRequest) Validate() error {
 		}
 	}
 
+	if len(errors) > 0 {
+		return CodifyRequestMultiError(errors)
+	}
+
 	return nil
 }
+
+// CodifyRequestMultiError is an error wrapping multiple validation errors
+// returned by CodifyRequest.ValidateAll() if the designated constraints
+// aren't met.
+type CodifyRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CodifyRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CodifyRequestMultiError) AllErrors() []error { return m }
 
 // CodifyRequestValidationError is the validation error returned by
 // CodifyRequest.Validate if the designated constraints aren't met.
@@ -528,24 +860,63 @@ var _ interface {
 var _CodifyRequest_Currency_Pattern = regexp.MustCompile("^[a-z]{3}$")
 
 // Validate checks the field values on CodifyResponse with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
 func (m *CodifyResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CodifyResponse with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in CodifyResponseMultiError,
+// or nil if none found.
+func (m *CodifyResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CodifyResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Result
 
 	if utf8.RuneCountInString(m.GetCodifiedUrl()) > 64 {
-		return CodifyResponseValidationError{
+		err := CodifyResponseValidationError{
 			field:  "CodifiedUrl",
 			reason: "value length must be at most 64 runes",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return CodifyResponseMultiError(errors)
 	}
 
 	return nil
 }
+
+// CodifyResponseMultiError is an error wrapping multiple validation errors
+// returned by CodifyResponse.ValidateAll() if the designated constraints
+// aren't met.
+type CodifyResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CodifyResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CodifyResponseMultiError) AllErrors() []error { return m }
 
 // CodifyResponseValidationError is the validation error returned by
 // CodifyResponse.Validate if the designated constraints aren't met.
@@ -603,21 +974,60 @@ var _ interface {
 
 // Validate checks the field values on GetPathMetadataRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *GetPathMetadataRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetPathMetadataRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetPathMetadataRequestMultiError, or nil if none found.
+func (m *GetPathMetadataRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetPathMetadataRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	if !_GetPathMetadataRequest_Path_Pattern.MatchString(m.GetPath()) {
-		return GetPathMetadataRequestValidationError{
+		err := GetPathMetadataRequestValidationError{
 			field:  "Path",
 			reason: "value does not match regex pattern \"^[0-9a-zA-Z]{1,8}$\"",
 		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return GetPathMetadataRequestMultiError(errors)
 	}
 
 	return nil
 }
+
+// GetPathMetadataRequestMultiError is an error wrapping multiple validation
+// errors returned by GetPathMetadataRequest.ValidateAll() if the designated
+// constraints aren't met.
+type GetPathMetadataRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetPathMetadataRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetPathMetadataRequestMultiError) AllErrors() []error { return m }
 
 // GetPathMetadataRequestValidationError is the validation error returned by
 // GetPathMetadataRequest.Validate if the designated constraints aren't met.
@@ -679,15 +1089,48 @@ var _GetPathMetadataRequest_Path_Pattern = regexp.MustCompile("^[0-9a-zA-Z]{1,8}
 
 // Validate checks the field values on GetPathMetadataResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *GetPathMetadataResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetPathMetadataResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetPathMetadataResponseMultiError, or nil if none found.
+func (m *GetPathMetadataResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetPathMetadataResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for Result
 
-	if v, ok := interface{}(m.GetDestination()).(interface{ Validate() error }); ok {
+	if all {
+		switch v := interface{}(m.GetDestination()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetPathMetadataResponseValidationError{
+					field:  "Destination",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetPathMetadataResponseValidationError{
+					field:  "Destination",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDestination()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetPathMetadataResponseValidationError{
 				field:  "Destination",
@@ -703,8 +1146,29 @@ func (m *GetPathMetadataResponse) Validate() error {
 
 	// no validation rules for RedirctUrl
 
+	if len(errors) > 0 {
+		return GetPathMetadataResponseMultiError(errors)
+	}
+
 	return nil
 }
+
+// GetPathMetadataResponseMultiError is an error wrapping multiple validation
+// errors returned by GetPathMetadataResponse.ValidateAll() if the designated
+// constraints aren't met.
+type GetPathMetadataResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetPathMetadataResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetPathMetadataResponseMultiError) AllErrors() []error { return m }
 
 // GetPathMetadataResponseValidationError is the validation error returned by
 // GetPathMetadataResponse.Validate if the designated constraints aren't met.
