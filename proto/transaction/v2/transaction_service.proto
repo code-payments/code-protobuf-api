@@ -104,7 +104,7 @@ message SubmitIntentRequest {
         // The globally unique client generated intent ID. Use the original intent
         // ID when operating on actions that mutate the intent.
         common.v1.IntentId id = 1 [(validate.rules).message.required = true];
-        
+
         // The verified owner account public key
         common.v1.SolanaAccountId owner = 2 [(validate.rules).message.required = true];
 
@@ -327,7 +327,7 @@ message SwapRequest {
 
         // Whether the client wants the RPC to wait for blockchain status. If false,
         // then the RPC will return Success when the swap is submitted to the blockchain.
-        // Otherwise, the RPC will observe and report back the status of the transaction. 
+        // Otherwise, the RPC will observe and report back the status of the transaction.
         bool wait_for_blockchain_status = 4;
 
         // The signature is of serialize(Initiate) without this field set using the
@@ -621,7 +621,7 @@ message NoPrivacyWithdrawAction {
 
     // The intended Kin quark amount to withdraw
     uint64 amount = 4 [(validate.rules).uint64.gt = 0];
-    
+
     // Whether the account is closed afterwards. This is always true, since there
     // are no current se cases to leave it open.
     bool should_close = 5 [(validate.rules).bool.const = true];
@@ -736,8 +736,8 @@ message ReasonStringErrorDetails {
 }
 
 message InvalidSignatureErrorDetails {
-    // The action whose signature mismatched 
-    uint32 action_id = 1; 
+    // The action whose signature mismatched
+    uint32 action_id = 1;
 
     oneof expected_blob {
         option (validate.required) = true;
@@ -770,6 +770,7 @@ message DeniedErrorDetails {
 //
 // Other Model Definitions
 //
+
 
 // ExchangeData defines an amount of Kin with currency exchange data
 message ExchangeData {

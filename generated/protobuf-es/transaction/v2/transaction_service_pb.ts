@@ -1049,7 +1049,7 @@ export class SwapRequest_Initiate extends Message<SwapRequest_Initiate> {
   /**
    * Whether the client wants the RPC to wait for blockchain status. If false,
    * then the RPC will return Success when the swap is submitted to the blockchain.
-   * Otherwise, the RPC will observe and report back the status of the transaction. 
+   * Otherwise, the RPC will observe and report back the status of the transaction.
    *
    * @generated from field: bool wait_for_blockchain_status = 4;
    */
@@ -2633,7 +2633,7 @@ export class ReasonStringErrorDetails extends Message<ReasonStringErrorDetails> 
  */
 export class InvalidSignatureErrorDetails extends Message<InvalidSignatureErrorDetails> {
   /**
-   * The action whose signature mismatched 
+   * The action whose signature mismatched
    *
    * @generated from field: uint32 action_id = 1;
    */

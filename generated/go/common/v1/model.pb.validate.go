@@ -11,12 +11,11 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
-	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
 
-	"google.golang.org/protobuf/types/known/anypb"
+	"github.com/golang/protobuf/ptypes"
 )
 
 // ensure the imports are used
@@ -31,66 +30,26 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = anypb.Any{}
-	_ = sort.Sort
+	_ = ptypes.DynamicAny{}
 )
 
 // Validate checks the field values on SolanaAccountId with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
 func (m *SolanaAccountId) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on SolanaAccountId with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// SolanaAccountIdMultiError, or nil if none found.
-func (m *SolanaAccountId) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *SolanaAccountId) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if len(m.GetValue()) != 32 {
-		err := SolanaAccountIdValidationError{
+		return SolanaAccountIdValidationError{
 			field:  "Value",
 			reason: "value length must be 32 bytes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return SolanaAccountIdMultiError(errors)
 	}
 
 	return nil
 }
-
-// SolanaAccountIdMultiError is an error wrapping multiple validation errors
-// returned by SolanaAccountId.ValidateAll() if the designated constraints
-// aren't met.
-type SolanaAccountIdMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m SolanaAccountIdMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m SolanaAccountIdMultiError) AllErrors() []error { return m }
 
 // SolanaAccountIdValidationError is the validation error returned by
 // SolanaAccountId.Validate if the designated constraints aren't met.
@@ -148,57 +107,20 @@ var _ interface {
 
 // Validate checks the field values on InstructionAccount with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *InstructionAccount) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on InstructionAccount with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// InstructionAccountMultiError, or nil if none found.
-func (m *InstructionAccount) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *InstructionAccount) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if m.GetAccount() == nil {
-		err := InstructionAccountValidationError{
+		return InstructionAccountValidationError{
 			field:  "Account",
 			reason: "value is required",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
-	if all {
-		switch v := interface{}(m.GetAccount()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, InstructionAccountValidationError{
-					field:  "Account",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, InstructionAccountValidationError{
-					field:  "Account",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetAccount()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetAccount()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return InstructionAccountValidationError{
 				field:  "Account",
@@ -212,29 +134,8 @@ func (m *InstructionAccount) validate(all bool) error {
 
 	// no validation rules for IsWritable
 
-	if len(errors) > 0 {
-		return InstructionAccountMultiError(errors)
-	}
-
 	return nil
 }
-
-// InstructionAccountMultiError is an error wrapping multiple validation errors
-// returned by InstructionAccount.ValidateAll() if the designated constraints
-// aren't met.
-type InstructionAccountMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m InstructionAccountMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m InstructionAccountMultiError) AllErrors() []error { return m }
 
 // InstructionAccountValidationError is the validation error returned by
 // InstructionAccount.Validate if the designated constraints aren't met.
@@ -293,60 +194,22 @@ var _ interface {
 } = InstructionAccountValidationError{}
 
 // Validate checks the field values on Transaction with the rules defined in
-// the proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
 func (m *Transaction) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Transaction with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in TransactionMultiError, or
-// nil if none found.
-func (m *Transaction) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Transaction) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if l := len(m.GetValue()); l < 1 || l > 1232 {
-		err := TransactionValidationError{
+		return TransactionValidationError{
 			field:  "Value",
 			reason: "value length must be between 1 and 1232 bytes, inclusive",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return TransactionMultiError(errors)
 	}
 
 	return nil
 }
-
-// TransactionMultiError is an error wrapping multiple validation errors
-// returned by Transaction.ValidateAll() if the designated constraints aren't met.
-type TransactionMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m TransactionMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m TransactionMultiError) AllErrors() []error { return m }
 
 // TransactionValidationError is the validation error returned by
 // Transaction.Validate if the designated constraints aren't met.
@@ -403,60 +266,21 @@ var _ interface {
 } = TransactionValidationError{}
 
 // Validate checks the field values on Blockhash with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// proto definition for this message. If any rules are violated, an error is returned.
 func (m *Blockhash) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Blockhash with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in BlockhashMultiError, or nil
-// if none found.
-func (m *Blockhash) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Blockhash) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if len(m.GetValue()) != 32 {
-		err := BlockhashValidationError{
+		return BlockhashValidationError{
 			field:  "Value",
 			reason: "value length must be 32 bytes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return BlockhashMultiError(errors)
 	}
 
 	return nil
 }
-
-// BlockhashMultiError is an error wrapping multiple validation errors returned
-// by Blockhash.ValidateAll() if the designated constraints aren't met.
-type BlockhashMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m BlockhashMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m BlockhashMultiError) AllErrors() []error { return m }
 
 // BlockhashValidationError is the validation error returned by
 // Blockhash.Validate if the designated constraints aren't met.
@@ -513,60 +337,21 @@ var _ interface {
 } = BlockhashValidationError{}
 
 // Validate checks the field values on Signature with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// proto definition for this message. If any rules are violated, an error is returned.
 func (m *Signature) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Signature with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in SignatureMultiError, or nil
-// if none found.
-func (m *Signature) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Signature) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if len(m.GetValue()) != 64 {
-		err := SignatureValidationError{
+		return SignatureValidationError{
 			field:  "Value",
 			reason: "value length must be 64 bytes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return SignatureMultiError(errors)
 	}
 
 	return nil
 }
-
-// SignatureMultiError is an error wrapping multiple validation errors returned
-// by Signature.ValidateAll() if the designated constraints aren't met.
-type SignatureMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m SignatureMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m SignatureMultiError) AllErrors() []error { return m }
 
 // SignatureValidationError is the validation error returned by
 // Signature.Validate if the designated constraints aren't met.
@@ -623,60 +408,21 @@ var _ interface {
 } = SignatureValidationError{}
 
 // Validate checks the field values on IntentId with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// proto definition for this message. If any rules are violated, an error is returned.
 func (m *IntentId) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on IntentId with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in IntentIdMultiError, or nil
-// if none found.
-func (m *IntentId) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *IntentId) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if len(m.GetValue()) != 32 {
-		err := IntentIdValidationError{
+		return IntentIdValidationError{
 			field:  "Value",
 			reason: "value length must be 32 bytes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return IntentIdMultiError(errors)
 	}
 
 	return nil
 }
-
-// IntentIdMultiError is an error wrapping multiple validation errors returned
-// by IntentId.ValidateAll() if the designated constraints aren't met.
-type IntentIdMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m IntentIdMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m IntentIdMultiError) AllErrors() []error { return m }
 
 // IntentIdValidationError is the validation error returned by
 // IntentId.Validate if the designated constraints aren't met.
@@ -733,51 +479,25 @@ var _ interface {
 } = IntentIdValidationError{}
 
 // Validate checks the field values on Domain with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// proto definition for this message. If any rules are violated, an error is returned.
 func (m *Domain) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Domain with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in DomainMultiError, or nil if none found.
-func (m *Domain) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Domain) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if l := utf8.RuneCountInString(m.GetValue()); l < 1 || l > 253 {
-		err := DomainValidationError{
+		return DomainValidationError{
 			field:  "Value",
 			reason: "value length must be between 1 and 253 runes, inclusive",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
 	if err := m._validateHostname(m.GetValue()); err != nil {
-		err = DomainValidationError{
+		return DomainValidationError{
 			field:  "Value",
 			reason: "value must be a valid hostname",
 			cause:  err,
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return DomainMultiError(errors)
 	}
 
 	return nil
@@ -812,22 +532,6 @@ func (m *Domain) _validateHostname(host string) error {
 
 	return nil
 }
-
-// DomainMultiError is an error wrapping multiple validation errors returned by
-// Domain.ValidateAll() if the designated constraints aren't met.
-type DomainMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m DomainMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m DomainMultiError) AllErrors() []error { return m }
 
 // DomainValidationError is the validation error returned by Domain.Validate if
 // the designated constraints aren't met.
@@ -884,59 +588,21 @@ var _ interface {
 } = DomainValidationError{}
 
 // Validate checks the field values on Hash with the rules defined in the proto
-// definition for this message. If any rules are violated, the first error
-// encountered is returned, or nil if there are no violations.
+// definition for this message. If any rules are violated, an error is returned.
 func (m *Hash) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Hash with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in HashMultiError, or nil if none found.
-func (m *Hash) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Hash) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if len(m.GetValue()) != 32 {
-		err := HashValidationError{
+		return HashValidationError{
 			field:  "Value",
 			reason: "value length must be 32 bytes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return HashMultiError(errors)
 	}
 
 	return nil
 }
-
-// HashMultiError is an error wrapping multiple validation errors returned by
-// Hash.ValidateAll() if the designated constraints aren't met.
-type HashMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m HashMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m HashMultiError) AllErrors() []error { return m }
 
 // HashValidationError is the validation error returned by Hash.Validate if the
 // designated constraints aren't met.
@@ -993,59 +659,21 @@ var _ interface {
 } = HashValidationError{}
 
 // Validate checks the field values on UUID with the rules defined in the proto
-// definition for this message. If any rules are violated, the first error
-// encountered is returned, or nil if there are no violations.
+// definition for this message. If any rules are violated, an error is returned.
 func (m *UUID) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on UUID with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in UUIDMultiError, or nil if none found.
-func (m *UUID) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *UUID) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if len(m.GetValue()) != 16 {
-		err := UUIDValidationError{
+		return UUIDValidationError{
 			field:  "Value",
 			reason: "value length must be 16 bytes",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return UUIDMultiError(errors)
 	}
 
 	return nil
 }
-
-// UUIDMultiError is an error wrapping multiple validation errors returned by
-// UUID.ValidateAll() if the designated constraints aren't met.
-type UUIDMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m UUIDMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m UUIDMultiError) AllErrors() []error { return m }
 
 // UUIDValidationError is the validation error returned by UUID.Validate if the
 // designated constraints aren't met.
@@ -1102,25 +730,11 @@ var _ interface {
 } = UUIDValidationError{}
 
 // Validate checks the field values on Request with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// proto definition for this message. If any rules are violated, an error is returned.
 func (m *Request) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Request with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in RequestMultiError, or nil if none found.
-func (m *Request) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Request) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
-
-	var errors []error
 
 	// no validation rules for Version
 
@@ -1130,28 +744,8 @@ func (m *Request) validate(all bool) error {
 
 	// no validation rules for Body
 
-	if len(errors) > 0 {
-		return RequestMultiError(errors)
-	}
-
 	return nil
 }
-
-// RequestMultiError is an error wrapping multiple validation errors returned
-// by Request.ValidateAll() if the designated constraints aren't met.
-type RequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m RequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m RequestMultiError) AllErrors() []error { return m }
 
 // RequestValidationError is the validation error returned by Request.Validate
 // if the designated constraints aren't met.
@@ -1208,26 +802,11 @@ var _ interface {
 } = RequestValidationError{}
 
 // Validate checks the field values on Response with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// proto definition for this message. If any rules are violated, an error is returned.
 func (m *Response) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Response with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in ResponseMultiError, or nil
-// if none found.
-func (m *Response) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Response) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
-
-	var errors []error
 
 	// no validation rules for Result
 
@@ -1235,28 +814,8 @@ func (m *Response) validate(all bool) error {
 
 	// no validation rules for Message
 
-	if len(errors) > 0 {
-		return ResponseMultiError(errors)
-	}
-
 	return nil
 }
-
-// ResponseMultiError is an error wrapping multiple validation errors returned
-// by Response.ValidateAll() if the designated constraints aren't met.
-type ResponseMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ResponseMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ResponseMultiError) AllErrors() []error { return m }
 
 // ResponseValidationError is the validation error returned by
 // Response.Validate if the designated constraints aren't met.
@@ -1313,71 +872,28 @@ var _ interface {
 } = ResponseValidationError{}
 
 // Validate checks the field values on ServerPing with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// proto definition for this message. If any rules are violated, an error is returned.
 func (m *ServerPing) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ServerPing with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in ServerPingMultiError, or
-// nil if none found.
-func (m *ServerPing) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ServerPing) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if m.GetTimestamp() == nil {
-		err := ServerPingValidationError{
+		return ServerPingValidationError{
 			field:  "Timestamp",
 			reason: "value is required",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
 	if m.GetPingDelay() == nil {
-		err := ServerPingValidationError{
+		return ServerPingValidationError{
 			field:  "PingDelay",
 			reason: "value is required",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return ServerPingMultiError(errors)
 	}
 
 	return nil
 }
-
-// ServerPingMultiError is an error wrapping multiple validation errors
-// returned by ServerPing.ValidateAll() if the designated constraints aren't met.
-type ServerPingMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ServerPingMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ServerPingMultiError) AllErrors() []error { return m }
 
 // ServerPingValidationError is the validation error returned by
 // ServerPing.Validate if the designated constraints aren't met.
@@ -1434,60 +950,21 @@ var _ interface {
 } = ServerPingValidationError{}
 
 // Validate checks the field values on ClientPong with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// proto definition for this message. If any rules are violated, an error is returned.
 func (m *ClientPong) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on ClientPong with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in ClientPongMultiError, or
-// nil if none found.
-func (m *ClientPong) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *ClientPong) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if m.GetTimestamp() == nil {
-		err := ClientPongValidationError{
+		return ClientPongValidationError{
 			field:  "Timestamp",
 			reason: "value is required",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if len(errors) > 0 {
-		return ClientPongMultiError(errors)
 	}
 
 	return nil
 }
-
-// ClientPongMultiError is an error wrapping multiple validation errors
-// returned by ClientPong.ValidateAll() if the designated constraints aren't met.
-type ClientPongMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m ClientPongMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m ClientPongMultiError) AllErrors() []error { return m }
 
 // ClientPongValidationError is the validation error returned by
 // ClientPong.Validate if the designated constraints aren't met.

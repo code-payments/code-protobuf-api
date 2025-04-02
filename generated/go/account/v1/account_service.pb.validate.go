@@ -11,12 +11,11 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
-	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
 
-	"google.golang.org/protobuf/types/known/anypb"
+	"github.com/golang/protobuf/ptypes"
 
 	common "github.com/code-payments/code-protobuf-api/generated/go/common/v1"
 )
@@ -33,65 +32,27 @@ var (
 	_ = time.Duration(0)
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
-	_ = anypb.Any{}
-	_ = sort.Sort
+	_ = ptypes.DynamicAny{}
 
 	_ = common.AccountType(0)
 )
 
 // Validate checks the field values on IsCodeAccountRequest with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *IsCodeAccountRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on IsCodeAccountRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// IsCodeAccountRequestMultiError, or nil if none found.
-func (m *IsCodeAccountRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *IsCodeAccountRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if m.GetOwner() == nil {
-		err := IsCodeAccountRequestValidationError{
+		return IsCodeAccountRequestValidationError{
 			field:  "Owner",
 			reason: "value is required",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
-	if all {
-		switch v := interface{}(m.GetOwner()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, IsCodeAccountRequestValidationError{
-					field:  "Owner",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, IsCodeAccountRequestValidationError{
-					field:  "Owner",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return IsCodeAccountRequestValidationError{
 				field:  "Owner",
@@ -102,36 +63,13 @@ func (m *IsCodeAccountRequest) validate(all bool) error {
 	}
 
 	if m.GetSignature() == nil {
-		err := IsCodeAccountRequestValidationError{
+		return IsCodeAccountRequestValidationError{
 			field:  "Signature",
 			reason: "value is required",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
-	if all {
-		switch v := interface{}(m.GetSignature()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, IsCodeAccountRequestValidationError{
-					field:  "Signature",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, IsCodeAccountRequestValidationError{
-					field:  "Signature",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return IsCodeAccountRequestValidationError{
 				field:  "Signature",
@@ -141,29 +79,8 @@ func (m *IsCodeAccountRequest) validate(all bool) error {
 		}
 	}
 
-	if len(errors) > 0 {
-		return IsCodeAccountRequestMultiError(errors)
-	}
-
 	return nil
 }
-
-// IsCodeAccountRequestMultiError is an error wrapping multiple validation
-// errors returned by IsCodeAccountRequest.ValidateAll() if the designated
-// constraints aren't met.
-type IsCodeAccountRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m IsCodeAccountRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m IsCodeAccountRequestMultiError) AllErrors() []error { return m }
 
 // IsCodeAccountRequestValidationError is the validation error returned by
 // IsCodeAccountRequest.Validate if the designated constraints aren't met.
@@ -223,51 +140,16 @@ var _ interface {
 
 // Validate checks the field values on IsCodeAccountResponse with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *IsCodeAccountResponse) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on IsCodeAccountResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// IsCodeAccountResponseMultiError, or nil if none found.
-func (m *IsCodeAccountResponse) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *IsCodeAccountResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	// no validation rules for Result
-
-	if len(errors) > 0 {
-		return IsCodeAccountResponseMultiError(errors)
-	}
 
 	return nil
 }
-
-// IsCodeAccountResponseMultiError is an error wrapping multiple validation
-// errors returned by IsCodeAccountResponse.ValidateAll() if the designated
-// constraints aren't met.
-type IsCodeAccountResponseMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m IsCodeAccountResponseMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m IsCodeAccountResponseMultiError) AllErrors() []error { return m }
 
 // IsCodeAccountResponseValidationError is the validation error returned by
 // IsCodeAccountResponse.Validate if the designated constraints aren't met.
@@ -327,57 +209,20 @@ var _ interface {
 
 // Validate checks the field values on GetTokenAccountInfosRequest with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *GetTokenAccountInfosRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on GetTokenAccountInfosRequest with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// GetTokenAccountInfosRequestMultiError, or nil if none found.
-func (m *GetTokenAccountInfosRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *GetTokenAccountInfosRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if m.GetOwner() == nil {
-		err := GetTokenAccountInfosRequestValidationError{
+		return GetTokenAccountInfosRequestValidationError{
 			field:  "Owner",
 			reason: "value is required",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
-	if all {
-		switch v := interface{}(m.GetOwner()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, GetTokenAccountInfosRequestValidationError{
-					field:  "Owner",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, GetTokenAccountInfosRequestValidationError{
-					field:  "Owner",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetTokenAccountInfosRequestValidationError{
 				field:  "Owner",
@@ -388,36 +233,13 @@ func (m *GetTokenAccountInfosRequest) validate(all bool) error {
 	}
 
 	if m.GetSignature() == nil {
-		err := GetTokenAccountInfosRequestValidationError{
+		return GetTokenAccountInfosRequestValidationError{
 			field:  "Signature",
 			reason: "value is required",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
-	if all {
-		switch v := interface{}(m.GetSignature()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, GetTokenAccountInfosRequestValidationError{
-					field:  "Signature",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, GetTokenAccountInfosRequestValidationError{
-					field:  "Signature",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GetTokenAccountInfosRequestValidationError{
 				field:  "Signature",
@@ -427,29 +249,8 @@ func (m *GetTokenAccountInfosRequest) validate(all bool) error {
 		}
 	}
 
-	if len(errors) > 0 {
-		return GetTokenAccountInfosRequestMultiError(errors)
-	}
-
 	return nil
 }
-
-// GetTokenAccountInfosRequestMultiError is an error wrapping multiple
-// validation errors returned by GetTokenAccountInfosRequest.ValidateAll() if
-// the designated constraints aren't met.
-type GetTokenAccountInfosRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m GetTokenAccountInfosRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m GetTokenAccountInfosRequestMultiError) AllErrors() []error { return m }
 
 // GetTokenAccountInfosRequestValidationError is the validation error returned
 // by GetTokenAccountInfosRequest.Validate if the designated constraints
@@ -510,97 +311,18 @@ var _ interface {
 
 // Validate checks the field values on GetTokenAccountInfosResponse with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *GetTokenAccountInfosResponse) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on GetTokenAccountInfosResponse with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// GetTokenAccountInfosResponseMultiError, or nil if none found.
-func (m *GetTokenAccountInfosResponse) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *GetTokenAccountInfosResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	// no validation rules for Result
 
-	{
-		sorted_keys := make([]string, len(m.GetTokenAccountInfos()))
-		i := 0
-		for key := range m.GetTokenAccountInfos() {
-			sorted_keys[i] = key
-			i++
-		}
-		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
-		for _, key := range sorted_keys {
-			val := m.GetTokenAccountInfos()[key]
-			_ = val
-
-			// no validation rules for TokenAccountInfos[key]
-
-			if all {
-				switch v := interface{}(val).(type) {
-				case interface{ ValidateAll() error }:
-					if err := v.ValidateAll(); err != nil {
-						errors = append(errors, GetTokenAccountInfosResponseValidationError{
-							field:  fmt.Sprintf("TokenAccountInfos[%v]", key),
-							reason: "embedded message failed validation",
-							cause:  err,
-						})
-					}
-				case interface{ Validate() error }:
-					if err := v.Validate(); err != nil {
-						errors = append(errors, GetTokenAccountInfosResponseValidationError{
-							field:  fmt.Sprintf("TokenAccountInfos[%v]", key),
-							reason: "embedded message failed validation",
-							cause:  err,
-						})
-					}
-				}
-			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
-				if err := v.Validate(); err != nil {
-					return GetTokenAccountInfosResponseValidationError{
-						field:  fmt.Sprintf("TokenAccountInfos[%v]", key),
-						reason: "embedded message failed validation",
-						cause:  err,
-					}
-				}
-			}
-
-		}
-	}
-
-	if len(errors) > 0 {
-		return GetTokenAccountInfosResponseMultiError(errors)
-	}
+	// no validation rules for TokenAccountInfos
 
 	return nil
 }
-
-// GetTokenAccountInfosResponseMultiError is an error wrapping multiple
-// validation errors returned by GetTokenAccountInfosResponse.ValidateAll() if
-// the designated constraints aren't met.
-type GetTokenAccountInfosResponseMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m GetTokenAccountInfosResponseMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m GetTokenAccountInfosResponseMultiError) AllErrors() []error { return m }
 
 // GetTokenAccountInfosResponseValidationError is the validation error returned
 // by GetTokenAccountInfosResponse.Validate if the designated constraints
@@ -661,57 +383,20 @@ var _ interface {
 
 // Validate checks the field values on LinkAdditionalAccountsRequest with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *LinkAdditionalAccountsRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on LinkAdditionalAccountsRequest with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the result is a list of violation errors wrapped in
-// LinkAdditionalAccountsRequestMultiError, or nil if none found.
-func (m *LinkAdditionalAccountsRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *LinkAdditionalAccountsRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if m.GetOwner() == nil {
-		err := LinkAdditionalAccountsRequestValidationError{
+		return LinkAdditionalAccountsRequestValidationError{
 			field:  "Owner",
 			reason: "value is required",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
-	if all {
-		switch v := interface{}(m.GetOwner()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, LinkAdditionalAccountsRequestValidationError{
-					field:  "Owner",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, LinkAdditionalAccountsRequestValidationError{
-					field:  "Owner",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return LinkAdditionalAccountsRequestValidationError{
 				field:  "Owner",
@@ -722,36 +407,13 @@ func (m *LinkAdditionalAccountsRequest) validate(all bool) error {
 	}
 
 	if m.GetSwapAuthority() == nil {
-		err := LinkAdditionalAccountsRequestValidationError{
+		return LinkAdditionalAccountsRequestValidationError{
 			field:  "SwapAuthority",
 			reason: "value is required",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
-	if all {
-		switch v := interface{}(m.GetSwapAuthority()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, LinkAdditionalAccountsRequestValidationError{
-					field:  "SwapAuthority",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, LinkAdditionalAccountsRequestValidationError{
-					field:  "SwapAuthority",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetSwapAuthority()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetSwapAuthority()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return LinkAdditionalAccountsRequestValidationError{
 				field:  "SwapAuthority",
@@ -762,39 +424,16 @@ func (m *LinkAdditionalAccountsRequest) validate(all bool) error {
 	}
 
 	if len(m.GetSignatures()) != 2 {
-		err := LinkAdditionalAccountsRequestValidationError{
+		return LinkAdditionalAccountsRequestValidationError{
 			field:  "Signatures",
 			reason: "value must contain exactly 2 item(s)",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
 	for idx, item := range m.GetSignatures() {
 		_, _ = idx, item
 
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, LinkAdditionalAccountsRequestValidationError{
-						field:  fmt.Sprintf("Signatures[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, LinkAdditionalAccountsRequestValidationError{
-						field:  fmt.Sprintf("Signatures[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return LinkAdditionalAccountsRequestValidationError{
 					field:  fmt.Sprintf("Signatures[%v]", idx),
@@ -806,29 +445,8 @@ func (m *LinkAdditionalAccountsRequest) validate(all bool) error {
 
 	}
 
-	if len(errors) > 0 {
-		return LinkAdditionalAccountsRequestMultiError(errors)
-	}
-
 	return nil
 }
-
-// LinkAdditionalAccountsRequestMultiError is an error wrapping multiple
-// validation errors returned by LinkAdditionalAccountsRequest.ValidateAll()
-// if the designated constraints aren't met.
-type LinkAdditionalAccountsRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m LinkAdditionalAccountsRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m LinkAdditionalAccountsRequestMultiError) AllErrors() []error { return m }
 
 // LinkAdditionalAccountsRequestValidationError is the validation error
 // returned by LinkAdditionalAccountsRequest.Validate if the designated
@@ -889,51 +507,16 @@ var _ interface {
 
 // Validate checks the field values on LinkAdditionalAccountsResponse with the
 // rules defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
+// violated, an error is returned.
 func (m *LinkAdditionalAccountsResponse) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on LinkAdditionalAccountsResponse with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, the result is a list of violation errors wrapped in
-// LinkAdditionalAccountsResponseMultiError, or nil if none found.
-func (m *LinkAdditionalAccountsResponse) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *LinkAdditionalAccountsResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	// no validation rules for Result
-
-	if len(errors) > 0 {
-		return LinkAdditionalAccountsResponseMultiError(errors)
-	}
 
 	return nil
 }
-
-// LinkAdditionalAccountsResponseMultiError is an error wrapping multiple
-// validation errors returned by LinkAdditionalAccountsResponse.ValidateAll()
-// if the designated constraints aren't met.
-type LinkAdditionalAccountsResponseMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m LinkAdditionalAccountsResponseMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m LinkAdditionalAccountsResponseMultiError) AllErrors() []error { return m }
 
 // LinkAdditionalAccountsResponseValidationError is the validation error
 // returned by LinkAdditionalAccountsResponse.Validate if the designated
@@ -993,58 +576,21 @@ var _ interface {
 } = LinkAdditionalAccountsResponseValidationError{}
 
 // Validate checks the field values on TokenAccountInfo with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
 func (m *TokenAccountInfo) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on TokenAccountInfo with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// TokenAccountInfoMultiError, or nil if none found.
-func (m *TokenAccountInfo) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *TokenAccountInfo) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
-	var errors []error
-
 	if m.GetAddress() == nil {
-		err := TokenAccountInfoValidationError{
+		return TokenAccountInfoValidationError{
 			field:  "Address",
 			reason: "value is required",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
-	if all {
-		switch v := interface{}(m.GetAddress()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, TokenAccountInfoValidationError{
-					field:  "Address",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, TokenAccountInfoValidationError{
-					field:  "Address",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetAddress()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetAddress()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return TokenAccountInfoValidationError{
 				field:  "Address",
@@ -1054,26 +600,7 @@ func (m *TokenAccountInfo) validate(all bool) error {
 		}
 	}
 
-	if all {
-		switch v := interface{}(m.GetOwner()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, TokenAccountInfoValidationError{
-					field:  "Owner",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, TokenAccountInfoValidationError{
-					field:  "Owner",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return TokenAccountInfoValidationError{
 				field:  "Owner",
@@ -1083,26 +610,7 @@ func (m *TokenAccountInfo) validate(all bool) error {
 		}
 	}
 
-	if all {
-		switch v := interface{}(m.GetAuthority()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, TokenAccountInfoValidationError{
-					field:  "Authority",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, TokenAccountInfoValidationError{
-					field:  "Authority",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetAuthority()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetAuthority()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return TokenAccountInfoValidationError{
 				field:  "Authority",
@@ -1113,14 +621,10 @@ func (m *TokenAccountInfo) validate(all bool) error {
 	}
 
 	if _, ok := _TokenAccountInfo_AccountType_NotInLookup[m.GetAccountType()]; ok {
-		err := TokenAccountInfoValidationError{
+		return TokenAccountInfoValidationError{
 			field:  "AccountType",
-			reason: "value must not be in list [UNKNOWN]",
+			reason: "value must not be in list [0]",
 		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
 	}
 
 	// no validation rules for Index
@@ -1137,26 +641,7 @@ func (m *TokenAccountInfo) validate(all bool) error {
 
 	// no validation rules for ClaimState
 
-	if all {
-		switch v := interface{}(m.GetOriginalExchangeData()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, TokenAccountInfoValidationError{
-					field:  "OriginalExchangeData",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, TokenAccountInfoValidationError{
-					field:  "OriginalExchangeData",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetOriginalExchangeData()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetOriginalExchangeData()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return TokenAccountInfoValidationError{
 				field:  "OriginalExchangeData",
@@ -1166,26 +651,7 @@ func (m *TokenAccountInfo) validate(all bool) error {
 		}
 	}
 
-	if all {
-		switch v := interface{}(m.GetMint()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, TokenAccountInfoValidationError{
-					field:  "Mint",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, TokenAccountInfoValidationError{
-					field:  "Mint",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetMint()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetMint()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return TokenAccountInfoValidationError{
 				field:  "Mint",
@@ -1195,26 +661,7 @@ func (m *TokenAccountInfo) validate(all bool) error {
 		}
 	}
 
-	if all {
-		switch v := interface{}(m.GetCreatedAt()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, TokenAccountInfoValidationError{
-					field:  "CreatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, TokenAccountInfoValidationError{
-					field:  "CreatedAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return TokenAccountInfoValidationError{
 				field:  "CreatedAt",
@@ -1224,29 +671,8 @@ func (m *TokenAccountInfo) validate(all bool) error {
 		}
 	}
 
-	if len(errors) > 0 {
-		return TokenAccountInfoMultiError(errors)
-	}
-
 	return nil
 }
-
-// TokenAccountInfoMultiError is an error wrapping multiple validation errors
-// returned by TokenAccountInfo.ValidateAll() if the designated constraints
-// aren't met.
-type TokenAccountInfoMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m TokenAccountInfoMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m TokenAccountInfoMultiError) AllErrors() []error { return m }
 
 // TokenAccountInfoValidationError is the validation error returned by
 // TokenAccountInfo.Validate if the designated constraints aren't met.
