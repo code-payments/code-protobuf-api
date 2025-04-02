@@ -1735,9 +1735,8 @@ type SendPublicPaymentMetadata struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// The primary or relatinship account where funds will be sent from. The primary
-	// account is assumed if this field is not set for backwards compatibility with
-	// old clients.
+	// The primary account where funds will be sent from. The primary account is assumed if this
+	// field is not set for backwards compatibility with old clients.
 	Source *v1.SolanaAccountId `protobuf:"bytes,4,opt,name=source,proto3" json:"source,omitempty"`
 	// The destination token account to send funds to. This cannot be a Code
 	// temporary account.

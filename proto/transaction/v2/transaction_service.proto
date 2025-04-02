@@ -491,9 +491,8 @@ message OpenAccountsMetadata {
 //
 // actions = [NoPrivacyTransferAction(PRIMARY, destination, ExchangeData.Quarks)]
 message SendPublicPaymentMetadata {
-    // The primary or relatinship account where funds will be sent from. The primary
-    // account is assumed if this field is not set for backwards compatibility with
-    // old clients.
+    // The primary account where funds will be sent from. The primary account is assumed if this
+    // field is not set for backwards compatibility with old clients.
     common.v1.SolanaAccountId source = 4;
 
     // The destination token account to send funds to. This cannot be a Code

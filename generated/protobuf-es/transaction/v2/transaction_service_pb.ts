@@ -1706,9 +1706,8 @@ export class OpenAccountsMetadata extends Message<OpenAccountsMetadata> {
  */
 export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata> {
   /**
-   * The primary or relatinship account where funds will be sent from. The primary
-   * account is assumed if this field is not set for backwards compatibility with
-   * old clients.
+   * The primary account where funds will be sent from. The primary account is assumed if this
+   * field is not set for backwards compatibility with old clients.
    *
    * @generated from field: code.common.v1.SolanaAccountId source = 4;
    */
