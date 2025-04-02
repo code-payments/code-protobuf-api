@@ -2025,12 +2025,7 @@ func (*Action_NoPrivacyWithdraw) isAction_Type() {}
 
 func (*Action_FeePayment) isAction_Type() {}
 
-// Virtual Instruction 1
-//
-//	Instructions:
-//	  1. system::AdvanceNonce
-//	  2. cvm::SystemTimelockInit
-//	Client Signature Required: No
+// No client signature required
 type OpenAccountAction struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -2126,13 +2121,7 @@ func (x *OpenAccountAction) GetAuthoritySignature() *v1.Signature {
 	return nil
 }
 
-// Virtual Instruction 1
-//
-//	Instructions:
-//	  1. system::AdvanceNonce
-//	  2. memo::Memo
-//	  3. timelock::TransferWithAuthority (source -> destination)
-//	Client Signature Required: Yes
+// Compact message signature required
 type NoPrivacyTransferAction struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -2206,16 +2195,7 @@ func (x *NoPrivacyTransferAction) GetAmount() uint64 {
 	return 0
 }
 
-// Virtual Instruction 1
-//
-//	Instructions:
-//	  1. system::AdvanceNonce
-//	  2. memo::Memo
-//	  3. timelock::RevokeLockWithAuthority
-//	  4. timelock::DeactivateLock
-//	  5. timelock::Withdraw (source -> destination)
-//	  6. timelock::CloseAccounts
-//	Client Signature Required: Yes
+// Compact message signature required
 type NoPrivacyWithdrawAction struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -2299,17 +2279,7 @@ func (x *NoPrivacyWithdrawAction) GetShouldClose() bool {
 	return false
 }
 
-// Virtual Instruction 1
-//
-//	Instructions:
-//	  1. system::AdvanceNonce
-//	  2. memo::Memo
-//	  3. timelock::TransferWithAuthority (source -> fee account)
-//	Client Signature Required: Yes
-//
-// Note: This is exactly a NoPrivacyTransferAction, but with specialized metadata
-//
-//	for fees.
+// Compact message signature required
 type FeePaymentAction struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

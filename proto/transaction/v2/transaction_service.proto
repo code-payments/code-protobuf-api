@@ -568,11 +568,7 @@ message Action {
     reserved 9; // Deprecated PermanentPrivacyUpgradeAction
 }
 
-// Virtual Instruction 1
-//  Instructions:
-//    1. system::AdvanceNonce
-//    2. cvm::SystemTimelockInit
-//  Client Signature Required: No
+// No client signature required
 message OpenAccountAction {
     // The type of account, which will dictate its intended use
     common.v1.AccountType account_type = 1 [(validate.rules).enum.not_in = 0];
@@ -597,12 +593,7 @@ message OpenAccountAction {
     common.v1.Signature authority_signature = 6 [(validate.rules).message.required = true];
 }
 
-// Virtual Instruction 1
-//  Instructions:
-//    1. system::AdvanceNonce
-//    2. memo::Memo
-//    3. timelock::TransferWithAuthority (source -> destination)
-//  Client Signature Required: Yes
+// Compact message signature required
 message NoPrivacyTransferAction {
     // The public key of the private key that has authority over source
     common.v1.SolanaAccountId authority = 1 [(validate.rules).message.required = true];
@@ -617,15 +608,7 @@ message NoPrivacyTransferAction {
     uint64 amount = 4 [(validate.rules).uint64.gt = 0];
 }
 
-// Virtual Instruction 1
-//  Instructions:
-//    1. system::AdvanceNonce
-//    2. memo::Memo
-//    3. timelock::RevokeLockWithAuthority
-//    4. timelock::DeactivateLock
-//    5. timelock::Withdraw (source -> destination)
-//    6. timelock::CloseAccounts
-//  Client Signature Required: Yes
+// Compact message signature required
 message NoPrivacyWithdrawAction {
     // The public key of the private key that has authority over source
     common.v1.SolanaAccountId authority = 1 [(validate.rules).message.required = true];
@@ -644,15 +627,7 @@ message NoPrivacyWithdrawAction {
     bool should_close = 5 [(validate.rules).bool.const = true];
 }
 
-// Virtual Instruction 1
-//  Instructions:
-//    1. system::AdvanceNonce
-//    2. memo::Memo
-//    3. timelock::TransferWithAuthority (source -> fee account)
-//  Client Signature Required: Yes
-//
-// Note: This is exactly a NoPrivacyTransferAction, but with specialized metadata
-//       for fees.
+// Compact message signature required
 message FeePaymentAction {
     // The type of fee being operated on
     FeeType type = 4;

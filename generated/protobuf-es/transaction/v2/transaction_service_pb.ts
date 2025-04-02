@@ -1934,11 +1934,7 @@ export class Action extends Message<Action> {
 }
 
 /**
- * Virtual Instruction 1
- *  Instructions:
- *    1. system::AdvanceNonce
- *    2. cvm::SystemTimelockInit
- *  Client Signature Required: No
+ * No client signature required
  *
  * @generated from message code.transaction.v2.OpenAccountAction
  */
@@ -2023,12 +2019,7 @@ export class OpenAccountAction extends Message<OpenAccountAction> {
 }
 
 /**
- * Virtual Instruction 1
- *  Instructions:
- *    1. system::AdvanceNonce
- *    2. memo::Memo
- *    3. timelock::TransferWithAuthority (source -> destination)
- *  Client Signature Required: Yes
+ * Compact message signature required
  *
  * @generated from message code.transaction.v2.NoPrivacyTransferAction
  */
@@ -2093,15 +2084,7 @@ export class NoPrivacyTransferAction extends Message<NoPrivacyTransferAction> {
 }
 
 /**
- * Virtual Instruction 1
- *  Instructions:
- *    1. system::AdvanceNonce
- *    2. memo::Memo
- *    3. timelock::RevokeLockWithAuthority
- *    4. timelock::DeactivateLock
- *    5. timelock::Withdraw (source -> destination)
- *    6. timelock::CloseAccounts
- *  Client Signature Required: Yes
+ * Compact message signature required
  *
  * @generated from message code.transaction.v2.NoPrivacyWithdrawAction
  */
@@ -2175,15 +2158,7 @@ export class NoPrivacyWithdrawAction extends Message<NoPrivacyWithdrawAction> {
 }
 
 /**
- * Virtual Instruction 1
- *  Instructions:
- *    1. system::AdvanceNonce
- *    2. memo::Memo
- *    3. timelock::TransferWithAuthority (source -> fee account)
- *  Client Signature Required: Yes
- *
- * Note: This is exactly a NoPrivacyTransferAction, but with specialized metadata
- *       for fees.
+ * Compact message signature required
  *
  * @generated from message code.transaction.v2.FeePaymentAction
  */
