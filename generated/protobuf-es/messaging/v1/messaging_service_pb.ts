@@ -910,121 +910,6 @@ export class WebhookCalled extends Message$1<WebhookCalled> {
 }
 
 /**
- * Request that an account logs in
- *
- * This message type is only initiated by third-parties through the SDK.
- *
- * @generated from message code.messaging.v1.RequestToLogin
- */
-export class RequestToLogin extends Message$1<RequestToLogin> {
-  /**
-   * The third-party's domain name, which is its primary identifier. Server
-   * guarantees to perform domain verification against the verifier account.
-   *
-   * Clients should expect subdomains for future feature compatiblity, but must
-   * use the ASCII base domain in the RELATIONSHIP account derivation strategy.
-   *
-   * @generated from field: code.common.v1.Domain domain = 1;
-   */
-  domain?: Domain;
-
-  /**
-   * Owner account owned by the third party used in domain verification.
-   *
-   * @generated from field: code.common.v1.SolanaAccountId verifier = 4;
-   */
-  verifier?: SolanaAccountId;
-
-  /**
-   * Signature of this message using the verifier private key, which in addition
-   * to domain verification, authenticates the third party.
-   *
-   * @generated from field: code.common.v1.Signature signature = 5;
-   */
-  signature?: Signature;
-
-  /**
-   * Rendezvous key to avoid replay attacks
-   *
-   * @generated from field: code.messaging.v1.RendezvousKey rendezvous_key = 6;
-   */
-  rendezvousKey?: RendezvousKey;
-
-  constructor(data?: PartialMessage<RequestToLogin>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.messaging.v1.RequestToLogin";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "domain", kind: "message", T: Domain },
-    { no: 4, name: "verifier", kind: "message", T: SolanaAccountId },
-    { no: 5, name: "signature", kind: "message", T: Signature },
-    { no: 6, name: "rendezvous_key", kind: "message", T: RendezvousKey },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RequestToLogin {
-    return new RequestToLogin().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): RequestToLogin {
-    return new RequestToLogin().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): RequestToLogin {
-    return new RequestToLogin().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: RequestToLogin | PlainMessage<RequestToLogin> | undefined, b: RequestToLogin | PlainMessage<RequestToLogin> | undefined): boolean {
-    return proto3.util.equals(RequestToLogin, a, b);
-  }
-}
-
-/**
- * Login is rejected by the client
- *
- * This message type is only initiated by user clients
- *
- * @generated from message code.messaging.v1.ClientRejectedLogin
- */
-export class ClientRejectedLogin extends Message$1<ClientRejectedLogin> {
-  /**
-   * Timestamp the login was rejected
-   *
-   * @generated from field: google.protobuf.Timestamp timestamp = 4;
-   */
-  timestamp?: Timestamp;
-
-  constructor(data?: PartialMessage<ClientRejectedLogin>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.messaging.v1.ClientRejectedLogin";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 4, name: "timestamp", kind: "message", T: Timestamp },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ClientRejectedLogin {
-    return new ClientRejectedLogin().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ClientRejectedLogin {
-    return new ClientRejectedLogin().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ClientRejectedLogin {
-    return new ClientRejectedLogin().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: ClientRejectedLogin | PlainMessage<ClientRejectedLogin> | undefined, b: ClientRejectedLogin | PlainMessage<ClientRejectedLogin> | undefined): boolean {
-    return proto3.util.equals(ClientRejectedLogin, a, b);
-  }
-}
-
-/**
  * Client has received an aidrop from server
  *
  * This message type is only initiated by server.
@@ -1151,18 +1036,6 @@ export class Message extends Message$1<Message> {
     case: "webhookCalled";
   } | {
     /**
-     * @generated from field: code.messaging.v1.RequestToLogin request_to_login = 10;
-     */
-    value: RequestToLogin;
-    case: "requestToLogin";
-  } | {
-    /**
-     * @generated from field: code.messaging.v1.ClientRejectedLogin client_rejected_login = 12;
-     */
-    value: ClientRejectedLogin;
-    case: "clientRejectedLogin";
-  } | {
-    /**
      * @generated from field: code.messaging.v1.AirdropReceived airdrop_received = 4;
      */
     value: AirdropReceived;
@@ -1185,8 +1058,6 @@ export class Message extends Message$1<Message> {
     { no: 7, name: "client_rejected_payment", kind: "message", T: ClientRejectedPayment, oneof: "kind" },
     { no: 8, name: "intent_submitted", kind: "message", T: IntentSubmitted, oneof: "kind" },
     { no: 9, name: "webhook_called", kind: "message", T: WebhookCalled, oneof: "kind" },
-    { no: 10, name: "request_to_login", kind: "message", T: RequestToLogin, oneof: "kind" },
-    { no: 12, name: "client_rejected_login", kind: "message", T: ClientRejectedLogin, oneof: "kind" },
     { no: 4, name: "airdrop_received", kind: "message", T: AirdropReceived, oneof: "kind" },
   ]);
 
