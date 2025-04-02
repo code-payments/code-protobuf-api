@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { CodifyRequest, CodifyResponse, GetPathMetadataRequest, GetPathMetadataResponse, GetStatusRequest, GetStatusResponse, RegisterWebhookRequest, RegisterWebhookResponse } from "./micro_payment_service_pb";
+import { GetStatusRequest, GetStatusResponse, RegisterWebhookRequest, RegisterWebhookResponse } from "./micro_payment_service_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -39,31 +39,6 @@ export const MicroPayment = {
       name: "RegisterWebhook",
       I: RegisterWebhookRequest,
       O: RegisterWebhookResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * Codify adds a trial micro paywall to any URL
-     *
-     * @generated from rpc code.micropayment.v1.MicroPayment.Codify
-     */
-    codify: {
-      name: "Codify",
-      I: CodifyRequest,
-      O: CodifyResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * GetPathMetadata gets codified website metadata for a given path
-     *
-     * Important Note: This RPC's current implementation is insecure and
-     * it's sole design is to enable PoC and trials.
-     *
-     * @generated from rpc code.micropayment.v1.MicroPayment.GetPathMetadata
-     */
-    getPathMetadata: {
-      name: "GetPathMetadata",
-      I: GetPathMetadataRequest,
-      O: GetPathMetadataResponse,
       kind: MethodKind.Unary,
     },
   }

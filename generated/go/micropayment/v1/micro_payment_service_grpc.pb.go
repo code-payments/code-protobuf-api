@@ -32,13 +32,6 @@ type MicroPaymentClient interface {
 	//	reserves the intent ID with payment details, plus registers the webhook
 	//	at the same time. Until that's possible, we're stuck with two RPC calls.
 	RegisterWebhook(ctx context.Context, in *RegisterWebhookRequest, opts ...grpc.CallOption) (*RegisterWebhookResponse, error)
-	// Codify adds a trial micro paywall to any URL
-	Codify(ctx context.Context, in *CodifyRequest, opts ...grpc.CallOption) (*CodifyResponse, error)
-	// GetPathMetadata gets codified website metadata for a given path
-	//
-	// Important Note: This RPC's current implementation is insecure and
-	// it's sole design is to enable PoC and trials.
-	GetPathMetadata(ctx context.Context, in *GetPathMetadataRequest, opts ...grpc.CallOption) (*GetPathMetadataResponse, error)
 }
 
 type microPaymentClient struct {
@@ -67,24 +60,6 @@ func (c *microPaymentClient) RegisterWebhook(ctx context.Context, in *RegisterWe
 	return out, nil
 }
 
-func (c *microPaymentClient) Codify(ctx context.Context, in *CodifyRequest, opts ...grpc.CallOption) (*CodifyResponse, error) {
-	out := new(CodifyResponse)
-	err := c.cc.Invoke(ctx, "/code.micropayment.v1.MicroPayment/Codify", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *microPaymentClient) GetPathMetadata(ctx context.Context, in *GetPathMetadataRequest, opts ...grpc.CallOption) (*GetPathMetadataResponse, error) {
-	out := new(GetPathMetadataResponse)
-	err := c.cc.Invoke(ctx, "/code.micropayment.v1.MicroPayment/GetPathMetadata", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // MicroPaymentServer is the server API for MicroPayment service.
 // All implementations must embed UnimplementedMicroPaymentServer
 // for forward compatibility
@@ -99,13 +74,6 @@ type MicroPaymentServer interface {
 	//	reserves the intent ID with payment details, plus registers the webhook
 	//	at the same time. Until that's possible, we're stuck with two RPC calls.
 	RegisterWebhook(context.Context, *RegisterWebhookRequest) (*RegisterWebhookResponse, error)
-	// Codify adds a trial micro paywall to any URL
-	Codify(context.Context, *CodifyRequest) (*CodifyResponse, error)
-	// GetPathMetadata gets codified website metadata for a given path
-	//
-	// Important Note: This RPC's current implementation is insecure and
-	// it's sole design is to enable PoC and trials.
-	GetPathMetadata(context.Context, *GetPathMetadataRequest) (*GetPathMetadataResponse, error)
 	mustEmbedUnimplementedMicroPaymentServer()
 }
 
@@ -118,12 +86,6 @@ func (UnimplementedMicroPaymentServer) GetStatus(context.Context, *GetStatusRequ
 }
 func (UnimplementedMicroPaymentServer) RegisterWebhook(context.Context, *RegisterWebhookRequest) (*RegisterWebhookResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterWebhook not implemented")
-}
-func (UnimplementedMicroPaymentServer) Codify(context.Context, *CodifyRequest) (*CodifyResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Codify not implemented")
-}
-func (UnimplementedMicroPaymentServer) GetPathMetadata(context.Context, *GetPathMetadataRequest) (*GetPathMetadataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPathMetadata not implemented")
 }
 func (UnimplementedMicroPaymentServer) mustEmbedUnimplementedMicroPaymentServer() {}
 
@@ -174,42 +136,6 @@ func _MicroPayment_RegisterWebhook_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MicroPayment_Codify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CodifyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MicroPaymentServer).Codify(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/code.micropayment.v1.MicroPayment/Codify",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MicroPaymentServer).Codify(ctx, req.(*CodifyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _MicroPayment_GetPathMetadata_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPathMetadataRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MicroPaymentServer).GetPathMetadata(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/code.micropayment.v1.MicroPayment/GetPathMetadata",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MicroPaymentServer).GetPathMetadata(ctx, req.(*GetPathMetadataRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // MicroPayment_ServiceDesc is the grpc.ServiceDesc for MicroPayment service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -224,14 +150,6 @@ var MicroPayment_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RegisterWebhook",
 			Handler:    _MicroPayment_RegisterWebhook_Handler,
-		},
-		{
-			MethodName: "Codify",
-			Handler:    _MicroPayment_Codify_Handler,
-		},
-		{
-			MethodName: "GetPathMetadata",
-			Handler:    _MicroPayment_GetPathMetadata_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { AirdropRequest, AirdropResponse, CanWithdrawToAccountRequest, CanWithdrawToAccountResponse, DeclareFiatOnrampPurchaseAttemptRequest, DeclareFiatOnrampPurchaseAttemptResponse, GetIntentMetadataRequest, GetIntentMetadataResponse, GetLimitsRequest, GetLimitsResponse, GetPaymentHistoryRequest, GetPaymentHistoryResponse, GetPrioritizedIntentsForPrivacyUpgradeRequest, GetPrioritizedIntentsForPrivacyUpgradeResponse, GetPrivacyUpgradeStatusRequest, GetPrivacyUpgradeStatusResponse, SubmitIntentRequest, SubmitIntentResponse, SwapRequest, SwapResponse } from "./transaction_service_pb";
+import { AirdropRequest, AirdropResponse, CanWithdrawToAccountRequest, CanWithdrawToAccountResponse, DeclareFiatOnrampPurchaseAttemptRequest, DeclareFiatOnrampPurchaseAttemptResponse, GetIntentMetadataRequest, GetIntentMetadataResponse, GetLimitsRequest, GetLimitsResponse, SubmitIntentRequest, SubmitIntentResponse, SwapRequest, SwapResponse } from "./transaction_service_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -17,13 +17,13 @@ export const Transaction = {
      * client actions to execute on the blockchain using the Code sequencer for
      * fulfillment.
      *
-     * Transactions are never exchanged between client and server. Instead, the
-     * required accounts and arguments for instructions known to each actor are
-     * exchanged to allow independent and local transaction construction.
+     * Transactions and virtual instructions are never exchanged between client and server.
+     * Instead, the required accounts and arguments for instructions known to each actor are
+     * exchanged to allow independent and local construction.
      *
      * Client and server are expected to fully validate the intent. Proofs will
      * be provided for any parameter requiring one. Signatures should only be
-     * generated after approval of all transactions.
+     * generated after approval.
      *
      * This RPC is not a traditional streaming endpoint. It bundles two unary calls
      * to enable DB-level transaction semantics.
@@ -31,16 +31,16 @@ export const Transaction = {
      * The high-level happy path flow for the RPC is as follows:
      *   1.  Client initiates a stream and sends SubmitIntentRequest.SubmitActions
      *   2.  Server validates the intent, its actions and metadata
-     *   3a. If there are transactions requiring the user's signature, then server
-     *       returns SubmitIntentResponse.ServerParameters
+     *   3a. If there are transactions or virtual instructions requiring the user's signature,
+     *       then server returns SubmitIntentResponse.ServerParameters
      *   3b. Otherwise, server returns SubmitIntentResponse.Success and closes the
      *       stream
-     *   4.  For each transaction requiring the user's signature, the client locally
-     *       constructs it, performs validation and collects the signature
+     *   4.  For each transaction or virtual instruction requiring the user's signature, the client
+     *       locally constructs it, performs validation and collects the signature
      *   5.  Client sends SubmitIntentRequest.SubmitSignatures with the signature
      *       list generated from 4
      *   6.  Server validates all signatures are submitted and are the expected values
-     *       using locally constructed transactions.
+     *       using locally constructed transactions or virtual instructions.
      *   7.  Server returns SubmitIntentResponse.Success and closes the stream
      * In the error case:
      *   * Server will return SubmitIntentResponse.Error and close the stream
@@ -68,30 +68,6 @@ export const Transaction = {
       kind: MethodKind.Unary,
     },
     /**
-     * GetPrivacyUpgradeStatus gets the status of a private transaction and the
-     * ability to upgrade it to permanent privacy.
-     *
-     * @generated from rpc code.transaction.v2.Transaction.GetPrivacyUpgradeStatus
-     */
-    getPrivacyUpgradeStatus: {
-      name: "GetPrivacyUpgradeStatus",
-      I: GetPrivacyUpgradeStatusRequest,
-      O: GetPrivacyUpgradeStatusResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * GetPrioritizedIntentsForPrivacyUpgrade allows clients to get private
-     * intent actions that can be upgraded in a secure and verifiable manner.
-     *
-     * @generated from rpc code.transaction.v2.Transaction.GetPrioritizedIntentsForPrivacyUpgrade
-     */
-    getPrioritizedIntentsForPrivacyUpgrade: {
-      name: "GetPrioritizedIntentsForPrivacyUpgrade",
-      I: GetPrioritizedIntentsForPrivacyUpgradeRequest,
-      O: GetPrioritizedIntentsForPrivacyUpgradeResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
      * GetLimits gets limits for money moving intents for an owner account in an
      * identity-aware manner
      *
@@ -101,19 +77,6 @@ export const Transaction = {
       name: "GetLimits",
       I: GetLimitsRequest,
       O: GetLimitsResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * GetPaymentHistory gets an owner account's payment history inferred from intents
-     *
-     * Deprecated: Payment history has migrated to chats
-     *
-     * @generated from rpc code.transaction.v2.Transaction.GetPaymentHistory
-     */
-    getPaymentHistory: {
-      name: "GetPaymentHistory",
-      I: GetPaymentHistoryRequest,
-      O: GetPaymentHistoryResponse,
       kind: MethodKind.Unary,
     },
     /**
@@ -148,6 +111,8 @@ export const Transaction = {
      *    Sequencer within the RPC handler
      *  * Balance changes are applied after the transaction has finalized
      *  * Transactions use recent blockhashes over a nonce
+     * SubmitIntent also operates on VM virtual instructions, whereas Swap uses
+     * Solana transactions.
      *
      * The transaction will have the following instruction format:
      *   1. ComputeBudget::SetComputeUnitLimit
@@ -157,7 +122,7 @@ export const Transaction = {
      *   5. SwapValidator::PostSwap
      *
      * Note: Currently limited to swapping USDC to Kin.
-     * Note: Kin is deposited into the primary account.
+     * Note: Kin is deposited into the token account derived from the VM deposit PDA of the owner account.
      *
      * @generated from rpc code.transaction.v2.Transaction.Swap
      */

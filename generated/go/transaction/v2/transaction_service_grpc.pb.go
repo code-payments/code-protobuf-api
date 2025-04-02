@@ -26,13 +26,13 @@ type TransactionClient interface {
 	// client actions to execute on the blockchain using the Code sequencer for
 	// fulfillment.
 	//
-	// Transactions are never exchanged between client and server. Instead, the
-	// required accounts and arguments for instructions known to each actor are
-	// exchanged to allow independent and local transaction construction.
+	// Transactions and virtual instructions are never exchanged between client and server.
+	// Instead, the required accounts and arguments for instructions known to each actor are
+	// exchanged to allow independent and local construction.
 	//
 	// Client and server are expected to fully validate the intent. Proofs will
 	// be provided for any parameter requiring one. Signatures should only be
-	// generated after approval of all transactions.
+	// generated after approval.
 	//
 	// This RPC is not a traditional streaming endpoint. It bundles two unary calls
 	// to enable DB-level transaction semantics.
@@ -40,16 +40,16 @@ type TransactionClient interface {
 	// The high-level happy path flow for the RPC is as follows:
 	//  1. Client initiates a stream and sends SubmitIntentRequest.SubmitActions
 	//  2. Server validates the intent, its actions and metadata
-	//     3a. If there are transactions requiring the user's signature, then server
-	//     returns SubmitIntentResponse.ServerParameters
+	//     3a. If there are transactions or virtual instructions requiring the user's signature,
+	//     then server returns SubmitIntentResponse.ServerParameters
 	//     3b. Otherwise, server returns SubmitIntentResponse.Success and closes the
 	//     stream
-	//  4. For each transaction requiring the user's signature, the client locally
-	//     constructs it, performs validation and collects the signature
+	//  4. For each transaction or virtual instruction requiring the user's signature, the client
+	//     locally constructs it, performs validation and collects the signature
 	//  5. Client sends SubmitIntentRequest.SubmitSignatures with the signature
 	//     list generated from 4
 	//  6. Server validates all signatures are submitted and are the expected values
-	//     using locally constructed transactions.
+	//     using locally constructed transactions or virtual instructions.
 	//  7. Server returns SubmitIntentResponse.Success and closes the stream
 	//
 	// In the error case:
@@ -60,19 +60,9 @@ type TransactionClient interface {
 	// to fetch the status of submitted intents. Metadata exists only for intents
 	// that have been successfully submitted.
 	GetIntentMetadata(ctx context.Context, in *GetIntentMetadataRequest, opts ...grpc.CallOption) (*GetIntentMetadataResponse, error)
-	// GetPrivacyUpgradeStatus gets the status of a private transaction and the
-	// ability to upgrade it to permanent privacy.
-	GetPrivacyUpgradeStatus(ctx context.Context, in *GetPrivacyUpgradeStatusRequest, opts ...grpc.CallOption) (*GetPrivacyUpgradeStatusResponse, error)
-	// GetPrioritizedIntentsForPrivacyUpgrade allows clients to get private
-	// intent actions that can be upgraded in a secure and verifiable manner.
-	GetPrioritizedIntentsForPrivacyUpgrade(ctx context.Context, in *GetPrioritizedIntentsForPrivacyUpgradeRequest, opts ...grpc.CallOption) (*GetPrioritizedIntentsForPrivacyUpgradeResponse, error)
 	// GetLimits gets limits for money moving intents for an owner account in an
 	// identity-aware manner
 	GetLimits(ctx context.Context, in *GetLimitsRequest, opts ...grpc.CallOption) (*GetLimitsResponse, error)
-	// GetPaymentHistory gets an owner account's payment history inferred from intents
-	//
-	// Deprecated: Payment history has migrated to chats
-	GetPaymentHistory(ctx context.Context, in *GetPaymentHistoryRequest, opts ...grpc.CallOption) (*GetPaymentHistoryResponse, error)
 	// CanWithdrawToAccount provides hints to clients for submitting withdraw intents.
 	// The RPC indicates if a withdrawal is possible, and how it should be performed.
 	CanWithdrawToAccount(ctx context.Context, in *CanWithdrawToAccountRequest, opts ...grpc.CallOption) (*CanWithdrawToAccountResponse, error)
@@ -87,6 +77,9 @@ type TransactionClient interface {
 	//   - Balance changes are applied after the transaction has finalized
 	//   - Transactions use recent blockhashes over a nonce
 	//
+	// SubmitIntent also operates on VM virtual instructions, whereas Swap uses
+	// Solana transactions.
+	//
 	// The transaction will have the following instruction format:
 	//  1. ComputeBudget::SetComputeUnitLimit
 	//  2. ComputeBudget::SetComputeUnitPrice
@@ -95,7 +88,7 @@ type TransactionClient interface {
 	//  5. SwapValidator::PostSwap
 	//
 	// Note: Currently limited to swapping USDC to Kin.
-	// Note: Kin is deposited into the primary account.
+	// Note: Kin is deposited into the token account derived from the VM deposit PDA of the owner account.
 	Swap(ctx context.Context, opts ...grpc.CallOption) (Transaction_SwapClient, error)
 	// DeclareFiatOnrampPurchaseAttempt is called whenever a user attempts to use a fiat
 	// onramp to purchase crypto for use in Code.
@@ -150,36 +143,9 @@ func (c *transactionClient) GetIntentMetadata(ctx context.Context, in *GetIntent
 	return out, nil
 }
 
-func (c *transactionClient) GetPrivacyUpgradeStatus(ctx context.Context, in *GetPrivacyUpgradeStatusRequest, opts ...grpc.CallOption) (*GetPrivacyUpgradeStatusResponse, error) {
-	out := new(GetPrivacyUpgradeStatusResponse)
-	err := c.cc.Invoke(ctx, "/code.transaction.v2.Transaction/GetPrivacyUpgradeStatus", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *transactionClient) GetPrioritizedIntentsForPrivacyUpgrade(ctx context.Context, in *GetPrioritizedIntentsForPrivacyUpgradeRequest, opts ...grpc.CallOption) (*GetPrioritizedIntentsForPrivacyUpgradeResponse, error) {
-	out := new(GetPrioritizedIntentsForPrivacyUpgradeResponse)
-	err := c.cc.Invoke(ctx, "/code.transaction.v2.Transaction/GetPrioritizedIntentsForPrivacyUpgrade", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *transactionClient) GetLimits(ctx context.Context, in *GetLimitsRequest, opts ...grpc.CallOption) (*GetLimitsResponse, error) {
 	out := new(GetLimitsResponse)
 	err := c.cc.Invoke(ctx, "/code.transaction.v2.Transaction/GetLimits", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *transactionClient) GetPaymentHistory(ctx context.Context, in *GetPaymentHistoryRequest, opts ...grpc.CallOption) (*GetPaymentHistoryResponse, error) {
-	out := new(GetPaymentHistoryResponse)
-	err := c.cc.Invoke(ctx, "/code.transaction.v2.Transaction/GetPaymentHistory", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -252,13 +218,13 @@ type TransactionServer interface {
 	// client actions to execute on the blockchain using the Code sequencer for
 	// fulfillment.
 	//
-	// Transactions are never exchanged between client and server. Instead, the
-	// required accounts and arguments for instructions known to each actor are
-	// exchanged to allow independent and local transaction construction.
+	// Transactions and virtual instructions are never exchanged between client and server.
+	// Instead, the required accounts and arguments for instructions known to each actor are
+	// exchanged to allow independent and local construction.
 	//
 	// Client and server are expected to fully validate the intent. Proofs will
 	// be provided for any parameter requiring one. Signatures should only be
-	// generated after approval of all transactions.
+	// generated after approval.
 	//
 	// This RPC is not a traditional streaming endpoint. It bundles two unary calls
 	// to enable DB-level transaction semantics.
@@ -266,16 +232,16 @@ type TransactionServer interface {
 	// The high-level happy path flow for the RPC is as follows:
 	//  1. Client initiates a stream and sends SubmitIntentRequest.SubmitActions
 	//  2. Server validates the intent, its actions and metadata
-	//     3a. If there are transactions requiring the user's signature, then server
-	//     returns SubmitIntentResponse.ServerParameters
+	//     3a. If there are transactions or virtual instructions requiring the user's signature,
+	//     then server returns SubmitIntentResponse.ServerParameters
 	//     3b. Otherwise, server returns SubmitIntentResponse.Success and closes the
 	//     stream
-	//  4. For each transaction requiring the user's signature, the client locally
-	//     constructs it, performs validation and collects the signature
+	//  4. For each transaction or virtual instruction requiring the user's signature, the client
+	//     locally constructs it, performs validation and collects the signature
 	//  5. Client sends SubmitIntentRequest.SubmitSignatures with the signature
 	//     list generated from 4
 	//  6. Server validates all signatures are submitted and are the expected values
-	//     using locally constructed transactions.
+	//     using locally constructed transactions or virtual instructions.
 	//  7. Server returns SubmitIntentResponse.Success and closes the stream
 	//
 	// In the error case:
@@ -286,19 +252,9 @@ type TransactionServer interface {
 	// to fetch the status of submitted intents. Metadata exists only for intents
 	// that have been successfully submitted.
 	GetIntentMetadata(context.Context, *GetIntentMetadataRequest) (*GetIntentMetadataResponse, error)
-	// GetPrivacyUpgradeStatus gets the status of a private transaction and the
-	// ability to upgrade it to permanent privacy.
-	GetPrivacyUpgradeStatus(context.Context, *GetPrivacyUpgradeStatusRequest) (*GetPrivacyUpgradeStatusResponse, error)
-	// GetPrioritizedIntentsForPrivacyUpgrade allows clients to get private
-	// intent actions that can be upgraded in a secure and verifiable manner.
-	GetPrioritizedIntentsForPrivacyUpgrade(context.Context, *GetPrioritizedIntentsForPrivacyUpgradeRequest) (*GetPrioritizedIntentsForPrivacyUpgradeResponse, error)
 	// GetLimits gets limits for money moving intents for an owner account in an
 	// identity-aware manner
 	GetLimits(context.Context, *GetLimitsRequest) (*GetLimitsResponse, error)
-	// GetPaymentHistory gets an owner account's payment history inferred from intents
-	//
-	// Deprecated: Payment history has migrated to chats
-	GetPaymentHistory(context.Context, *GetPaymentHistoryRequest) (*GetPaymentHistoryResponse, error)
 	// CanWithdrawToAccount provides hints to clients for submitting withdraw intents.
 	// The RPC indicates if a withdrawal is possible, and how it should be performed.
 	CanWithdrawToAccount(context.Context, *CanWithdrawToAccountRequest) (*CanWithdrawToAccountResponse, error)
@@ -313,6 +269,9 @@ type TransactionServer interface {
 	//   - Balance changes are applied after the transaction has finalized
 	//   - Transactions use recent blockhashes over a nonce
 	//
+	// SubmitIntent also operates on VM virtual instructions, whereas Swap uses
+	// Solana transactions.
+	//
 	// The transaction will have the following instruction format:
 	//  1. ComputeBudget::SetComputeUnitLimit
 	//  2. ComputeBudget::SetComputeUnitPrice
@@ -321,7 +280,7 @@ type TransactionServer interface {
 	//  5. SwapValidator::PostSwap
 	//
 	// Note: Currently limited to swapping USDC to Kin.
-	// Note: Kin is deposited into the primary account.
+	// Note: Kin is deposited into the token account derived from the VM deposit PDA of the owner account.
 	Swap(Transaction_SwapServer) error
 	// DeclareFiatOnrampPurchaseAttempt is called whenever a user attempts to use a fiat
 	// onramp to purchase crypto for use in Code.
@@ -339,17 +298,8 @@ func (UnimplementedTransactionServer) SubmitIntent(Transaction_SubmitIntentServe
 func (UnimplementedTransactionServer) GetIntentMetadata(context.Context, *GetIntentMetadataRequest) (*GetIntentMetadataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetIntentMetadata not implemented")
 }
-func (UnimplementedTransactionServer) GetPrivacyUpgradeStatus(context.Context, *GetPrivacyUpgradeStatusRequest) (*GetPrivacyUpgradeStatusResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPrivacyUpgradeStatus not implemented")
-}
-func (UnimplementedTransactionServer) GetPrioritizedIntentsForPrivacyUpgrade(context.Context, *GetPrioritizedIntentsForPrivacyUpgradeRequest) (*GetPrioritizedIntentsForPrivacyUpgradeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPrioritizedIntentsForPrivacyUpgrade not implemented")
-}
 func (UnimplementedTransactionServer) GetLimits(context.Context, *GetLimitsRequest) (*GetLimitsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLimits not implemented")
-}
-func (UnimplementedTransactionServer) GetPaymentHistory(context.Context, *GetPaymentHistoryRequest) (*GetPaymentHistoryResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPaymentHistory not implemented")
 }
 func (UnimplementedTransactionServer) CanWithdrawToAccount(context.Context, *CanWithdrawToAccountRequest) (*CanWithdrawToAccountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CanWithdrawToAccount not implemented")
@@ -420,42 +370,6 @@ func _Transaction_GetIntentMetadata_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Transaction_GetPrivacyUpgradeStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPrivacyUpgradeStatusRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TransactionServer).GetPrivacyUpgradeStatus(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/code.transaction.v2.Transaction/GetPrivacyUpgradeStatus",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TransactionServer).GetPrivacyUpgradeStatus(ctx, req.(*GetPrivacyUpgradeStatusRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Transaction_GetPrioritizedIntentsForPrivacyUpgrade_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPrioritizedIntentsForPrivacyUpgradeRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TransactionServer).GetPrioritizedIntentsForPrivacyUpgrade(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/code.transaction.v2.Transaction/GetPrioritizedIntentsForPrivacyUpgrade",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TransactionServer).GetPrioritizedIntentsForPrivacyUpgrade(ctx, req.(*GetPrioritizedIntentsForPrivacyUpgradeRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Transaction_GetLimits_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetLimitsRequest)
 	if err := dec(in); err != nil {
@@ -470,24 +384,6 @@ func _Transaction_GetLimits_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TransactionServer).GetLimits(ctx, req.(*GetLimitsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Transaction_GetPaymentHistory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPaymentHistoryRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TransactionServer).GetPaymentHistory(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/code.transaction.v2.Transaction/GetPaymentHistory",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TransactionServer).GetPaymentHistory(ctx, req.(*GetPaymentHistoryRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -584,20 +480,8 @@ var Transaction_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Transaction_GetIntentMetadata_Handler,
 		},
 		{
-			MethodName: "GetPrivacyUpgradeStatus",
-			Handler:    _Transaction_GetPrivacyUpgradeStatus_Handler,
-		},
-		{
-			MethodName: "GetPrioritizedIntentsForPrivacyUpgrade",
-			Handler:    _Transaction_GetPrioritizedIntentsForPrivacyUpgrade_Handler,
-		},
-		{
 			MethodName: "GetLimits",
 			Handler:    _Transaction_GetLimits_Handler,
-		},
-		{
-			MethodName: "GetPaymentHistory",
-			Handler:    _Transaction_GetPaymentHistory_Handler,
 		},
 		{
 			MethodName: "CanWithdrawToAccount",
