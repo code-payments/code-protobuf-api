@@ -236,8 +236,7 @@ message GetLimitsResponse {
     // Send limits keyed by currency
     map<string, SendLimit> send_limits_by_currency = 2;
 
-    // Deposit limits
-    DepositLimit deposit_limit = 3;
+    reserved 3; // Deprecated deposit limit
 
     // Micro payment limits keyed by currency
     map<string, MicroPaymentLimit> micro_payment_limits_by_currency = 4;
@@ -819,14 +818,6 @@ message SendLimit {
 
     // Maximum allowed on a per-day basis
     float max_per_day = 3;
-}
-
-message DepositLimit {
-    // Maximum quarks that may be deposited at any time. Server will guarantee
-    // this threshold will be below enforced dollar value limits, while also
-    // ensuring sufficient funds are available for a full organizer that supports
-    // max payment sends. Total dollar value limits may be spread across many deposits.
-    uint64 max_quarks = 1;
 }
 
 message MicroPaymentLimit {

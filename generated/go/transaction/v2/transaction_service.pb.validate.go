@@ -559,16 +559,6 @@ func (m *GetLimitsResponse) Validate() error {
 
 	// no validation rules for SendLimitsByCurrency
 
-	if v, ok := interface{}(m.GetDepositLimit()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return GetLimitsResponseValidationError{
-				field:  "DepositLimit",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
 	// no validation rules for MicroPaymentLimitsByCurrency
 
 	// no validation rules for BuyModuleLimitsByCurrency
@@ -3691,73 +3681,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = SendLimitValidationError{}
-
-// Validate checks the field values on DepositLimit with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *DepositLimit) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	// no validation rules for MaxQuarks
-
-	return nil
-}
-
-// DepositLimitValidationError is the validation error returned by
-// DepositLimit.Validate if the designated constraints aren't met.
-type DepositLimitValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e DepositLimitValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e DepositLimitValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e DepositLimitValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e DepositLimitValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e DepositLimitValidationError) ErrorName() string { return "DepositLimitValidationError" }
-
-// Error satisfies the builtin error interface
-func (e DepositLimitValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sDepositLimit.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = DepositLimitValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = DepositLimitValidationError{}
 
 // Validate checks the field values on MicroPaymentLimit with the rules defined
 // in the proto definition for this message. If any rules are violated, an

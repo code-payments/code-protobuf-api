@@ -637,13 +637,6 @@ export class GetLimitsResponse extends Message<GetLimitsResponse> {
   sendLimitsByCurrency: { [key: string]: SendLimit } = {};
 
   /**
-   * Deposit limits
-   *
-   * @generated from field: code.transaction.v2.DepositLimit deposit_limit = 3;
-   */
-  depositLimit?: DepositLimit;
-
-  /**
    * Micro payment limits keyed by currency
    *
    * @generated from field: map<string, code.transaction.v2.MicroPaymentLimit> micro_payment_limits_by_currency = 4;
@@ -667,7 +660,6 @@ export class GetLimitsResponse extends Message<GetLimitsResponse> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "result", kind: "enum", T: proto3.getEnumType(GetLimitsResponse_Result) },
     { no: 2, name: "send_limits_by_currency", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: SendLimit} },
-    { no: 3, name: "deposit_limit", kind: "message", T: DepositLimit },
     { no: 4, name: "micro_payment_limits_by_currency", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: MicroPaymentLimit} },
     { no: 5, name: "buy_module_limits_by_currency", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: BuyModuleLimit} },
   ]);
@@ -2974,48 +2966,6 @@ export class SendLimit extends Message<SendLimit> {
 
   static equals(a: SendLimit | PlainMessage<SendLimit> | undefined, b: SendLimit | PlainMessage<SendLimit> | undefined): boolean {
     return proto3.util.equals(SendLimit, a, b);
-  }
-}
-
-/**
- * @generated from message code.transaction.v2.DepositLimit
- */
-export class DepositLimit extends Message<DepositLimit> {
-  /**
-   * Maximum quarks that may be deposited at any time. Server will guarantee
-   * this threshold will be below enforced dollar value limits, while also
-   * ensuring sufficient funds are available for a full organizer that supports
-   * max payment sends. Total dollar value limits may be spread across many deposits.
-   *
-   * @generated from field: uint64 max_quarks = 1;
-   */
-  maxQuarks = protoInt64.zero;
-
-  constructor(data?: PartialMessage<DepositLimit>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.DepositLimit";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "max_quarks", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DepositLimit {
-    return new DepositLimit().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DepositLimit {
-    return new DepositLimit().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DepositLimit {
-    return new DepositLimit().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: DepositLimit | PlainMessage<DepositLimit> | undefined, b: DepositLimit | PlainMessage<DepositLimit> | undefined): boolean {
-    return proto3.util.equals(DepositLimit, a, b);
   }
 }
 
