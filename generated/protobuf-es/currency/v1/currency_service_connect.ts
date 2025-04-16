@@ -13,7 +13,8 @@ export const Currency = {
   typeName: "code.currency.v1.Currency",
   methods: {
     /**
-     * GetAllRates returns the exchange rates for Kin against all available currencies
+     * GetAllRates returns the exchange rates for the core mint token against all
+     * available currencies
      *
      * @generated from rpc code.currency.v1.Currency.GetAllRates
      */

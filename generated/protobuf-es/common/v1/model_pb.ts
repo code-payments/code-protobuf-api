@@ -10,6 +10,8 @@ import { Duration, Message, proto3, Timestamp } from "@bufbuild/protobuf";
  * AccountType associates a type to an account, which infers how an account is used
  * within the Code ecosystem.
  *
+ * todo: Deprecate legacy accounts (temporary, buckets, legacy primary, relationship)
+ *
  * @generated from enum code.common.v1.AccountType
  */
 export enum AccountType {

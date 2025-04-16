@@ -6,7 +6,7 @@
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
 import { Message as Message$1, proto3, Timestamp } from "@bufbuild/protobuf";
 import { ClientPong, Domain, IntentId, ServerPing, Signature, SolanaAccountId } from "../../common/v1/model_pb";
-import { AdditionalFeePayment, AirdropType, ExchangeData, ExchangeDataWithoutRate, Metadata } from "../../transaction/v2/transaction_service_pb";
+import { AdditionalFeePayment, ExchangeData, ExchangeDataWithoutRate, Metadata } from "../../transaction/v2/transaction_service_pb";
 
 /**
  * @generated from message code.messaging.v1.OpenMessageStreamRequest
@@ -578,7 +578,8 @@ export class MessageId extends Message$1<MessageId> {
  */
 export class RequestToGrabBill extends Message$1<RequestToGrabBill> {
   /**
-   * Requestor is the Kin token account on Solana to which a payment should be sent.
+   * Requestor is the virtual core mint token account on the VM to which a
+   * payment should be sent.
    *
    * @generated from field: code.common.v1.SolanaAccountId requestor_account = 1;
    */
@@ -622,7 +623,8 @@ export class RequestToGrabBill extends Message$1<RequestToGrabBill> {
  */
 export class RequestToReceiveBill extends Message$1<RequestToReceiveBill> {
   /**
-   * Requestor is the Kin token account on Solana to which a payment should be sent.
+   * Requestor is the virtual core mint token account on the VM to which a
+   * payment should be sent.
    *
    * @generated from field: code.common.v1.SolanaAccountId requestor_account = 1;
    */
@@ -635,10 +637,10 @@ export class RequestToReceiveBill extends Message$1<RequestToReceiveBill> {
    */
   exchangeData: {
     /**
-     * An exact amount of Kin. Payment is guaranteed to transfer the specified
+     * An exact amount of core mint tokens. Payment is guaranteed to transfer the specified
      * quarks in the requested currency and exchange rate.
      *
-     * Only supports Kin. Use exchange_data.partial for fiat amounts.
+     * Only supports the core mint account. Use exchange_data.partial for fiat amounts.
      *
      * @generated from field: code.transaction.v2.ExchangeData exact = 2;
      */
@@ -646,11 +648,11 @@ export class RequestToReceiveBill extends Message$1<RequestToReceiveBill> {
     case: "exact";
   } | {
     /**
-     * Fiat amount request. The amount of Kin is determined at time of payment
-     * with a recent exchange rate provided by the paying client and validatd
-     * by server.
+     * Fiat amount request. The amount of core mint tokens are determined at
+     * time of payment with a recent exchange rate provided by the paying client
+     * and validated by server.
      *
-     * Only supports fiat amounts. Use exchange_data.exact for Kin.
+     * Only supports fiat amounts. Use exchange_data.exact for the core mint account.
      *
      * @generated from field: code.transaction.v2.ExchangeDataWithoutRate partial = 3;
      */
@@ -910,65 +912,6 @@ export class WebhookCalled extends Message$1<WebhookCalled> {
 }
 
 /**
- * Client has received an aidrop from server
- *
- * This message type is only initiated by server.
- *
- * @generated from message code.messaging.v1.AirdropReceived
- */
-export class AirdropReceived extends Message$1<AirdropReceived> {
-  /**
-   * The type of airdrop received
-   *
-   * @generated from field: code.transaction.v2.AirdropType airdrop_type = 1;
-   */
-  airdropType = AirdropType.UNKNOWN;
-
-  /**
-   * Exchange data relating to the amount of Kin and fiat value of the airdrop
-   *
-   * @generated from field: code.transaction.v2.ExchangeData exchange_data = 2;
-   */
-  exchangeData?: ExchangeData;
-
-  /**
-   * Time the airdrop was received
-   *
-   * @generated from field: google.protobuf.Timestamp timestamp = 3;
-   */
-  timestamp?: Timestamp;
-
-  constructor(data?: PartialMessage<AirdropReceived>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.messaging.v1.AirdropReceived";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "airdrop_type", kind: "enum", T: proto3.getEnumType(AirdropType) },
-    { no: 2, name: "exchange_data", kind: "message", T: ExchangeData },
-    { no: 3, name: "timestamp", kind: "message", T: Timestamp },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): AirdropReceived {
-    return new AirdropReceived().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): AirdropReceived {
-    return new AirdropReceived().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): AirdropReceived {
-    return new AirdropReceived().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: AirdropReceived | PlainMessage<AirdropReceived> | undefined, b: AirdropReceived | PlainMessage<AirdropReceived> | undefined): boolean {
-    return proto3.util.equals(AirdropReceived, a, b);
-  }
-}
-
-/**
  * @generated from message code.messaging.v1.Message
  */
 export class Message extends Message$1<Message> {
@@ -1034,12 +977,6 @@ export class Message extends Message$1<Message> {
      */
     value: WebhookCalled;
     case: "webhookCalled";
-  } | {
-    /**
-     * @generated from field: code.messaging.v1.AirdropReceived airdrop_received = 4;
-     */
-    value: AirdropReceived;
-    case: "airdropReceived";
   } | { case: undefined; value?: undefined } = { case: undefined };
 
   constructor(data?: PartialMessage<Message>) {
@@ -1058,7 +995,6 @@ export class Message extends Message$1<Message> {
     { no: 7, name: "client_rejected_payment", kind: "message", T: ClientRejectedPayment, oneof: "kind" },
     { no: 8, name: "intent_submitted", kind: "message", T: IntentSubmitted, oneof: "kind" },
     { no: 9, name: "webhook_called", kind: "message", T: WebhookCalled, oneof: "kind" },
-    { no: 4, name: "airdrop_received", kind: "message", T: AirdropReceived, oneof: "kind" },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Message {

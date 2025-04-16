@@ -25,6 +25,8 @@ const (
 
 // AccountType associates a type to an account, which infers how an account is used
 // within the Code ecosystem.
+//
+// todo: Deprecate legacy accounts (temporary, buckets, legacy primary, relationship)
 type AccountType int32
 
 const (

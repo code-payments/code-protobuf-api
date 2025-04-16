@@ -22,7 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CurrencyClient interface {
-	// GetAllRates returns the exchange rates for Kin against all available currencies
+	// GetAllRates returns the exchange rates for the core mint token against all
+	// available currencies
 	GetAllRates(ctx context.Context, in *GetAllRatesRequest, opts ...grpc.CallOption) (*GetAllRatesResponse, error)
 }
 
@@ -47,7 +48,8 @@ func (c *currencyClient) GetAllRates(ctx context.Context, in *GetAllRatesRequest
 // All implementations must embed UnimplementedCurrencyServer
 // for forward compatibility
 type CurrencyServer interface {
-	// GetAllRates returns the exchange rates for Kin against all available currencies
+	// GetAllRates returns the exchange rates for the core mint token against all
+	// available currencies
 	GetAllRates(context.Context, *GetAllRatesRequest) (*GetAllRatesResponse, error)
 	mustEmbedUnimplementedCurrencyServer()
 }

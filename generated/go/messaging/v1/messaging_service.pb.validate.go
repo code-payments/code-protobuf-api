@@ -16,8 +16,6 @@ import (
 	"unicode/utf8"
 
 	"github.com/golang/protobuf/ptypes"
-
-	transaction "github.com/code-payments/code-protobuf-api/generated/go/transaction/v2"
 )
 
 // ensure the imports are used
@@ -33,8 +31,6 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = ptypes.DynamicAny{}
-
-	_ = transaction.AirdropType(0)
 )
 
 // Validate checks the field values on OpenMessageStreamRequest with the rules
@@ -1713,106 +1709,6 @@ var _ interface {
 	ErrorName() string
 } = WebhookCalledValidationError{}
 
-// Validate checks the field values on AirdropReceived with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *AirdropReceived) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	if _, ok := _AirdropReceived_AirdropType_NotInLookup[m.GetAirdropType()]; ok {
-		return AirdropReceivedValidationError{
-			field:  "AirdropType",
-			reason: "value must not be in list [0]",
-		}
-	}
-
-	if m.GetExchangeData() == nil {
-		return AirdropReceivedValidationError{
-			field:  "ExchangeData",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetExchangeData()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return AirdropReceivedValidationError{
-				field:  "ExchangeData",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetTimestamp() == nil {
-		return AirdropReceivedValidationError{
-			field:  "Timestamp",
-			reason: "value is required",
-		}
-	}
-
-	return nil
-}
-
-// AirdropReceivedValidationError is the validation error returned by
-// AirdropReceived.Validate if the designated constraints aren't met.
-type AirdropReceivedValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e AirdropReceivedValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e AirdropReceivedValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e AirdropReceivedValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e AirdropReceivedValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e AirdropReceivedValidationError) ErrorName() string { return "AirdropReceivedValidationError" }
-
-// Error satisfies the builtin error interface
-func (e AirdropReceivedValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sAirdropReceived.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = AirdropReceivedValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = AirdropReceivedValidationError{}
-
-var _AirdropReceived_AirdropType_NotInLookup = map[transaction.AirdropType]struct{}{
-	0: {},
-}
-
 // Validate checks the field values on Message with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *Message) Validate() error {
@@ -1908,18 +1804,6 @@ func (m *Message) Validate() error {
 			if err := v.Validate(); err != nil {
 				return MessageValidationError{
 					field:  "WebhookCalled",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	case *Message_AirdropReceived:
-
-		if v, ok := interface{}(m.GetAirdropReceived()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return MessageValidationError{
-					field:  "AirdropReceived",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}

@@ -64,7 +64,8 @@ export class GetAllRatesResponse extends Message<GetAllRatesResponse> {
   asOf?: Timestamp;
 
   /**
-   * The price of 1 Kin in different currencies, keyed on 3- or 4- letter lowercase currency code.
+   * The price of 1 core mint token in different currencies, keyed on 3- or 4-
+   * letter lowercase currency code.
    *
    * @generated from field: map<string, double> rates = 3;
    */

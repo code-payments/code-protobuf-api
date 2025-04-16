@@ -127,7 +127,8 @@ type GetAllRatesResponse struct {
 	Result GetAllRatesResponse_Result `protobuf:"varint,1,opt,name=result,proto3,enum=code.currency.v1.GetAllRatesResponse_Result" json:"result,omitempty"`
 	// The time the exchange rates were observed
 	AsOf *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=as_of,json=asOf,proto3" json:"as_of,omitempty"`
-	// The price of 1 Kin in different currencies, keyed on 3- or 4- letter lowercase currency code.
+	// The price of 1 core mint token in different currencies, keyed on 3- or 4-
+	// letter lowercase currency code.
 	Rates map[string]float64 `protobuf:"bytes,3,rep,name=rates,proto3" json:"rates,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"fixed64,2,opt,name=value,proto3"`
 }
 
