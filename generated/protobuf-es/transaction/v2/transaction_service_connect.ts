@@ -92,7 +92,7 @@ export const Transaction = {
       kind: MethodKind.Unary,
     },
     /**
-     * Airdrop airdrops Kin to the requesting account
+     * Airdrop airdrops core mint tokens to the requesting account
      *
      * @generated from rpc code.transaction.v2.Transaction.Airdrop
      */
@@ -121,8 +121,8 @@ export const Transaction = {
      *   4. Dynamic swap instruction
      *   5. SwapValidator::PostSwap
      *
-     * Note: Currently limited to swapping USDC to Kin.
-     * Note: Kin is deposited into the token account derived from the VM deposit PDA of the owner account.
+     * Note: Currently limited to swapping USDC to core mint tokens.
+     * Note: Core mint tokens are deposited into the token account derived from the VM deposit PDA of the owner account.
      *
      * @generated from rpc code.transaction.v2.Transaction.Swap
      */
@@ -134,7 +134,7 @@ export const Transaction = {
     },
     /**
      * DeclareFiatOnrampPurchaseAttempt is called whenever a user attempts to use a fiat
-     * onramp to purchase crypto for use in Code.
+     * onramp to purchase core mint tokens for use in Code.
      *
      * @generated from rpc code.transaction.v2.Transaction.DeclareFiatOnrampPurchaseAttempt
      */

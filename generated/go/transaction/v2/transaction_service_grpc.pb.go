@@ -66,7 +66,7 @@ type TransactionClient interface {
 	// CanWithdrawToAccount provides hints to clients for submitting withdraw intents.
 	// The RPC indicates if a withdrawal is possible, and how it should be performed.
 	CanWithdrawToAccount(ctx context.Context, in *CanWithdrawToAccountRequest, opts ...grpc.CallOption) (*CanWithdrawToAccountResponse, error)
-	// Airdrop airdrops Kin to the requesting account
+	// Airdrop airdrops core mint tokens to the requesting account
 	Airdrop(ctx context.Context, in *AirdropRequest, opts ...grpc.CallOption) (*AirdropResponse, error)
 	// Swap performs an on-chain swap. The high-level flow mirrors SubmitIntent
 	// closely. However, due to the time-sensitive nature and unreliability of
@@ -87,11 +87,11 @@ type TransactionClient interface {
 	//  4. Dynamic swap instruction
 	//  5. SwapValidator::PostSwap
 	//
-	// Note: Currently limited to swapping USDC to Kin.
-	// Note: Kin is deposited into the token account derived from the VM deposit PDA of the owner account.
+	// Note: Currently limited to swapping USDC to core mint tokens.
+	// Note: Core mint tokens are deposited into the token account derived from the VM deposit PDA of the owner account.
 	Swap(ctx context.Context, opts ...grpc.CallOption) (Transaction_SwapClient, error)
 	// DeclareFiatOnrampPurchaseAttempt is called whenever a user attempts to use a fiat
-	// onramp to purchase crypto for use in Code.
+	// onramp to purchase core mint tokens for use in Code.
 	DeclareFiatOnrampPurchaseAttempt(ctx context.Context, in *DeclareFiatOnrampPurchaseAttemptRequest, opts ...grpc.CallOption) (*DeclareFiatOnrampPurchaseAttemptResponse, error)
 }
 
@@ -258,7 +258,7 @@ type TransactionServer interface {
 	// CanWithdrawToAccount provides hints to clients for submitting withdraw intents.
 	// The RPC indicates if a withdrawal is possible, and how it should be performed.
 	CanWithdrawToAccount(context.Context, *CanWithdrawToAccountRequest) (*CanWithdrawToAccountResponse, error)
-	// Airdrop airdrops Kin to the requesting account
+	// Airdrop airdrops core mint tokens to the requesting account
 	Airdrop(context.Context, *AirdropRequest) (*AirdropResponse, error)
 	// Swap performs an on-chain swap. The high-level flow mirrors SubmitIntent
 	// closely. However, due to the time-sensitive nature and unreliability of
@@ -279,11 +279,11 @@ type TransactionServer interface {
 	//  4. Dynamic swap instruction
 	//  5. SwapValidator::PostSwap
 	//
-	// Note: Currently limited to swapping USDC to Kin.
-	// Note: Kin is deposited into the token account derived from the VM deposit PDA of the owner account.
+	// Note: Currently limited to swapping USDC to core mint tokens.
+	// Note: Core mint tokens are deposited into the token account derived from the VM deposit PDA of the owner account.
 	Swap(Transaction_SwapServer) error
 	// DeclareFiatOnrampPurchaseAttempt is called whenever a user attempts to use a fiat
-	// onramp to purchase crypto for use in Code.
+	// onramp to purchase core mint tokens for use in Code.
 	DeclareFiatOnrampPurchaseAttempt(context.Context, *DeclareFiatOnrampPurchaseAttemptRequest) (*DeclareFiatOnrampPurchaseAttemptResponse, error)
 	mustEmbedUnimplementedTransactionServer()
 }

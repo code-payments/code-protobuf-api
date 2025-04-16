@@ -840,7 +840,7 @@ export class AirdropRequest extends Message<AirdropRequest> {
   airdropType = AirdropType.UNKNOWN;
 
   /**
-   * The owner account to airdrop Kin to
+   * The owner account to airdrop core mint tokens to
    *
    * @generated from field: code.common.v1.SolanaAccountId owner = 2;
    */
@@ -895,7 +895,7 @@ export class AirdropResponse extends Message<AirdropResponse> {
   result = AirdropResponse_Result.OK;
 
   /**
-   * Exchange data for the amount of Kin airdropped when successful
+   * Exchange data for the amount of core mint tokens airdropped when successful
    *
    * @generated from field: code.transaction.v2.ExchangeData exchange_data = 2;
    */
@@ -1648,7 +1648,7 @@ export class Metadata extends Message<Metadata> {
 
 /**
  * Open a set of accounts. Currently, clients should only use this for new users
- * to open all required accounts up front (buckets, incoming, and outgoing).
+ * to open all required accounts up front..
  *
  * Action Spec:
  *
@@ -1690,9 +1690,19 @@ export class OpenAccountsMetadata extends Message<OpenAccountsMetadata> {
 /**
  * Send a payment to a destination account publicly.
  *
- * Action Spec:
+ * Action Spec (Payment, Withdrawal):
  *
  * actions = [NoPrivacyTransferAction(PRIMARY, destination, ExchangeData.Quarks)]
+ *
+ * Action Spec (Remote Send):
+ *
+ * actions = [
+ *   OpenAccountAction(REMOTE_SEND_GIFT_CARD),
+ *   NoPrivacyTransferAction(PRIMARY, REMOTE_SEND_GIFT_CARD, ExchangeData.Quarks),
+ *   NoPrivacyWithdrawAction(REMOTE_SEND_GIFT_CARD, PRIMARY, ExchangeData.Quarks),
+ * ]
+ *
+ * todo: Possibly use a different action type for deferred closing?
  *
  * @generated from message code.transaction.v2.SendPublicPaymentMetadata
  */
@@ -1706,8 +1716,7 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
   source?: SolanaAccountId;
 
   /**
-   * The destination token account to send funds to. This cannot be a Code
-   * temporary account.
+   * The destination token account to send funds to.
    *
    * @generated from field: code.common.v1.SolanaAccountId destination = 1;
    */
@@ -1727,6 +1736,13 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
    */
   isWithdrawal = false;
 
+  /**
+   * Is the payment going to a new gift card? Note is_withdrawal must be false.
+   *
+   * @generated from field: bool is_remote_send = 5;
+   */
+  isRemoteSend = false;
+
   constructor(data?: PartialMessage<SendPublicPaymentMetadata>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1739,6 +1755,7 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
     { no: 1, name: "destination", kind: "message", T: SolanaAccountId },
     { no: 2, name: "exchange_data", kind: "message", T: ExchangeData },
     { no: 3, name: "is_withdrawal", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 5, name: "is_remote_send", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SendPublicPaymentMetadata {
@@ -1760,15 +1777,11 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
 
 /**
  * Receive funds into a user-owned account publicly. All use cases of this intent
- * close the account, so all funds must be moved. Use this intent to receive payments
- * from an account not owned by a user's 12 words into a temporary incoming account,
- * which will guarantee privacy upgradeability.
+ * close the account, so all funds must be moved.
  *
  * Action Spec (Remote Send):
  *
- * actions = [NoPrivacyWithdrawAction(REMOTE_SEND_GIFT_CARD, TEMPORARY_INCOMING[latest_index], quarks)]
- *
- * TODO: This requires a new implementation for the VM
+ * actions = [NoPrivacyWithdrawAction(REMOTE_SEND_GIFT_CARD, PRIMARY, quarks)]
  *
  * @generated from message code.transaction.v2.ReceivePaymentsPubliclyMetadata
  */
@@ -1781,7 +1794,7 @@ export class ReceivePaymentsPubliclyMetadata extends Message<ReceivePaymentsPubl
   source?: SolanaAccountId;
 
   /**
-   * The exact amount of Kin in quarks being received
+   * The exact amount of core mint quarks being received
    *
    * @generated from field: uint64 quarks = 2;
    */
@@ -2038,7 +2051,7 @@ export class NoPrivacyTransferAction extends Message<NoPrivacyTransferAction> {
   destination?: SolanaAccountId;
 
   /**
-   * The Kin quark amount to transfer
+   * The core mint quark amount to transfer
    *
    * @generated from field: uint64 amount = 4;
    */
@@ -2103,7 +2116,7 @@ export class NoPrivacyWithdrawAction extends Message<NoPrivacyWithdrawAction> {
   destination?: SolanaAccountId;
 
   /**
-   * The intended Kin quark amount to withdraw
+   * The intended core mint quark amount to withdraw
    *
    * @generated from field: uint64 amount = 4;
    */
@@ -2177,7 +2190,7 @@ export class FeePaymentAction extends Message<FeePaymentAction> {
   source?: SolanaAccountId;
 
   /**
-   * The Kin quark amount to transfer
+   * The core mint quark amount to transfer
    *
    * @generated from field: uint64 amount = 3;
    */
@@ -2752,7 +2765,7 @@ proto3.util.setEnumType(DeniedErrorDetails_Code, "code.transaction.v2.DeniedErro
 ]);
 
 /**
- * ExchangeData defines an amount of Kin with currency exchange data
+ * ExchangeData defines an amount of crypto with currency exchange data
  *
  * @generated from message code.transaction.v2.ExchangeData
  */
@@ -2872,7 +2885,7 @@ export class ExchangeDataWithoutRate extends Message<ExchangeDataWithoutRate> {
  */
 export class AdditionalFeePayment extends Message<AdditionalFeePayment> {
   /**
-   * Destination Kin token account where the fee payment will be made
+   * Destination token account where the fee payment will be made
    *
    * @generated from field: code.common.v1.SolanaAccountId destination = 1;
    */

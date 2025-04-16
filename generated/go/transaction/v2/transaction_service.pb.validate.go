@@ -1616,6 +1616,8 @@ func (m *SendPublicPaymentMetadata) Validate() error {
 
 	// no validation rules for IsWithdrawal
 
+	// no validation rules for IsRemoteSend
+
 	return nil
 }
 
