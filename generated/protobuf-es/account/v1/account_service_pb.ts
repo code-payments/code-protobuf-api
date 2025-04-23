@@ -444,16 +444,6 @@ export class TokenAccountInfo extends Message<TokenAccountInfo> {
   blockchainState = TokenAccountInfo_BlockchainState.UNKNOWN;
 
   /**
-   * For temporary incoming accounts only. Flag indicates whether client must
-   * actively try rotating it by issuing a ReceivePaymentsPrivately intent. In
-   * general, clients should wait as long as possible until this flag is true
-   * or requiring the funds to send their next payment.
-   *
-   * @generated from field: bool must_rotate = 10;
-   */
-  mustRotate = false;
-
-  /**
    * Whether an account is claimed. This only applies to relevant account types
    * (eg. REMOTE_SEND_GIFT_CARD).
    *
@@ -508,7 +498,6 @@ export class TokenAccountInfo extends Message<TokenAccountInfo> {
     { no: 7, name: "balance", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
     { no: 8, name: "management_state", kind: "enum", T: proto3.getEnumType(TokenAccountInfo_ManagementState) },
     { no: 9, name: "blockchain_state", kind: "enum", T: proto3.getEnumType(TokenAccountInfo_BlockchainState) },
-    { no: 10, name: "must_rotate", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 11, name: "claim_state", kind: "enum", T: proto3.getEnumType(TokenAccountInfo_ClaimState) },
     { no: 12, name: "original_exchange_data", kind: "message", T: ExchangeData },
     { no: 13, name: "mint", kind: "message", T: SolanaAccountId },

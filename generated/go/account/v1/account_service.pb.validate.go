@@ -637,8 +637,6 @@ func (m *TokenAccountInfo) Validate() error {
 
 	// no validation rules for BlockchainState
 
-	// no validation rules for MustRotate
-
 	// no validation rules for ClaimState
 
 	if v, ok := interface{}(m.GetOriginalExchangeData()).(interface{ Validate() error }); ok {
