@@ -1699,7 +1699,7 @@ export class OpenAccountsMetadata extends Message<OpenAccountsMetadata> {
  * actions = [
  *   OpenAccountAction(REMOTE_SEND_GIFT_CARD),
  *   NoPrivacyTransferAction(PRIMARY, REMOTE_SEND_GIFT_CARD, ExchangeData.Quarks),
- *   NoPrivacyWithdrawAction(REMOTE_SEND_GIFT_CARD, PRIMARY, ExchangeData.Quarks),
+ *   NoPrivacyWithdrawAction(REMOTE_SEND_GIFT_CARD, PRIMARY, ExchangeData.Quarks, is_auto_return=true),
  * ]
  *
  * todo: Possibly use a different action type for deferred closing?
@@ -2130,6 +2130,15 @@ export class NoPrivacyWithdrawAction extends Message<NoPrivacyWithdrawAction> {
    */
   shouldClose = false;
 
+  /**
+   * Whether this action is for an auto-return, which client allows server to defer
+   * scheduling at its own discretion to return funds back to the owner (to their primary
+   * account) that funded source.
+   *
+   * @generated from field: bool is_auto_return = 6;
+   */
+  isAutoReturn = false;
+
   constructor(data?: PartialMessage<NoPrivacyWithdrawAction>) {
     super();
     proto3.util.initPartial(data, this);
@@ -2143,6 +2152,7 @@ export class NoPrivacyWithdrawAction extends Message<NoPrivacyWithdrawAction> {
     { no: 3, name: "destination", kind: "message", T: SolanaAccountId },
     { no: 4, name: "amount", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
     { no: 5, name: "should_close", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 6, name: "is_auto_return", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): NoPrivacyWithdrawAction {

@@ -2258,6 +2258,8 @@ func (m *NoPrivacyWithdrawAction) Validate() error {
 		}
 	}
 
+	// no validation rules for IsAutoReturn
+
 	return nil
 }
 
