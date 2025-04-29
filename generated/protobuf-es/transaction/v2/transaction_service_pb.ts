@@ -1703,12 +1703,20 @@ export enum VoidGiftCardResponse_Result {
    * @generated from enum value: CLAIMED_BY_OTHER_USER = 2;
    */
   CLAIMED_BY_OTHER_USER = 2,
+
+  /**
+   * The gift card doesn't exist
+   *
+   * @generated from enum value: NOT_FOUND = 3;
+   */
+  NOT_FOUND = 3,
 }
 // Retrieve enum metadata with: proto3.getEnumType(VoidGiftCardResponse_Result)
 proto3.util.setEnumType(VoidGiftCardResponse_Result, "code.transaction.v2.VoidGiftCardResponse.Result", [
   { no: 0, name: "OK" },
   { no: 1, name: "DENIED" },
   { no: 2, name: "CLAIMED_BY_OTHER_USER" },
+  { no: 3, name: "NOT_FOUND" },
 ]);
 
 /**

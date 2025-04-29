@@ -481,6 +481,8 @@ message VoidGiftCardResponse {
         DENIED = 1;
         // A different owner account than the issuer claimed the gift card
         CLAIMED_BY_OTHER_USER = 2;
+        // The gift card doesn't exist
+        NOT_FOUND = 3;
     }
 }
 
