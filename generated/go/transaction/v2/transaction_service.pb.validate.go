@@ -1903,8 +1903,6 @@ func (m *ReceivePaymentsPubliclyMetadata) Validate() error {
 		}
 	}
 
-	// no validation rules for IsIssuerVoidingGiftCard
-
 	if v, ok := interface{}(m.GetExchangeData()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ReceivePaymentsPubliclyMetadataValidationError{

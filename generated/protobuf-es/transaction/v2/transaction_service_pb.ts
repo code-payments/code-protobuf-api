@@ -1941,16 +1941,6 @@ export class ReceivePaymentsPubliclyMetadata extends Message<ReceivePaymentsPubl
   isRemoteSend = false;
 
   /**
-   * If is_remote_send is true, is the gift card being voided? The user owner
-   * account's 12 words that issued the gift card may only set this flag to true.
-   * Functionally, this doesn't affect the intent, but rather if we decide to show
-   * it in a user-friendly payment history.
-   *
-   * @generated from field: bool is_issuer_voiding_gift_card = 4;
-   */
-  isIssuerVoidingGiftCard = false;
-
-  /**
    * If is_remote_send is true, the original exchange data that was provided as
    * part of creating the gift card account. This is purely a server-provided value.
    * SubmitIntent will disallow this being set.
@@ -1970,7 +1960,6 @@ export class ReceivePaymentsPubliclyMetadata extends Message<ReceivePaymentsPubl
     { no: 1, name: "source", kind: "message", T: SolanaAccountId },
     { no: 2, name: "quarks", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
     { no: 3, name: "is_remote_send", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 4, name: "is_issuer_voiding_gift_card", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 5, name: "exchange_data", kind: "message", T: ExchangeData },
   ]);
 
