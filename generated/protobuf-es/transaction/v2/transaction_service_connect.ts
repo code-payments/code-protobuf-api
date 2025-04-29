@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { AirdropRequest, AirdropResponse, CanWithdrawToAccountRequest, CanWithdrawToAccountResponse, DeclareFiatOnrampPurchaseAttemptRequest, DeclareFiatOnrampPurchaseAttemptResponse, GetIntentMetadataRequest, GetIntentMetadataResponse, GetLimitsRequest, GetLimitsResponse, SubmitIntentRequest, SubmitIntentResponse, SwapRequest, SwapResponse } from "./transaction_service_pb";
+import { AirdropRequest, AirdropResponse, CanWithdrawToAccountRequest, CanWithdrawToAccountResponse, DeclareFiatOnrampPurchaseAttemptRequest, DeclareFiatOnrampPurchaseAttemptResponse, GetIntentMetadataRequest, GetIntentMetadataResponse, GetLimitsRequest, GetLimitsResponse, SubmitIntentRequest, SubmitIntentResponse, SwapRequest, SwapResponse, VoidGiftCardRequest, VoidGiftCardResponse } from "./transaction_service_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -142,6 +142,22 @@ export const Transaction = {
       name: "DeclareFiatOnrampPurchaseAttempt",
       I: DeclareFiatOnrampPurchaseAttemptRequest,
       O: DeclareFiatOnrampPurchaseAttemptResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * VoidGiftCard voids a gift card account by returning the funds to the funds back
+     * to the issuer via the auto-return action if it hasn't been claimed or already
+     * returned.
+     *
+     * Note: The RPC is idempotent. If the user already claimed/voided the gift card, or
+     *       it is close to or is auto-returned, then OK will be returned.
+     *
+     * @generated from rpc code.transaction.v2.Transaction.VoidGiftCard
+     */
+    voidGiftCard: {
+      name: "VoidGiftCard",
+      I: VoidGiftCardRequest,
+      O: VoidGiftCardResponse,
       kind: MethodKind.Unary,
     },
   }

@@ -1588,6 +1588,130 @@ proto3.util.setEnumType(DeclareFiatOnrampPurchaseAttemptResponse_Result, "code.t
 ]);
 
 /**
+ * @generated from message code.transaction.v2.VoidGiftCardRequest
+ */
+export class VoidGiftCardRequest extends Message<VoidGiftCardRequest> {
+  /**
+   * The owner account that issued the gift card account
+   *
+   * @generated from field: code.common.v1.SolanaAccountId owner = 1;
+   */
+  owner?: SolanaAccountId;
+
+  /**
+   * The vault of the gift card account to void
+   *
+   * @generated from field: code.common.v1.SolanaAccountId gift_card_vault = 2;
+   */
+  giftCardVault?: SolanaAccountId;
+
+  /**
+   * The signature is of serialize(VoidGiftCardRequest) without this field set using
+   * the private key of the owner account. This provides an authentication mechanism
+   * to the RPC.
+   *
+   * @generated from field: code.common.v1.Signature signature = 3;
+   */
+  signature?: Signature;
+
+  constructor(data?: PartialMessage<VoidGiftCardRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.transaction.v2.VoidGiftCardRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "owner", kind: "message", T: SolanaAccountId },
+    { no: 2, name: "gift_card_vault", kind: "message", T: SolanaAccountId },
+    { no: 3, name: "signature", kind: "message", T: Signature },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): VoidGiftCardRequest {
+    return new VoidGiftCardRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): VoidGiftCardRequest {
+    return new VoidGiftCardRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): VoidGiftCardRequest {
+    return new VoidGiftCardRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: VoidGiftCardRequest | PlainMessage<VoidGiftCardRequest> | undefined, b: VoidGiftCardRequest | PlainMessage<VoidGiftCardRequest> | undefined): boolean {
+    return proto3.util.equals(VoidGiftCardRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message code.transaction.v2.VoidGiftCardResponse
+ */
+export class VoidGiftCardResponse extends Message<VoidGiftCardResponse> {
+  /**
+   * @generated from field: code.transaction.v2.VoidGiftCardResponse.Result result = 1;
+   */
+  result = VoidGiftCardResponse_Result.OK;
+
+  constructor(data?: PartialMessage<VoidGiftCardResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.transaction.v2.VoidGiftCardResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "result", kind: "enum", T: proto3.getEnumType(VoidGiftCardResponse_Result) },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): VoidGiftCardResponse {
+    return new VoidGiftCardResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): VoidGiftCardResponse {
+    return new VoidGiftCardResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): VoidGiftCardResponse {
+    return new VoidGiftCardResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: VoidGiftCardResponse | PlainMessage<VoidGiftCardResponse> | undefined, b: VoidGiftCardResponse | PlainMessage<VoidGiftCardResponse> | undefined): boolean {
+    return proto3.util.equals(VoidGiftCardResponse, a, b);
+  }
+}
+
+/**
+ * @generated from enum code.transaction.v2.VoidGiftCardResponse.Result
+ */
+export enum VoidGiftCardResponse_Result {
+  /**
+   * @generated from enum value: OK = 0;
+   */
+  OK = 0,
+
+  /**
+   * The owner account didn't issue the gift card accoun
+   *
+   * @generated from enum value: DENIED = 1;
+   */
+  DENIED = 1,
+
+  /**
+   * A different owner account than the issuer claimed the gift card
+   *
+   * @generated from enum value: CLAIMED_BY_OTHER_USER = 2;
+   */
+  CLAIMED_BY_OTHER_USER = 2,
+}
+// Retrieve enum metadata with: proto3.getEnumType(VoidGiftCardResponse_Result)
+proto3.util.setEnumType(VoidGiftCardResponse_Result, "code.transaction.v2.VoidGiftCardResponse.Result", [
+  { no: 0, name: "OK" },
+  { no: 1, name: "DENIED" },
+  { no: 2, name: "CLAIMED_BY_OTHER_USER" },
+]);
+
+/**
  * Metadata describes the high-level details of an intent
  *
  * @generated from message code.transaction.v2.Metadata

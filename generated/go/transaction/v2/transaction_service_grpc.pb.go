@@ -93,6 +93,14 @@ type TransactionClient interface {
 	// DeclareFiatOnrampPurchaseAttempt is called whenever a user attempts to use a fiat
 	// onramp to purchase core mint tokens for use in Code.
 	DeclareFiatOnrampPurchaseAttempt(ctx context.Context, in *DeclareFiatOnrampPurchaseAttemptRequest, opts ...grpc.CallOption) (*DeclareFiatOnrampPurchaseAttemptResponse, error)
+	// VoidGiftCard voids a gift card account by returning the funds to the funds back
+	// to the issuer via the auto-return action if it hasn't been claimed or already
+	// returned.
+	//
+	// Note: The RPC is idempotent. If the user already claimed/voided the gift card, or
+	//
+	//	it is close to or is auto-returned, then OK will be returned.
+	VoidGiftCard(ctx context.Context, in *VoidGiftCardRequest, opts ...grpc.CallOption) (*VoidGiftCardResponse, error)
 }
 
 type transactionClient struct {
@@ -210,6 +218,15 @@ func (c *transactionClient) DeclareFiatOnrampPurchaseAttempt(ctx context.Context
 	return out, nil
 }
 
+func (c *transactionClient) VoidGiftCard(ctx context.Context, in *VoidGiftCardRequest, opts ...grpc.CallOption) (*VoidGiftCardResponse, error) {
+	out := new(VoidGiftCardResponse)
+	err := c.cc.Invoke(ctx, "/code.transaction.v2.Transaction/VoidGiftCard", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TransactionServer is the server API for Transaction service.
 // All implementations must embed UnimplementedTransactionServer
 // for forward compatibility
@@ -285,6 +302,14 @@ type TransactionServer interface {
 	// DeclareFiatOnrampPurchaseAttempt is called whenever a user attempts to use a fiat
 	// onramp to purchase core mint tokens for use in Code.
 	DeclareFiatOnrampPurchaseAttempt(context.Context, *DeclareFiatOnrampPurchaseAttemptRequest) (*DeclareFiatOnrampPurchaseAttemptResponse, error)
+	// VoidGiftCard voids a gift card account by returning the funds to the funds back
+	// to the issuer via the auto-return action if it hasn't been claimed or already
+	// returned.
+	//
+	// Note: The RPC is idempotent. If the user already claimed/voided the gift card, or
+	//
+	//	it is close to or is auto-returned, then OK will be returned.
+	VoidGiftCard(context.Context, *VoidGiftCardRequest) (*VoidGiftCardResponse, error)
 	mustEmbedUnimplementedTransactionServer()
 }
 
@@ -312,6 +337,9 @@ func (UnimplementedTransactionServer) Swap(Transaction_SwapServer) error {
 }
 func (UnimplementedTransactionServer) DeclareFiatOnrampPurchaseAttempt(context.Context, *DeclareFiatOnrampPurchaseAttemptRequest) (*DeclareFiatOnrampPurchaseAttemptResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeclareFiatOnrampPurchaseAttempt not implemented")
+}
+func (UnimplementedTransactionServer) VoidGiftCard(context.Context, *VoidGiftCardRequest) (*VoidGiftCardResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VoidGiftCard not implemented")
 }
 func (UnimplementedTransactionServer) mustEmbedUnimplementedTransactionServer() {}
 
@@ -468,6 +496,24 @@ func _Transaction_DeclareFiatOnrampPurchaseAttempt_Handler(srv interface{}, ctx 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Transaction_VoidGiftCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VoidGiftCardRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TransactionServer).VoidGiftCard(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/code.transaction.v2.Transaction/VoidGiftCard",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TransactionServer).VoidGiftCard(ctx, req.(*VoidGiftCardRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Transaction_ServiceDesc is the grpc.ServiceDesc for Transaction service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -494,6 +540,10 @@ var Transaction_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeclareFiatOnrampPurchaseAttempt",
 			Handler:    _Transaction_DeclareFiatOnrampPurchaseAttempt_Handler,
+		},
+		{
+			MethodName: "VoidGiftCard",
+			Handler:    _Transaction_VoidGiftCard_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

@@ -1385,6 +1385,193 @@ var _ interface {
 	ErrorName() string
 } = DeclareFiatOnrampPurchaseAttemptResponseValidationError{}
 
+// Validate checks the field values on VoidGiftCardRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *VoidGiftCardRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetOwner() == nil {
+		return VoidGiftCardRequestValidationError{
+			field:  "Owner",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return VoidGiftCardRequestValidationError{
+				field:  "Owner",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetGiftCardVault() == nil {
+		return VoidGiftCardRequestValidationError{
+			field:  "GiftCardVault",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetGiftCardVault()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return VoidGiftCardRequestValidationError{
+				field:  "GiftCardVault",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetSignature() == nil {
+		return VoidGiftCardRequestValidationError{
+			field:  "Signature",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return VoidGiftCardRequestValidationError{
+				field:  "Signature",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// VoidGiftCardRequestValidationError is the validation error returned by
+// VoidGiftCardRequest.Validate if the designated constraints aren't met.
+type VoidGiftCardRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e VoidGiftCardRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e VoidGiftCardRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e VoidGiftCardRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e VoidGiftCardRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e VoidGiftCardRequestValidationError) ErrorName() string {
+	return "VoidGiftCardRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e VoidGiftCardRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sVoidGiftCardRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = VoidGiftCardRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = VoidGiftCardRequestValidationError{}
+
+// Validate checks the field values on VoidGiftCardResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *VoidGiftCardResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Result
+
+	return nil
+}
+
+// VoidGiftCardResponseValidationError is the validation error returned by
+// VoidGiftCardResponse.Validate if the designated constraints aren't met.
+type VoidGiftCardResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e VoidGiftCardResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e VoidGiftCardResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e VoidGiftCardResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e VoidGiftCardResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e VoidGiftCardResponseValidationError) ErrorName() string {
+	return "VoidGiftCardResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e VoidGiftCardResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sVoidGiftCardResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = VoidGiftCardResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = VoidGiftCardResponseValidationError{}
+
 // Validate checks the field values on Metadata with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *Metadata) Validate() error {
