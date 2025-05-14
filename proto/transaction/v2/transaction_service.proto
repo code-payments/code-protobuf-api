@@ -251,6 +251,9 @@ message GetLimitsResponse {
 
     // Buy module limits keyed by currency
     map<string, BuyModuleLimit> buy_module_limits_by_currency = 5;
+
+    // The amount of USD transacted since the consumption timestamp
+    double usd_transacted = 6 [(validate.rules).double.gte = 0];;
 }
 
 message CanWithdrawToAccountRequest {

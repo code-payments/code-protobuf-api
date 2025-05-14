@@ -563,6 +563,13 @@ func (m *GetLimitsResponse) Validate() error {
 
 	// no validation rules for BuyModuleLimitsByCurrency
 
+	if m.GetUsdTransacted() < 0 {
+		return GetLimitsResponseValidationError{
+			field:  "UsdTransacted",
+			reason: "value must be greater than or equal to 0",
+		}
+	}
+
 	return nil
 }
 

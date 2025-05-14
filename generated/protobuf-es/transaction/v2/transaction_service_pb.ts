@@ -650,6 +650,13 @@ export class GetLimitsResponse extends Message<GetLimitsResponse> {
    */
   buyModuleLimitsByCurrency: { [key: string]: BuyModuleLimit } = {};
 
+  /**
+   * The amount of USD transacted since the consumption timestamp
+   *
+   * @generated from field: double usd_transacted = 6;
+   */
+  usdTransacted = 0;
+
   constructor(data?: PartialMessage<GetLimitsResponse>) {
     super();
     proto3.util.initPartial(data, this);
@@ -662,6 +669,7 @@ export class GetLimitsResponse extends Message<GetLimitsResponse> {
     { no: 2, name: "send_limits_by_currency", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: SendLimit} },
     { no: 4, name: "micro_payment_limits_by_currency", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: MicroPaymentLimit} },
     { no: 5, name: "buy_module_limits_by_currency", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: BuyModuleLimit} },
+    { no: 6, name: "usd_transacted", kind: "scalar", T: 1 /* ScalarType.DOUBLE */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetLimitsResponse {
