@@ -68,31 +68,6 @@ type TransactionClient interface {
 	CanWithdrawToAccount(ctx context.Context, in *CanWithdrawToAccountRequest, opts ...grpc.CallOption) (*CanWithdrawToAccountResponse, error)
 	// Airdrop airdrops core mint tokens to the requesting account
 	Airdrop(ctx context.Context, in *AirdropRequest, opts ...grpc.CallOption) (*AirdropResponse, error)
-	// Swap performs an on-chain swap. The high-level flow mirrors SubmitIntent
-	// closely. However, due to the time-sensitive nature and unreliability of
-	// swaps, they do not fit within the broader intent system. This results in
-	// a few key differences:
-	//   - Transactions are submitted on a best-effort basis outside of the Code
-	//     Sequencer within the RPC handler
-	//   - Balance changes are applied after the transaction has finalized
-	//   - Transactions use recent blockhashes over a nonce
-	//
-	// SubmitIntent also operates on VM virtual instructions, whereas Swap uses
-	// Solana transactions.
-	//
-	// The transaction will have the following instruction format:
-	//  1. ComputeBudget::SetComputeUnitLimit
-	//  2. ComputeBudget::SetComputeUnitPrice
-	//  3. SwapValidator::PreSwap
-	//  4. Dynamic swap instruction
-	//  5. SwapValidator::PostSwap
-	//
-	// Note: Currently limited to swapping USDC to core mint tokens.
-	// Note: Core mint tokens are deposited into the token account derived from the VM deposit PDA of the owner account.
-	Swap(ctx context.Context, opts ...grpc.CallOption) (Transaction_SwapClient, error)
-	// DeclareFiatOnrampPurchaseAttempt is called whenever a user attempts to use a fiat
-	// onramp to purchase core mint tokens for use in Code.
-	DeclareFiatOnrampPurchaseAttempt(ctx context.Context, in *DeclareFiatOnrampPurchaseAttemptRequest, opts ...grpc.CallOption) (*DeclareFiatOnrampPurchaseAttemptResponse, error)
 	// VoidGiftCard voids a gift card account by returning the funds to the funds back
 	// to the issuer via the auto-return action if it hasn't been claimed or already
 	// returned.
@@ -178,46 +153,6 @@ func (c *transactionClient) Airdrop(ctx context.Context, in *AirdropRequest, opt
 	return out, nil
 }
 
-func (c *transactionClient) Swap(ctx context.Context, opts ...grpc.CallOption) (Transaction_SwapClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Transaction_ServiceDesc.Streams[1], "/code.transaction.v2.Transaction/Swap", opts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &transactionSwapClient{stream}
-	return x, nil
-}
-
-type Transaction_SwapClient interface {
-	Send(*SwapRequest) error
-	Recv() (*SwapResponse, error)
-	grpc.ClientStream
-}
-
-type transactionSwapClient struct {
-	grpc.ClientStream
-}
-
-func (x *transactionSwapClient) Send(m *SwapRequest) error {
-	return x.ClientStream.SendMsg(m)
-}
-
-func (x *transactionSwapClient) Recv() (*SwapResponse, error) {
-	m := new(SwapResponse)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-func (c *transactionClient) DeclareFiatOnrampPurchaseAttempt(ctx context.Context, in *DeclareFiatOnrampPurchaseAttemptRequest, opts ...grpc.CallOption) (*DeclareFiatOnrampPurchaseAttemptResponse, error) {
-	out := new(DeclareFiatOnrampPurchaseAttemptResponse)
-	err := c.cc.Invoke(ctx, "/code.transaction.v2.Transaction/DeclareFiatOnrampPurchaseAttempt", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *transactionClient) VoidGiftCard(ctx context.Context, in *VoidGiftCardRequest, opts ...grpc.CallOption) (*VoidGiftCardResponse, error) {
 	out := new(VoidGiftCardResponse)
 	err := c.cc.Invoke(ctx, "/code.transaction.v2.Transaction/VoidGiftCard", in, out, opts...)
@@ -277,31 +212,6 @@ type TransactionServer interface {
 	CanWithdrawToAccount(context.Context, *CanWithdrawToAccountRequest) (*CanWithdrawToAccountResponse, error)
 	// Airdrop airdrops core mint tokens to the requesting account
 	Airdrop(context.Context, *AirdropRequest) (*AirdropResponse, error)
-	// Swap performs an on-chain swap. The high-level flow mirrors SubmitIntent
-	// closely. However, due to the time-sensitive nature and unreliability of
-	// swaps, they do not fit within the broader intent system. This results in
-	// a few key differences:
-	//   - Transactions are submitted on a best-effort basis outside of the Code
-	//     Sequencer within the RPC handler
-	//   - Balance changes are applied after the transaction has finalized
-	//   - Transactions use recent blockhashes over a nonce
-	//
-	// SubmitIntent also operates on VM virtual instructions, whereas Swap uses
-	// Solana transactions.
-	//
-	// The transaction will have the following instruction format:
-	//  1. ComputeBudget::SetComputeUnitLimit
-	//  2. ComputeBudget::SetComputeUnitPrice
-	//  3. SwapValidator::PreSwap
-	//  4. Dynamic swap instruction
-	//  5. SwapValidator::PostSwap
-	//
-	// Note: Currently limited to swapping USDC to core mint tokens.
-	// Note: Core mint tokens are deposited into the token account derived from the VM deposit PDA of the owner account.
-	Swap(Transaction_SwapServer) error
-	// DeclareFiatOnrampPurchaseAttempt is called whenever a user attempts to use a fiat
-	// onramp to purchase core mint tokens for use in Code.
-	DeclareFiatOnrampPurchaseAttempt(context.Context, *DeclareFiatOnrampPurchaseAttemptRequest) (*DeclareFiatOnrampPurchaseAttemptResponse, error)
 	// VoidGiftCard voids a gift card account by returning the funds to the funds back
 	// to the issuer via the auto-return action if it hasn't been claimed or already
 	// returned.
@@ -331,12 +241,6 @@ func (UnimplementedTransactionServer) CanWithdrawToAccount(context.Context, *Can
 }
 func (UnimplementedTransactionServer) Airdrop(context.Context, *AirdropRequest) (*AirdropResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Airdrop not implemented")
-}
-func (UnimplementedTransactionServer) Swap(Transaction_SwapServer) error {
-	return status.Errorf(codes.Unimplemented, "method Swap not implemented")
-}
-func (UnimplementedTransactionServer) DeclareFiatOnrampPurchaseAttempt(context.Context, *DeclareFiatOnrampPurchaseAttemptRequest) (*DeclareFiatOnrampPurchaseAttemptResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeclareFiatOnrampPurchaseAttempt not implemented")
 }
 func (UnimplementedTransactionServer) VoidGiftCard(context.Context, *VoidGiftCardRequest) (*VoidGiftCardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VoidGiftCard not implemented")
@@ -452,50 +356,6 @@ func _Transaction_Airdrop_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Transaction_Swap_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(TransactionServer).Swap(&transactionSwapServer{stream})
-}
-
-type Transaction_SwapServer interface {
-	Send(*SwapResponse) error
-	Recv() (*SwapRequest, error)
-	grpc.ServerStream
-}
-
-type transactionSwapServer struct {
-	grpc.ServerStream
-}
-
-func (x *transactionSwapServer) Send(m *SwapResponse) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func (x *transactionSwapServer) Recv() (*SwapRequest, error) {
-	m := new(SwapRequest)
-	if err := x.ServerStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-func _Transaction_DeclareFiatOnrampPurchaseAttempt_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeclareFiatOnrampPurchaseAttemptRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TransactionServer).DeclareFiatOnrampPurchaseAttempt(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/code.transaction.v2.Transaction/DeclareFiatOnrampPurchaseAttempt",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TransactionServer).DeclareFiatOnrampPurchaseAttempt(ctx, req.(*DeclareFiatOnrampPurchaseAttemptRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Transaction_VoidGiftCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(VoidGiftCardRequest)
 	if err := dec(in); err != nil {
@@ -538,10 +398,6 @@ var Transaction_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Transaction_Airdrop_Handler,
 		},
 		{
-			MethodName: "DeclareFiatOnrampPurchaseAttempt",
-			Handler:    _Transaction_DeclareFiatOnrampPurchaseAttempt_Handler,
-		},
-		{
 			MethodName: "VoidGiftCard",
 			Handler:    _Transaction_VoidGiftCard_Handler,
 		},
@@ -550,12 +406,6 @@ var Transaction_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "SubmitIntent",
 			Handler:       _Transaction_SubmitIntent_Handler,
-			ServerStreams: true,
-			ClientStreams: true,
-		},
-		{
-			StreamName:    "Swap",
-			Handler:       _Transaction_Swap_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},

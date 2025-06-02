@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { AirdropRequest, AirdropResponse, CanWithdrawToAccountRequest, CanWithdrawToAccountResponse, DeclareFiatOnrampPurchaseAttemptRequest, DeclareFiatOnrampPurchaseAttemptResponse, GetIntentMetadataRequest, GetIntentMetadataResponse, GetLimitsRequest, GetLimitsResponse, SubmitIntentRequest, SubmitIntentResponse, SwapRequest, SwapResponse, VoidGiftCardRequest, VoidGiftCardResponse } from "./transaction_service_pb";
+import { AirdropRequest, AirdropResponse, CanWithdrawToAccountRequest, CanWithdrawToAccountResponse, GetIntentMetadataRequest, GetIntentMetadataResponse, GetLimitsRequest, GetLimitsResponse, SubmitIntentRequest, SubmitIntentResponse, VoidGiftCardRequest, VoidGiftCardResponse } from "./transaction_service_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -100,48 +100,6 @@ export const Transaction = {
       name: "Airdrop",
       I: AirdropRequest,
       O: AirdropResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * Swap performs an on-chain swap. The high-level flow mirrors SubmitIntent
-     * closely. However, due to the time-sensitive nature and unreliability of
-     * swaps, they do not fit within the broader intent system. This results in
-     * a few key differences:
-     *  * Transactions are submitted on a best-effort basis outside of the Code
-     *    Sequencer within the RPC handler
-     *  * Balance changes are applied after the transaction has finalized
-     *  * Transactions use recent blockhashes over a nonce
-     * SubmitIntent also operates on VM virtual instructions, whereas Swap uses
-     * Solana transactions.
-     *
-     * The transaction will have the following instruction format:
-     *   1. ComputeBudget::SetComputeUnitLimit
-     *   2. ComputeBudget::SetComputeUnitPrice
-     *   3. SwapValidator::PreSwap
-     *   4. Dynamic swap instruction
-     *   5. SwapValidator::PostSwap
-     *
-     * Note: Currently limited to swapping USDC to core mint tokens.
-     * Note: Core mint tokens are deposited into the token account derived from the VM deposit PDA of the owner account.
-     *
-     * @generated from rpc code.transaction.v2.Transaction.Swap
-     */
-    swap: {
-      name: "Swap",
-      I: SwapRequest,
-      O: SwapResponse,
-      kind: MethodKind.BiDiStreaming,
-    },
-    /**
-     * DeclareFiatOnrampPurchaseAttempt is called whenever a user attempts to use a fiat
-     * onramp to purchase core mint tokens for use in Code.
-     *
-     * @generated from rpc code.transaction.v2.Transaction.DeclareFiatOnrampPurchaseAttempt
-     */
-    declareFiatOnrampPurchaseAttempt: {
-      name: "DeclareFiatOnrampPurchaseAttempt",
-      I: DeclareFiatOnrampPurchaseAttemptRequest,
-      O: DeclareFiatOnrampPurchaseAttemptResponse,
       kind: MethodKind.Unary,
     },
     /**
