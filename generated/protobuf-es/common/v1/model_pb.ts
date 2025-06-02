@@ -10,7 +10,7 @@ import { Duration, Message, proto3, Timestamp } from "@bufbuild/protobuf";
  * AccountType associates a type to an account, which infers how an account is used
  * within the Code ecosystem.
  *
- * todo: Deprecate legacy accounts (temporary, buckets, legacy primary, relationship)
+ * todo: Deprecate legacy accounts (temporary, buckets, legacy primary, relationship, swap)
  *
  * @generated from enum code.common.v1.AccountType
  */
@@ -356,45 +356,6 @@ export class IntentId extends Message<IntentId> {
 
   static equals(a: IntentId | PlainMessage<IntentId> | undefined, b: IntentId | PlainMessage<IntentId> | undefined): boolean {
     return proto3.util.equals(IntentId, a, b);
-  }
-}
-
-/**
- * Domain is a hostname
- *
- * @generated from message code.common.v1.Domain
- */
-export class Domain extends Message<Domain> {
-  /**
-   * @generated from field: string value = 1;
-   */
-  value = "";
-
-  constructor(data?: PartialMessage<Domain>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.common.v1.Domain";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Domain {
-    return new Domain().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Domain {
-    return new Domain().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Domain {
-    return new Domain().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: Domain | PlainMessage<Domain> | undefined, b: Domain | PlainMessage<Domain> | undefined): boolean {
-    return proto3.util.equals(Domain, a, b);
   }
 }
 

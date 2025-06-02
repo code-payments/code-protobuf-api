@@ -26,7 +26,7 @@ const (
 // AccountType associates a type to an account, which infers how an account is used
 // within the Code ecosystem.
 //
-// todo: Deprecate legacy accounts (temporary, buckets, legacy primary, relationship)
+// todo: Deprecate legacy accounts (temporary, buckets, legacy primary, relationship, swap)
 type AccountType int32
 
 const (
@@ -155,7 +155,7 @@ func (x Response_Result) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Response_Result.Descriptor instead.
 func (Response_Result) EnumDescriptor() ([]byte, []int) {
-	return file_common_v1_model_proto_rawDescGZIP(), []int{10, 0}
+	return file_common_v1_model_proto_rawDescGZIP(), []int{9, 0}
 }
 
 // SolanaAccountId is a raw binary Ed25519 public key for a Solana account
@@ -465,54 +465,6 @@ func (x *IntentId) GetValue() []byte {
 	return nil
 }
 
-// Domain is a hostname
-type Domain struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
-}
-
-func (x *Domain) Reset() {
-	*x = Domain{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_common_v1_model_proto_msgTypes[6]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Domain) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Domain) ProtoMessage() {}
-
-func (x *Domain) ProtoReflect() protoreflect.Message {
-	mi := &file_common_v1_model_proto_msgTypes[6]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Domain.ProtoReflect.Descriptor instead.
-func (*Domain) Descriptor() ([]byte, []int) {
-	return file_common_v1_model_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *Domain) GetValue() string {
-	if x != nil {
-		return x.Value
-	}
-	return ""
-}
-
 // Hash is a raw binary 32 byte hash value
 type Hash struct {
 	state         protoimpl.MessageState
@@ -525,7 +477,7 @@ type Hash struct {
 func (x *Hash) Reset() {
 	*x = Hash{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_common_v1_model_proto_msgTypes[7]
+		mi := &file_common_v1_model_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -538,7 +490,7 @@ func (x *Hash) String() string {
 func (*Hash) ProtoMessage() {}
 
 func (x *Hash) ProtoReflect() protoreflect.Message {
-	mi := &file_common_v1_model_proto_msgTypes[7]
+	mi := &file_common_v1_model_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -551,7 +503,7 @@ func (x *Hash) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Hash.ProtoReflect.Descriptor instead.
 func (*Hash) Descriptor() ([]byte, []int) {
-	return file_common_v1_model_proto_rawDescGZIP(), []int{7}
+	return file_common_v1_model_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *Hash) GetValue() []byte {
@@ -573,7 +525,7 @@ type UUID struct {
 func (x *UUID) Reset() {
 	*x = UUID{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_common_v1_model_proto_msgTypes[8]
+		mi := &file_common_v1_model_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -586,7 +538,7 @@ func (x *UUID) String() string {
 func (*UUID) ProtoMessage() {}
 
 func (x *UUID) ProtoReflect() protoreflect.Message {
-	mi := &file_common_v1_model_proto_msgTypes[8]
+	mi := &file_common_v1_model_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -599,7 +551,7 @@ func (x *UUID) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UUID.ProtoReflect.Descriptor instead.
 func (*UUID) Descriptor() ([]byte, []int) {
-	return file_common_v1_model_proto_rawDescGZIP(), []int{8}
+	return file_common_v1_model_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *UUID) GetValue() []byte {
@@ -624,7 +576,7 @@ type Request struct {
 func (x *Request) Reset() {
 	*x = Request{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_common_v1_model_proto_msgTypes[9]
+		mi := &file_common_v1_model_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -637,7 +589,7 @@ func (x *Request) String() string {
 func (*Request) ProtoMessage() {}
 
 func (x *Request) ProtoReflect() protoreflect.Message {
-	mi := &file_common_v1_model_proto_msgTypes[9]
+	mi := &file_common_v1_model_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -650,7 +602,7 @@ func (x *Request) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Request.ProtoReflect.Descriptor instead.
 func (*Request) Descriptor() ([]byte, []int) {
-	return file_common_v1_model_proto_rawDescGZIP(), []int{9}
+	return file_common_v1_model_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *Request) GetVersion() string {
@@ -695,7 +647,7 @@ type Response struct {
 func (x *Response) Reset() {
 	*x = Response{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_common_v1_model_proto_msgTypes[10]
+		mi := &file_common_v1_model_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -708,7 +660,7 @@ func (x *Response) String() string {
 func (*Response) ProtoMessage() {}
 
 func (x *Response) ProtoReflect() protoreflect.Message {
-	mi := &file_common_v1_model_proto_msgTypes[10]
+	mi := &file_common_v1_model_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -721,7 +673,7 @@ func (x *Response) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Response.ProtoReflect.Descriptor instead.
 func (*Response) Descriptor() ([]byte, []int) {
-	return file_common_v1_model_proto_rawDescGZIP(), []int{10}
+	return file_common_v1_model_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *Response) GetResult() Response_Result {
@@ -760,7 +712,7 @@ type ServerPing struct {
 func (x *ServerPing) Reset() {
 	*x = ServerPing{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_common_v1_model_proto_msgTypes[11]
+		mi := &file_common_v1_model_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -773,7 +725,7 @@ func (x *ServerPing) String() string {
 func (*ServerPing) ProtoMessage() {}
 
 func (x *ServerPing) ProtoReflect() protoreflect.Message {
-	mi := &file_common_v1_model_proto_msgTypes[11]
+	mi := &file_common_v1_model_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -786,7 +738,7 @@ func (x *ServerPing) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ServerPing.ProtoReflect.Descriptor instead.
 func (*ServerPing) Descriptor() ([]byte, []int) {
-	return file_common_v1_model_proto_rawDescGZIP(), []int{11}
+	return file_common_v1_model_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *ServerPing) GetTimestamp() *timestamppb.Timestamp {
@@ -816,7 +768,7 @@ type ClientPong struct {
 func (x *ClientPong) Reset() {
 	*x = ClientPong{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_common_v1_model_proto_msgTypes[12]
+		mi := &file_common_v1_model_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -829,7 +781,7 @@ func (x *ClientPong) String() string {
 func (*ClientPong) ProtoMessage() {}
 
 func (x *ClientPong) ProtoReflect() protoreflect.Message {
-	mi := &file_common_v1_model_proto_msgTypes[12]
+	mi := &file_common_v1_model_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -842,7 +794,7 @@ func (x *ClientPong) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClientPong.ProtoReflect.Descriptor instead.
 func (*ClientPong) Descriptor() ([]byte, []int) {
-	return file_common_v1_model_proto_rawDescGZIP(), []int{12}
+	return file_common_v1_model_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *ClientPong) GetTimestamp() *timestamppb.Timestamp {
@@ -888,9 +840,6 @@ var file_common_v1_model_proto_rawDesc = []byte{
 	0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x22, 0x2d, 0x0a, 0x08, 0x49, 0x6e, 0x74, 0x65, 0x6e, 0x74,
 	0x49, 0x64, 0x12, 0x21, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28,
 	0x0c, 0x42, 0x0b, 0xba, 0xe9, 0xc0, 0x03, 0x06, 0x7a, 0x04, 0x10, 0x20, 0x18, 0x20, 0x52, 0x05,
-	0x76, 0x61, 0x6c, 0x75, 0x65, 0x22, 0x2e, 0x0a, 0x06, 0x44, 0x6f, 0x6d, 0x61, 0x69, 0x6e, 0x12,
-	0x24, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x0e,
-	0xba, 0xe9, 0xc0, 0x03, 0x09, 0x72, 0x07, 0x10, 0x01, 0x18, 0xfd, 0x01, 0x68, 0x01, 0x52, 0x05,
 	0x76, 0x61, 0x6c, 0x75, 0x65, 0x22, 0x29, 0x0a, 0x04, 0x48, 0x61, 0x73, 0x68, 0x12, 0x21, 0x0a,
 	0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x42, 0x0b, 0xba, 0xe9,
 	0xc0, 0x03, 0x06, 0x7a, 0x04, 0x10, 0x20, 0x18, 0x20, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65,
@@ -971,7 +920,7 @@ func file_common_v1_model_proto_rawDescGZIP() []byte {
 }
 
 var file_common_v1_model_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_common_v1_model_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_common_v1_model_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_common_v1_model_proto_goTypes = []interface{}{
 	(AccountType)(0),              // 0: code.common.v1.AccountType
 	(Response_Result)(0),          // 1: code.common.v1.Response.Result
@@ -981,22 +930,21 @@ var file_common_v1_model_proto_goTypes = []interface{}{
 	(*Blockhash)(nil),             // 5: code.common.v1.Blockhash
 	(*Signature)(nil),             // 6: code.common.v1.Signature
 	(*IntentId)(nil),              // 7: code.common.v1.IntentId
-	(*Domain)(nil),                // 8: code.common.v1.Domain
-	(*Hash)(nil),                  // 9: code.common.v1.Hash
-	(*UUID)(nil),                  // 10: code.common.v1.UUID
-	(*Request)(nil),               // 11: code.common.v1.Request
-	(*Response)(nil),              // 12: code.common.v1.Response
-	(*ServerPing)(nil),            // 13: code.common.v1.ServerPing
-	(*ClientPong)(nil),            // 14: code.common.v1.ClientPong
-	(*timestamppb.Timestamp)(nil), // 15: google.protobuf.Timestamp
-	(*durationpb.Duration)(nil),   // 16: google.protobuf.Duration
+	(*Hash)(nil),                  // 8: code.common.v1.Hash
+	(*UUID)(nil),                  // 9: code.common.v1.UUID
+	(*Request)(nil),               // 10: code.common.v1.Request
+	(*Response)(nil),              // 11: code.common.v1.Response
+	(*ServerPing)(nil),            // 12: code.common.v1.ServerPing
+	(*ClientPong)(nil),            // 13: code.common.v1.ClientPong
+	(*timestamppb.Timestamp)(nil), // 14: google.protobuf.Timestamp
+	(*durationpb.Duration)(nil),   // 15: google.protobuf.Duration
 }
 var file_common_v1_model_proto_depIdxs = []int32{
 	2,  // 0: code.common.v1.InstructionAccount.account:type_name -> code.common.v1.SolanaAccountId
 	1,  // 1: code.common.v1.Response.result:type_name -> code.common.v1.Response.Result
-	15, // 2: code.common.v1.ServerPing.timestamp:type_name -> google.protobuf.Timestamp
-	16, // 3: code.common.v1.ServerPing.ping_delay:type_name -> google.protobuf.Duration
-	15, // 4: code.common.v1.ClientPong.timestamp:type_name -> google.protobuf.Timestamp
+	14, // 2: code.common.v1.ServerPing.timestamp:type_name -> google.protobuf.Timestamp
+	15, // 3: code.common.v1.ServerPing.ping_delay:type_name -> google.protobuf.Duration
+	14, // 4: code.common.v1.ClientPong.timestamp:type_name -> google.protobuf.Timestamp
 	5,  // [5:5] is the sub-list for method output_type
 	5,  // [5:5] is the sub-list for method input_type
 	5,  // [5:5] is the sub-list for extension type_name
@@ -1083,18 +1031,6 @@ func file_common_v1_model_proto_init() {
 			}
 		}
 		file_common_v1_model_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Domain); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_common_v1_model_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Hash); i {
 			case 0:
 				return &v.state
@@ -1106,7 +1042,7 @@ func file_common_v1_model_proto_init() {
 				return nil
 			}
 		}
-		file_common_v1_model_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+		file_common_v1_model_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UUID); i {
 			case 0:
 				return &v.state
@@ -1118,7 +1054,7 @@ func file_common_v1_model_proto_init() {
 				return nil
 			}
 		}
-		file_common_v1_model_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+		file_common_v1_model_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Request); i {
 			case 0:
 				return &v.state
@@ -1130,7 +1066,7 @@ func file_common_v1_model_proto_init() {
 				return nil
 			}
 		}
-		file_common_v1_model_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+		file_common_v1_model_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Response); i {
 			case 0:
 				return &v.state
@@ -1142,7 +1078,7 @@ func file_common_v1_model_proto_init() {
 				return nil
 			}
 		}
-		file_common_v1_model_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+		file_common_v1_model_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ServerPing); i {
 			case 0:
 				return &v.state
@@ -1154,7 +1090,7 @@ func file_common_v1_model_proto_init() {
 				return nil
 			}
 		}
-		file_common_v1_model_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+		file_common_v1_model_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ClientPong); i {
 			case 0:
 				return &v.state
@@ -1173,7 +1109,7 @@ func file_common_v1_model_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_common_v1_model_proto_rawDesc,
 			NumEnums:      2,
-			NumMessages:   13,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

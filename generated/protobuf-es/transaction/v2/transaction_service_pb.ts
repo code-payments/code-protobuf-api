@@ -17,24 +17,24 @@ export enum AirdropType {
   UNKNOWN = 0,
 
   /**
-   * Reward for giving someone else their first crypto
+   * Reward for onboarding another user
    *
-   * @generated from enum value: GIVE_FIRST_CRYPTO = 1;
+   * @generated from enum value: ONBOARDING_BONUS = 1;
    */
-  GIVE_FIRST_CRYPTO = 1,
+  ONBOARDING_BONUS = 1,
 
   /**
    * Airdrop for getting a user started with first crypto balance
    *
-   * @generated from enum value: GET_FIRST_CRYPTO = 2;
+   * @generated from enum value: WELCOME_BONUS = 2;
    */
-  GET_FIRST_CRYPTO = 2,
+  WELCOME_BONUS = 2,
 }
 // Retrieve enum metadata with: proto3.getEnumType(AirdropType)
 proto3.util.setEnumType(AirdropType, "code.transaction.v2.AirdropType", [
   { no: 0, name: "UNKNOWN" },
-  { no: 1, name: "GIVE_FIRST_CRYPTO" },
-  { no: 2, name: "GET_FIRST_CRYPTO" },
+  { no: 1, name: "ONBOARDING_BONUS" },
+  { no: 2, name: "WELCOME_BONUS" },
 ]);
 
 /**
@@ -637,20 +637,6 @@ export class GetLimitsResponse extends Message<GetLimitsResponse> {
   sendLimitsByCurrency: { [key: string]: SendLimit } = {};
 
   /**
-   * Micro payment limits keyed by currency
-   *
-   * @generated from field: map<string, code.transaction.v2.MicroPaymentLimit> micro_payment_limits_by_currency = 4;
-   */
-  microPaymentLimitsByCurrency: { [key: string]: MicroPaymentLimit } = {};
-
-  /**
-   * Buy module limits keyed by currency
-   *
-   * @generated from field: map<string, code.transaction.v2.BuyModuleLimit> buy_module_limits_by_currency = 5;
-   */
-  buyModuleLimitsByCurrency: { [key: string]: BuyModuleLimit } = {};
-
-  /**
    * The amount of USD transacted since the consumption timestamp
    *
    * @generated from field: double usd_transacted = 6;
@@ -667,8 +653,6 @@ export class GetLimitsResponse extends Message<GetLimitsResponse> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "result", kind: "enum", T: proto3.getEnumType(GetLimitsResponse_Result) },
     { no: 2, name: "send_limits_by_currency", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: SendLimit} },
-    { no: 4, name: "micro_payment_limits_by_currency", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: MicroPaymentLimit} },
-    { no: 5, name: "buy_module_limits_by_currency", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: BuyModuleLimit} },
     { no: 6, name: "usd_transacted", kind: "scalar", T: 1 /* ScalarType.DOUBLE */ },
   ]);
 
@@ -2393,53 +2377,6 @@ export class ExchangeDataWithoutRate extends Message<ExchangeDataWithoutRate> {
 }
 
 /**
- * @generated from message code.transaction.v2.AdditionalFeePayment
- */
-export class AdditionalFeePayment extends Message<AdditionalFeePayment> {
-  /**
-   * Destination token account where the fee payment will be made
-   *
-   * @generated from field: code.common.v1.SolanaAccountId destination = 1;
-   */
-  destination?: SolanaAccountId;
-
-  /**
-   * Fee percentage, in basis points, of the total quark amount of a payment.
-   *
-   * @generated from field: uint32 fee_bps = 2;
-   */
-  feeBps = 0;
-
-  constructor(data?: PartialMessage<AdditionalFeePayment>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.AdditionalFeePayment";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "destination", kind: "message", T: SolanaAccountId },
-    { no: 2, name: "fee_bps", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): AdditionalFeePayment {
-    return new AdditionalFeePayment().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): AdditionalFeePayment {
-    return new AdditionalFeePayment().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): AdditionalFeePayment {
-    return new AdditionalFeePayment().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: AdditionalFeePayment | PlainMessage<AdditionalFeePayment> | undefined, b: AdditionalFeePayment | PlainMessage<AdditionalFeePayment> | undefined): boolean {
-    return proto3.util.equals(AdditionalFeePayment, a, b);
-  }
-}
-
-/**
  * @generated from message code.transaction.v2.SendLimit
  */
 export class SendLimit extends Message<SendLimit> {
@@ -2491,100 +2428,6 @@ export class SendLimit extends Message<SendLimit> {
 
   static equals(a: SendLimit | PlainMessage<SendLimit> | undefined, b: SendLimit | PlainMessage<SendLimit> | undefined): boolean {
     return proto3.util.equals(SendLimit, a, b);
-  }
-}
-
-/**
- * @generated from message code.transaction.v2.MicroPaymentLimit
- */
-export class MicroPaymentLimit extends Message<MicroPaymentLimit> {
-  /**
-   * Maximum native amount that can be applied per micro payment transaction
-   *
-   * @generated from field: float max_per_transaction = 1;
-   */
-  maxPerTransaction = 0;
-
-  /**
-   * Minimum native amount that can be applied per micro payment transaction
-   *
-   * @generated from field: float min_per_transaction = 2;
-   */
-  minPerTransaction = 0;
-
-  constructor(data?: PartialMessage<MicroPaymentLimit>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.MicroPaymentLimit";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "max_per_transaction", kind: "scalar", T: 2 /* ScalarType.FLOAT */ },
-    { no: 2, name: "min_per_transaction", kind: "scalar", T: 2 /* ScalarType.FLOAT */ },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): MicroPaymentLimit {
-    return new MicroPaymentLimit().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): MicroPaymentLimit {
-    return new MicroPaymentLimit().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): MicroPaymentLimit {
-    return new MicroPaymentLimit().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: MicroPaymentLimit | PlainMessage<MicroPaymentLimit> | undefined, b: MicroPaymentLimit | PlainMessage<MicroPaymentLimit> | undefined): boolean {
-    return proto3.util.equals(MicroPaymentLimit, a, b);
-  }
-}
-
-/**
- * @generated from message code.transaction.v2.BuyModuleLimit
- */
-export class BuyModuleLimit extends Message<BuyModuleLimit> {
-  /**
-   * Minimum amount that can be purchased through the buy module
-   *
-   * @generated from field: float min_per_transaction = 1;
-   */
-  minPerTransaction = 0;
-
-  /**
-   * Maximum amount that can be purchased through the buy module
-   *
-   * @generated from field: float max_per_transaction = 2;
-   */
-  maxPerTransaction = 0;
-
-  constructor(data?: PartialMessage<BuyModuleLimit>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.BuyModuleLimit";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "min_per_transaction", kind: "scalar", T: 2 /* ScalarType.FLOAT */ },
-    { no: 2, name: "max_per_transaction", kind: "scalar", T: 2 /* ScalarType.FLOAT */ },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): BuyModuleLimit {
-    return new BuyModuleLimit().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): BuyModuleLimit {
-    return new BuyModuleLimit().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): BuyModuleLimit {
-    return new BuyModuleLimit().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: BuyModuleLimit | PlainMessage<BuyModuleLimit> | undefined, b: BuyModuleLimit | PlainMessage<BuyModuleLimit> | undefined): boolean {
-    return proto3.util.equals(BuyModuleLimit, a, b);
   }
 }
 

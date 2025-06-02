@@ -220,11 +220,9 @@ message GetLimitsResponse {
 
     reserved 3; // Deprecated deposit limit
 
-    // Micro payment limits keyed by currency
-    map<string, MicroPaymentLimit> micro_payment_limits_by_currency = 4;
+    reserved 4; // Deprecated micro payment limits
 
-    // Buy module limits keyed by currency
-    map<string, BuyModuleLimit> buy_module_limits_by_currency = 5;
+    reserved 5; // Deprecated buy module limits
 
     // The amount of USD transacted since the consumption timestamp
     double usd_transacted = 6 [(validate.rules).double.gte = 0];;
@@ -670,17 +668,6 @@ message ExchangeDataWithoutRate {
     double native_amount = 2 [(validate.rules).double.gt = 0];
 }
 
-message AdditionalFeePayment {
-    // Destination token account where the fee payment will be made
-    common.v1.SolanaAccountId destination = 1 [(validate.rules).message.required = true];
-
-    // Fee percentage, in basis points, of the total quark amount of a payment.
-    uint32 fee_bps = 2 [(validate.rules).uint32 = {
-        gt: 0,
-        lte: 10000,
-    }];
-}
-
 message SendLimit {
     // Remaining limit to apply on the next transaction
     float next_transaction = 1;
@@ -692,22 +679,6 @@ message SendLimit {
     float max_per_day = 3;
 }
 
-message MicroPaymentLimit {
-    // Maximum native amount that can be applied per micro payment transaction
-    float max_per_transaction = 1;
-
-    // Minimum native amount that can be applied per micro payment transaction
-    float min_per_transaction = 2;
-}
-
-message BuyModuleLimit {
-    // Minimum amount that can be purchased through the buy module
-    float min_per_transaction = 1;
-
-    // Maximum amount that can be purchased through the buy module
-    float max_per_transaction = 2;
-}
-
 message Cursor {
     bytes value = 1 [(validate.rules).bytes = {
         min_len: 8
@@ -717,8 +688,8 @@ message Cursor {
 
 enum AirdropType {
     UNKNOWN = 0;
-    // Reward for giving someone else their first crypto
-    GIVE_FIRST_CRYPTO = 1;
+    // Reward for onboarding another user
+    ONBOARDING_BONUS = 1;
     // Airdrop for getting a user started with first crypto balance
-    GET_FIRST_CRYPTO = 2;
+    WELCOME_BONUS = 2;
 }

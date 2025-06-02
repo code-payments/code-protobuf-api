@@ -13,7 +13,7 @@ import "validate/validate.proto";
 // AccountType associates a type to an account, which infers how an account is used
 // within the Code ecosystem.
 //
-// todo: Deprecate legacy accounts (temporary, buckets, legacy primary, relationship)
+// todo: Deprecate legacy accounts (temporary, buckets, legacy primary, relationship, swap)
 enum AccountType {
     UNKNOWN                  = 0;
     PRIMARY                  = 1;
@@ -81,15 +81,6 @@ message IntentId {
     bytes value = 1 [(validate.rules).bytes = {
         min_len: 32
         max_len: 32
-    }];
-}
-
-// Domain is a hostname
-message Domain {
-    string value = 1 [(validate.rules).string = {
-        min_len: 1
-        max_len: 253
-        hostname: true
     }];
 }
 
