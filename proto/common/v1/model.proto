@@ -30,6 +30,7 @@ enum AccountType {
     REMOTE_SEND_GIFT_CARD    = 12;
     RELATIONSHIP             = 13;
     SWAP                     = 14;
+    ASSOCIATED_TOKEN_ACCOUNT = 15;
 }
 
 // SolanaAccountId is a raw binary Ed25519 public key for a Solana account

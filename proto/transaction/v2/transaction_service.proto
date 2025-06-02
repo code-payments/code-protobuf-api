@@ -147,9 +147,6 @@ message SubmitIntentResponse {
             // The intent was successfully created and is now scheduled.
             OK = 0;
         }
-
-       // todo: Revisit if we need side-effects. Clients are effecitively doing
-       //       local simulation now with the privacy solution.
     }
 
     message Error {
@@ -233,6 +230,13 @@ message CanWithdrawToAccountRequest {
 }
 
 message CanWithdrawToAccountResponse {
+    // Server-controlled flag to indicate if the account can be withdrawn to.
+    // There are several reasons server may deny it, including:
+    //  - Wrong type of Code account
+    //  - Unsupported external account type (eg. token account but of the wrong mint)
+    // This is guaranteed to be false when account_type = Unknown.
+    bool is_valid_payment_destination = 1;
+
     // Metadata so the client knows how to withdraw to the account. Server cannot
     // provide precalculated addresses in this response to maintain non-custodial
     // status.
@@ -243,24 +247,23 @@ message CanWithdrawToAccountResponse {
         OwnerAccount = 2; // Client locally derives the ATA to use in SubmitIntent
     }
 
-    // Server-controlled flag to indicate if the account can be withdrawn to.
-    // There are several reasons server may deny it, including:
-    //  - Wrong type of Code account
-    //  - Not wanting to subsidize the creation of an ATA
-    //  - Unsupported external account type (eg. token account but of the wrong mint)
-    // This is guaranteed to be false when account_type = Unknown.
-    bool is_valid_payment_destination = 1;
-
-    // Token account requires initialization before the withdrawal can occur.
-    // Server has chosen not to subsidize the fees. The response is guaranteed
-    // to have set is_valid_payment_destination = false in this case.
+    // ATA requires initialization before the withdrawal can occur. Server will not
+    // subsidize the account creation, so a fee is required.
     bool requires_initialization = 3;
+
+    // The WITHDRAWAL_CREATE_ON_SEND fee, in USD, that must be paid in order to
+    // submit a withdrawal to subsidize the creation of the account at time of
+    // send. The user must explicitly agree to this fee amount before submitting
+    // the intent.
+    //
+    // This will be set when requires_initialization = true
+    ExchangeDataWithoutRate fee_amount = 4;
 }
 
 message AirdropRequest {
     // The type of airdrop to claim
     AirdropType airdrop_type = 1 [(validate.rules).enum = {
-        not_in: [0, 1] // UNKNOWN, GIVE_FIRST_CRYPTO
+        not_in: [0, 1] // UNKNOWN, ONBOARDING_BONUS
     }];
 
     // The owner account to airdrop core mint tokens to
@@ -321,9 +324,9 @@ message Metadata {
     oneof type {
         option (validate.required) = true;
 
-        OpenAccountsMetadata             open_accounts              = 1;
-        SendPublicPaymentMetadata        send_public_payment        = 6;
-        ReceivePaymentsPubliclyMetadata  receive_payments_publicly  = 7;
+        OpenAccountsMetadata            open_accounts             = 1;
+        SendPublicPaymentMetadata       send_public_payment       = 6;
+        ReceivePaymentsPubliclyMetadata receive_payments_publicly = 7;
     }
 
     reserved 2; // Deprecated SendPrivatePaymentMetadata
@@ -346,9 +349,17 @@ message OpenAccountsMetadata {
 
 // Send a payment to a destination account publicly.
 //
-// Action Spec (Payment, Withdrawal):
+// Action Spec (Payment):
 //
 // actions = [NoPrivacyTransferAction(PRIMARY, destination, ExchangeData.Quarks)]
+//
+// Action Spec (Withdrawal):
+//
+// actions = [NoPrivacyTransferAction(PRIMARY, destination, ExchangeData.Quarks)]
+// if destinationRequiresInitialization {
+//   actions[0].NoPrivacyTransferAction.ExchangeData.Quarks -= feeAmount
+//   actions.push_back(FeePaymentAction(PRIMARY, feeAccount, feeAmount))
+// }
 //
 // Action Spec (Remote Send):
 //
@@ -357,8 +368,6 @@ message OpenAccountsMetadata {
 //   NoPrivacyTransferAction(PRIMARY, REMOTE_SEND_GIFT_CARD, ExchangeData.Quarks),
 //   NoPrivacyWithdrawAction(REMOTE_SEND_GIFT_CARD, PRIMARY, ExchangeData.Quarks, is_auto_return=true),
 // ]
-//
-// todo: Possibly use a different action type for deferred closing?
 message SendPublicPaymentMetadata {
     // The primary account where funds will be sent from. The primary account is assumed if this
     // field is not set for backwards compatibility with old clients.
@@ -375,6 +384,10 @@ message SendPublicPaymentMetadata {
 
     // Is the payment going to a new gift card? Note is_withdrawal must be false.
     bool is_remote_send = 5;
+
+    // Destination owner account, which is required for withdrawals that intend
+    // to create an ATA. Every other variation of this intent can omit this field.
+    common.v1.SolanaAccountId destination_owner = 6;
 }
 
 // Receive funds into a user-owned account publicly. All use cases of this intent
@@ -419,10 +432,10 @@ message Action {
     oneof type {
         option (validate.required) = true;
 
-        OpenAccountAction              open_account               = 2;
-        NoPrivacyTransferAction        no_privacy_transfer        = 5;
-        NoPrivacyWithdrawAction        no_privacy_withdraw        = 6;
-        FeePaymentAction               fee_payment                = 10;
+        OpenAccountAction       open_account        = 2;
+        NoPrivacyTransferAction no_privacy_transfer = 5;
+        NoPrivacyWithdrawAction no_privacy_withdraw = 6;
+        FeePaymentAction        fee_payment         = 10;
     }
 
     reserved 3; // Deprecated CloseEmptyAccountAction 
@@ -499,24 +512,20 @@ message NoPrivacyWithdrawAction {
 // Compact message signature required
 message FeePaymentAction {
     // The type of fee being operated on
-    FeeType type = 4;
+    FeeType type = 1 [(validate.rules).enum.not_in = 0];
     enum FeeType {
-        CODE        = 0; // Hardcoded $0.01 USD fee to a dynamic fee account specified by server
-        THIRD_PARTY = 1; // Third party fee specified at time of payment request
+        UNKNOWN                   = 0;
+        WITHDRAWAL_CREATE_ON_SEND = 1; // Server-defined fee for creating an external ATA for withdrawals on send
     }
 
     // The public key of the private key that has authority over source
-    common.v1.SolanaAccountId authority = 1 [(validate.rules).message.required = true];
+    common.v1.SolanaAccountId authority = 2 [(validate.rules).message.required = true];
 
     // The source account where funds are transferred from
-    common.v1.SolanaAccountId source = 2 [(validate.rules).message.required = true];
+    common.v1.SolanaAccountId source = 3 [(validate.rules).message.required = true];
 
     // The core mint quark amount to transfer
-    uint64 amount = 3 [(validate.rules).uint64.gt = 0];
-
-    // The destination where the fee payment is being made for fees outside of
-    // Code.
-    common.v1.SolanaAccountId destination = 5;
+    uint64 amount = 4 [(validate.rules).uint64.gt = 0];
 }
 
 //
@@ -547,10 +556,10 @@ message ServerParameter {
         FeePaymentServerParameter               fee_payment                = 11;
     }
 
-    reserved 4; // Deprecated CloseEmptyAccountServerParameter
-    reserved 5; // Deprecated CloseDormantAccountServerParameter
-    reserved 8; // Deprecated TemporaryPrivacyTransferServerParameter
-    reserved 9; // Deprecated TemporaryPrivacyExchangeServerParameter
+    reserved 4;  // Deprecated CloseEmptyAccountServerParameter
+    reserved 5;  // Deprecated CloseDormantAccountServerParameter
+    reserved 8;  // Deprecated TemporaryPrivacyTransferServerParameter
+    reserved 9;  // Deprecated TemporaryPrivacyExchangeServerParameter
     reserved 10; // Deprecated PermanentPrivacyUpgradeServerParameter
 }
 
@@ -577,9 +586,10 @@ message NoPrivacyWithdrawServerParameter {
 }
 
 message FeePaymentServerParameter {
-    // The destination account where Code fee payments should be sent. This will
-    // only be set when the corresponding FeePaymentAction Type is CODE.
-    common.v1.SolanaAccountId code_destination = 1;
+    // The destination account where OCP fee payments should be sent. This will
+    // only be set when the corresponding FeePaymentAction.Type:
+    // - WITHDRAWAL_CREATE_ON_SEND
+    common.v1.SolanaAccountId destination = 1 [(validate.rules).message.required = true];
 }
 
 //
@@ -677,13 +687,6 @@ message SendLimit {
 
     // Maximum allowed on a per-day basis
     float max_per_day = 3;
-}
-
-message Cursor {
-    bytes value = 1 [(validate.rules).bytes = {
-        min_len: 8
-        max_len: 8
-    }];
 }
 
 enum AirdropType {

@@ -718,11 +718,21 @@ func (m *CanWithdrawToAccountResponse) Validate() error {
 		return nil
 	}
 
-	// no validation rules for AccountType
-
 	// no validation rules for IsValidPaymentDestination
 
+	// no validation rules for AccountType
+
 	// no validation rules for RequiresInitialization
+
+	if v, ok := interface{}(m.GetFeeAmount()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CanWithdrawToAccountResponseValidationError{
+				field:  "FeeAmount",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	return nil
 }
@@ -1391,6 +1401,16 @@ func (m *SendPublicPaymentMetadata) Validate() error {
 	// no validation rules for IsWithdrawal
 
 	// no validation rules for IsRemoteSend
+
+	if v, ok := interface{}(m.GetDestinationOwner()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SendPublicPaymentMetadataValidationError{
+				field:  "DestinationOwner",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	return nil
 }
@@ -2099,7 +2119,12 @@ func (m *FeePaymentAction) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Type
+	if _, ok := _FeePaymentAction_Type_NotInLookup[m.GetType()]; ok {
+		return FeePaymentActionValidationError{
+			field:  "Type",
+			reason: "value must not be in list [0]",
+		}
+	}
 
 	if m.GetAuthority() == nil {
 		return FeePaymentActionValidationError{
@@ -2139,16 +2164,6 @@ func (m *FeePaymentAction) Validate() error {
 		return FeePaymentActionValidationError{
 			field:  "Amount",
 			reason: "value must be greater than 0",
-		}
-	}
-
-	if v, ok := interface{}(m.GetDestination()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return FeePaymentActionValidationError{
-				field:  "Destination",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
 		}
 	}
 
@@ -2208,6 +2223,10 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = FeePaymentActionValidationError{}
+
+var _FeePaymentAction_Type_NotInLookup = map[FeePaymentAction_FeeType]struct{}{
+	0: {},
+}
 
 // Validate checks the field values on ServerParameter with the rules defined
 // in the proto definition for this message. If any rules are violated, an
@@ -2668,10 +2687,17 @@ func (m *FeePaymentServerParameter) Validate() error {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetCodeDestination()).(interface{ Validate() error }); ok {
+	if m.GetDestination() == nil {
+		return FeePaymentServerParameterValidationError{
+			field:  "Destination",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetDestination()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return FeePaymentServerParameterValidationError{
-				field:  "CodeDestination",
+				field:  "Destination",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -3366,77 +3392,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = SendLimitValidationError{}
-
-// Validate checks the field values on Cursor with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Cursor) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	if len(m.GetValue()) != 8 {
-		return CursorValidationError{
-			field:  "Value",
-			reason: "value length must be 8 bytes",
-		}
-	}
-
-	return nil
-}
-
-// CursorValidationError is the validation error returned by Cursor.Validate if
-// the designated constraints aren't met.
-type CursorValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e CursorValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e CursorValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e CursorValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e CursorValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e CursorValidationError) ErrorName() string { return "CursorValidationError" }
-
-// Error satisfies the builtin error interface
-func (e CursorValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sCursor.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = CursorValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = CursorValidationError{}
 
 // Validate checks the field values on SubmitIntentRequest_SubmitActions with
 // the rules defined in the proto definition for this message. If any rules

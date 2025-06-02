@@ -729,6 +729,17 @@ export class CanWithdrawToAccountRequest extends Message<CanWithdrawToAccountReq
  */
 export class CanWithdrawToAccountResponse extends Message<CanWithdrawToAccountResponse> {
   /**
+   * Server-controlled flag to indicate if the account can be withdrawn to.
+   * There are several reasons server may deny it, including:
+   *  - Wrong type of Code account
+   *  - Unsupported external account type (eg. token account but of the wrong mint)
+   * This is guaranteed to be false when account_type = Unknown.
+   *
+   * @generated from field: bool is_valid_payment_destination = 1;
+   */
+  isValidPaymentDestination = false;
+
+  /**
    * Metadata so the client knows how to withdraw to the account. Server cannot
    * provide precalculated addresses in this response to maintain non-custodial
    * status.
@@ -738,25 +749,24 @@ export class CanWithdrawToAccountResponse extends Message<CanWithdrawToAccountRe
   accountType = CanWithdrawToAccountResponse_AccountType.Unknown;
 
   /**
-   * Server-controlled flag to indicate if the account can be withdrawn to.
-   * There are several reasons server may deny it, including:
-   *  - Wrong type of Code account
-   *  - Not wanting to subsidize the creation of an ATA
-   *  - Unsupported external account type (eg. token account but of the wrong mint)
-   * This is guaranteed to be false when account_type = Unknown.
-   *
-   * @generated from field: bool is_valid_payment_destination = 1;
-   */
-  isValidPaymentDestination = false;
-
-  /**
-   * Token account requires initialization before the withdrawal can occur.
-   * Server has chosen not to subsidize the fees. The response is guaranteed
-   * to have set is_valid_payment_destination = false in this case.
+   * ATA requires initialization before the withdrawal can occur. Server will not
+   * subsidize the account creation, so a fee is required.
    *
    * @generated from field: bool requires_initialization = 3;
    */
   requiresInitialization = false;
+
+  /**
+   * The WITHDRAWAL_CREATE_ON_SEND fee, in USD, that must be paid in order to
+   * submit a withdrawal to subsidize the creation of the account at time of
+   * send. The user must explicitly agree to this fee amount before submitting
+   * the intent.
+   *
+   * This will be set when requires_initialization = true
+   *
+   * @generated from field: code.transaction.v2.ExchangeDataWithoutRate fee_amount = 4;
+   */
+  feeAmount?: ExchangeDataWithoutRate;
 
   constructor(data?: PartialMessage<CanWithdrawToAccountResponse>) {
     super();
@@ -766,9 +776,10 @@ export class CanWithdrawToAccountResponse extends Message<CanWithdrawToAccountRe
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "code.transaction.v2.CanWithdrawToAccountResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 2, name: "account_type", kind: "enum", T: proto3.getEnumType(CanWithdrawToAccountResponse_AccountType) },
     { no: 1, name: "is_valid_payment_destination", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 2, name: "account_type", kind: "enum", T: proto3.getEnumType(CanWithdrawToAccountResponse_AccountType) },
     { no: 3, name: "requires_initialization", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 4, name: "fee_amount", kind: "message", T: ExchangeDataWithoutRate },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CanWithdrawToAccountResponse {
@@ -1187,9 +1198,17 @@ export class OpenAccountsMetadata extends Message<OpenAccountsMetadata> {
 /**
  * Send a payment to a destination account publicly.
  *
- * Action Spec (Payment, Withdrawal):
+ * Action Spec (Payment):
  *
  * actions = [NoPrivacyTransferAction(PRIMARY, destination, ExchangeData.Quarks)]
+ *
+ * Action Spec (Withdrawal):
+ *
+ * actions = [NoPrivacyTransferAction(PRIMARY, destination, ExchangeData.Quarks)]
+ * if destinationRequiresInitialization {
+ *   actions[0].NoPrivacyTransferAction.ExchangeData.Quarks -= feeAmount
+ *   actions.push_back(FeePaymentAction(PRIMARY, feeAccount, feeAmount))
+ * }
  *
  * Action Spec (Remote Send):
  *
@@ -1198,8 +1217,6 @@ export class OpenAccountsMetadata extends Message<OpenAccountsMetadata> {
  *   NoPrivacyTransferAction(PRIMARY, REMOTE_SEND_GIFT_CARD, ExchangeData.Quarks),
  *   NoPrivacyWithdrawAction(REMOTE_SEND_GIFT_CARD, PRIMARY, ExchangeData.Quarks, is_auto_return=true),
  * ]
- *
- * todo: Possibly use a different action type for deferred closing?
  *
  * @generated from message code.transaction.v2.SendPublicPaymentMetadata
  */
@@ -1240,6 +1257,14 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
    */
   isRemoteSend = false;
 
+  /**
+   * Destination owner account, which is required for withdrawals that intend
+   * to create an ATA. Every other variation of this intent can omit this field.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId destination_owner = 6;
+   */
+  destinationOwner?: SolanaAccountId;
+
   constructor(data?: PartialMessage<SendPublicPaymentMetadata>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1253,6 +1278,7 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
     { no: 2, name: "exchange_data", kind: "message", T: ExchangeData },
     { no: 3, name: "is_withdrawal", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 5, name: "is_remote_send", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 6, name: "destination_owner", kind: "message", T: SolanaAccountId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SendPublicPaymentMetadata {
@@ -1667,38 +1693,30 @@ export class FeePaymentAction extends Message<FeePaymentAction> {
   /**
    * The type of fee being operated on
    *
-   * @generated from field: code.transaction.v2.FeePaymentAction.FeeType type = 4;
+   * @generated from field: code.transaction.v2.FeePaymentAction.FeeType type = 1;
    */
-  type = FeePaymentAction_FeeType.CODE;
+  type = FeePaymentAction_FeeType.UNKNOWN;
 
   /**
    * The public key of the private key that has authority over source
    *
-   * @generated from field: code.common.v1.SolanaAccountId authority = 1;
+   * @generated from field: code.common.v1.SolanaAccountId authority = 2;
    */
   authority?: SolanaAccountId;
 
   /**
    * The source account where funds are transferred from
    *
-   * @generated from field: code.common.v1.SolanaAccountId source = 2;
+   * @generated from field: code.common.v1.SolanaAccountId source = 3;
    */
   source?: SolanaAccountId;
 
   /**
    * The core mint quark amount to transfer
    *
-   * @generated from field: uint64 amount = 3;
+   * @generated from field: uint64 amount = 4;
    */
   amount = protoInt64.zero;
-
-  /**
-   * The destination where the fee payment is being made for fees outside of
-   * Code.
-   *
-   * @generated from field: code.common.v1.SolanaAccountId destination = 5;
-   */
-  destination?: SolanaAccountId;
 
   constructor(data?: PartialMessage<FeePaymentAction>) {
     super();
@@ -1708,11 +1726,10 @@ export class FeePaymentAction extends Message<FeePaymentAction> {
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "code.transaction.v2.FeePaymentAction";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 4, name: "type", kind: "enum", T: proto3.getEnumType(FeePaymentAction_FeeType) },
-    { no: 1, name: "authority", kind: "message", T: SolanaAccountId },
-    { no: 2, name: "source", kind: "message", T: SolanaAccountId },
-    { no: 3, name: "amount", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 5, name: "destination", kind: "message", T: SolanaAccountId },
+    { no: 1, name: "type", kind: "enum", T: proto3.getEnumType(FeePaymentAction_FeeType) },
+    { no: 2, name: "authority", kind: "message", T: SolanaAccountId },
+    { no: 3, name: "source", kind: "message", T: SolanaAccountId },
+    { no: 4, name: "amount", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): FeePaymentAction {
@@ -1737,23 +1754,21 @@ export class FeePaymentAction extends Message<FeePaymentAction> {
  */
 export enum FeePaymentAction_FeeType {
   /**
-   * Hardcoded $0.01 USD fee to a dynamic fee account specified by server
-   *
-   * @generated from enum value: CODE = 0;
+   * @generated from enum value: UNKNOWN = 0;
    */
-  CODE = 0,
+  UNKNOWN = 0,
 
   /**
-   * Third party fee specified at time of payment request
+   * Server-defined fee for creating an external ATA for withdrawals on send
    *
-   * @generated from enum value: THIRD_PARTY = 1;
+   * @generated from enum value: WITHDRAWAL_CREATE_ON_SEND = 1;
    */
-  THIRD_PARTY = 1,
+  WITHDRAWAL_CREATE_ON_SEND = 1,
 }
 // Retrieve enum metadata with: proto3.getEnumType(FeePaymentAction_FeeType)
 proto3.util.setEnumType(FeePaymentAction_FeeType, "code.transaction.v2.FeePaymentAction.FeeType", [
-  { no: 0, name: "CODE" },
-  { no: 1, name: "THIRD_PARTY" },
+  { no: 0, name: "UNKNOWN" },
+  { no: 1, name: "WITHDRAWAL_CREATE_ON_SEND" },
 ]);
 
 /**
@@ -1998,12 +2013,13 @@ export class NoPrivacyWithdrawServerParameter extends Message<NoPrivacyWithdrawS
  */
 export class FeePaymentServerParameter extends Message<FeePaymentServerParameter> {
   /**
-   * The destination account where Code fee payments should be sent. This will
-   * only be set when the corresponding FeePaymentAction Type is CODE.
+   * The destination account where OCP fee payments should be sent. This will
+   * only be set when the corresponding FeePaymentAction.Type:
+   * - WITHDRAWAL_CREATE_ON_SEND
    *
-   * @generated from field: code.common.v1.SolanaAccountId code_destination = 1;
+   * @generated from field: code.common.v1.SolanaAccountId destination = 1;
    */
-  codeDestination?: SolanaAccountId;
+  destination?: SolanaAccountId;
 
   constructor(data?: PartialMessage<FeePaymentServerParameter>) {
     super();
@@ -2013,7 +2029,7 @@ export class FeePaymentServerParameter extends Message<FeePaymentServerParameter
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "code.transaction.v2.FeePaymentServerParameter";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "code_destination", kind: "message", T: SolanaAccountId },
+    { no: 1, name: "destination", kind: "message", T: SolanaAccountId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): FeePaymentServerParameter {
@@ -2428,43 +2444,6 @@ export class SendLimit extends Message<SendLimit> {
 
   static equals(a: SendLimit | PlainMessage<SendLimit> | undefined, b: SendLimit | PlainMessage<SendLimit> | undefined): boolean {
     return proto3.util.equals(SendLimit, a, b);
-  }
-}
-
-/**
- * @generated from message code.transaction.v2.Cursor
- */
-export class Cursor extends Message<Cursor> {
-  /**
-   * @generated from field: bytes value = 1;
-   */
-  value = new Uint8Array(0);
-
-  constructor(data?: PartialMessage<Cursor>) {
-    super();
-    proto3.util.initPartial(data, this);
-  }
-
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.Cursor";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "value", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-  ]);
-
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Cursor {
-    return new Cursor().fromBinary(bytes, options);
-  }
-
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Cursor {
-    return new Cursor().fromJson(jsonValue, options);
-  }
-
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Cursor {
-    return new Cursor().fromJsonString(jsonString, options);
-  }
-
-  static equals(a: Cursor | PlainMessage<Cursor> | undefined, b: Cursor | PlainMessage<Cursor> | undefined): boolean {
-    return proto3.util.equals(Cursor, a, b);
   }
 }
 
