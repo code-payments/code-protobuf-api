@@ -1759,16 +1759,16 @@ export enum FeePaymentAction_FeeType {
   UNKNOWN = 0,
 
   /**
-   * Server-defined fee for creating an external ATA for withdrawals on send
+   * Server-defined fee for creating an external ATA on withdrawals on send
    *
-   * @generated from enum value: WITHDRAWAL_CREATE_ON_SEND = 1;
+   * @generated from enum value: CREATE_ON_SEND_WITHDRAWAL = 1;
    */
-  WITHDRAWAL_CREATE_ON_SEND = 1,
+  CREATE_ON_SEND_WITHDRAWAL = 1,
 }
 // Retrieve enum metadata with: proto3.getEnumType(FeePaymentAction_FeeType)
 proto3.util.setEnumType(FeePaymentAction_FeeType, "code.transaction.v2.FeePaymentAction.FeeType", [
   { no: 0, name: "UNKNOWN" },
-  { no: 1, name: "WITHDRAWAL_CREATE_ON_SEND" },
+  { no: 1, name: "CREATE_ON_SEND_WITHDRAWAL" },
 ]);
 
 /**
@@ -2015,7 +2015,7 @@ export class FeePaymentServerParameter extends Message<FeePaymentServerParameter
   /**
    * The destination account where OCP fee payments should be sent. This will
    * only be set when the corresponding FeePaymentAction.Type:
-   * - WITHDRAWAL_CREATE_ON_SEND
+   * - CREATE_ON_SEND_WITHDRAWAL
    *
    * @generated from field: code.common.v1.SolanaAccountId destination = 1;
    */
