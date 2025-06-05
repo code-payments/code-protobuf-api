@@ -249,6 +249,26 @@ func (m *GetTokenAccountInfosRequest) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetRequestingOwner()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetTokenAccountInfosRequestValidationError{
+				field:  "RequestingOwner",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetRequestingOwnerSignature()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetTokenAccountInfosRequestValidationError{
+				field:  "RequestingOwnerSignature",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
@@ -474,6 +494,8 @@ func (m *TokenAccountInfo) Validate() error {
 			}
 		}
 	}
+
+	// no validation rules for IsGiftCardIssuer
 
 	return nil
 }

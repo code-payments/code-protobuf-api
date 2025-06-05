@@ -131,21 +131,43 @@ proto3.util.setEnumType(IsCodeAccountResponse_Result, "code.account.v1.IsCodeAcc
  */
 export class GetTokenAccountInfosRequest extends Message<GetTokenAccountInfosRequest> {
   /**
-   * The owner account, which can also be thought of as a parent account for this
-   * RPC that links to one or more token accounts.
+   * The owner account to fetch balances for, which can also be thought of as a
+   * parent account for this RPC that links to one or more token accounts.
    *
    * @generated from field: code.common.v1.SolanaAccountId owner = 1;
    */
   owner?: SolanaAccountId;
 
   /**
-   * The signature is of serialize(GetTokenAccountInfosRequest) without this field set
-   * using the private key of the owner account. This provides an authentication
-   * mechanism to the RPC.
+   * The signature is of serialize(GetTokenAccountInfosRequest) without signature
+   * fields set using the private key of the owner account. This provides
+   * an authentication mechanism to the RPC.
    *
    * @generated from field: code.common.v1.Signature signature = 2;
    */
   signature?: Signature;
+
+  /**
+   * A requesting owner account that is requesting the balance for owner. Additional
+   * metadata that is considered private will be provided, if applicable. An example
+   * use case includes a user owner account requesting account info for a gift card
+   * owner account.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId requesting_owner = 3;
+   */
+  requestingOwner?: SolanaAccountId;
+
+  /**
+   * The signature is of serialize(GetTokenAccountInfosRequest) without signature
+   * fields set using the private key of the requesting_owner_signature account.
+   * This provides an authentication mechanism to the RPC when requesting_owner is
+   * present.
+   * 
+   * This must be set when requesting_owner is present.
+   *
+   * @generated from field: code.common.v1.Signature requesting_owner_signature = 4;
+   */
+  requestingOwnerSignature?: Signature;
 
   constructor(data?: PartialMessage<GetTokenAccountInfosRequest>) {
     super();
@@ -157,6 +179,8 @@ export class GetTokenAccountInfosRequest extends Message<GetTokenAccountInfosReq
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "owner", kind: "message", T: SolanaAccountId },
     { no: 2, name: "signature", kind: "message", T: Signature },
+    { no: 3, name: "requesting_owner", kind: "message", T: SolanaAccountId },
+    { no: 4, name: "requesting_owner_signature", kind: "message", T: Signature },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetTokenAccountInfosRequest {
@@ -351,6 +375,14 @@ export class TokenAccountInfo extends Message<TokenAccountInfo> {
    */
   createdAt?: Timestamp;
 
+  /**
+   * For REMOTE_SEND_GIFT_CARD, if requesting_owner was provided, was
+   * requesting_owner the issuer of the account.
+   *
+   * @generated from field: bool is_gift_card_issuer = 18;
+   */
+  isGiftCardIssuer = false;
+
   constructor(data?: PartialMessage<TokenAccountInfo>) {
     super();
     proto3.util.initPartial(data, this);
@@ -372,6 +404,7 @@ export class TokenAccountInfo extends Message<TokenAccountInfo> {
     { no: 12, name: "original_exchange_data", kind: "message", T: ExchangeData },
     { no: 13, name: "mint", kind: "message", T: SolanaAccountId },
     { no: 17, name: "created_at", kind: "message", T: Timestamp },
+    { no: 18, name: "is_gift_card_issuer", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): TokenAccountInfo {
