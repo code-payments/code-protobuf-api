@@ -1354,6 +1354,13 @@ func (m *SendPublicPaymentMetadata) Validate() error {
 		return nil
 	}
 
+	if m.GetSource() == nil {
+		return SendPublicPaymentMetadataValidationError{
+			field:  "Source",
+			reason: "value is required",
+		}
+	}
+
 	if v, ok := interface{}(m.GetSource()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SendPublicPaymentMetadataValidationError{
@@ -1381,6 +1388,16 @@ func (m *SendPublicPaymentMetadata) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetDestinationOwner()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SendPublicPaymentMetadataValidationError{
+				field:  "DestinationOwner",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if m.GetExchangeData() == nil {
 		return SendPublicPaymentMetadataValidationError{
 			field:  "ExchangeData",
@@ -1401,16 +1418,6 @@ func (m *SendPublicPaymentMetadata) Validate() error {
 	// no validation rules for IsWithdrawal
 
 	// no validation rules for IsRemoteSend
-
-	if v, ok := interface{}(m.GetDestinationOwner()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SendPublicPaymentMetadataValidationError{
-				field:  "DestinationOwner",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
 
 	return nil
 }

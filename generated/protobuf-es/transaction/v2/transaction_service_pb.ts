@@ -757,7 +757,7 @@ export class CanWithdrawToAccountResponse extends Message<CanWithdrawToAccountRe
   requiresInitialization = false;
 
   /**
-   * The WITHDRAWAL_CREATE_ON_SEND fee, in USD, that must be paid in order to
+   * The CREATE_ON_SEND_WITHDRAWAL fee, in USD, that must be paid in order to
    * submit a withdrawal to subsidize the creation of the account at time of
    * send. The user must explicitly agree to this fee amount before submitting
    * the intent.
@@ -1222,8 +1222,8 @@ export class OpenAccountsMetadata extends Message<OpenAccountsMetadata> {
  */
 export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata> {
   /**
-   * The primary account where funds will be sent from. The primary account is assumed if this
-   * field is not set for backwards compatibility with old clients.
+   * The source account where funds will be sent from. Currently, this is always
+   * the user's primary account.
    *
    * @generated from field: code.common.v1.SolanaAccountId source = 4;
    */
@@ -1235,6 +1235,14 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
    * @generated from field: code.common.v1.SolanaAccountId destination = 1;
    */
   destination?: SolanaAccountId;
+
+  /**
+   * Destination owner account, which is required for withdrawals that intend
+   * to create an ATA. Every other variation of this intent can omit this field.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId destination_owner = 6;
+   */
+  destinationOwner?: SolanaAccountId;
 
   /**
    * The exchange data of total funds being sent to the destination
@@ -1257,14 +1265,6 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
    */
   isRemoteSend = false;
 
-  /**
-   * Destination owner account, which is required for withdrawals that intend
-   * to create an ATA. Every other variation of this intent can omit this field.
-   *
-   * @generated from field: code.common.v1.SolanaAccountId destination_owner = 6;
-   */
-  destinationOwner?: SolanaAccountId;
-
   constructor(data?: PartialMessage<SendPublicPaymentMetadata>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1275,10 +1275,10 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 4, name: "source", kind: "message", T: SolanaAccountId },
     { no: 1, name: "destination", kind: "message", T: SolanaAccountId },
+    { no: 6, name: "destination_owner", kind: "message", T: SolanaAccountId },
     { no: 2, name: "exchange_data", kind: "message", T: ExchangeData },
     { no: 3, name: "is_withdrawal", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 5, name: "is_remote_send", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 6, name: "destination_owner", kind: "message", T: SolanaAccountId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SendPublicPaymentMetadata {
