@@ -94,6 +94,11 @@ export enum AccountType {
    * @generated from enum value: ASSOCIATED_TOKEN_ACCOUNT = 15;
    */
   ASSOCIATED_TOKEN_ACCOUNT = 15,
+
+  /**
+   * @generated from enum value: POOL = 16;
+   */
+  POOL = 16,
 }
 // Retrieve enum metadata with: proto3.getEnumType(AccountType)
 proto3.util.setEnumType(AccountType, "code.common.v1.AccountType", [
@@ -113,6 +118,7 @@ proto3.util.setEnumType(AccountType, "code.common.v1.AccountType", [
   { no: 13, name: "RELATIONSHIP" },
   { no: 14, name: "SWAP" },
   { no: 15, name: "ASSOCIATED_TOKEN_ACCOUNT" },
+  { no: 16, name: "POOL" },
 ]);
 
 /**

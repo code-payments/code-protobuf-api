@@ -1122,6 +1122,12 @@ export class Metadata extends Message<Metadata> {
      */
     value: ReceivePaymentsPubliclyMetadata;
     case: "receivePaymentsPublicly";
+  } | {
+    /**
+     * @generated from field: code.transaction.v2.PublicDistributionMetadata public_distribution = 9;
+     */
+    value: PublicDistributionMetadata;
+    case: "publicDistribution";
   } | { case: undefined; value?: undefined } = { case: undefined };
 
   constructor(data?: PartialMessage<Metadata>) {
@@ -1135,6 +1141,7 @@ export class Metadata extends Message<Metadata> {
     { no: 1, name: "open_accounts", kind: "message", T: OpenAccountsMetadata, oneof: "type" },
     { no: 6, name: "send_public_payment", kind: "message", T: SendPublicPaymentMetadata, oneof: "type" },
     { no: 7, name: "receive_payments_publicly", kind: "message", T: ReceivePaymentsPubliclyMetadata, oneof: "type" },
+    { no: 9, name: "public_distribution", kind: "message", T: PublicDistributionMetadata, oneof: "type" },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Metadata {
@@ -1155,19 +1162,26 @@ export class Metadata extends Message<Metadata> {
 }
 
 /**
- * Open a set of accounts. Currently, clients should only use this for new users
- * to open all required accounts up front..
+ * Open a set of accounts
  *
- * Action Spec:
+ * Action Spec (User):
  *
  * for account in [PRIMARY]
  *   actions.push_back(OpenAccountAction(account))
  *
- * Nothing is currently required
+ * Action Spec (Pool):
+ *
+ * for account in [POOL]
+ *   actions.push_back(OpenAccountAction(account))
  *
  * @generated from message code.transaction.v2.OpenAccountsMetadata
  */
 export class OpenAccountsMetadata extends Message<OpenAccountsMetadata> {
+  /**
+   * @generated from field: code.transaction.v2.OpenAccountsMetadata.AccountSet account_set = 1;
+   */
+  accountSet = OpenAccountsMetadata_AccountSet.USER;
+
   constructor(data?: PartialMessage<OpenAccountsMetadata>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1176,6 +1190,7 @@ export class OpenAccountsMetadata extends Message<OpenAccountsMetadata> {
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "code.transaction.v2.OpenAccountsMetadata";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "account_set", kind: "enum", T: proto3.getEnumType(OpenAccountsMetadata_AccountSet) },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): OpenAccountsMetadata {
@@ -1194,6 +1209,30 @@ export class OpenAccountsMetadata extends Message<OpenAccountsMetadata> {
     return proto3.util.equals(OpenAccountsMetadata, a, b);
   }
 }
+
+/**
+ * @generated from enum code.transaction.v2.OpenAccountsMetadata.AccountSet
+ */
+export enum OpenAccountsMetadata_AccountSet {
+  /**
+   * Opens a set of user accounts
+   *
+   * @generated from enum value: USER = 0;
+   */
+  USER = 0,
+
+  /**
+   * Opens a pool account
+   *
+   * @generated from enum value: POOL = 1;
+   */
+  POOL = 1,
+}
+// Retrieve enum metadata with: proto3.getEnumType(OpenAccountsMetadata_AccountSet)
+proto3.util.setEnumType(OpenAccountsMetadata_AccountSet, "code.transaction.v2.OpenAccountsMetadata.AccountSet", [
+  { no: 0, name: "USER" },
+  { no: 1, name: "POOL" },
+]);
 
 /**
  * Send a payment to a destination account publicly.
@@ -1368,6 +1407,113 @@ export class ReceivePaymentsPubliclyMetadata extends Message<ReceivePaymentsPubl
 
   static equals(a: ReceivePaymentsPubliclyMetadata | PlainMessage<ReceivePaymentsPubliclyMetadata> | undefined, b: ReceivePaymentsPubliclyMetadata | PlainMessage<ReceivePaymentsPubliclyMetadata> | undefined): boolean {
     return proto3.util.equals(ReceivePaymentsPubliclyMetadata, a, b);
+  }
+}
+
+/**
+ * Distribute funds from a pool account publicly to one or more user-owned accounts.
+ *
+ * Action Spec:
+ *
+ * for distribution in distributions[:len(distributions)-1]
+ *   actions.push_back(NoPrivacyTransferAction(POOL, distribution.destination, distributions.quarks))
+ * actions.push_back(NoPrivacyWithdrawAction(POOL, distributions[:len(distributions)-1].destination, distributions[:len(distributions)-1].quarks))
+ *
+ * Notes:
+ *  - All funds must distributed. The balance of the pool must be zero at the end of the intent
+ *  - The pool is closed at the end of the intent via a NoPrivacyWithdrawAction
+ *
+ * @generated from message code.transaction.v2.PublicDistributionMetadata
+ */
+export class PublicDistributionMetadata extends Message<PublicDistributionMetadata> {
+  /**
+   * The pool account to distribute from
+   *
+   * @generated from field: code.common.v1.SolanaAccountId source = 1;
+   */
+  source?: SolanaAccountId;
+
+  /**
+   * The set of distributions
+   *
+   * @generated from field: repeated code.transaction.v2.PublicDistributionMetadata.Distribution distributions = 2;
+   */
+  distributions: PublicDistributionMetadata_Distribution[] = [];
+
+  constructor(data?: PartialMessage<PublicDistributionMetadata>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.transaction.v2.PublicDistributionMetadata";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "source", kind: "message", T: SolanaAccountId },
+    { no: 2, name: "distributions", kind: "message", T: PublicDistributionMetadata_Distribution, repeated: true },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PublicDistributionMetadata {
+    return new PublicDistributionMetadata().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): PublicDistributionMetadata {
+    return new PublicDistributionMetadata().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): PublicDistributionMetadata {
+    return new PublicDistributionMetadata().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: PublicDistributionMetadata | PlainMessage<PublicDistributionMetadata> | undefined, b: PublicDistributionMetadata | PlainMessage<PublicDistributionMetadata> | undefined): boolean {
+    return proto3.util.equals(PublicDistributionMetadata, a, b);
+  }
+}
+
+/**
+ * @generated from message code.transaction.v2.PublicDistributionMetadata.Distribution
+ */
+export class PublicDistributionMetadata_Distribution extends Message<PublicDistributionMetadata_Distribution> {
+  /**
+   * Destination where a portion of the pool's funds will be distributed.
+   * This must always be a primary account.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId destination = 1;
+   */
+  destination?: SolanaAccountId;
+
+  /**
+   * The amount of funds to distribute to the destination
+   *
+   * @generated from field: uint64 quarks = 2;
+   */
+  quarks = protoInt64.zero;
+
+  constructor(data?: PartialMessage<PublicDistributionMetadata_Distribution>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.transaction.v2.PublicDistributionMetadata.Distribution";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "destination", kind: "message", T: SolanaAccountId },
+    { no: 2, name: "quarks", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PublicDistributionMetadata_Distribution {
+    return new PublicDistributionMetadata_Distribution().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): PublicDistributionMetadata_Distribution {
+    return new PublicDistributionMetadata_Distribution().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): PublicDistributionMetadata_Distribution {
+    return new PublicDistributionMetadata_Distribution().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: PublicDistributionMetadata_Distribution | PlainMessage<PublicDistributionMetadata_Distribution> | undefined, b: PublicDistributionMetadata_Distribution | PlainMessage<PublicDistributionMetadata_Distribution> | undefined): boolean {
+    return proto3.util.equals(PublicDistributionMetadata_Distribution, a, b);
   }
 }
 

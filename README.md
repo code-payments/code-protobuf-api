@@ -12,7 +12,6 @@ The APIs and models for communication between Code clients and server.
 - [Account](https://github.com/code-payments/code-protobuf-api/blob/main/proto/account/v1/account_service.proto)
 - [Currency](https://github.com/code-payments/code-protobuf-api/blob/main/proto/currency/v1/currency_service.proto)
 - [Messaging](https://github.com/code-payments/code-protobuf-api/blob/main/proto/messaging/v1/messaging_service.proto)
-- [Micro Payment](https://github.com/code-payments/code-protobuf-api/blob/main/proto/micropayment/v1/micro_payment_service.proto)
 - [Transaction](https://github.com/code-payments/code-protobuf-api/blob/main/proto/transaction/v2/transaction_service.proto)
 
 ## Code Generation
