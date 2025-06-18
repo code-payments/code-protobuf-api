@@ -441,7 +441,10 @@ message PublicDistributionMetadata {
     common.v1.SolanaAccountId source = 1 [(validate.rules).message.required = true];
 
     // The set of distributions
-    repeated Distribution distributions = 2;
+    repeated Distribution distributions = 2 [(validate.rules).repeated = {
+        min_items: 1,
+        // todo: max-items?
+    }];;
     message Distribution {
         // Destination where a portion of the pool's funds will be distributed.
         // This must always be a primary account.

@@ -1631,6 +1631,13 @@ func (m *PublicDistributionMetadata) Validate() error {
 		}
 	}
 
+	if len(m.GetDistributions()) < 1 {
+		return PublicDistributionMetadataValidationError{
+			field:  "Distributions",
+			reason: "value must contain at least 1 item(s)",
+		}
+	}
+
 	for idx, item := range m.GetDistributions() {
 		_, _ = idx, item
 
