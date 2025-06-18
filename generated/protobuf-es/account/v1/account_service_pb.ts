@@ -214,6 +214,13 @@ export class GetTokenAccountInfosResponse extends Message<GetTokenAccountInfosRe
    */
   tokenAccountInfos: { [key: string]: TokenAccountInfo } = {};
 
+  /**
+   * The next index clients should use for POOL account types
+   *
+   * @generated from field: uint64 next_pool_index = 3;
+   */
+  nextPoolIndex = protoInt64.zero;
+
   constructor(data?: PartialMessage<GetTokenAccountInfosResponse>) {
     super();
     proto3.util.initPartial(data, this);
@@ -224,6 +231,7 @@ export class GetTokenAccountInfosResponse extends Message<GetTokenAccountInfosRe
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "result", kind: "enum", T: proto3.getEnumType(GetTokenAccountInfosResponse_Result) },
     { no: 2, name: "token_account_infos", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: TokenAccountInfo} },
+    { no: 3, name: "next_pool_index", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetTokenAccountInfosResponse {

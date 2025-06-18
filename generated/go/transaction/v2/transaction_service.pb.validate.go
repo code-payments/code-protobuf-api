@@ -1214,6 +1214,18 @@ func (m *Metadata) Validate() error {
 			}
 		}
 
+	case *Metadata_PublicDistribution:
+
+		if v, ok := interface{}(m.GetPublicDistribution()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return MetadataValidationError{
+					field:  "PublicDistribution",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
 	default:
 		return MetadataValidationError{
 			field:  "Type",
@@ -1285,6 +1297,13 @@ var _ interface {
 func (m *OpenAccountsMetadata) Validate() error {
 	if m == nil {
 		return nil
+	}
+
+	if _, ok := OpenAccountsMetadata_AccountSet_name[int32(m.GetAccountSet())]; !ok {
+		return OpenAccountsMetadataValidationError{
+			field:  "AccountSet",
+			reason: "value must be one of the defined enum values",
+		}
 	}
 
 	return nil
@@ -1586,6 +1605,105 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ReceivePaymentsPubliclyMetadataValidationError{}
+
+// Validate checks the field values on PublicDistributionMetadata with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *PublicDistributionMetadata) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetSource() == nil {
+		return PublicDistributionMetadataValidationError{
+			field:  "Source",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetSource()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PublicDistributionMetadataValidationError{
+				field:  "Source",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	for idx, item := range m.GetDistributions() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return PublicDistributionMetadataValidationError{
+					field:  fmt.Sprintf("Distributions[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// PublicDistributionMetadataValidationError is the validation error returned
+// by PublicDistributionMetadata.Validate if the designated constraints aren't met.
+type PublicDistributionMetadataValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PublicDistributionMetadataValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PublicDistributionMetadataValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PublicDistributionMetadataValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PublicDistributionMetadataValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PublicDistributionMetadataValidationError) ErrorName() string {
+	return "PublicDistributionMetadataValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e PublicDistributionMetadataValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPublicDistributionMetadata.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PublicDistributionMetadataValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PublicDistributionMetadataValidationError{}
 
 // Validate checks the field values on Action with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
@@ -3891,3 +4009,95 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = SubmitIntentResponse_ErrorValidationError{}
+
+// Validate checks the field values on PublicDistributionMetadata_Distribution
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, an error is returned.
+func (m *PublicDistributionMetadata_Distribution) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetDestination() == nil {
+		return PublicDistributionMetadata_DistributionValidationError{
+			field:  "Destination",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetDestination()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PublicDistributionMetadata_DistributionValidationError{
+				field:  "Destination",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetQuarks() <= 0 {
+		return PublicDistributionMetadata_DistributionValidationError{
+			field:  "Quarks",
+			reason: "value must be greater than 0",
+		}
+	}
+
+	return nil
+}
+
+// PublicDistributionMetadata_DistributionValidationError is the validation
+// error returned by PublicDistributionMetadata_Distribution.Validate if the
+// designated constraints aren't met.
+type PublicDistributionMetadata_DistributionValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PublicDistributionMetadata_DistributionValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PublicDistributionMetadata_DistributionValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PublicDistributionMetadata_DistributionValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PublicDistributionMetadata_DistributionValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PublicDistributionMetadata_DistributionValidationError) ErrorName() string {
+	return "PublicDistributionMetadata_DistributionValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e PublicDistributionMetadata_DistributionValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPublicDistributionMetadata_Distribution.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PublicDistributionMetadata_DistributionValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PublicDistributionMetadata_DistributionValidationError{}

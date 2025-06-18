@@ -341,6 +341,8 @@ func (m *GetTokenAccountInfosResponse) Validate() error {
 
 	// no validation rules for TokenAccountInfos
 
+	// no validation rules for NextPoolIndex
+
 	return nil
 }
 

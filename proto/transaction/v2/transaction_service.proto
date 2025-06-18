@@ -327,6 +327,7 @@ message Metadata {
         OpenAccountsMetadata            open_accounts             = 1;
         SendPublicPaymentMetadata       send_public_payment       = 6;
         ReceivePaymentsPubliclyMetadata receive_payments_publicly = 7;
+        PublicDistributionMetadata      public_distribution       = 9;
     }
 
     reserved 2; // Deprecated SendPrivatePaymentMetadata
@@ -336,15 +337,23 @@ message Metadata {
     reserved 8; // Deprecated EstablishRelationshipMetadata
 }
 
-// Open a set of accounts. Currently, clients should only use this for new users
-// to open all required accounts up front..
+// Open a set of accounts
 //
-// Action Spec:
+// Action Spec (User):
 //
 // for account in [PRIMARY]
 //   actions.push_back(OpenAccountAction(account))
+//
+// Action Spec (Pool):
+//
+// for account in [POOL]
+//   actions.push_back(OpenAccountAction(account))
 message OpenAccountsMetadata {
-    // Nothing is currently required
+    AccountSet account_set = 1 [(validate.rules).enum.defined_only = true];
+    enum AccountSet {
+        USER = 0; // Opens a set of user accounts
+        POOL = 1; // Opens a pool account
+    }
 }
 
 // Send a payment to a destination account publicly.
@@ -414,6 +423,33 @@ message ReceivePaymentsPubliclyMetadata {
     // part of creating the gift card account. This is purely a server-provided value.
     // SubmitIntent will disallow this being set.
     ExchangeData exchange_data = 5;
+}
+
+// Distribute funds from a pool account publicly to one or more user-owned accounts.
+//
+// Action Spec:
+//
+// for distribution in distributions[:len(distributions)-1]
+//   actions.push_back(NoPrivacyTransferAction(POOL, distribution.destination, distributions.quarks))
+// actions.push_back(NoPrivacyWithdrawAction(POOL, distributions[:len(distributions)-1].destination, distributions[:len(distributions)-1].quarks))
+//
+// Notes:
+//  - All funds must distributed. The balance of the pool must be zero at the end of the intent
+//  - The pool is closed at the end of the intent via a NoPrivacyWithdrawAction
+message PublicDistributionMetadata {
+    // The pool account to distribute from
+    common.v1.SolanaAccountId source = 1 [(validate.rules).message.required = true];
+
+    // The set of distributions
+    repeated Distribution distributions = 2;
+    message Distribution {
+        // Destination where a portion of the pool's funds will be distributed.
+        // This must always be a primary account.
+        common.v1.SolanaAccountId destination = 1 [(validate.rules).message.required = true];
+
+        // The amount of funds to distribute to the destination
+        uint64 quarks = 2 [(validate.rules).uint64.gt = 0];
+    }
 }
 
 //
@@ -550,10 +586,10 @@ message ServerParameter {
     oneof type {
         option (validate.required) = true;
 
-        OpenAccountServerParameter              open_account               = 3;
-        NoPrivacyTransferServerParameter        no_privacy_transfer        = 6;
-        NoPrivacyWithdrawServerParameter        no_privacy_withdraw        = 7;
-        FeePaymentServerParameter               fee_payment                = 11;
+        OpenAccountServerParameter       open_account        = 3;
+        NoPrivacyTransferServerParameter no_privacy_transfer = 6;
+        NoPrivacyWithdrawServerParameter no_privacy_withdraw = 7;
+        FeePaymentServerParameter        fee_payment         = 11;
     }
 
     reserved 4;  // Deprecated CloseEmptyAccountServerParameter
