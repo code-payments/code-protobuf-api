@@ -169,6 +169,25 @@ export class GetTokenAccountInfosRequest extends Message<GetTokenAccountInfosReq
    */
   requestingOwnerSignature?: Signature;
 
+  /**
+   * Filter to apply to limit response sizes
+   *
+   * @generated from oneof code.account.v1.GetTokenAccountInfosRequest.Filter
+   */
+  Filter: {
+    /**
+     * @generated from field: code.common.v1.SolanaAccountId filter_by_token_address = 10;
+     */
+    value: SolanaAccountId;
+    case: "filterByTokenAddress";
+  } | {
+    /**
+     * @generated from field: code.common.v1.AccountType filter_by_account_type = 11;
+     */
+    value: AccountType;
+    case: "filterByAccountType";
+  } | { case: undefined; value?: undefined } = { case: undefined };
+
   constructor(data?: PartialMessage<GetTokenAccountInfosRequest>) {
     super();
     proto3.util.initPartial(data, this);
@@ -181,6 +200,8 @@ export class GetTokenAccountInfosRequest extends Message<GetTokenAccountInfosReq
     { no: 2, name: "signature", kind: "message", T: Signature },
     { no: 3, name: "requesting_owner", kind: "message", T: SolanaAccountId },
     { no: 4, name: "requesting_owner_signature", kind: "message", T: Signature },
+    { no: 10, name: "filter_by_token_address", kind: "message", T: SolanaAccountId, oneof: "Filter" },
+    { no: 11, name: "filter_by_account_type", kind: "enum", T: proto3.getEnumType(AccountType), oneof: "Filter" },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetTokenAccountInfosRequest {

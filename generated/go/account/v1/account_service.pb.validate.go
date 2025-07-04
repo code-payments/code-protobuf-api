@@ -35,6 +35,8 @@ var (
 	_ = ptypes.DynamicAny{}
 
 	_ = common.AccountType(0)
+
+	_ = common.AccountType(0)
 )
 
 // Validate checks the field values on IsCodeAccountRequest with the rules
@@ -267,6 +269,25 @@ func (m *GetTokenAccountInfosRequest) Validate() error {
 				cause:  err,
 			}
 		}
+	}
+
+	switch m.Filter.(type) {
+
+	case *GetTokenAccountInfosRequest_FilterByTokenAddress:
+
+		if v, ok := interface{}(m.GetFilterByTokenAddress()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return GetTokenAccountInfosRequestValidationError{
+					field:  "FilterByTokenAddress",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *GetTokenAccountInfosRequest_FilterByAccountType:
+		// no validation rules for FilterByAccountType
+
 	}
 
 	return nil
