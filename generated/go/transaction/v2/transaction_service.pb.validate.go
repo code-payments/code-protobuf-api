@@ -3584,10 +3584,10 @@ func (m *SubmitIntentRequest_SubmitActions) Validate() error {
 		}
 	}
 
-	if l := len(m.GetActions()); l < 1 || l > 256 {
+	if l := len(m.GetActions()); l < 1 || l > 1024 {
 		return SubmitIntentRequest_SubmitActionsValidationError{
 			field:  "Actions",
-			reason: "value must contain between 1 and 256 items, inclusive",
+			reason: "value must contain between 1 and 1024 items, inclusive",
 		}
 	}
 
@@ -3691,10 +3691,10 @@ func (m *SubmitIntentRequest_SubmitSignatures) Validate() error {
 		return nil
 	}
 
-	if l := len(m.GetSignatures()); l < 1 || l > 256 {
+	if l := len(m.GetSignatures()); l < 1 || l > 1024 {
 		return SubmitIntentRequest_SubmitSignaturesValidationError{
 			field:  "Signatures",
-			reason: "value must contain between 1 and 256 items, inclusive",
+			reason: "value must contain between 1 and 1024 items, inclusive",
 		}
 	}
 
