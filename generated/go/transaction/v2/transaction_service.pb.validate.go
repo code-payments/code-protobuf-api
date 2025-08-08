@@ -3781,10 +3781,10 @@ func (m *SubmitIntentResponse_ServerParameters) Validate() error {
 		return nil
 	}
 
-	if l := len(m.GetServerParameters()); l < 1 || l > 256 {
+	if l := len(m.GetServerParameters()); l < 1 || l > 1024 {
 		return SubmitIntentResponse_ServerParametersValidationError{
 			field:  "ServerParameters",
-			reason: "value must contain between 1 and 256 items, inclusive",
+			reason: "value must contain between 1 and 1024 items, inclusive",
 		}
 	}
 
