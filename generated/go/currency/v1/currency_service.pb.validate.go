@@ -200,3 +200,438 @@ var _ interface {
 } = GetAllRatesResponseValidationError{}
 
 var _GetAllRatesResponse_Rates_Pattern = regexp.MustCompile("^[a-z]{3,4}$")
+
+// Validate checks the field values on GetMintsRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *GetMintsRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if l := len(m.GetAddresses()); l < 1 || l > 1024 {
+		return GetMintsRequestValidationError{
+			field:  "Addresses",
+			reason: "value must contain between 1 and 1024 items, inclusive",
+		}
+	}
+
+	for idx, item := range m.GetAddresses() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return GetMintsRequestValidationError{
+					field:  fmt.Sprintf("Addresses[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// GetMintsRequestValidationError is the validation error returned by
+// GetMintsRequest.Validate if the designated constraints aren't met.
+type GetMintsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetMintsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetMintsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetMintsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetMintsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetMintsRequestValidationError) ErrorName() string { return "GetMintsRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GetMintsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetMintsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetMintsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetMintsRequestValidationError{}
+
+// Validate checks the field values on GetMintsResponse with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *GetMintsResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Result
+
+	// no validation rules for MetadataByAddress
+
+	return nil
+}
+
+// GetMintsResponseValidationError is the validation error returned by
+// GetMintsResponse.Validate if the designated constraints aren't met.
+type GetMintsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetMintsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetMintsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetMintsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetMintsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetMintsResponseValidationError) ErrorName() string { return "GetMintsResponseValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GetMintsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetMintsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetMintsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetMintsResponseValidationError{}
+
+// Validate checks the field values on Mint with the rules defined in the proto
+// definition for this message. If any rules are violated, an error is returned.
+func (m *Mint) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetAddress() == nil {
+		return MintValidationError{
+			field:  "Address",
+			reason: "value is required",
+		}
+	}
+
+	// no validation rules for Decimals
+
+	if l := utf8.RuneCountInString(m.GetName()); l < 1 || l > 32 {
+		return MintValidationError{
+			field:  "Name",
+			reason: "value length must be between 1 and 32 runes, inclusive",
+		}
+	}
+
+	if l := utf8.RuneCountInString(m.GetSymbol()); l < 1 || l > 8 {
+		return MintValidationError{
+			field:  "Symbol",
+			reason: "value length must be between 1 and 8 runes, inclusive",
+		}
+	}
+
+	if v, ok := interface{}(m.GetVmMetadata()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return MintValidationError{
+				field:  "VmMetadata",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetCurrencyCreatorMetadata()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return MintValidationError{
+				field:  "CurrencyCreatorMetadata",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// MintValidationError is the validation error returned by Mint.Validate if the
+// designated constraints aren't met.
+type MintValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e MintValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e MintValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e MintValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e MintValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e MintValidationError) ErrorName() string { return "MintValidationError" }
+
+// Error satisfies the builtin error interface
+func (e MintValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sMint.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = MintValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = MintValidationError{}
+
+// Validate checks the field values on VmMintMetadata with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *VmMintMetadata) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetVm() == nil {
+		return VmMintMetadataValidationError{
+			field:  "Vm",
+			reason: "value is required",
+		}
+	}
+
+	if m.GetAuthority() == nil {
+		return VmMintMetadataValidationError{
+			field:  "Authority",
+			reason: "value is required",
+		}
+	}
+
+	if m.GetLockDurationInDays() != 21 {
+		return VmMintMetadataValidationError{
+			field:  "LockDurationInDays",
+			reason: "value must equal 21",
+		}
+	}
+
+	return nil
+}
+
+// VmMintMetadataValidationError is the validation error returned by
+// VmMintMetadata.Validate if the designated constraints aren't met.
+type VmMintMetadataValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e VmMintMetadataValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e VmMintMetadataValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e VmMintMetadataValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e VmMintMetadataValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e VmMintMetadataValidationError) ErrorName() string { return "VmMintMetadataValidationError" }
+
+// Error satisfies the builtin error interface
+func (e VmMintMetadataValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sVmMintMetadata.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = VmMintMetadataValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = VmMintMetadataValidationError{}
+
+// Validate checks the field values on CurrencyCreatorMintMetadata with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *CurrencyCreatorMintMetadata) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for SupplyFromBonding
+
+	// no validation rules for CoreMintTokensLocked
+
+	if m.GetBuyFeeBps() != 0 {
+		return CurrencyCreatorMintMetadataValidationError{
+			field:  "BuyFeeBps",
+			reason: "value must equal 0",
+		}
+	}
+
+	if m.GetSellFeeBps() != 100 {
+		return CurrencyCreatorMintMetadataValidationError{
+			field:  "SellFeeBps",
+			reason: "value must equal 100",
+		}
+	}
+
+	return nil
+}
+
+// CurrencyCreatorMintMetadataValidationError is the validation error returned
+// by CurrencyCreatorMintMetadata.Validate if the designated constraints
+// aren't met.
+type CurrencyCreatorMintMetadataValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CurrencyCreatorMintMetadataValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CurrencyCreatorMintMetadataValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CurrencyCreatorMintMetadataValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CurrencyCreatorMintMetadataValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CurrencyCreatorMintMetadataValidationError) ErrorName() string {
+	return "CurrencyCreatorMintMetadataValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CurrencyCreatorMintMetadataValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCurrencyCreatorMintMetadata.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CurrencyCreatorMintMetadataValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CurrencyCreatorMintMetadataValidationError{}

@@ -25,6 +25,8 @@ type CurrencyClient interface {
 	// GetAllRates returns the exchange rates for the core mint token against all
 	// available currencies
 	GetAllRates(ctx context.Context, in *GetAllRatesRequest, opts ...grpc.CallOption) (*GetAllRatesResponse, error)
+	// GetMints gets mint account metadata by address
+	GetMints(ctx context.Context, in *GetMintsRequest, opts ...grpc.CallOption) (*GetMintsResponse, error)
 }
 
 type currencyClient struct {
@@ -44,6 +46,15 @@ func (c *currencyClient) GetAllRates(ctx context.Context, in *GetAllRatesRequest
 	return out, nil
 }
 
+func (c *currencyClient) GetMints(ctx context.Context, in *GetMintsRequest, opts ...grpc.CallOption) (*GetMintsResponse, error) {
+	out := new(GetMintsResponse)
+	err := c.cc.Invoke(ctx, "/code.currency.v1.Currency/GetMints", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CurrencyServer is the server API for Currency service.
 // All implementations must embed UnimplementedCurrencyServer
 // for forward compatibility
@@ -51,6 +62,8 @@ type CurrencyServer interface {
 	// GetAllRates returns the exchange rates for the core mint token against all
 	// available currencies
 	GetAllRates(context.Context, *GetAllRatesRequest) (*GetAllRatesResponse, error)
+	// GetMints gets mint account metadata by address
+	GetMints(context.Context, *GetMintsRequest) (*GetMintsResponse, error)
 	mustEmbedUnimplementedCurrencyServer()
 }
 
@@ -60,6 +73,9 @@ type UnimplementedCurrencyServer struct {
 
 func (UnimplementedCurrencyServer) GetAllRates(context.Context, *GetAllRatesRequest) (*GetAllRatesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllRates not implemented")
+}
+func (UnimplementedCurrencyServer) GetMints(context.Context, *GetMintsRequest) (*GetMintsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMints not implemented")
 }
 func (UnimplementedCurrencyServer) mustEmbedUnimplementedCurrencyServer() {}
 
@@ -92,6 +108,24 @@ func _Currency_GetAllRates_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Currency_GetMints_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMintsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CurrencyServer).GetMints(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/code.currency.v1.Currency/GetMints",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CurrencyServer).GetMints(ctx, req.(*GetMintsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Currency_ServiceDesc is the grpc.ServiceDesc for Currency service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -102,6 +136,10 @@ var Currency_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAllRates",
 			Handler:    _Currency_GetAllRates_Handler,
+		},
+		{
+			MethodName: "GetMints",
+			Handler:    _Currency_GetMints_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

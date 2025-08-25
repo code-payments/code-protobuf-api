@@ -6,6 +6,7 @@ option go_package = "github.com/code-payments/code-protobuf-api/generated/go/cur
 option java_package = "com.codeinc.gen.currency.v1";
 option objc_class_prefix = "CPBCurrencyV1";
 
+import "common/v1/model.proto";
 import "validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 
@@ -13,6 +14,9 @@ service Currency {
     // GetAllRates returns the exchange rates for the core mint token against all
     // available currencies
     rpc GetAllRates(GetAllRatesRequest) returns (GetAllRatesResponse);
+
+    // GetMints gets mint account metadata by address
+    rpc GetMints(GetMintsRequest) returns (GetMintsResponse);
 }
 
 message GetAllRatesRequest {
@@ -39,4 +43,77 @@ message GetAllRatesResponse {
     map<string, double> rates = 3 [(validate.rules).map.keys.string = {
         pattern: "^[a-z]{3,4}$"
     }];
+}
+
+message GetMintsRequest {
+    repeated common.v1.SolanaAccountId addresses = 1 [(validate.rules).repeated = {
+        min_items: 1
+        max_items: 1024 // Arbitrary
+    }];
+}
+
+message GetMintsResponse {
+    Result result = 1;
+    enum Result {
+        OK        = 0;
+        NOT_FOUND = 1;
+    }
+
+    map<string, Mint> metadata_by_address = 2;
+}
+
+message Mint {
+    // Token mint address
+    common.v1.SolanaAccountId address = 1 [(validate.rules).timestamp.required = true];
+
+    // The number of decimals configured for the mint
+    uint32 decimals = 2;
+
+    // Currency name
+    string name = 3 [(validate.rules).string = {
+        min_len: 1,
+        max_len: 32,
+    }];
+
+    // Currency ticker symbol
+    string symbol = 4 [(validate.rules).string = {
+        min_len: 1,
+        max_len: 8,
+    }];
+
+    // Available when a VM exists for the given mint, and can be used for deriving
+    // VM deposit PDAs
+    //
+    // Note: Only currencies with a VM are useable for payments
+    VmMintMetadata vm_metadata = 5;
+
+    // Available when created by the currency creator program, and can be used for
+    // calculating price, market cap, etc. based on the exponential bonding curve
+    CurrencyCreatorMintMetadata currency_creator_metadata = 6;
+}
+
+message VmMintMetadata {
+    // VM address
+    common.v1.SolanaAccountId vm = 1 [(validate.rules).timestamp.required = true];
+
+    // Authority that subsidizes and authorizes all transactions against the VM
+    common.v1.SolanaAccountId authority = 2 [(validate.rules).timestamp.required = true];
+
+    // Lock duration of Virtual Timelock Accounts on the VM, currently hardcoded
+    // to 21 days
+    uint32 lock_duration_in_days = 3 [(validate.rules).uint32.const = 21];
+}
+
+message CurrencyCreatorMintMetadata {
+    // Current circulating token supply
+    uint64 supply_from_bonding = 1;
+
+    // Current core mint tokens locked in the liquidity pool
+    uint64 core_mint_tokens_locked = 2;
+
+    // Percent fee for buys in basis points, currently hardcoded to 0%
+    uint32 buy_fee_bps = 3 [(validate.rules).uint32.const = 0];
+
+    // Precent fee for sells in basis points, currently hardcoded to 1%
+    uint32 sell_fee_bps = 4 [(validate.rules).uint32.const = 100];
 }

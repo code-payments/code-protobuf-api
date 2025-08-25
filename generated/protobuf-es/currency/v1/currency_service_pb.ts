@@ -4,7 +4,8 @@
 // @ts-nocheck
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3, Timestamp } from "@bufbuild/protobuf";
+import { Message, proto3, protoInt64, Timestamp } from "@bufbuild/protobuf";
+import { SolanaAccountId } from "../../common/v1/model_pb";
 
 /**
  * @generated from message code.currency.v1.GetAllRatesRequest
@@ -122,4 +123,306 @@ proto3.util.setEnumType(GetAllRatesResponse_Result, "code.currency.v1.GetAllRate
   { no: 0, name: "OK" },
   { no: 1, name: "MISSING_DATA" },
 ]);
+
+/**
+ * @generated from message code.currency.v1.GetMintsRequest
+ */
+export class GetMintsRequest extends Message<GetMintsRequest> {
+  /**
+   * @generated from field: repeated code.common.v1.SolanaAccountId addresses = 1;
+   */
+  addresses: SolanaAccountId[] = [];
+
+  constructor(data?: PartialMessage<GetMintsRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.currency.v1.GetMintsRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "addresses", kind: "message", T: SolanaAccountId, repeated: true },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetMintsRequest {
+    return new GetMintsRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetMintsRequest {
+    return new GetMintsRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetMintsRequest {
+    return new GetMintsRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: GetMintsRequest | PlainMessage<GetMintsRequest> | undefined, b: GetMintsRequest | PlainMessage<GetMintsRequest> | undefined): boolean {
+    return proto3.util.equals(GetMintsRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message code.currency.v1.GetMintsResponse
+ */
+export class GetMintsResponse extends Message<GetMintsResponse> {
+  /**
+   * @generated from field: code.currency.v1.GetMintsResponse.Result result = 1;
+   */
+  result = GetMintsResponse_Result.OK;
+
+  /**
+   * @generated from field: map<string, code.currency.v1.Mint> metadata_by_address = 2;
+   */
+  metadataByAddress: { [key: string]: Mint } = {};
+
+  constructor(data?: PartialMessage<GetMintsResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.currency.v1.GetMintsResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "result", kind: "enum", T: proto3.getEnumType(GetMintsResponse_Result) },
+    { no: 2, name: "metadata_by_address", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: Mint} },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetMintsResponse {
+    return new GetMintsResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetMintsResponse {
+    return new GetMintsResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetMintsResponse {
+    return new GetMintsResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: GetMintsResponse | PlainMessage<GetMintsResponse> | undefined, b: GetMintsResponse | PlainMessage<GetMintsResponse> | undefined): boolean {
+    return proto3.util.equals(GetMintsResponse, a, b);
+  }
+}
+
+/**
+ * @generated from enum code.currency.v1.GetMintsResponse.Result
+ */
+export enum GetMintsResponse_Result {
+  /**
+   * @generated from enum value: OK = 0;
+   */
+  OK = 0,
+
+  /**
+   * @generated from enum value: NOT_FOUND = 1;
+   */
+  NOT_FOUND = 1,
+}
+// Retrieve enum metadata with: proto3.getEnumType(GetMintsResponse_Result)
+proto3.util.setEnumType(GetMintsResponse_Result, "code.currency.v1.GetMintsResponse.Result", [
+  { no: 0, name: "OK" },
+  { no: 1, name: "NOT_FOUND" },
+]);
+
+/**
+ * @generated from message code.currency.v1.Mint
+ */
+export class Mint extends Message<Mint> {
+  /**
+   * Token mint address
+   *
+   * @generated from field: code.common.v1.SolanaAccountId address = 1;
+   */
+  address?: SolanaAccountId;
+
+  /**
+   * The number of decimals configured for the mint
+   *
+   * @generated from field: uint32 decimals = 2;
+   */
+  decimals = 0;
+
+  /**
+   * Currency name
+   *
+   * @generated from field: string name = 3;
+   */
+  name = "";
+
+  /**
+   * Currency ticker symbol
+   *
+   * @generated from field: string symbol = 4;
+   */
+  symbol = "";
+
+  /**
+   * Available when a VM exists for the given mint, and can be used for deriving
+   * VM deposit PDAs
+   *
+   * Note: Only currencies with a VM are useable for payments
+   *
+   * @generated from field: code.currency.v1.VmMintMetadata vm_metadata = 5;
+   */
+  vmMetadata?: VmMintMetadata;
+
+  /**
+   * Available when created by the currency creator program, and can be used for
+   * calculating price, market cap, etc. based on the exponential bonding curve
+   *
+   * @generated from field: code.currency.v1.CurrencyCreatorMintMetadata currency_creator_metadata = 6;
+   */
+  currencyCreatorMetadata?: CurrencyCreatorMintMetadata;
+
+  constructor(data?: PartialMessage<Mint>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.currency.v1.Mint";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "address", kind: "message", T: SolanaAccountId },
+    { no: 2, name: "decimals", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
+    { no: 3, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "symbol", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "vm_metadata", kind: "message", T: VmMintMetadata },
+    { no: 6, name: "currency_creator_metadata", kind: "message", T: CurrencyCreatorMintMetadata },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Mint {
+    return new Mint().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Mint {
+    return new Mint().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Mint {
+    return new Mint().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: Mint | PlainMessage<Mint> | undefined, b: Mint | PlainMessage<Mint> | undefined): boolean {
+    return proto3.util.equals(Mint, a, b);
+  }
+}
+
+/**
+ * @generated from message code.currency.v1.VmMintMetadata
+ */
+export class VmMintMetadata extends Message<VmMintMetadata> {
+  /**
+   * VM address
+   *
+   * @generated from field: code.common.v1.SolanaAccountId vm = 1;
+   */
+  vm?: SolanaAccountId;
+
+  /**
+   * Authority that subsidizes and authorizes all transactions against the VM
+   *
+   * @generated from field: code.common.v1.SolanaAccountId authority = 2;
+   */
+  authority?: SolanaAccountId;
+
+  /**
+   * Lock duration of Virtual Timelock Accounts on the VM, currently hardcoded
+   * to 21 days
+   *
+   * @generated from field: uint32 lock_duration_in_days = 3;
+   */
+  lockDurationInDays = 0;
+
+  constructor(data?: PartialMessage<VmMintMetadata>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.currency.v1.VmMintMetadata";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "vm", kind: "message", T: SolanaAccountId },
+    { no: 2, name: "authority", kind: "message", T: SolanaAccountId },
+    { no: 3, name: "lock_duration_in_days", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): VmMintMetadata {
+    return new VmMintMetadata().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): VmMintMetadata {
+    return new VmMintMetadata().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): VmMintMetadata {
+    return new VmMintMetadata().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: VmMintMetadata | PlainMessage<VmMintMetadata> | undefined, b: VmMintMetadata | PlainMessage<VmMintMetadata> | undefined): boolean {
+    return proto3.util.equals(VmMintMetadata, a, b);
+  }
+}
+
+/**
+ * @generated from message code.currency.v1.CurrencyCreatorMintMetadata
+ */
+export class CurrencyCreatorMintMetadata extends Message<CurrencyCreatorMintMetadata> {
+  /**
+   * Current circulating token supply
+   *
+   * @generated from field: uint64 supply_from_bonding = 1;
+   */
+  supplyFromBonding = protoInt64.zero;
+
+  /**
+   * Current core mint tokens locked in the liquidity pool
+   *
+   * @generated from field: uint64 core_mint_tokens_locked = 2;
+   */
+  coreMintTokensLocked = protoInt64.zero;
+
+  /**
+   * Percent fee for buys in basis points, currently hardcoded to 0%
+   *
+   * @generated from field: uint32 buy_fee_bps = 3;
+   */
+  buyFeeBps = 0;
+
+  /**
+   * Precent fee for sells in basis points, currently hardcoded to 1%
+   *
+   * @generated from field: uint32 sell_fee_bps = 4;
+   */
+  sellFeeBps = 0;
+
+  constructor(data?: PartialMessage<CurrencyCreatorMintMetadata>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.currency.v1.CurrencyCreatorMintMetadata";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "supply_from_bonding", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+    { no: 2, name: "core_mint_tokens_locked", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+    { no: 3, name: "buy_fee_bps", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
+    { no: 4, name: "sell_fee_bps", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CurrencyCreatorMintMetadata {
+    return new CurrencyCreatorMintMetadata().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): CurrencyCreatorMintMetadata {
+    return new CurrencyCreatorMintMetadata().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): CurrencyCreatorMintMetadata {
+    return new CurrencyCreatorMintMetadata().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: CurrencyCreatorMintMetadata | PlainMessage<CurrencyCreatorMintMetadata> | undefined, b: CurrencyCreatorMintMetadata | PlainMessage<CurrencyCreatorMintMetadata> | undefined): boolean {
+    return proto3.util.equals(CurrencyCreatorMintMetadata, a, b);
+  }
+}
 
