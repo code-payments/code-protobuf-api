@@ -105,15 +105,39 @@ message VmMintMetadata {
 }
 
 message CurrencyCreatorMintMetadata {
-    // Current circulating token supply
-    uint64 supply_from_bonding = 1;
+    // The address of the currency config
+    common.v1.SolanaAccountId currency_config = 1 [(validate.rules).timestamp.required = true];
+
+    // The address of the liquidity pool
+    common.v1.SolanaAccountId liquidity_pool = 2 [(validate.rules).timestamp.required = true];
+
+    // The random seed used during currency creation
+    common.v1.SolanaAccountId seed = 3 [(validate.rules).timestamp.required = true];
+
+    // The address of the authority for the currency
+    common.v1.SolanaAccountId authority = 4 [(validate.rules).timestamp.required = true];
+
+    // The address where this mint's tokens are locked against the liquidity pool
+    common.v1.SolanaAccountId mint_vault = 5 [(validate.rules).timestamp.required = true];
+
+    // The address where core mint tokens are locked against the liquidity pool
+    common.v1.SolanaAccountId core_mint_vault = 6 [(validate.rules).timestamp.required = true];
+
+    // Reserved for mint_fees if we enable buy fees
+    reserved 7;
+
+    // The address where core mint fees are paid
+    common.v1.SolanaAccountId core_mint_fees = 8 [(validate.rules).timestamp.required = true];
+
+    // Current circulating mint token supply
+    uint64 supply_from_bonding = 9;
 
     // Current core mint tokens locked in the liquidity pool
-    uint64 core_mint_tokens_locked = 2;
+    uint64 core_mint_tokens_locked = 10;
 
-    // Percent fee for buys in basis points, currently hardcoded to 0%
-    uint32 buy_fee_bps = 3 [(validate.rules).uint32.const = 0];
+    // Reserved for buy_fee_bps if we enable buy fees
+    reserved 11;
 
     // Precent fee for sells in basis points, currently hardcoded to 1%
-    uint32 sell_fee_bps = 4 [(validate.rules).uint32.const = 100];
+    uint32 sell_fee_bps = 12 [(validate.rules).uint32.const = 100];
 }

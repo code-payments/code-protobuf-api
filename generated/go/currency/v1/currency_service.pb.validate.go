@@ -558,16 +558,58 @@ func (m *CurrencyCreatorMintMetadata) Validate() error {
 		return nil
 	}
 
+	if m.GetCurrencyConfig() == nil {
+		return CurrencyCreatorMintMetadataValidationError{
+			field:  "CurrencyConfig",
+			reason: "value is required",
+		}
+	}
+
+	if m.GetLiquidityPool() == nil {
+		return CurrencyCreatorMintMetadataValidationError{
+			field:  "LiquidityPool",
+			reason: "value is required",
+		}
+	}
+
+	if m.GetSeed() == nil {
+		return CurrencyCreatorMintMetadataValidationError{
+			field:  "Seed",
+			reason: "value is required",
+		}
+	}
+
+	if m.GetAuthority() == nil {
+		return CurrencyCreatorMintMetadataValidationError{
+			field:  "Authority",
+			reason: "value is required",
+		}
+	}
+
+	if m.GetMintVault() == nil {
+		return CurrencyCreatorMintMetadataValidationError{
+			field:  "MintVault",
+			reason: "value is required",
+		}
+	}
+
+	if m.GetCoreMintVault() == nil {
+		return CurrencyCreatorMintMetadataValidationError{
+			field:  "CoreMintVault",
+			reason: "value is required",
+		}
+	}
+
+	if m.GetCoreMintFees() == nil {
+		return CurrencyCreatorMintMetadataValidationError{
+			field:  "CoreMintFees",
+			reason: "value is required",
+		}
+	}
+
 	// no validation rules for SupplyFromBonding
 
 	// no validation rules for CoreMintTokensLocked
-
-	if m.GetBuyFeeBps() != 0 {
-		return CurrencyCreatorMintMetadataValidationError{
-			field:  "BuyFeeBps",
-			reason: "value must equal 0",
-		}
-	}
 
 	if m.GetSellFeeBps() != 100 {
 		return CurrencyCreatorMintMetadataValidationError{

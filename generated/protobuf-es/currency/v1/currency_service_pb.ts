@@ -368,30 +368,72 @@ export class VmMintMetadata extends Message<VmMintMetadata> {
  */
 export class CurrencyCreatorMintMetadata extends Message<CurrencyCreatorMintMetadata> {
   /**
-   * Current circulating token supply
+   * The address of the currency config
    *
-   * @generated from field: uint64 supply_from_bonding = 1;
+   * @generated from field: code.common.v1.SolanaAccountId currency_config = 1;
+   */
+  currencyConfig?: SolanaAccountId;
+
+  /**
+   * The address of the liquidity pool
+   *
+   * @generated from field: code.common.v1.SolanaAccountId liquidity_pool = 2;
+   */
+  liquidityPool?: SolanaAccountId;
+
+  /**
+   * The random seed used during currency creation
+   *
+   * @generated from field: code.common.v1.SolanaAccountId seed = 3;
+   */
+  seed?: SolanaAccountId;
+
+  /**
+   * The address of the authority for the currency
+   *
+   * @generated from field: code.common.v1.SolanaAccountId authority = 4;
+   */
+  authority?: SolanaAccountId;
+
+  /**
+   * The address where this mint's tokens are locked against the liquidity pool
+   *
+   * @generated from field: code.common.v1.SolanaAccountId mint_vault = 5;
+   */
+  mintVault?: SolanaAccountId;
+
+  /**
+   * The address where core mint tokens are locked against the liquidity pool
+   *
+   * @generated from field: code.common.v1.SolanaAccountId core_mint_vault = 6;
+   */
+  coreMintVault?: SolanaAccountId;
+
+  /**
+   * The address where core mint fees are paid
+   *
+   * @generated from field: code.common.v1.SolanaAccountId core_mint_fees = 8;
+   */
+  coreMintFees?: SolanaAccountId;
+
+  /**
+   * Current circulating mint token supply
+   *
+   * @generated from field: uint64 supply_from_bonding = 9;
    */
   supplyFromBonding = protoInt64.zero;
 
   /**
    * Current core mint tokens locked in the liquidity pool
    *
-   * @generated from field: uint64 core_mint_tokens_locked = 2;
+   * @generated from field: uint64 core_mint_tokens_locked = 10;
    */
   coreMintTokensLocked = protoInt64.zero;
 
   /**
-   * Percent fee for buys in basis points, currently hardcoded to 0%
-   *
-   * @generated from field: uint32 buy_fee_bps = 3;
-   */
-  buyFeeBps = 0;
-
-  /**
    * Precent fee for sells in basis points, currently hardcoded to 1%
    *
-   * @generated from field: uint32 sell_fee_bps = 4;
+   * @generated from field: uint32 sell_fee_bps = 12;
    */
   sellFeeBps = 0;
 
@@ -403,10 +445,16 @@ export class CurrencyCreatorMintMetadata extends Message<CurrencyCreatorMintMeta
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "code.currency.v1.CurrencyCreatorMintMetadata";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "supply_from_bonding", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 2, name: "core_mint_tokens_locked", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 3, name: "buy_fee_bps", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-    { no: 4, name: "sell_fee_bps", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
+    { no: 1, name: "currency_config", kind: "message", T: SolanaAccountId },
+    { no: 2, name: "liquidity_pool", kind: "message", T: SolanaAccountId },
+    { no: 3, name: "seed", kind: "message", T: SolanaAccountId },
+    { no: 4, name: "authority", kind: "message", T: SolanaAccountId },
+    { no: 5, name: "mint_vault", kind: "message", T: SolanaAccountId },
+    { no: 6, name: "core_mint_vault", kind: "message", T: SolanaAccountId },
+    { no: 8, name: "core_mint_fees", kind: "message", T: SolanaAccountId },
+    { no: 9, name: "supply_from_bonding", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+    { no: 10, name: "core_mint_tokens_locked", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+    { no: 12, name: "sell_fee_bps", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CurrencyCreatorMintMetadata {
