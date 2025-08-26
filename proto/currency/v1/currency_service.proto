@@ -129,11 +129,11 @@ message CurrencyCreatorMintMetadata {
     // The address where core mint fees are paid
     common.v1.SolanaAccountId core_mint_fees = 8 [(validate.rules).timestamp.required = true];
 
-    // Current circulating mint token supply
+    // Current circulating mint token supply in quarks
     uint64 supply_from_bonding = 9;
 
-    // Current core mint tokens locked in the liquidity pool
-    uint64 core_mint_tokens_locked = 10;
+    // Current core mint quarks locked in the liquidity pool
+    uint64 core_mint_locked = 10;
 
     // Reserved for buy_fee_bps if we enable buy fees
     reserved 11;

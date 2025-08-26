@@ -417,18 +417,18 @@ export class CurrencyCreatorMintMetadata extends Message<CurrencyCreatorMintMeta
   coreMintFees?: SolanaAccountId;
 
   /**
-   * Current circulating mint token supply
+   * Current circulating mint token supply in quarks
    *
    * @generated from field: uint64 supply_from_bonding = 9;
    */
   supplyFromBonding = protoInt64.zero;
 
   /**
-   * Current core mint tokens locked in the liquidity pool
+   * Current core mint quarks locked in the liquidity pool
    *
-   * @generated from field: uint64 core_mint_tokens_locked = 10;
+   * @generated from field: uint64 core_mint_locked = 10;
    */
-  coreMintTokensLocked = protoInt64.zero;
+  coreMintLocked = protoInt64.zero;
 
   /**
    * Precent fee for sells in basis points, currently hardcoded to 1%
@@ -453,7 +453,7 @@ export class CurrencyCreatorMintMetadata extends Message<CurrencyCreatorMintMeta
     { no: 6, name: "core_mint_vault", kind: "message", T: SolanaAccountId },
     { no: 8, name: "core_mint_fees", kind: "message", T: SolanaAccountId },
     { no: 9, name: "supply_from_bonding", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 10, name: "core_mint_tokens_locked", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+    { no: 10, name: "core_mint_locked", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
     { no: 12, name: "sell_fee_bps", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
   ]);
 
