@@ -288,6 +288,18 @@ func (m *GetTokenAccountInfosRequest) Validate() error {
 	case *GetTokenAccountInfosRequest_FilterByAccountType:
 		// no validation rules for FilterByAccountType
 
+	case *GetTokenAccountInfosRequest_FilterByMintAddress:
+
+		if v, ok := interface{}(m.GetFilterByMintAddress()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return GetTokenAccountInfosRequestValidationError{
+					field:  "FilterByMintAddress",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
 	}
 
 	return nil

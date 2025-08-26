@@ -186,6 +186,12 @@ export class GetTokenAccountInfosRequest extends Message<GetTokenAccountInfosReq
      */
     value: AccountType;
     case: "filterByAccountType";
+  } | {
+    /**
+     * @generated from field: code.common.v1.SolanaAccountId filter_by_mint_address = 12;
+     */
+    value: SolanaAccountId;
+    case: "filterByMintAddress";
   } | { case: undefined; value?: undefined } = { case: undefined };
 
   constructor(data?: PartialMessage<GetTokenAccountInfosRequest>) {
@@ -202,6 +208,7 @@ export class GetTokenAccountInfosRequest extends Message<GetTokenAccountInfosReq
     { no: 4, name: "requesting_owner_signature", kind: "message", T: Signature },
     { no: 10, name: "filter_by_token_address", kind: "message", T: SolanaAccountId, oneof: "Filter" },
     { no: 11, name: "filter_by_account_type", kind: "enum", T: proto3.getEnumType(AccountType), oneof: "Filter" },
+    { no: 12, name: "filter_by_mint_address", kind: "message", T: SolanaAccountId, oneof: "Filter" },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetTokenAccountInfosRequest {

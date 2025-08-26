@@ -72,6 +72,7 @@ message GetTokenAccountInfosRequest {
     oneof Filter {
         common.v1.SolanaAccountId filter_by_token_address = 10;
         common.v1.AccountType     filter_by_account_type  = 11;
+        common.v1.SolanaAccountId filter_by_mint_address  = 12;
     }
 }
 
