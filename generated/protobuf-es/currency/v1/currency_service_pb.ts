@@ -262,17 +262,18 @@ export class Mint extends Message<Mint> {
    *
    * Note: Only currencies with a VM are useable for payments
    *
-   * @generated from field: code.currency.v1.VmMintMetadata vm_metadata = 5;
+   * @generated from field: code.currency.v1.VmMetadata vm_metadata = 5;
    */
-  vmMetadata?: VmMintMetadata;
+  vmMetadata?: VmMetadata;
 
   /**
-   * Available when created by the currency creator program, and can be used for
-   * calculating price, market cap, etc. based on the exponential bonding curve
+   * Available when created by the launchpad via the currency creator program, and
+   * can be used for calculating price, market cap, etc. based on the exponential
+   * bonding curve
    *
-   * @generated from field: code.currency.v1.CurrencyCreatorMintMetadata currency_creator_metadata = 6;
+   * @generated from field: code.currency.v1.LaunchpadMetadata launchpad_metadata = 6;
    */
-  currencyCreatorMetadata?: CurrencyCreatorMintMetadata;
+  launchpadMetadata?: LaunchpadMetadata;
 
   constructor(data?: PartialMessage<Mint>) {
     super();
@@ -286,8 +287,8 @@ export class Mint extends Message<Mint> {
     { no: 2, name: "decimals", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
     { no: 3, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 4, name: "symbol", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 5, name: "vm_metadata", kind: "message", T: VmMintMetadata },
-    { no: 6, name: "currency_creator_metadata", kind: "message", T: CurrencyCreatorMintMetadata },
+    { no: 5, name: "vm_metadata", kind: "message", T: VmMetadata },
+    { no: 6, name: "launchpad_metadata", kind: "message", T: LaunchpadMetadata },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Mint {
@@ -308,9 +309,9 @@ export class Mint extends Message<Mint> {
 }
 
 /**
- * @generated from message code.currency.v1.VmMintMetadata
+ * @generated from message code.currency.v1.VmMetadata
  */
-export class VmMintMetadata extends Message<VmMintMetadata> {
+export class VmMetadata extends Message<VmMetadata> {
   /**
    * VM address
    *
@@ -333,40 +334,40 @@ export class VmMintMetadata extends Message<VmMintMetadata> {
    */
   lockDurationInDays = 0;
 
-  constructor(data?: PartialMessage<VmMintMetadata>) {
+  constructor(data?: PartialMessage<VmMetadata>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.currency.v1.VmMintMetadata";
+  static readonly typeName = "code.currency.v1.VmMetadata";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "vm", kind: "message", T: SolanaAccountId },
     { no: 2, name: "authority", kind: "message", T: SolanaAccountId },
     { no: 3, name: "lock_duration_in_days", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): VmMintMetadata {
-    return new VmMintMetadata().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): VmMetadata {
+    return new VmMetadata().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): VmMintMetadata {
-    return new VmMintMetadata().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): VmMetadata {
+    return new VmMetadata().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): VmMintMetadata {
-    return new VmMintMetadata().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): VmMetadata {
+    return new VmMetadata().fromJsonString(jsonString, options);
   }
 
-  static equals(a: VmMintMetadata | PlainMessage<VmMintMetadata> | undefined, b: VmMintMetadata | PlainMessage<VmMintMetadata> | undefined): boolean {
-    return proto3.util.equals(VmMintMetadata, a, b);
+  static equals(a: VmMetadata | PlainMessage<VmMetadata> | undefined, b: VmMetadata | PlainMessage<VmMetadata> | undefined): boolean {
+    return proto3.util.equals(VmMetadata, a, b);
   }
 }
 
 /**
- * @generated from message code.currency.v1.CurrencyCreatorMintMetadata
+ * @generated from message code.currency.v1.LaunchpadMetadata
  */
-export class CurrencyCreatorMintMetadata extends Message<CurrencyCreatorMintMetadata> {
+export class LaunchpadMetadata extends Message<LaunchpadMetadata> {
   /**
    * The address of the currency config
    *
@@ -437,13 +438,13 @@ export class CurrencyCreatorMintMetadata extends Message<CurrencyCreatorMintMeta
    */
   sellFeeBps = 0;
 
-  constructor(data?: PartialMessage<CurrencyCreatorMintMetadata>) {
+  constructor(data?: PartialMessage<LaunchpadMetadata>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.currency.v1.CurrencyCreatorMintMetadata";
+  static readonly typeName = "code.currency.v1.LaunchpadMetadata";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "currency_config", kind: "message", T: SolanaAccountId },
     { no: 2, name: "liquidity_pool", kind: "message", T: SolanaAccountId },
@@ -457,20 +458,20 @@ export class CurrencyCreatorMintMetadata extends Message<CurrencyCreatorMintMeta
     { no: 12, name: "sell_fee_bps", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CurrencyCreatorMintMetadata {
-    return new CurrencyCreatorMintMetadata().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): LaunchpadMetadata {
+    return new LaunchpadMetadata().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): CurrencyCreatorMintMetadata {
-    return new CurrencyCreatorMintMetadata().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): LaunchpadMetadata {
+    return new LaunchpadMetadata().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): CurrencyCreatorMintMetadata {
-    return new CurrencyCreatorMintMetadata().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): LaunchpadMetadata {
+    return new LaunchpadMetadata().fromJsonString(jsonString, options);
   }
 
-  static equals(a: CurrencyCreatorMintMetadata | PlainMessage<CurrencyCreatorMintMetadata> | undefined, b: CurrencyCreatorMintMetadata | PlainMessage<CurrencyCreatorMintMetadata> | undefined): boolean {
-    return proto3.util.equals(CurrencyCreatorMintMetadata, a, b);
+  static equals(a: LaunchpadMetadata | PlainMessage<LaunchpadMetadata> | undefined, b: LaunchpadMetadata | PlainMessage<LaunchpadMetadata> | undefined): boolean {
+    return proto3.util.equals(LaunchpadMetadata, a, b);
   }
 }
 

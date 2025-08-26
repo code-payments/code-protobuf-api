@@ -397,10 +397,10 @@ func (m *Mint) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetCurrencyCreatorMetadata()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetLaunchpadMetadata()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return MintValidationError{
-				field:  "CurrencyCreatorMetadata",
+				field:  "LaunchpadMetadata",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -464,30 +464,29 @@ var _ interface {
 	ErrorName() string
 } = MintValidationError{}
 
-// Validate checks the field values on VmMintMetadata with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *VmMintMetadata) Validate() error {
+// Validate checks the field values on VmMetadata with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *VmMetadata) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if m.GetVm() == nil {
-		return VmMintMetadataValidationError{
+		return VmMetadataValidationError{
 			field:  "Vm",
 			reason: "value is required",
 		}
 	}
 
 	if m.GetAuthority() == nil {
-		return VmMintMetadataValidationError{
+		return VmMetadataValidationError{
 			field:  "Authority",
 			reason: "value is required",
 		}
 	}
 
 	if m.GetLockDurationInDays() != 21 {
-		return VmMintMetadataValidationError{
+		return VmMetadataValidationError{
 			field:  "LockDurationInDays",
 			reason: "value must equal 21",
 		}
@@ -496,9 +495,9 @@ func (m *VmMintMetadata) Validate() error {
 	return nil
 }
 
-// VmMintMetadataValidationError is the validation error returned by
-// VmMintMetadata.Validate if the designated constraints aren't met.
-type VmMintMetadataValidationError struct {
+// VmMetadataValidationError is the validation error returned by
+// VmMetadata.Validate if the designated constraints aren't met.
+type VmMetadataValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -506,22 +505,22 @@ type VmMintMetadataValidationError struct {
 }
 
 // Field function returns field value.
-func (e VmMintMetadataValidationError) Field() string { return e.field }
+func (e VmMetadataValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e VmMintMetadataValidationError) Reason() string { return e.reason }
+func (e VmMetadataValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e VmMintMetadataValidationError) Cause() error { return e.cause }
+func (e VmMetadataValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e VmMintMetadataValidationError) Key() bool { return e.key }
+func (e VmMetadataValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e VmMintMetadataValidationError) ErrorName() string { return "VmMintMetadataValidationError" }
+func (e VmMetadataValidationError) ErrorName() string { return "VmMetadataValidationError" }
 
 // Error satisfies the builtin error interface
-func (e VmMintMetadataValidationError) Error() string {
+func (e VmMetadataValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -533,14 +532,14 @@ func (e VmMintMetadataValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sVmMintMetadata.%s: %s%s",
+		"invalid %sVmMetadata.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = VmMintMetadataValidationError{}
+var _ error = VmMetadataValidationError{}
 
 var _ interface {
 	Field() string
@@ -548,60 +547,60 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = VmMintMetadataValidationError{}
+} = VmMetadataValidationError{}
 
-// Validate checks the field values on CurrencyCreatorMintMetadata with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *CurrencyCreatorMintMetadata) Validate() error {
+// Validate checks the field values on LaunchpadMetadata with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *LaunchpadMetadata) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if m.GetCurrencyConfig() == nil {
-		return CurrencyCreatorMintMetadataValidationError{
+		return LaunchpadMetadataValidationError{
 			field:  "CurrencyConfig",
 			reason: "value is required",
 		}
 	}
 
 	if m.GetLiquidityPool() == nil {
-		return CurrencyCreatorMintMetadataValidationError{
+		return LaunchpadMetadataValidationError{
 			field:  "LiquidityPool",
 			reason: "value is required",
 		}
 	}
 
 	if m.GetSeed() == nil {
-		return CurrencyCreatorMintMetadataValidationError{
+		return LaunchpadMetadataValidationError{
 			field:  "Seed",
 			reason: "value is required",
 		}
 	}
 
 	if m.GetAuthority() == nil {
-		return CurrencyCreatorMintMetadataValidationError{
+		return LaunchpadMetadataValidationError{
 			field:  "Authority",
 			reason: "value is required",
 		}
 	}
 
 	if m.GetMintVault() == nil {
-		return CurrencyCreatorMintMetadataValidationError{
+		return LaunchpadMetadataValidationError{
 			field:  "MintVault",
 			reason: "value is required",
 		}
 	}
 
 	if m.GetCoreMintVault() == nil {
-		return CurrencyCreatorMintMetadataValidationError{
+		return LaunchpadMetadataValidationError{
 			field:  "CoreMintVault",
 			reason: "value is required",
 		}
 	}
 
 	if m.GetCoreMintFees() == nil {
-		return CurrencyCreatorMintMetadataValidationError{
+		return LaunchpadMetadataValidationError{
 			field:  "CoreMintFees",
 			reason: "value is required",
 		}
@@ -612,7 +611,7 @@ func (m *CurrencyCreatorMintMetadata) Validate() error {
 	// no validation rules for CoreMintLocked
 
 	if m.GetSellFeeBps() != 100 {
-		return CurrencyCreatorMintMetadataValidationError{
+		return LaunchpadMetadataValidationError{
 			field:  "SellFeeBps",
 			reason: "value must equal 100",
 		}
@@ -621,10 +620,9 @@ func (m *CurrencyCreatorMintMetadata) Validate() error {
 	return nil
 }
 
-// CurrencyCreatorMintMetadataValidationError is the validation error returned
-// by CurrencyCreatorMintMetadata.Validate if the designated constraints
-// aren't met.
-type CurrencyCreatorMintMetadataValidationError struct {
+// LaunchpadMetadataValidationError is the validation error returned by
+// LaunchpadMetadata.Validate if the designated constraints aren't met.
+type LaunchpadMetadataValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -632,24 +630,24 @@ type CurrencyCreatorMintMetadataValidationError struct {
 }
 
 // Field function returns field value.
-func (e CurrencyCreatorMintMetadataValidationError) Field() string { return e.field }
+func (e LaunchpadMetadataValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e CurrencyCreatorMintMetadataValidationError) Reason() string { return e.reason }
+func (e LaunchpadMetadataValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e CurrencyCreatorMintMetadataValidationError) Cause() error { return e.cause }
+func (e LaunchpadMetadataValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e CurrencyCreatorMintMetadataValidationError) Key() bool { return e.key }
+func (e LaunchpadMetadataValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e CurrencyCreatorMintMetadataValidationError) ErrorName() string {
-	return "CurrencyCreatorMintMetadataValidationError"
+func (e LaunchpadMetadataValidationError) ErrorName() string {
+	return "LaunchpadMetadataValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e CurrencyCreatorMintMetadataValidationError) Error() string {
+func (e LaunchpadMetadataValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -661,14 +659,14 @@ func (e CurrencyCreatorMintMetadataValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sCurrencyCreatorMintMetadata.%s: %s%s",
+		"invalid %sLaunchpadMetadata.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = CurrencyCreatorMintMetadataValidationError{}
+var _ error = LaunchpadMetadataValidationError{}
 
 var _ interface {
 	Field() string
@@ -676,4 +674,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = CurrencyCreatorMintMetadataValidationError{}
+} = LaunchpadMetadataValidationError{}

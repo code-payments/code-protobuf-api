@@ -85,14 +85,15 @@ message Mint {
     // VM deposit PDAs
     //
     // Note: Only currencies with a VM are useable for payments
-    VmMintMetadata vm_metadata = 5;
+    VmMetadata vm_metadata = 5;
 
-    // Available when created by the currency creator program, and can be used for
-    // calculating price, market cap, etc. based on the exponential bonding curve
-    CurrencyCreatorMintMetadata currency_creator_metadata = 6;
+    // Available when created by the launchpad via the currency creator program, and
+    // can be used for calculating price, market cap, etc. based on the exponential
+    // bonding curve
+    LaunchpadMetadata launchpad_metadata = 6;
 }
 
-message VmMintMetadata {
+message VmMetadata {
     // VM address
     common.v1.SolanaAccountId vm = 1 [(validate.rules).timestamp.required = true];
 
@@ -104,7 +105,7 @@ message VmMintMetadata {
     uint32 lock_duration_in_days = 3 [(validate.rules).uint32.const = 21];
 }
 
-message CurrencyCreatorMintMetadata {
+message LaunchpadMetadata {
     // The address of the currency config
     common.v1.SolanaAccountId currency_config = 1 [(validate.rules).timestamp.required = true];
 
