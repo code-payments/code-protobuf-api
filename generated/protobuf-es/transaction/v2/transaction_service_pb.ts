@@ -1182,6 +1182,15 @@ export class OpenAccountsMetadata extends Message<OpenAccountsMetadata> {
    */
   accountSet = OpenAccountsMetadata_AccountSet.USER;
 
+  /**
+   * The mint that this action will be operating against. For backwards
+   * compatibility, if no mint is set, then it is assumed to be the core
+   * mint.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId mint = 2;
+   */
+  mint?: SolanaAccountId;
+
   constructor(data?: PartialMessage<OpenAccountsMetadata>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1191,6 +1200,7 @@ export class OpenAccountsMetadata extends Message<OpenAccountsMetadata> {
   static readonly typeName = "code.transaction.v2.OpenAccountsMetadata";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "account_set", kind: "enum", T: proto3.getEnumType(OpenAccountsMetadata_AccountSet) },
+    { no: 2, name: "mint", kind: "message", T: SolanaAccountId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): OpenAccountsMetadata {
@@ -1304,6 +1314,15 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
    */
   isRemoteSend = false;
 
+  /**
+   * The mint that this intent will be operating against. For backwards
+   * compatibility, if no mint is set, then it is assumed to be the core
+   * mint.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId mint = 7;
+   */
+  mint?: SolanaAccountId;
+
   constructor(data?: PartialMessage<SendPublicPaymentMetadata>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1318,6 +1337,7 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
     { no: 2, name: "exchange_data", kind: "message", T: ExchangeData },
     { no: 3, name: "is_withdrawal", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 5, name: "is_remote_send", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 7, name: "mint", kind: "message", T: SolanaAccountId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SendPublicPaymentMetadata {
@@ -1379,6 +1399,15 @@ export class ReceivePaymentsPubliclyMetadata extends Message<ReceivePaymentsPubl
    */
   exchangeData?: ExchangeData;
 
+  /**
+   * The mint that this intent will be operating against. For backwards
+   * compatibility, if no mint is set, then it is assumed to be the core
+   * mint.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId mint = 6;
+   */
+  mint?: SolanaAccountId;
+
   constructor(data?: PartialMessage<ReceivePaymentsPubliclyMetadata>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1391,6 +1420,7 @@ export class ReceivePaymentsPubliclyMetadata extends Message<ReceivePaymentsPubl
     { no: 2, name: "quarks", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
     { no: 3, name: "is_remote_send", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 5, name: "exchange_data", kind: "message", T: ExchangeData },
+    { no: 6, name: "mint", kind: "message", T: SolanaAccountId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ReceivePaymentsPubliclyMetadata {
@@ -1440,6 +1470,15 @@ export class PublicDistributionMetadata extends Message<PublicDistributionMetada
    */
   distributions: PublicDistributionMetadata_Distribution[] = [];
 
+  /**
+   * The mint that this intent will be operating against. For backwards
+   * compatibility, if no mint is set, then it is assumed to be the core
+   * mint.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId mint = 3;
+   */
+  mint?: SolanaAccountId;
+
   constructor(data?: PartialMessage<PublicDistributionMetadata>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1450,6 +1489,7 @@ export class PublicDistributionMetadata extends Message<PublicDistributionMetada
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "source", kind: "message", T: SolanaAccountId },
     { no: 2, name: "distributions", kind: "message", T: PublicDistributionMetadata_Distribution, repeated: true },
+    { no: 3, name: "mint", kind: "message", T: SolanaAccountId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PublicDistributionMetadata {
@@ -1648,6 +1688,15 @@ export class OpenAccountAction extends Message<OpenAccountAction> {
    */
   authoritySignature?: Signature;
 
+  /**
+   * The mint that this action will be operating against. For backwards
+   * compatibility, if no mint is set, then it is assumed to be the core
+   * mint.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId mint = 7;
+   */
+  mint?: SolanaAccountId;
+
   constructor(data?: PartialMessage<OpenAccountAction>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1662,6 +1711,7 @@ export class OpenAccountAction extends Message<OpenAccountAction> {
     { no: 4, name: "authority", kind: "message", T: SolanaAccountId },
     { no: 5, name: "token", kind: "message", T: SolanaAccountId },
     { no: 6, name: "authority_signature", kind: "message", T: Signature },
+    { no: 7, name: "mint", kind: "message", T: SolanaAccountId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): OpenAccountAction {
@@ -1715,6 +1765,15 @@ export class NoPrivacyTransferAction extends Message<NoPrivacyTransferAction> {
    */
   amount = protoInt64.zero;
 
+  /**
+   * The mint that this action will be operating against. For backwards
+   * compatibility, if no mint is set, then it is assumed to be the core
+   * mint.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId mint = 5;
+   */
+  mint?: SolanaAccountId;
+
   constructor(data?: PartialMessage<NoPrivacyTransferAction>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1727,6 +1786,7 @@ export class NoPrivacyTransferAction extends Message<NoPrivacyTransferAction> {
     { no: 2, name: "source", kind: "message", T: SolanaAccountId },
     { no: 3, name: "destination", kind: "message", T: SolanaAccountId },
     { no: 4, name: "amount", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+    { no: 5, name: "mint", kind: "message", T: SolanaAccountId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): NoPrivacyTransferAction {
@@ -1797,6 +1857,15 @@ export class NoPrivacyWithdrawAction extends Message<NoPrivacyWithdrawAction> {
    */
   isAutoReturn = false;
 
+  /**
+   * The mint that this action will be operating against. For backwards
+   * compatibility, if no mint is set, then it is assumed to be the core
+   * mint.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId mint = 7;
+   */
+  mint?: SolanaAccountId;
+
   constructor(data?: PartialMessage<NoPrivacyWithdrawAction>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1811,6 +1880,7 @@ export class NoPrivacyWithdrawAction extends Message<NoPrivacyWithdrawAction> {
     { no: 4, name: "amount", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
     { no: 5, name: "should_close", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 6, name: "is_auto_return", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 7, name: "mint", kind: "message", T: SolanaAccountId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): NoPrivacyWithdrawAction {
@@ -1864,6 +1934,15 @@ export class FeePaymentAction extends Message<FeePaymentAction> {
    */
   amount = protoInt64.zero;
 
+  /**
+   * The mint that this action will be operating against. For backwards
+   * compatibility, if no mint is set, then it is assumed to be the core
+   * mint.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId mint = 5;
+   */
+  mint?: SolanaAccountId;
+
   constructor(data?: PartialMessage<FeePaymentAction>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1876,6 +1955,7 @@ export class FeePaymentAction extends Message<FeePaymentAction> {
     { no: 2, name: "authority", kind: "message", T: SolanaAccountId },
     { no: 3, name: "source", kind: "message", T: SolanaAccountId },
     { no: 4, name: "amount", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+    { no: 5, name: "mint", kind: "message", T: SolanaAccountId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): FeePaymentAction {

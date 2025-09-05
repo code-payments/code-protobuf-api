@@ -354,6 +354,12 @@ message OpenAccountsMetadata {
         USER = 0; // Opens a set of user accounts
         POOL = 1; // Opens a pool account
     }
+
+
+    // The mint that this action will be operating against. For backwards
+    // compatibility, if no mint is set, then it is assumed to be the core
+    // mint.
+    common.v1.SolanaAccountId mint = 2;
 }
 
 // Send a payment to a destination account publicly.
@@ -397,6 +403,12 @@ message SendPublicPaymentMetadata {
 
     // Is the payment going to a new gift card? Note is_withdrawal must be false.
     bool is_remote_send = 5;
+
+
+    // The mint that this intent will be operating against. For backwards
+    // compatibility, if no mint is set, then it is assumed to be the core
+    // mint.
+    common.v1.SolanaAccountId mint = 7;
 }
 
 // Receive funds into a user-owned account publicly. All use cases of this intent
@@ -423,6 +435,12 @@ message ReceivePaymentsPubliclyMetadata {
     // part of creating the gift card account. This is purely a server-provided value.
     // SubmitIntent will disallow this being set.
     ExchangeData exchange_data = 5;
+
+
+    // The mint that this intent will be operating against. For backwards
+    // compatibility, if no mint is set, then it is assumed to be the core
+    // mint.
+    common.v1.SolanaAccountId mint = 6;
 }
 
 // Distribute funds from a pool account publicly to one or more user-owned accounts.
@@ -453,6 +471,12 @@ message PublicDistributionMetadata {
         // The amount of funds to distribute to the destination
         uint64 quarks = 2 [(validate.rules).uint64.gt = 0];
     }
+
+
+    // The mint that this intent will be operating against. For backwards
+    // compatibility, if no mint is set, then it is assumed to be the core
+    // mint.
+    common.v1.SolanaAccountId mint = 3;
 }
 
 //
@@ -507,6 +531,12 @@ message OpenAccountAction {
     // using the private key of the authority account. This provides a proof
     // of authorization to link authority to owner.
     common.v1.Signature authority_signature = 6 [(validate.rules).message.required = true];
+
+
+    // The mint that this action will be operating against. For backwards
+    // compatibility, if no mint is set, then it is assumed to be the core
+    // mint.
+    common.v1.SolanaAccountId mint = 7;
 }
 
 // Compact message signature required
@@ -522,6 +552,12 @@ message NoPrivacyTransferAction {
 
     // The core mint quark amount to transfer
     uint64 amount = 4 [(validate.rules).uint64.gt = 0];
+
+
+    // The mint that this action will be operating against. For backwards
+    // compatibility, if no mint is set, then it is assumed to be the core
+    // mint.
+    common.v1.SolanaAccountId mint = 5;
 }
 
 // Compact message signature required
@@ -546,6 +582,12 @@ message NoPrivacyWithdrawAction {
     // scheduling at its own discretion to return funds back to the owner (to their primary
     // account) that funded source.
     bool is_auto_return = 6;
+
+
+    // The mint that this action will be operating against. For backwards
+    // compatibility, if no mint is set, then it is assumed to be the core
+    // mint.
+    common.v1.SolanaAccountId mint = 7;
 }
 
 // Compact message signature required
@@ -565,6 +607,12 @@ message FeePaymentAction {
 
     // The core mint quark amount to transfer
     uint64 amount = 4 [(validate.rules).uint64.gt = 0];
+
+
+    // The mint that this action will be operating against. For backwards
+    // compatibility, if no mint is set, then it is assumed to be the core
+    // mint.
+    common.v1.SolanaAccountId mint = 5;
 }
 
 //

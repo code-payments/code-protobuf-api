@@ -1306,6 +1306,16 @@ func (m *OpenAccountsMetadata) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetMint()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return OpenAccountsMetadataValidationError{
+				field:  "Mint",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
@@ -1438,6 +1448,16 @@ func (m *SendPublicPaymentMetadata) Validate() error {
 
 	// no validation rules for IsRemoteSend
 
+	if v, ok := interface{}(m.GetMint()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SendPublicPaymentMetadataValidationError{
+				field:  "Mint",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
@@ -1540,6 +1560,16 @@ func (m *ReceivePaymentsPubliclyMetadata) Validate() error {
 		if err := v.Validate(); err != nil {
 			return ReceivePaymentsPubliclyMetadataValidationError{
 				field:  "ExchangeData",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetMint()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ReceivePaymentsPubliclyMetadataValidationError{
+				field:  "Mint",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -1651,6 +1681,16 @@ func (m *PublicDistributionMetadata) Validate() error {
 			}
 		}
 
+	}
+
+	if v, ok := interface{}(m.GetMint()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PublicDistributionMetadataValidationError{
+				field:  "Mint",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	return nil
@@ -1921,6 +1961,16 @@ func (m *OpenAccountAction) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetMint()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return OpenAccountActionValidationError{
+				field:  "Mint",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
@@ -2047,6 +2097,16 @@ func (m *NoPrivacyTransferAction) Validate() error {
 		return NoPrivacyTransferActionValidationError{
 			field:  "Amount",
 			reason: "value must be greater than 0",
+		}
+	}
+
+	if v, ok := interface{}(m.GetMint()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return NoPrivacyTransferActionValidationError{
+				field:  "Mint",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
 	}
 
@@ -2184,6 +2244,16 @@ func (m *NoPrivacyWithdrawAction) Validate() error {
 
 	// no validation rules for IsAutoReturn
 
+	if v, ok := interface{}(m.GetMint()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return NoPrivacyWithdrawActionValidationError{
+				field:  "Mint",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
@@ -2296,6 +2366,16 @@ func (m *FeePaymentAction) Validate() error {
 		return FeePaymentActionValidationError{
 			field:  "Amount",
 			reason: "value must be greater than 0",
+		}
+	}
+
+	if v, ok := interface{}(m.GetMint()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return FeePaymentActionValidationError{
+				field:  "Mint",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
 	}
 
