@@ -3393,6 +3393,16 @@ func (m *ExchangeData) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetMint()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ExchangeDataValidationError{
+				field:  "Mint",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 

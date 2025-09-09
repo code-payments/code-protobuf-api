@@ -2539,6 +2539,15 @@ export class ExchangeData extends Message<ExchangeData> {
    */
   quarks = protoInt64.zero;
 
+  /**
+   * The crypto mint that is being operated against for the exchange.
+   * For backwards compatibility, if no mint is set, then it is assumed
+   * to be the core mint.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId mint = 5;
+   */
+  mint?: SolanaAccountId;
+
   constructor(data?: PartialMessage<ExchangeData>) {
     super();
     proto3.util.initPartial(data, this);
@@ -2551,6 +2560,7 @@ export class ExchangeData extends Message<ExchangeData> {
     { no: 2, name: "exchange_rate", kind: "scalar", T: 1 /* ScalarType.DOUBLE */ },
     { no: 3, name: "native_amount", kind: "scalar", T: 1 /* ScalarType.DOUBLE */ },
     { no: 4, name: "quarks", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+    { no: 5, name: "mint", kind: "message", T: SolanaAccountId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ExchangeData {

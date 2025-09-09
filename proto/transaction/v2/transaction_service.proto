@@ -754,6 +754,11 @@ message ExchangeData {
     // The exact amount of quarks to send. This will be used as the source of
     // truth for validating transaction transfer amounts.
     uint64 quarks = 4 [(validate.rules).uint64.gt = 0];
+
+    // The crypto mint that is being operated against for the exchange.
+    // For backwards compatibility, if no mint is set, then it is assumed
+    // to be the core mint.
+    common.v1.SolanaAccountId mint = 5;
 }
 
 message ExchangeDataWithoutRate {
