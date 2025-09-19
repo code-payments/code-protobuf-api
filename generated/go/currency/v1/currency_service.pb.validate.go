@@ -387,6 +387,20 @@ func (m *Mint) Validate() error {
 		}
 	}
 
+	if l := utf8.RuneCountInString(m.GetDescription()); l < 1 || l > 4096 {
+		return MintValidationError{
+			field:  "Description",
+			reason: "value length must be between 1 and 4096 runes, inclusive",
+		}
+	}
+
+	if l := utf8.RuneCountInString(m.GetImageUrl()); l < 1 || l > 1024 {
+		return MintValidationError{
+			field:  "ImageUrl",
+			reason: "value length must be between 1 and 1024 runes, inclusive",
+		}
+	}
+
 	if v, ok := interface{}(m.GetVmMetadata()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return MintValidationError{

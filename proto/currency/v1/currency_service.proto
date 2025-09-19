@@ -81,16 +81,28 @@ message Mint {
         max_len: 8,
     }];
 
+    // Currency description
+    string description = 5 [(validate.rules).string = {
+        min_len: 1,
+        max_len: 4096,
+    }];
+
+    // URL to currency image
+    string image_url = 6 [(validate.rules).string = {
+        min_len: 1,
+        max_len: 1024,
+    }];
+
     // Available when a VM exists for the given mint, and can be used for deriving
     // VM deposit PDAs
     //
     // Note: Only currencies with a VM are useable for payments
-    VmMetadata vm_metadata = 5;
+    VmMetadata vm_metadata = 7;
 
     // Available when created by the launchpad via the currency creator program, and
     // can be used for calculating price, market cap, etc. based on the exponential
     // bonding curve
-    LaunchpadMetadata launchpad_metadata = 6;
+    LaunchpadMetadata launchpad_metadata = 8;
 }
 
 message VmMetadata {
