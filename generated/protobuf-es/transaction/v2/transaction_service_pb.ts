@@ -777,6 +777,8 @@ export class CanWithdrawToAccountResponse extends Message<CanWithdrawToAccountRe
    *
    * This will be set when requires_initialization = true
    *
+   * Note: The fee is always paid in the core mint.
+   *
    * @generated from field: code.transaction.v2.ExchangeDataWithoutRate fee_amount = 4;
    */
   feeAmount?: ExchangeDataWithoutRate;

@@ -1075,6 +1075,8 @@ type CanWithdrawToAccountResponse struct {
 	// the intent.
 	//
 	// This will be set when requires_initialization = true
+	//
+	// Note: The fee is always paid in the core mint.
 	FeeAmount *ExchangeDataWithoutRate `protobuf:"bytes,4,opt,name=fee_amount,json=feeAmount,proto3" json:"fee_amount,omitempty"`
 }
 

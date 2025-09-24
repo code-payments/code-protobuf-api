@@ -264,6 +264,8 @@ message CanWithdrawToAccountResponse {
     // the intent.
     //
     // This will be set when requires_initialization = true
+    //
+    // Note: The fee is always paid in the core mint.
     ExchangeDataWithoutRate fee_amount = 4;
 }
 
