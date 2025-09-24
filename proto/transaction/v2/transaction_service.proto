@@ -226,7 +226,14 @@ message GetLimitsResponse {
 }
 
 message CanWithdrawToAccountRequest {
+    // The destination account attempted to be withdrawn to. Can be an owner or
+    // token account.
    common.v1.SolanaAccountId account = 1 [(validate.rules).message.required = true];
+
+   // The mint that the withdraw will be operating against. For backwards
+   // compatibility, if no mint is set, then it is assumed to be the core
+   // mint.
+   common.v1.SolanaAccountId mint = 2;
 }
 
 message CanWithdrawToAccountResponse {

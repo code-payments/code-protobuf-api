@@ -692,9 +692,21 @@ proto3.util.setEnumType(GetLimitsResponse_Result, "code.transaction.v2.GetLimits
  */
 export class CanWithdrawToAccountRequest extends Message<CanWithdrawToAccountRequest> {
   /**
+   * The destination account attempted to be withdrawn to. Can be an owner or
+   * token account.
+   *
    * @generated from field: code.common.v1.SolanaAccountId account = 1;
    */
   account?: SolanaAccountId;
+
+  /**
+   * The mint that the withdraw will be operating against. For backwards
+   * compatibility, if no mint is set, then it is assumed to be the core
+   * mint.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId mint = 2;
+   */
+  mint?: SolanaAccountId;
 
   constructor(data?: PartialMessage<CanWithdrawToAccountRequest>) {
     super();
@@ -705,6 +717,7 @@ export class CanWithdrawToAccountRequest extends Message<CanWithdrawToAccountReq
   static readonly typeName = "code.transaction.v2.CanWithdrawToAccountRequest";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "account", kind: "message", T: SolanaAccountId },
+    { no: 2, name: "mint", kind: "message", T: SolanaAccountId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CanWithdrawToAccountRequest {
