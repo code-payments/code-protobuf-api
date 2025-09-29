@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { GetAllRatesRequest, GetAllRatesResponse } from "./currency_service_pb";
+import { GetAllRatesRequest, GetAllRatesResponse, GetMintsRequest, GetMintsResponse } from "./currency_service_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -22,6 +22,17 @@ export const Currency = {
       name: "GetAllRates",
       I: GetAllRatesRequest,
       O: GetAllRatesResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * GetMints gets mint account metadata by address
+     *
+     * @generated from rpc code.currency.v1.Currency.GetMints
+     */
+    getMints: {
+      name: "GetMints",
+      I: GetMintsRequest,
+      O: GetMintsResponse,
       kind: MethodKind.Unary,
     },
   }

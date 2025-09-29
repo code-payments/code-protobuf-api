@@ -10,8 +10,6 @@ import { Duration, Message, proto3, Timestamp } from "@bufbuild/protobuf";
  * AccountType associates a type to an account, which infers how an account is used
  * within the Code ecosystem.
  *
- * todo: Deprecate legacy accounts (temporary, buckets, legacy primary, relationship, swap)
- *
  * @generated from enum code.common.v1.AccountType
  */
 export enum AccountType {
@@ -26,64 +24,9 @@ export enum AccountType {
   PRIMARY = 1,
 
   /**
-   * @generated from enum value: TEMPORARY_INCOMING = 2;
-   */
-  TEMPORARY_INCOMING = 2,
-
-  /**
-   * @generated from enum value: TEMPORARY_OUTGOING = 3;
-   */
-  TEMPORARY_OUTGOING = 3,
-
-  /**
-   * @generated from enum value: BUCKET_1_KIN = 4;
-   */
-  BUCKET_1_KIN = 4,
-
-  /**
-   * @generated from enum value: BUCKET_10_KIN = 5;
-   */
-  BUCKET_10_KIN = 5,
-
-  /**
-   * @generated from enum value: BUCKET_100_KIN = 6;
-   */
-  BUCKET_100_KIN = 6,
-
-  /**
-   * @generated from enum value: BUCKET_1_000_KIN = 7;
-   */
-  BUCKET_1_000_KIN = 7,
-
-  /**
-   * @generated from enum value: BUCKET_10_000_KIN = 8;
-   */
-  BUCKET_10_000_KIN = 8,
-
-  /**
-   * @generated from enum value: BUCKET_100_000_KIN = 9;
-   */
-  BUCKET_100_000_KIN = 9,
-
-  /**
-   * @generated from enum value: BUCKET_1_000_000_KIN = 10;
-   */
-  BUCKET_1_000_000_KIN = 10,
-
-  /**
-   * @generated from enum value: LEGACY_PRIMARY_2022 = 11;
-   */
-  LEGACY_PRIMARY_2022 = 11,
-
-  /**
    * @generated from enum value: REMOTE_SEND_GIFT_CARD = 12;
    */
   REMOTE_SEND_GIFT_CARD = 12,
-
-  /**
-   * @generated from enum value: RELATIONSHIP = 13;
-   */
-  RELATIONSHIP = 13,
 
   /**
    * @generated from enum value: SWAP = 14;
@@ -104,18 +47,7 @@ export enum AccountType {
 proto3.util.setEnumType(AccountType, "code.common.v1.AccountType", [
   { no: 0, name: "UNKNOWN" },
   { no: 1, name: "PRIMARY" },
-  { no: 2, name: "TEMPORARY_INCOMING" },
-  { no: 3, name: "TEMPORARY_OUTGOING" },
-  { no: 4, name: "BUCKET_1_KIN" },
-  { no: 5, name: "BUCKET_10_KIN" },
-  { no: 6, name: "BUCKET_100_KIN" },
-  { no: 7, name: "BUCKET_1_000_KIN" },
-  { no: 8, name: "BUCKET_10_000_KIN" },
-  { no: 9, name: "BUCKET_100_000_KIN" },
-  { no: 10, name: "BUCKET_1_000_000_KIN" },
-  { no: 11, name: "LEGACY_PRIMARY_2022" },
   { no: 12, name: "REMOTE_SEND_GIFT_CARD" },
-  { no: 13, name: "RELATIONSHIP" },
   { no: 14, name: "SWAP" },
   { no: 15, name: "ASSOCIATED_TOKEN_ACCOUNT" },
   { no: 16, name: "POOL" },
