@@ -816,8 +816,8 @@ type RequestToGrabBill struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Requestor is the virtual core mint token account on the VM to which a
-	// payment should be sent.
+	// Requestor is the virtual token account on the VM to which a payment
+	// should be sent.
 	RequestorAccount *v1.SolanaAccountId `protobuf:"bytes,1,opt,name=requestor_account,json=requestorAccount,proto3" json:"requestor_account,omitempty"`
 }
 

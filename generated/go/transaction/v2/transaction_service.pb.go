@@ -1076,7 +1076,7 @@ type CanWithdrawToAccountResponse struct {
 	//
 	// This will be set when requires_initialization = true
 	//
-	// Note: The fee is always paid in the core mint.
+	// Note: The fee is always paid in the target mint.
 	FeeAmount *ExchangeDataWithoutRate `protobuf:"bytes,4,opt,name=fee_amount,json=feeAmount,proto3" json:"fee_amount,omitempty"`
 }
 
@@ -1703,7 +1703,7 @@ type ReceivePaymentsPubliclyMetadata struct {
 
 	// The remote send gift card to receive funds from
 	Source *v1.SolanaAccountId `protobuf:"bytes,1,opt,name=source,proto3" json:"source,omitempty"`
-	// The exact amount of core mint quarks being received
+	// The exact amount of quarks being received
 	Quarks uint64 `protobuf:"varint,2,opt,name=quarks,proto3" json:"quarks,omitempty"`
 	// Is the receipt of funds from a remote send gift card? Currently, this is
 	// the only use case for this intent and validation enforces the flag to true.
@@ -2111,7 +2111,7 @@ type NoPrivacyTransferAction struct {
 	Source *v1.SolanaAccountId `protobuf:"bytes,2,opt,name=source,proto3" json:"source,omitempty"`
 	// The destination account where funds are transferred to
 	Destination *v1.SolanaAccountId `protobuf:"bytes,3,opt,name=destination,proto3" json:"destination,omitempty"`
-	// The core mint quark amount to transfer
+	// The quark amount to transfer
 	Amount uint64 `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
 	// The mint that this action will be operating against. For backwards
 	// compatibility, if no mint is set, then it is assumed to be the core
@@ -2198,7 +2198,7 @@ type NoPrivacyWithdrawAction struct {
 	Source *v1.SolanaAccountId `protobuf:"bytes,2,opt,name=source,proto3" json:"source,omitempty"`
 	// The destination account where funds are transferred to
 	Destination *v1.SolanaAccountId `protobuf:"bytes,3,opt,name=destination,proto3" json:"destination,omitempty"`
-	// The intended core mint quark amount to withdraw
+	// The quark amount to withdraw
 	Amount uint64 `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
 	// Whether the account is closed afterwards. This is always true, since there
 	// are no current se cases to leave it open.
@@ -2306,7 +2306,7 @@ type FeePaymentAction struct {
 	Authority *v1.SolanaAccountId `protobuf:"bytes,2,opt,name=authority,proto3" json:"authority,omitempty"`
 	// The source account where funds are transferred from
 	Source *v1.SolanaAccountId `protobuf:"bytes,3,opt,name=source,proto3" json:"source,omitempty"`
-	// The core mint quark amount to transfer
+	// The quark amount to transfer
 	Amount uint64 `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`
 	// The mint that this action will be operating against. For backwards
 	// compatibility, if no mint is set, then it is assumed to be the core

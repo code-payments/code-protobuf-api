@@ -577,8 +577,8 @@ export class MessageId extends Message$1<MessageId> {
  */
 export class RequestToGrabBill extends Message$1<RequestToGrabBill> {
   /**
-   * Requestor is the virtual core mint token account on the VM to which a
-   * payment should be sent.
+   * Requestor is the virtual token account on the VM to which a payment
+   * should be sent.
    *
    * @generated from field: code.common.v1.SolanaAccountId requestor_account = 1;
    */

@@ -265,7 +265,7 @@ message CanWithdrawToAccountResponse {
     //
     // This will be set when requires_initialization = true
     //
-    // Note: The fee is always paid in the core mint.
+    // Note: The fee is always paid in the target mint.
     ExchangeDataWithoutRate fee_amount = 4;
 }
 
@@ -430,7 +430,7 @@ message ReceivePaymentsPubliclyMetadata {
     // The remote send gift card to receive funds from
     common.v1.SolanaAccountId source = 1 [(validate.rules).message.required = true];
 
-    // The exact amount of core mint quarks being received
+    // The exact amount of quarks being received
     uint64 quarks = 2 [(validate.rules).uint64.gt = 0];
 
     // Is the receipt of funds from a remote send gift card? Currently, this is
@@ -559,7 +559,7 @@ message NoPrivacyTransferAction {
     // The destination account where funds are transferred to
     common.v1.SolanaAccountId destination = 3 [(validate.rules).message.required = true];
 
-    // The core mint quark amount to transfer
+    // The quark amount to transfer
     uint64 amount = 4 [(validate.rules).uint64.gt = 0];
 
 
@@ -580,7 +580,7 @@ message NoPrivacyWithdrawAction {
     // The destination account where funds are transferred to
     common.v1.SolanaAccountId destination = 3 [(validate.rules).message.required = true];
 
-    // The intended core mint quark amount to withdraw
+    // The quark amount to withdraw
     uint64 amount = 4 [(validate.rules).uint64.gt = 0];
 
     // Whether the account is closed afterwards. This is always true, since there
@@ -614,7 +614,7 @@ message FeePaymentAction {
     // The source account where funds are transferred from
     common.v1.SolanaAccountId source = 3 [(validate.rules).message.required = true];
 
-    // The core mint quark amount to transfer
+    // The quark amount to transfer
     uint64 amount = 4 [(validate.rules).uint64.gt = 0];
 
 

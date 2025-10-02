@@ -777,7 +777,7 @@ export class CanWithdrawToAccountResponse extends Message<CanWithdrawToAccountRe
    *
    * This will be set when requires_initialization = true
    *
-   * Note: The fee is always paid in the core mint.
+   * Note: The fee is always paid in the target mint.
    *
    * @generated from field: code.transaction.v2.ExchangeDataWithoutRate fee_amount = 4;
    */
@@ -1391,7 +1391,7 @@ export class ReceivePaymentsPubliclyMetadata extends Message<ReceivePaymentsPubl
   source?: SolanaAccountId;
 
   /**
-   * The exact amount of core mint quarks being received
+   * The exact amount of quarks being received
    *
    * @generated from field: uint64 quarks = 2;
    */
@@ -1774,7 +1774,7 @@ export class NoPrivacyTransferAction extends Message<NoPrivacyTransferAction> {
   destination?: SolanaAccountId;
 
   /**
-   * The core mint quark amount to transfer
+   * The quark amount to transfer
    *
    * @generated from field: uint64 amount = 4;
    */
@@ -1849,7 +1849,7 @@ export class NoPrivacyWithdrawAction extends Message<NoPrivacyWithdrawAction> {
   destination?: SolanaAccountId;
 
   /**
-   * The intended core mint quark amount to withdraw
+   * The quark amount to withdraw
    *
    * @generated from field: uint64 amount = 4;
    */
@@ -1943,7 +1943,7 @@ export class FeePaymentAction extends Message<FeePaymentAction> {
   source?: SolanaAccountId;
 
   /**
-   * The core mint quark amount to transfer
+   * The quark amount to transfer
    *
    * @generated from field: uint64 amount = 4;
    */
