@@ -613,6 +613,47 @@ export class RequestToGrabBill extends Message$1<RequestToGrabBill> {
 }
 
 /**
+ * Request that a bill be given in the desired mint
+ *
+ * @generated from message code.messaging.v1.RequestToGiveBill
+ */
+export class RequestToGiveBill extends Message$1<RequestToGiveBill> {
+  /**
+   * The mint that the bill will be received in
+   *
+   * @generated from field: code.common.v1.SolanaAccountId mint = 1;
+   */
+  mint?: SolanaAccountId;
+
+  constructor(data?: PartialMessage<RequestToGiveBill>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.messaging.v1.RequestToGiveBill";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "mint", kind: "message", T: SolanaAccountId },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RequestToGiveBill {
+    return new RequestToGiveBill().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): RequestToGiveBill {
+    return new RequestToGiveBill().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): RequestToGiveBill {
+    return new RequestToGiveBill().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: RequestToGiveBill | PlainMessage<RequestToGiveBill> | undefined, b: RequestToGiveBill | PlainMessage<RequestToGiveBill> | undefined): boolean {
+    return proto3.util.equals(RequestToGiveBill, a, b);
+  }
+}
+
+/**
  * @generated from message code.messaging.v1.Message
  */
 export class Message extends Message$1<Message> {
@@ -648,6 +689,12 @@ export class Message extends Message$1<Message> {
      */
     value: RequestToGrabBill;
     case: "requestToGrabBill";
+  } | {
+    /**
+     * @generated from field: code.messaging.v1.RequestToGiveBill request_to_give_bill = 13;
+     */
+    value: RequestToGiveBill;
+    case: "requestToGiveBill";
   } | { case: undefined; value?: undefined } = { case: undefined };
 
   constructor(data?: PartialMessage<Message>) {
@@ -661,6 +708,7 @@ export class Message extends Message$1<Message> {
     { no: 1, name: "id", kind: "message", T: MessageId },
     { no: 3, name: "send_message_request_signature", kind: "message", T: Signature },
     { no: 2, name: "request_to_grab_bill", kind: "message", T: RequestToGrabBill, oneof: "kind" },
+    { no: 13, name: "request_to_give_bill", kind: "message", T: RequestToGiveBill, oneof: "kind" },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Message {

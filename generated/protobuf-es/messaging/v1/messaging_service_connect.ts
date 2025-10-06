@@ -22,13 +22,16 @@ export const Messaging = {
      * and are eligible for deletion from the service. Clients should, however, handle
      * duplicate delivery of messages.
      *
-     * For grabbing a bill, the expected flow is as follows:
-     *   1. The payment sender creates a cash scan code
-     *   2. The payment sender calls OpenMessageStream on the rendezvous public key, which is
-     *      derived by using sha256(scan payload) as the keypair seed.
-     *   3. The payment recipient scans the code and uses SendMessage to send their account ID
-     *      back to the sender via the rendezvous public key.
-     *   4. The payment sender receives the message, submits the intent, and closes the stream.
+     * For giving/grabbing a bill, the expected flow is as follows:
+     *   1. The payment sender creates a multi-mint cash scan code.
+     *   2. The payment sender calls OpenMessageStream on the rendezvous public key.
+     *   3. The payment sender uses SendMessage to send the mint in a RequestToGiveBill message.
+     *   4. The payment sender shows the bill with the scan code containing the rendezvous public key.
+     *   4. The payment recipient scans the code.
+     *   5. The payment recipient uses PollMessages to get the RequestToGiveBill message from part 3.
+     *   6. The payment recipient sends the destination address in a RequestToGrabBill message.
+     *   7. The payment sender receives the RequestToGrabBill message in real time, submits the intent
+     *      for the payment to the provided destination, and then closes the stream.
      *
      * @generated from rpc code.messaging.v1.Messaging.OpenMessageStream
      */
