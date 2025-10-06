@@ -861,6 +861,8 @@ func (x *RequestToGrabBill) GetRequestorAccount() *v1.SolanaAccountId {
 }
 
 // Request that a bill be given in the desired mint
+//
+// This message type is only initiated by clients.
 type RequestToGiveBill struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

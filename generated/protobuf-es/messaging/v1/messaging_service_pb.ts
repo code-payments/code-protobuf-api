@@ -615,6 +615,8 @@ export class RequestToGrabBill extends Message$1<RequestToGrabBill> {
 /**
  * Request that a bill be given in the desired mint
  *
+ * This message type is only initiated by clients.
+ *
  * @generated from message code.messaging.v1.RequestToGiveBill
  */
 export class RequestToGiveBill extends Message$1<RequestToGiveBill> {

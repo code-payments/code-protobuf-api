@@ -189,6 +189,8 @@ message RequestToGrabBill {
 }
 
 // Request that a bill be given in the desired mint
+//
+// This message type is only initiated by clients.
 message RequestToGiveBill {
     // The mint that the bill will be received in
     common.v1.SolanaAccountId mint = 1 [(validate.rules).message.required = true];
