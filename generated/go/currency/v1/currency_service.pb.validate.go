@@ -371,6 +371,16 @@ func (m *Mint) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetAddress()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return MintValidationError{
+				field:  "Address",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	// no validation rules for Decimals
 
 	if l := utf8.RuneCountInString(m.GetName()); l < 1 || l > 32 {
@@ -418,6 +428,13 @@ func (m *Mint) Validate() error {
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
+		}
+	}
+
+	if m.GetCreatedAt() == nil {
+		return MintValidationError{
+			field:  "CreatedAt",
+			reason: "value is required",
 		}
 	}
 
@@ -492,10 +509,30 @@ func (m *VmMetadata) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetVm()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return VmMetadataValidationError{
+				field:  "Vm",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if m.GetAuthority() == nil {
 		return VmMetadataValidationError{
 			field:  "Authority",
 			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetAuthority()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return VmMetadataValidationError{
+				field:  "Authority",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
 	}
 
@@ -578,10 +615,30 @@ func (m *LaunchpadMetadata) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetCurrencyConfig()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return LaunchpadMetadataValidationError{
+				field:  "CurrencyConfig",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if m.GetLiquidityPool() == nil {
 		return LaunchpadMetadataValidationError{
 			field:  "LiquidityPool",
 			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetLiquidityPool()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return LaunchpadMetadataValidationError{
+				field:  "LiquidityPool",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
 	}
 
@@ -592,10 +649,30 @@ func (m *LaunchpadMetadata) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetSeed()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return LaunchpadMetadataValidationError{
+				field:  "Seed",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if m.GetAuthority() == nil {
 		return LaunchpadMetadataValidationError{
 			field:  "Authority",
 			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetAuthority()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return LaunchpadMetadataValidationError{
+				field:  "Authority",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
 	}
 
@@ -606,6 +683,16 @@ func (m *LaunchpadMetadata) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetMintVault()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return LaunchpadMetadataValidationError{
+				field:  "MintVault",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if m.GetCoreMintVault() == nil {
 		return LaunchpadMetadataValidationError{
 			field:  "CoreMintVault",
@@ -613,10 +700,30 @@ func (m *LaunchpadMetadata) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetCoreMintVault()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return LaunchpadMetadataValidationError{
+				field:  "CoreMintVault",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if m.GetCoreMintFees() == nil {
 		return LaunchpadMetadataValidationError{
 			field:  "CoreMintFees",
 			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetCoreMintFees()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return LaunchpadMetadataValidationError{
+				field:  "CoreMintFees",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
 	}
 

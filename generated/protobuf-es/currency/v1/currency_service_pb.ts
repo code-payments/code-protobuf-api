@@ -289,6 +289,13 @@ export class Mint extends Message<Mint> {
    */
   launchpadMetadata?: LaunchpadMetadata;
 
+  /**
+   * Timestamp the currency was created
+   *
+   * @generated from field: google.protobuf.Timestamp created_at = 9;
+   */
+  createdAt?: Timestamp;
+
   constructor(data?: PartialMessage<Mint>) {
     super();
     proto3.util.initPartial(data, this);
@@ -305,6 +312,7 @@ export class Mint extends Message<Mint> {
     { no: 6, name: "image_url", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 7, name: "vm_metadata", kind: "message", T: VmMetadata },
     { no: 8, name: "launchpad_metadata", kind: "message", T: LaunchpadMetadata },
+    { no: 9, name: "created_at", kind: "message", T: Timestamp },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Mint {
