@@ -1201,12 +1201,12 @@ func (m *SwapRequest) Validate() error {
 			}
 		}
 
-	case *SwapRequest_SubmitSignature_:
+	case *SwapRequest_SubmitSignatures_:
 
-		if v, ok := interface{}(m.GetSubmitSignature()).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(m.GetSubmitSignatures()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return SwapRequestValidationError{
-					field:  "SubmitSignature",
+					field:  "SubmitSignatures",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -4416,38 +4416,43 @@ var _ interface {
 	ErrorName() string
 } = SwapRequest_InitiateValidationError{}
 
-// Validate checks the field values on SwapRequest_SubmitSignature with the
+// Validate checks the field values on SwapRequest_SubmitSignatures with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *SwapRequest_SubmitSignature) Validate() error {
+func (m *SwapRequest_SubmitSignatures) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	if m.GetSignature() == nil {
-		return SwapRequest_SubmitSignatureValidationError{
-			field:  "Signature",
-			reason: "value is required",
+	if len(m.GetSignatures()) != 2 {
+		return SwapRequest_SubmitSignaturesValidationError{
+			field:  "Signatures",
+			reason: "value must contain exactly 2 item(s)",
 		}
 	}
 
-	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SwapRequest_SubmitSignatureValidationError{
-				field:  "Signature",
-				reason: "embedded message failed validation",
-				cause:  err,
+	for idx, item := range m.GetSignatures() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SwapRequest_SubmitSignaturesValidationError{
+					field:  fmt.Sprintf("Signatures[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
 			}
 		}
+
 	}
 
 	return nil
 }
 
-// SwapRequest_SubmitSignatureValidationError is the validation error returned
-// by SwapRequest_SubmitSignature.Validate if the designated constraints
+// SwapRequest_SubmitSignaturesValidationError is the validation error returned
+// by SwapRequest_SubmitSignatures.Validate if the designated constraints
 // aren't met.
-type SwapRequest_SubmitSignatureValidationError struct {
+type SwapRequest_SubmitSignaturesValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -4455,24 +4460,24 @@ type SwapRequest_SubmitSignatureValidationError struct {
 }
 
 // Field function returns field value.
-func (e SwapRequest_SubmitSignatureValidationError) Field() string { return e.field }
+func (e SwapRequest_SubmitSignaturesValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e SwapRequest_SubmitSignatureValidationError) Reason() string { return e.reason }
+func (e SwapRequest_SubmitSignaturesValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e SwapRequest_SubmitSignatureValidationError) Cause() error { return e.cause }
+func (e SwapRequest_SubmitSignaturesValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e SwapRequest_SubmitSignatureValidationError) Key() bool { return e.key }
+func (e SwapRequest_SubmitSignaturesValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e SwapRequest_SubmitSignatureValidationError) ErrorName() string {
-	return "SwapRequest_SubmitSignatureValidationError"
+func (e SwapRequest_SubmitSignaturesValidationError) ErrorName() string {
+	return "SwapRequest_SubmitSignaturesValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e SwapRequest_SubmitSignatureValidationError) Error() string {
+func (e SwapRequest_SubmitSignaturesValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -4484,14 +4489,14 @@ func (e SwapRequest_SubmitSignatureValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sSwapRequest_SubmitSignature.%s: %s%s",
+		"invalid %sSwapRequest_SubmitSignatures.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = SwapRequest_SubmitSignatureValidationError{}
+var _ error = SwapRequest_SubmitSignaturesValidationError{}
 
 var _ interface {
 	Field() string
@@ -4499,7 +4504,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = SwapRequest_SubmitSignatureValidationError{}
+} = SwapRequest_SubmitSignaturesValidationError{}
 
 // Validate checks the field values on SwapRequest_Initiate_Stateless with the
 // rules defined in the proto definition for this message. If any rules are

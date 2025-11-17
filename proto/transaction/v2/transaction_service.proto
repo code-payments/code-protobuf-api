@@ -337,8 +337,8 @@ message SwapRequest {
     oneof request {
         option (validate.required) = true;
 
-        Initiate        initiate         = 1;
-        SubmitSignature submit_signature = 2;
+        Initiate         initiate         = 1;
+        SubmitSignatures submit_signatures = 2;
     }
 
     message Initiate {
@@ -379,9 +379,12 @@ message SwapRequest {
         }
     }
 
-    message SubmitSignature {
-        // The signature for the locally constructed swap transaction
-        common.v1.Signature signature = 1 [(validate.rules).message.required = true];
+    message SubmitSignatures {
+        // The signatures for the locally constructed swap transaction
+        repeated common.v1.Signature signatures = 1 [(validate.rules).repeated = {
+            min_items: 2
+            max_items: 2
+        }];
     }
 }
 

@@ -1125,10 +1125,10 @@ export class SwapRequest extends Message<SwapRequest> {
     case: "initiate";
   } | {
     /**
-     * @generated from field: code.transaction.v2.SwapRequest.SubmitSignature submit_signature = 2;
+     * @generated from field: code.transaction.v2.SwapRequest.SubmitSignatures submit_signatures = 2;
      */
-    value: SwapRequest_SubmitSignature;
-    case: "submitSignature";
+    value: SwapRequest_SubmitSignatures;
+    case: "submitSignatures";
   } | { case: undefined; value?: undefined } = { case: undefined };
 
   constructor(data?: PartialMessage<SwapRequest>) {
@@ -1140,7 +1140,7 @@ export class SwapRequest extends Message<SwapRequest> {
   static readonly typeName = "code.transaction.v2.SwapRequest";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "initiate", kind: "message", T: SwapRequest_Initiate, oneof: "request" },
-    { no: 2, name: "submit_signature", kind: "message", T: SwapRequest_SubmitSignature, oneof: "request" },
+    { no: 2, name: "submit_signatures", kind: "message", T: SwapRequest_SubmitSignatures, oneof: "request" },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SwapRequest {
@@ -1297,41 +1297,41 @@ export class SwapRequest_Initiate_Stateless extends Message<SwapRequest_Initiate
 }
 
 /**
- * @generated from message code.transaction.v2.SwapRequest.SubmitSignature
+ * @generated from message code.transaction.v2.SwapRequest.SubmitSignatures
  */
-export class SwapRequest_SubmitSignature extends Message<SwapRequest_SubmitSignature> {
+export class SwapRequest_SubmitSignatures extends Message<SwapRequest_SubmitSignatures> {
   /**
-   * The signature for the locally constructed swap transaction
+   * The signatures for the locally constructed swap transaction
    *
-   * @generated from field: code.common.v1.Signature signature = 1;
+   * @generated from field: repeated code.common.v1.Signature signatures = 1;
    */
-  signature?: Signature;
+  signatures: Signature[] = [];
 
-  constructor(data?: PartialMessage<SwapRequest_SubmitSignature>) {
+  constructor(data?: PartialMessage<SwapRequest_SubmitSignatures>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.transaction.v2.SwapRequest.SubmitSignature";
+  static readonly typeName = "code.transaction.v2.SwapRequest.SubmitSignatures";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "signature", kind: "message", T: Signature },
+    { no: 1, name: "signatures", kind: "message", T: Signature, repeated: true },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SwapRequest_SubmitSignature {
-    return new SwapRequest_SubmitSignature().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SwapRequest_SubmitSignatures {
+    return new SwapRequest_SubmitSignatures().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SwapRequest_SubmitSignature {
-    return new SwapRequest_SubmitSignature().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SwapRequest_SubmitSignatures {
+    return new SwapRequest_SubmitSignatures().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SwapRequest_SubmitSignature {
-    return new SwapRequest_SubmitSignature().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SwapRequest_SubmitSignatures {
+    return new SwapRequest_SubmitSignatures().fromJsonString(jsonString, options);
   }
 
-  static equals(a: SwapRequest_SubmitSignature | PlainMessage<SwapRequest_SubmitSignature> | undefined, b: SwapRequest_SubmitSignature | PlainMessage<SwapRequest_SubmitSignature> | undefined): boolean {
-    return proto3.util.equals(SwapRequest_SubmitSignature, a, b);
+  static equals(a: SwapRequest_SubmitSignatures | PlainMessage<SwapRequest_SubmitSignatures> | undefined, b: SwapRequest_SubmitSignatures | PlainMessage<SwapRequest_SubmitSignatures> | undefined): boolean {
+    return proto3.util.equals(SwapRequest_SubmitSignatures, a, b);
   }
 }
 
