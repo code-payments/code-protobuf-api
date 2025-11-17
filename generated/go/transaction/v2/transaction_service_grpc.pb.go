@@ -76,6 +76,14 @@ type TransactionClient interface {
 	//
 	//	it is close to or is auto-returned, then OK will be returned.
 	VoidGiftCard(ctx context.Context, in *VoidGiftCardRequest, opts ...grpc.CallOption) (*VoidGiftCardResponse, error)
+	// Swap performs an on-chain swap. The high-level flow mirrors SubmitIntent
+	// closely. However, due to the time-sensitive nature and unreliability of
+	// swaps, they do not fit within the broader intent system. This results in
+	// a few key differences:
+	//   - Transactions are submitted on a best-effort basis outside of the Code
+	//     Sequencer within the RPC handler
+	//   - Balance changes are applied after the transaction has finalized
+	Swap(ctx context.Context, opts ...grpc.CallOption) (Transaction_SwapClient, error)
 }
 
 type transactionClient struct {
@@ -162,6 +170,37 @@ func (c *transactionClient) VoidGiftCard(ctx context.Context, in *VoidGiftCardRe
 	return out, nil
 }
 
+func (c *transactionClient) Swap(ctx context.Context, opts ...grpc.CallOption) (Transaction_SwapClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Transaction_ServiceDesc.Streams[1], "/code.transaction.v2.Transaction/Swap", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &transactionSwapClient{stream}
+	return x, nil
+}
+
+type Transaction_SwapClient interface {
+	Send(*SwapRequest) error
+	Recv() (*SwapResponse, error)
+	grpc.ClientStream
+}
+
+type transactionSwapClient struct {
+	grpc.ClientStream
+}
+
+func (x *transactionSwapClient) Send(m *SwapRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *transactionSwapClient) Recv() (*SwapResponse, error) {
+	m := new(SwapResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // TransactionServer is the server API for Transaction service.
 // All implementations must embed UnimplementedTransactionServer
 // for forward compatibility
@@ -220,6 +259,14 @@ type TransactionServer interface {
 	//
 	//	it is close to or is auto-returned, then OK will be returned.
 	VoidGiftCard(context.Context, *VoidGiftCardRequest) (*VoidGiftCardResponse, error)
+	// Swap performs an on-chain swap. The high-level flow mirrors SubmitIntent
+	// closely. However, due to the time-sensitive nature and unreliability of
+	// swaps, they do not fit within the broader intent system. This results in
+	// a few key differences:
+	//   - Transactions are submitted on a best-effort basis outside of the Code
+	//     Sequencer within the RPC handler
+	//   - Balance changes are applied after the transaction has finalized
+	Swap(Transaction_SwapServer) error
 	mustEmbedUnimplementedTransactionServer()
 }
 
@@ -244,6 +291,9 @@ func (UnimplementedTransactionServer) Airdrop(context.Context, *AirdropRequest) 
 }
 func (UnimplementedTransactionServer) VoidGiftCard(context.Context, *VoidGiftCardRequest) (*VoidGiftCardResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VoidGiftCard not implemented")
+}
+func (UnimplementedTransactionServer) Swap(Transaction_SwapServer) error {
+	return status.Errorf(codes.Unimplemented, "method Swap not implemented")
 }
 func (UnimplementedTransactionServer) mustEmbedUnimplementedTransactionServer() {}
 
@@ -374,6 +424,32 @@ func _Transaction_VoidGiftCard_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Transaction_Swap_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(TransactionServer).Swap(&transactionSwapServer{stream})
+}
+
+type Transaction_SwapServer interface {
+	Send(*SwapResponse) error
+	Recv() (*SwapRequest, error)
+	grpc.ServerStream
+}
+
+type transactionSwapServer struct {
+	grpc.ServerStream
+}
+
+func (x *transactionSwapServer) Send(m *SwapResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *transactionSwapServer) Recv() (*SwapRequest, error) {
+	m := new(SwapRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // Transaction_ServiceDesc is the grpc.ServiceDesc for Transaction service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -406,6 +482,12 @@ var Transaction_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "SubmitIntent",
 			Handler:       _Transaction_SubmitIntent_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "Swap",
+			Handler:       _Transaction_Swap_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},

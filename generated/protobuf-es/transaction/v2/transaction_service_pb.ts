@@ -5,7 +5,7 @@
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
 import { Message, proto3, protoInt64, Timestamp } from "@bufbuild/protobuf";
-import { AccountType, Blockhash, Hash, IntentId, Signature, SolanaAccountId, Transaction } from "../../common/v1/model_pb";
+import { AccountType, Blockhash, Hash, IntentId, Signature, SolanaAccountId, SolanaAddressLookupTable, Transaction } from "../../common/v1/model_pb";
 
 /**
  * @generated from enum code.transaction.v2.AirdropType
@@ -1108,6 +1108,599 @@ proto3.util.setEnumType(VoidGiftCardResponse_Result, "code.transaction.v2.VoidGi
   { no: 1, name: "DENIED" },
   { no: 2, name: "CLAIMED_BY_OTHER_USER" },
   { no: 3, name: "NOT_FOUND" },
+]);
+
+/**
+ * @generated from message code.transaction.v2.SwapRequest
+ */
+export class SwapRequest extends Message<SwapRequest> {
+  /**
+   * @generated from oneof code.transaction.v2.SwapRequest.request
+   */
+  request: {
+    /**
+     * @generated from field: code.transaction.v2.SwapRequest.Initiate initiate = 1;
+     */
+    value: SwapRequest_Initiate;
+    case: "initiate";
+  } | {
+    /**
+     * @generated from field: code.transaction.v2.SwapRequest.SubmitSignature submit_signature = 2;
+     */
+    value: SwapRequest_SubmitSignature;
+    case: "submitSignature";
+  } | { case: undefined; value?: undefined } = { case: undefined };
+
+  constructor(data?: PartialMessage<SwapRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.transaction.v2.SwapRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "initiate", kind: "message", T: SwapRequest_Initiate, oneof: "request" },
+    { no: 2, name: "submit_signature", kind: "message", T: SwapRequest_SubmitSignature, oneof: "request" },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SwapRequest {
+    return new SwapRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SwapRequest {
+    return new SwapRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SwapRequest {
+    return new SwapRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: SwapRequest | PlainMessage<SwapRequest> | undefined, b: SwapRequest | PlainMessage<SwapRequest> | undefined): boolean {
+    return proto3.util.equals(SwapRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message code.transaction.v2.SwapRequest.Initiate
+ */
+export class SwapRequest_Initiate extends Message<SwapRequest_Initiate> {
+  /**
+   * @generated from oneof code.transaction.v2.SwapRequest.Initiate.kind
+   */
+  kind: {
+    /**
+     * @generated from field: code.transaction.v2.SwapRequest.Initiate.Stateless stateless = 1;
+     */
+    value: SwapRequest_Initiate_Stateless;
+    case: "stateless";
+  } | { case: undefined; value?: undefined } = { case: undefined };
+
+  constructor(data?: PartialMessage<SwapRequest_Initiate>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.transaction.v2.SwapRequest.Initiate";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "stateless", kind: "message", T: SwapRequest_Initiate_Stateless, oneof: "kind" },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SwapRequest_Initiate {
+    return new SwapRequest_Initiate().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SwapRequest_Initiate {
+    return new SwapRequest_Initiate().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SwapRequest_Initiate {
+    return new SwapRequest_Initiate().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: SwapRequest_Initiate | PlainMessage<SwapRequest_Initiate> | undefined, b: SwapRequest_Initiate | PlainMessage<SwapRequest_Initiate> | undefined): boolean {
+    return proto3.util.equals(SwapRequest_Initiate, a, b);
+  }
+}
+
+/**
+ * @generated from message code.transaction.v2.SwapRequest.Initiate.Stateless
+ */
+export class SwapRequest_Initiate_Stateless extends Message<SwapRequest_Initiate_Stateless> {
+  /**
+   * The verified owner account public key
+   *
+   * @generated from field: code.common.v1.SolanaAccountId owner = 1;
+   */
+  owner?: SolanaAccountId;
+
+  /**
+   * The source mint that will be swapped from
+   *
+   * @generated from field: code.common.v1.SolanaAccountId from_mint = 2;
+   */
+  fromMint?: SolanaAccountId;
+
+  /**
+   * The destination mint that will be swapped to
+   *
+   * @generated from field: code.common.v1.SolanaAccountId to_mint = 3;
+   */
+  toMint?: SolanaAccountId;
+
+  /**
+   * The amount to swap from the source mint in quarks.
+   *
+   * @generated from field: uint64 amount = 4;
+   */
+  amount = protoInt64.zero;
+
+  /**
+   * The user authority account that will sign to authorize the swap.
+   *
+   * For Currency Creator program buy/sell flows, this should be a random one-time use account.
+   *
+   * @generated from field: code.common.v1.SolanaAccountId swap_authority = 5;
+   */
+  swapAuthority?: SolanaAccountId;
+
+  /**
+   * Whether the client wants the RPC to wait for blockchain status. If false,
+   * then the RPC will return Success when the swap is submitted to the blockchain.
+   * Otherwise, the RPC will observe and report back the status of the transaction.
+   *
+   * @generated from field: bool wait_for_blockchain_status = 6;
+   */
+  waitForBlockchainStatus = false;
+
+  /**
+   * The signature is of serialize(InitiateStateless) without this field set using the
+   * private key of the owner account. This provides an authentication mechanism
+   * to the RPC.
+   *
+   * @generated from field: code.common.v1.Signature signature = 7;
+   */
+  signature?: Signature;
+
+  constructor(data?: PartialMessage<SwapRequest_Initiate_Stateless>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.transaction.v2.SwapRequest.Initiate.Stateless";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "owner", kind: "message", T: SolanaAccountId },
+    { no: 2, name: "from_mint", kind: "message", T: SolanaAccountId },
+    { no: 3, name: "to_mint", kind: "message", T: SolanaAccountId },
+    { no: 4, name: "amount", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+    { no: 5, name: "swap_authority", kind: "message", T: SolanaAccountId },
+    { no: 6, name: "wait_for_blockchain_status", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 7, name: "signature", kind: "message", T: Signature },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SwapRequest_Initiate_Stateless {
+    return new SwapRequest_Initiate_Stateless().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SwapRequest_Initiate_Stateless {
+    return new SwapRequest_Initiate_Stateless().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SwapRequest_Initiate_Stateless {
+    return new SwapRequest_Initiate_Stateless().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: SwapRequest_Initiate_Stateless | PlainMessage<SwapRequest_Initiate_Stateless> | undefined, b: SwapRequest_Initiate_Stateless | PlainMessage<SwapRequest_Initiate_Stateless> | undefined): boolean {
+    return proto3.util.equals(SwapRequest_Initiate_Stateless, a, b);
+  }
+}
+
+/**
+ * @generated from message code.transaction.v2.SwapRequest.SubmitSignature
+ */
+export class SwapRequest_SubmitSignature extends Message<SwapRequest_SubmitSignature> {
+  /**
+   * The signature for the locally constructed swap transaction
+   *
+   * @generated from field: code.common.v1.Signature signature = 1;
+   */
+  signature?: Signature;
+
+  constructor(data?: PartialMessage<SwapRequest_SubmitSignature>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.transaction.v2.SwapRequest.SubmitSignature";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "signature", kind: "message", T: Signature },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SwapRequest_SubmitSignature {
+    return new SwapRequest_SubmitSignature().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SwapRequest_SubmitSignature {
+    return new SwapRequest_SubmitSignature().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SwapRequest_SubmitSignature {
+    return new SwapRequest_SubmitSignature().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: SwapRequest_SubmitSignature | PlainMessage<SwapRequest_SubmitSignature> | undefined, b: SwapRequest_SubmitSignature | PlainMessage<SwapRequest_SubmitSignature> | undefined): boolean {
+    return proto3.util.equals(SwapRequest_SubmitSignature, a, b);
+  }
+}
+
+/**
+ * @generated from message code.transaction.v2.SwapResponse
+ */
+export class SwapResponse extends Message<SwapResponse> {
+  /**
+   * @generated from oneof code.transaction.v2.SwapResponse.response
+   */
+  response: {
+    /**
+     * @generated from field: code.transaction.v2.SwapResponse.ServerParameters server_parameters = 1;
+     */
+    value: SwapResponse_ServerParameters;
+    case: "serverParameters";
+  } | {
+    /**
+     * @generated from field: code.transaction.v2.SwapResponse.Success success = 2;
+     */
+    value: SwapResponse_Success;
+    case: "success";
+  } | {
+    /**
+     * @generated from field: code.transaction.v2.SwapResponse.Error error = 3;
+     */
+    value: SwapResponse_Error;
+    case: "error";
+  } | { case: undefined; value?: undefined } = { case: undefined };
+
+  constructor(data?: PartialMessage<SwapResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.transaction.v2.SwapResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "server_parameters", kind: "message", T: SwapResponse_ServerParameters, oneof: "response" },
+    { no: 2, name: "success", kind: "message", T: SwapResponse_Success, oneof: "response" },
+    { no: 3, name: "error", kind: "message", T: SwapResponse_Error, oneof: "response" },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SwapResponse {
+    return new SwapResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SwapResponse {
+    return new SwapResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SwapResponse {
+    return new SwapResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: SwapResponse | PlainMessage<SwapResponse> | undefined, b: SwapResponse | PlainMessage<SwapResponse> | undefined): boolean {
+    return proto3.util.equals(SwapResponse, a, b);
+  }
+}
+
+/**
+ * @generated from message code.transaction.v2.SwapResponse.ServerParameters
+ */
+export class SwapResponse_ServerParameters extends Message<SwapResponse_ServerParameters> {
+  /**
+   * @generated from oneof code.transaction.v2.SwapResponse.ServerParameters.kind
+   */
+  kind: {
+    /**
+     * @generated from field: code.transaction.v2.SwapResponse.ServerParameters.CurrencyCreator currency_creator = 1;
+     */
+    value: SwapResponse_ServerParameters_CurrencyCreator;
+    case: "currencyCreator";
+  } | { case: undefined; value?: undefined } = { case: undefined };
+
+  constructor(data?: PartialMessage<SwapResponse_ServerParameters>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.transaction.v2.SwapResponse.ServerParameters";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "currency_creator", kind: "message", T: SwapResponse_ServerParameters_CurrencyCreator, oneof: "kind" },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SwapResponse_ServerParameters {
+    return new SwapResponse_ServerParameters().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SwapResponse_ServerParameters {
+    return new SwapResponse_ServerParameters().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SwapResponse_ServerParameters {
+    return new SwapResponse_ServerParameters().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: SwapResponse_ServerParameters | PlainMessage<SwapResponse_ServerParameters> | undefined, b: SwapResponse_ServerParameters | PlainMessage<SwapResponse_ServerParameters> | undefined): boolean {
+    return proto3.util.equals(SwapResponse_ServerParameters, a, b);
+  }
+}
+
+/**
+ * Server parameters when executing buy/sell flows against the Currency Creator
+ * program.
+ *
+ * Supported Solana transaction version: v0
+ *
+ * Instruction formats:
+ *
+ * Buy Tokens (Core Mint -> Launchpad Currency Mint):
+ *  1. [Optional] ComputeBudget::SetComputeUnitLimit
+ *  2. [Optional] ComputeBudget::SetComputeUnitPrice
+ *  3. [Optional] Memo::Memo
+ *  4. AssociatedTokenAccount::CreateIdempotent (open Core Mint temporary account)
+ *  5. VM::TransferForSwap (Core Mint VM swap ATA -> Core Mint temporary account)
+ *  6. CurrencyCreator::BuyAndDepositIntoVm (bounded buy depositing to_mint tokens into the to_mint VM)
+ *  7. Token::CloseAccount (closes Core Mint temporary account)
+ *  8. VM::CloseSwapAccountIfEmpty (closes Core Mint VM swap ATA if empty)
+ *
+ * Sell Tokens (Launchpad Currency Mint -> Core Mint):
+ *  1. [Optional] ComputeBudget::SetComputeUnitLimit
+ *  2. [Optional] ComputeBudget::SetComputeUnitPrice
+ *  3. [Optional] Memo::Memo
+ *  4. AssociatedTokenAccount::CreateIdempotent (open from_mint temporary account)
+ *  5. VM::TransferForSwap (from_mint VM swap ATA -> from_mint temporary account)
+ *  6. CurrencyCreator::SellAndDepositIntoVm (bounded sell depositing Core Mint into the Core Mint VM)
+ *  7. Token::CloseAccount (closes from_mint temporary account)
+ *  8. VM::CloseSwapAccountIfEmpty (closes from_mint swap PDA/ATA if empty)
+ *
+ * Swap Tokens (Launchpad Currency Mint -> Launchpad Currency Mint):
+ *  1.  [Optional] ComputeBudget::SetComputeUnitLimit
+ *  2.  [Optional] ComputeBudget::SetComputeUnitPrice
+ *  3.  [Optional] Memo::Memo
+ *  4.  AssociatedTokenAccount::CreateIdempotent (open Core Mint temporary account)
+ *  5.  AssociatedTokenAccount::CreateIdempotent (open from_mint temporary account)
+ *  6.  VM::TransferForSwap (from_mint VM swap ATA -> from_mint temporary account)
+ *  7.  CurrencyCreator::SellTokens (bounded sell transferring Core Mint into temporary account)
+ *  8.  CurrencyCreator::BuyAndDepositIntoVm (unlimited buy depositing to_mint tokens into the to_mint VM)
+ *  9.  Token::CloseAccount (closes Core Mint temporary account)
+ *  10. Token::CloseAccount (closes from_mint temporary account)
+ *  11. VM::CloseSwapAccountIfEmpty (closes from_mint VM swap ATA if empty)
+ *
+ * Note: This is likely to (breaking) change once we add a stateful swap
+ *
+ * @generated from message code.transaction.v2.SwapResponse.ServerParameters.CurrencyCreator
+ */
+export class SwapResponse_ServerParameters_CurrencyCreator extends Message<SwapResponse_ServerParameters_CurrencyCreator> {
+  /**
+   * Subisdizer account that will be paying for the swap
+   *
+   * @generated from field: code.common.v1.SolanaAccountId payer = 1;
+   */
+  payer?: SolanaAccountId;
+
+  /**
+   * Recent blockhash
+   *
+   * @generated from field: code.common.v1.Blockhash recent_blockhash = 2;
+   */
+  recentBlockhash?: Blockhash;
+
+  /**
+   * ALTs that should be used when constructing the versioned transaction
+   *
+   * @generated from field: repeated code.common.v1.SolanaAddressLookupTable alts = 3;
+   */
+  alts: SolanaAddressLookupTable[] = [];
+
+  /**
+   * Compute unit limit provided to the ComputeBudget::SetComputeUnitLimit
+   * instruction. If the value is 0, then the instruction can be omitted.
+   *
+   * @generated from field: uint32 compute_unit_limit = 4;
+   */
+  computeUnitLimit = 0;
+
+  /**
+   * Compute unit price provided in the ComputeBudget::SetComputeUnitPrice
+   * instruction. If the value is 0, then the instruction can be omitted.
+   *
+   * @generated from field: uint64 compute_unit_price = 5;
+   */
+  computeUnitPrice = protoInt64.zero;
+
+  /**
+   * Value provided into the Memo::Memo instruction. If the value length is 0,
+   * then the instruction can be omitted.
+   *
+   * @generated from field: string memo_value = 6;
+   */
+  memoValue = "";
+
+  constructor(data?: PartialMessage<SwapResponse_ServerParameters_CurrencyCreator>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.transaction.v2.SwapResponse.ServerParameters.CurrencyCreator";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "payer", kind: "message", T: SolanaAccountId },
+    { no: 2, name: "recent_blockhash", kind: "message", T: Blockhash },
+    { no: 3, name: "alts", kind: "message", T: SolanaAddressLookupTable, repeated: true },
+    { no: 4, name: "compute_unit_limit", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
+    { no: 5, name: "compute_unit_price", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+    { no: 6, name: "memo_value", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SwapResponse_ServerParameters_CurrencyCreator {
+    return new SwapResponse_ServerParameters_CurrencyCreator().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SwapResponse_ServerParameters_CurrencyCreator {
+    return new SwapResponse_ServerParameters_CurrencyCreator().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SwapResponse_ServerParameters_CurrencyCreator {
+    return new SwapResponse_ServerParameters_CurrencyCreator().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: SwapResponse_ServerParameters_CurrencyCreator | PlainMessage<SwapResponse_ServerParameters_CurrencyCreator> | undefined, b: SwapResponse_ServerParameters_CurrencyCreator | PlainMessage<SwapResponse_ServerParameters_CurrencyCreator> | undefined): boolean {
+    return proto3.util.equals(SwapResponse_ServerParameters_CurrencyCreator, a, b);
+  }
+}
+
+/**
+ * @generated from message code.transaction.v2.SwapResponse.Success
+ */
+export class SwapResponse_Success extends Message<SwapResponse_Success> {
+  /**
+   * @generated from field: code.transaction.v2.SwapResponse.Success.Code code = 1;
+   */
+  code = SwapResponse_Success_Code.SWAP_SUBMITTED;
+
+  constructor(data?: PartialMessage<SwapResponse_Success>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.transaction.v2.SwapResponse.Success";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "code", kind: "enum", T: proto3.getEnumType(SwapResponse_Success_Code) },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SwapResponse_Success {
+    return new SwapResponse_Success().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SwapResponse_Success {
+    return new SwapResponse_Success().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SwapResponse_Success {
+    return new SwapResponse_Success().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: SwapResponse_Success | PlainMessage<SwapResponse_Success> | undefined, b: SwapResponse_Success | PlainMessage<SwapResponse_Success> | undefined): boolean {
+    return proto3.util.equals(SwapResponse_Success, a, b);
+  }
+}
+
+/**
+ * @generated from enum code.transaction.v2.SwapResponse.Success.Code
+ */
+export enum SwapResponse_Success_Code {
+  /**
+   * The swap was submitted to the blockchain.
+   *
+   * @generated from enum value: SWAP_SUBMITTED = 0;
+   */
+  SWAP_SUBMITTED = 0,
+
+  /**
+   * The swap was finalized on the blockchain.
+   *
+   * @generated from enum value: SWAP_FINALIZED = 1;
+   */
+  SWAP_FINALIZED = 1,
+}
+// Retrieve enum metadata with: proto3.getEnumType(SwapResponse_Success_Code)
+proto3.util.setEnumType(SwapResponse_Success_Code, "code.transaction.v2.SwapResponse.Success.Code", [
+  { no: 0, name: "SWAP_SUBMITTED" },
+  { no: 1, name: "SWAP_FINALIZED" },
+]);
+
+/**
+ * @generated from message code.transaction.v2.SwapResponse.Error
+ */
+export class SwapResponse_Error extends Message<SwapResponse_Error> {
+  /**
+   * @generated from field: code.transaction.v2.SwapResponse.Error.Code code = 1;
+   */
+  code = SwapResponse_Error_Code.DENIED;
+
+  /**
+   * @generated from field: repeated code.transaction.v2.ErrorDetails error_details = 2;
+   */
+  errorDetails: ErrorDetails[] = [];
+
+  constructor(data?: PartialMessage<SwapResponse_Error>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.transaction.v2.SwapResponse.Error";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "code", kind: "enum", T: proto3.getEnumType(SwapResponse_Error_Code) },
+    { no: 2, name: "error_details", kind: "message", T: ErrorDetails, repeated: true },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SwapResponse_Error {
+    return new SwapResponse_Error().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SwapResponse_Error {
+    return new SwapResponse_Error().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SwapResponse_Error {
+    return new SwapResponse_Error().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: SwapResponse_Error | PlainMessage<SwapResponse_Error> | undefined, b: SwapResponse_Error | PlainMessage<SwapResponse_Error> | undefined): boolean {
+    return proto3.util.equals(SwapResponse_Error, a, b);
+  }
+}
+
+/**
+ * @generated from enum code.transaction.v2.SwapResponse.Error.Code
+ */
+export enum SwapResponse_Error_Code {
+  /**
+   * Denied by a guard (spam, money laundering, etc)
+   *
+   * @generated from enum value: DENIED = 0;
+   */
+  DENIED = 0,
+
+  /**
+   * There is an issue with the provided signature.
+   *
+   * @generated from enum value: SIGNATURE_ERROR = 2;
+   */
+  SIGNATURE_ERROR = 2,
+
+  /**
+   * The swap failed server-side validation
+   *
+   * @generated from enum value: INVALID_SWAP = 3;
+   */
+  INVALID_SWAP = 3,
+
+  /**
+   * The submitted swap transaction failed. Attempt the swap again.
+   *
+   * @generated from enum value: SWAP_FAILED = 4;
+   */
+  SWAP_FAILED = 4,
+}
+// Retrieve enum metadata with: proto3.getEnumType(SwapResponse_Error_Code)
+proto3.util.setEnumType(SwapResponse_Error_Code, "code.transaction.v2.SwapResponse.Error.Code", [
+  { no: 0, name: "DENIED" },
+  { no: 2, name: "SIGNATURE_ERROR" },
+  { no: 3, name: "INVALID_SWAP" },
+  { no: 4, name: "SWAP_FAILED" },
 ]);
 
 /**

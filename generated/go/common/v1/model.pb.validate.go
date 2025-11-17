@@ -105,41 +105,59 @@ var _ interface {
 	ErrorName() string
 } = SolanaAccountIdValidationError{}
 
-// Validate checks the field values on InstructionAccount with the rules
+// Validate checks the field values on SolanaAddressLookupTable with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *InstructionAccount) Validate() error {
+func (m *SolanaAddressLookupTable) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	if m.GetAccount() == nil {
-		return InstructionAccountValidationError{
-			field:  "Account",
+	if m.GetAddress() == nil {
+		return SolanaAddressLookupTableValidationError{
+			field:  "Address",
 			reason: "value is required",
 		}
 	}
 
-	if v, ok := interface{}(m.GetAccount()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetAddress()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return InstructionAccountValidationError{
-				field:  "Account",
+			return SolanaAddressLookupTableValidationError{
+				field:  "Address",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
 		}
 	}
 
-	// no validation rules for IsSigner
+	if l := len(m.GetEntries()); l < 1 || l > 256 {
+		return SolanaAddressLookupTableValidationError{
+			field:  "Entries",
+			reason: "value must contain between 1 and 256 items, inclusive",
+		}
+	}
 
-	// no validation rules for IsWritable
+	for idx, item := range m.GetEntries() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SolanaAddressLookupTableValidationError{
+					field:  fmt.Sprintf("Entries[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
 
 	return nil
 }
 
-// InstructionAccountValidationError is the validation error returned by
-// InstructionAccount.Validate if the designated constraints aren't met.
-type InstructionAccountValidationError struct {
+// SolanaAddressLookupTableValidationError is the validation error returned by
+// SolanaAddressLookupTable.Validate if the designated constraints aren't met.
+type SolanaAddressLookupTableValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -147,24 +165,24 @@ type InstructionAccountValidationError struct {
 }
 
 // Field function returns field value.
-func (e InstructionAccountValidationError) Field() string { return e.field }
+func (e SolanaAddressLookupTableValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e InstructionAccountValidationError) Reason() string { return e.reason }
+func (e SolanaAddressLookupTableValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e InstructionAccountValidationError) Cause() error { return e.cause }
+func (e SolanaAddressLookupTableValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e InstructionAccountValidationError) Key() bool { return e.key }
+func (e SolanaAddressLookupTableValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e InstructionAccountValidationError) ErrorName() string {
-	return "InstructionAccountValidationError"
+func (e SolanaAddressLookupTableValidationError) ErrorName() string {
+	return "SolanaAddressLookupTableValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e InstructionAccountValidationError) Error() string {
+func (e SolanaAddressLookupTableValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -176,14 +194,14 @@ func (e InstructionAccountValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sInstructionAccount.%s: %s%s",
+		"invalid %sSolanaAddressLookupTable.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = InstructionAccountValidationError{}
+var _ error = SolanaAddressLookupTableValidationError{}
 
 var _ interface {
 	Field() string
@@ -191,7 +209,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = InstructionAccountValidationError{}
+} = SolanaAddressLookupTableValidationError{}
 
 // Validate checks the field values on Transaction with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
