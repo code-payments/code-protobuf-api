@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { AirdropRequest, AirdropResponse, CanWithdrawToAccountRequest, CanWithdrawToAccountResponse, GetIntentMetadataRequest, GetIntentMetadataResponse, GetLimitsRequest, GetLimitsResponse, SubmitIntentRequest, SubmitIntentResponse, VoidGiftCardRequest, VoidGiftCardResponse } from "./transaction_service_pb";
+import { AirdropRequest, AirdropResponse, CanWithdrawToAccountRequest, CanWithdrawToAccountResponse, GetIntentMetadataRequest, GetIntentMetadataResponse, GetLimitsRequest, GetLimitsResponse, SubmitIntentRequest, SubmitIntentResponse, SwapRequest, SwapResponse, VoidGiftCardRequest, VoidGiftCardResponse } from "./transaction_service_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -117,6 +117,23 @@ export const Transaction = {
       I: VoidGiftCardRequest,
       O: VoidGiftCardResponse,
       kind: MethodKind.Unary,
+    },
+    /**
+     * Swap performs an on-chain swap. The high-level flow mirrors SubmitIntent
+     * closely. However, due to the time-sensitive nature and unreliability of
+     * swaps, they do not fit within the broader intent system. This results in
+     * a few key differences:
+     *  * Transactions are submitted on a best-effort basis outside of the Code
+     *    Sequencer within the RPC handler
+     *  * Balance changes are applied after the transaction has finalized
+     *
+     * @generated from rpc code.transaction.v2.Transaction.Swap
+     */
+    swap: {
+      name: "Swap",
+      I: SwapRequest,
+      O: SwapResponse,
+      kind: MethodKind.BiDiStreaming,
     },
   }
 } as const;

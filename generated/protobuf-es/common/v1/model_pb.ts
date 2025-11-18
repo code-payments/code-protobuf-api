@@ -93,54 +93,47 @@ export class SolanaAccountId extends Message<SolanaAccountId> {
 }
 
 /**
- * InstructionAccount is an account public key used within the context of
- * an instruction.
+ * A Solana address lookup table used in versioned transactions
  *
- * @generated from message code.common.v1.InstructionAccount
+ * @generated from message code.common.v1.SolanaAddressLookupTable
  */
-export class InstructionAccount extends Message<InstructionAccount> {
+export class SolanaAddressLookupTable extends Message<SolanaAddressLookupTable> {
   /**
-   * @generated from field: code.common.v1.SolanaAccountId account = 1;
+   * @generated from field: code.common.v1.SolanaAccountId address = 1;
    */
-  account?: SolanaAccountId;
+  address?: SolanaAccountId;
 
   /**
-   * @generated from field: bool is_signer = 2;
+   * @generated from field: repeated code.common.v1.SolanaAccountId entries = 2;
    */
-  isSigner = false;
+  entries: SolanaAccountId[] = [];
 
-  /**
-   * @generated from field: bool is_writable = 3;
-   */
-  isWritable = false;
-
-  constructor(data?: PartialMessage<InstructionAccount>) {
+  constructor(data?: PartialMessage<SolanaAddressLookupTable>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "code.common.v1.InstructionAccount";
+  static readonly typeName = "code.common.v1.SolanaAddressLookupTable";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "account", kind: "message", T: SolanaAccountId },
-    { no: 2, name: "is_signer", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 3, name: "is_writable", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 1, name: "address", kind: "message", T: SolanaAccountId },
+    { no: 2, name: "entries", kind: "message", T: SolanaAccountId, repeated: true },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): InstructionAccount {
-    return new InstructionAccount().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SolanaAddressLookupTable {
+    return new SolanaAddressLookupTable().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): InstructionAccount {
-    return new InstructionAccount().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SolanaAddressLookupTable {
+    return new SolanaAddressLookupTable().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): InstructionAccount {
-    return new InstructionAccount().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SolanaAddressLookupTable {
+    return new SolanaAddressLookupTable().fromJsonString(jsonString, options);
   }
 
-  static equals(a: InstructionAccount | PlainMessage<InstructionAccount> | undefined, b: InstructionAccount | PlainMessage<InstructionAccount> | undefined): boolean {
-    return proto3.util.equals(InstructionAccount, a, b);
+  static equals(a: SolanaAddressLookupTable | PlainMessage<SolanaAddressLookupTable> | undefined, b: SolanaAddressLookupTable | PlainMessage<SolanaAddressLookupTable> | undefined): boolean {
+    return proto3.util.equals(SolanaAddressLookupTable, a, b);
   }
 }
 

@@ -1179,6 +1179,216 @@ var _ interface {
 	ErrorName() string
 } = VoidGiftCardResponseValidationError{}
 
+// Validate checks the field values on SwapRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *SwapRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	switch m.Request.(type) {
+
+	case *SwapRequest_Initiate_:
+
+		if v, ok := interface{}(m.GetInitiate()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SwapRequestValidationError{
+					field:  "Initiate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *SwapRequest_SubmitSignatures_:
+
+		if v, ok := interface{}(m.GetSubmitSignatures()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SwapRequestValidationError{
+					field:  "SubmitSignatures",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return SwapRequestValidationError{
+			field:  "Request",
+			reason: "value is required",
+		}
+
+	}
+
+	return nil
+}
+
+// SwapRequestValidationError is the validation error returned by
+// SwapRequest.Validate if the designated constraints aren't met.
+type SwapRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SwapRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SwapRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SwapRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SwapRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SwapRequestValidationError) ErrorName() string { return "SwapRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SwapRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSwapRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SwapRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SwapRequestValidationError{}
+
+// Validate checks the field values on SwapResponse with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *SwapResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	switch m.Response.(type) {
+
+	case *SwapResponse_ServerParameters_:
+
+		if v, ok := interface{}(m.GetServerParameters()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SwapResponseValidationError{
+					field:  "ServerParameters",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *SwapResponse_Success_:
+
+		if v, ok := interface{}(m.GetSuccess()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SwapResponseValidationError{
+					field:  "Success",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *SwapResponse_Error_:
+
+		if v, ok := interface{}(m.GetError()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SwapResponseValidationError{
+					field:  "Error",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return SwapResponseValidationError{
+			field:  "Response",
+			reason: "value is required",
+		}
+
+	}
+
+	return nil
+}
+
+// SwapResponseValidationError is the validation error returned by
+// SwapResponse.Validate if the designated constraints aren't met.
+type SwapResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SwapResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SwapResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SwapResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SwapResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SwapResponseValidationError) ErrorName() string { return "SwapResponseValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SwapResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSwapResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SwapResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SwapResponseValidationError{}
+
 // Validate checks the field values on Metadata with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *Metadata) Validate() error {
@@ -4116,6 +4326,740 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = SubmitIntentResponse_ErrorValidationError{}
+
+// Validate checks the field values on SwapRequest_Initiate with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *SwapRequest_Initiate) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	switch m.Kind.(type) {
+
+	case *SwapRequest_Initiate_Stateless_:
+
+		if v, ok := interface{}(m.GetStateless()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SwapRequest_InitiateValidationError{
+					field:  "Stateless",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return SwapRequest_InitiateValidationError{
+			field:  "Kind",
+			reason: "value is required",
+		}
+
+	}
+
+	return nil
+}
+
+// SwapRequest_InitiateValidationError is the validation error returned by
+// SwapRequest_Initiate.Validate if the designated constraints aren't met.
+type SwapRequest_InitiateValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SwapRequest_InitiateValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SwapRequest_InitiateValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SwapRequest_InitiateValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SwapRequest_InitiateValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SwapRequest_InitiateValidationError) ErrorName() string {
+	return "SwapRequest_InitiateValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SwapRequest_InitiateValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSwapRequest_Initiate.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SwapRequest_InitiateValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SwapRequest_InitiateValidationError{}
+
+// Validate checks the field values on SwapRequest_SubmitSignatures with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *SwapRequest_SubmitSignatures) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetSignatures()) != 2 {
+		return SwapRequest_SubmitSignaturesValidationError{
+			field:  "Signatures",
+			reason: "value must contain exactly 2 item(s)",
+		}
+	}
+
+	for idx, item := range m.GetSignatures() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SwapRequest_SubmitSignaturesValidationError{
+					field:  fmt.Sprintf("Signatures[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// SwapRequest_SubmitSignaturesValidationError is the validation error returned
+// by SwapRequest_SubmitSignatures.Validate if the designated constraints
+// aren't met.
+type SwapRequest_SubmitSignaturesValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SwapRequest_SubmitSignaturesValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SwapRequest_SubmitSignaturesValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SwapRequest_SubmitSignaturesValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SwapRequest_SubmitSignaturesValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SwapRequest_SubmitSignaturesValidationError) ErrorName() string {
+	return "SwapRequest_SubmitSignaturesValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SwapRequest_SubmitSignaturesValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSwapRequest_SubmitSignatures.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SwapRequest_SubmitSignaturesValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SwapRequest_SubmitSignaturesValidationError{}
+
+// Validate checks the field values on SwapRequest_Initiate_Stateless with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *SwapRequest_Initiate_Stateless) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetOwner() == nil {
+		return SwapRequest_Initiate_StatelessValidationError{
+			field:  "Owner",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SwapRequest_Initiate_StatelessValidationError{
+				field:  "Owner",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetFromMint() == nil {
+		return SwapRequest_Initiate_StatelessValidationError{
+			field:  "FromMint",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetFromMint()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SwapRequest_Initiate_StatelessValidationError{
+				field:  "FromMint",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetToMint() == nil {
+		return SwapRequest_Initiate_StatelessValidationError{
+			field:  "ToMint",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetToMint()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SwapRequest_Initiate_StatelessValidationError{
+				field:  "ToMint",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetAmount() <= 0 {
+		return SwapRequest_Initiate_StatelessValidationError{
+			field:  "Amount",
+			reason: "value must be greater than 0",
+		}
+	}
+
+	if m.GetSwapAuthority() == nil {
+		return SwapRequest_Initiate_StatelessValidationError{
+			field:  "SwapAuthority",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetSwapAuthority()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SwapRequest_Initiate_StatelessValidationError{
+				field:  "SwapAuthority",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for WaitForBlockchainStatus
+
+	if m.GetSignature() == nil {
+		return SwapRequest_Initiate_StatelessValidationError{
+			field:  "Signature",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SwapRequest_Initiate_StatelessValidationError{
+				field:  "Signature",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// SwapRequest_Initiate_StatelessValidationError is the validation error
+// returned by SwapRequest_Initiate_Stateless.Validate if the designated
+// constraints aren't met.
+type SwapRequest_Initiate_StatelessValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SwapRequest_Initiate_StatelessValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SwapRequest_Initiate_StatelessValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SwapRequest_Initiate_StatelessValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SwapRequest_Initiate_StatelessValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SwapRequest_Initiate_StatelessValidationError) ErrorName() string {
+	return "SwapRequest_Initiate_StatelessValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SwapRequest_Initiate_StatelessValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSwapRequest_Initiate_Stateless.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SwapRequest_Initiate_StatelessValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SwapRequest_Initiate_StatelessValidationError{}
+
+// Validate checks the field values on SwapResponse_ServerParameters with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *SwapResponse_ServerParameters) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	switch m.Kind.(type) {
+
+	case *SwapResponse_ServerParameters_CurrencyCreator_:
+
+		if v, ok := interface{}(m.GetCurrencyCreator()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SwapResponse_ServerParametersValidationError{
+					field:  "CurrencyCreator",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return SwapResponse_ServerParametersValidationError{
+			field:  "Kind",
+			reason: "value is required",
+		}
+
+	}
+
+	return nil
+}
+
+// SwapResponse_ServerParametersValidationError is the validation error
+// returned by SwapResponse_ServerParameters.Validate if the designated
+// constraints aren't met.
+type SwapResponse_ServerParametersValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SwapResponse_ServerParametersValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SwapResponse_ServerParametersValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SwapResponse_ServerParametersValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SwapResponse_ServerParametersValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SwapResponse_ServerParametersValidationError) ErrorName() string {
+	return "SwapResponse_ServerParametersValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SwapResponse_ServerParametersValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSwapResponse_ServerParameters.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SwapResponse_ServerParametersValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SwapResponse_ServerParametersValidationError{}
+
+// Validate checks the field values on SwapResponse_Success with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *SwapResponse_Success) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Code
+
+	return nil
+}
+
+// SwapResponse_SuccessValidationError is the validation error returned by
+// SwapResponse_Success.Validate if the designated constraints aren't met.
+type SwapResponse_SuccessValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SwapResponse_SuccessValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SwapResponse_SuccessValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SwapResponse_SuccessValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SwapResponse_SuccessValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SwapResponse_SuccessValidationError) ErrorName() string {
+	return "SwapResponse_SuccessValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SwapResponse_SuccessValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSwapResponse_Success.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SwapResponse_SuccessValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SwapResponse_SuccessValidationError{}
+
+// Validate checks the field values on SwapResponse_Error with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *SwapResponse_Error) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Code
+
+	for idx, item := range m.GetErrorDetails() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SwapResponse_ErrorValidationError{
+					field:  fmt.Sprintf("ErrorDetails[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// SwapResponse_ErrorValidationError is the validation error returned by
+// SwapResponse_Error.Validate if the designated constraints aren't met.
+type SwapResponse_ErrorValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SwapResponse_ErrorValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SwapResponse_ErrorValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SwapResponse_ErrorValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SwapResponse_ErrorValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SwapResponse_ErrorValidationError) ErrorName() string {
+	return "SwapResponse_ErrorValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SwapResponse_ErrorValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSwapResponse_Error.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SwapResponse_ErrorValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SwapResponse_ErrorValidationError{}
+
+// Validate checks the field values on
+// SwapResponse_ServerParameters_CurrencyCreator with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *SwapResponse_ServerParameters_CurrencyCreator) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetPayer() == nil {
+		return SwapResponse_ServerParameters_CurrencyCreatorValidationError{
+			field:  "Payer",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetPayer()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SwapResponse_ServerParameters_CurrencyCreatorValidationError{
+				field:  "Payer",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetRecentBlockhash() == nil {
+		return SwapResponse_ServerParameters_CurrencyCreatorValidationError{
+			field:  "RecentBlockhash",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetRecentBlockhash()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SwapResponse_ServerParameters_CurrencyCreatorValidationError{
+				field:  "RecentBlockhash",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	for idx, item := range m.GetAlts() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SwapResponse_ServerParameters_CurrencyCreatorValidationError{
+					field:  fmt.Sprintf("Alts[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	// no validation rules for ComputeUnitLimit
+
+	// no validation rules for ComputeUnitPrice
+
+	if utf8.RuneCountInString(m.GetMemoValue()) > 64 {
+		return SwapResponse_ServerParameters_CurrencyCreatorValidationError{
+			field:  "MemoValue",
+			reason: "value length must be at most 64 runes",
+		}
+	}
+
+	if m.GetMemoryAccount() == nil {
+		return SwapResponse_ServerParameters_CurrencyCreatorValidationError{
+			field:  "MemoryAccount",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetMemoryAccount()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SwapResponse_ServerParameters_CurrencyCreatorValidationError{
+				field:  "MemoryAccount",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for MemoryIndex
+
+	return nil
+}
+
+// SwapResponse_ServerParameters_CurrencyCreatorValidationError is the
+// validation error returned by
+// SwapResponse_ServerParameters_CurrencyCreator.Validate if the designated
+// constraints aren't met.
+type SwapResponse_ServerParameters_CurrencyCreatorValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SwapResponse_ServerParameters_CurrencyCreatorValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SwapResponse_ServerParameters_CurrencyCreatorValidationError) Reason() string {
+	return e.reason
+}
+
+// Cause function returns cause value.
+func (e SwapResponse_ServerParameters_CurrencyCreatorValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SwapResponse_ServerParameters_CurrencyCreatorValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SwapResponse_ServerParameters_CurrencyCreatorValidationError) ErrorName() string {
+	return "SwapResponse_ServerParameters_CurrencyCreatorValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SwapResponse_ServerParameters_CurrencyCreatorValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSwapResponse_ServerParameters_CurrencyCreator.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SwapResponse_ServerParameters_CurrencyCreatorValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SwapResponse_ServerParameters_CurrencyCreatorValidationError{}
 
 // Validate checks the field values on PublicDistributionMetadata_Distribution
 // with the rules defined in the proto definition for this message. If any
