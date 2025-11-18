@@ -4979,6 +4979,25 @@ func (m *SwapResponse_ServerParameters_CurrencyCreator) Validate() error {
 		}
 	}
 
+	if m.GetMemoryAccount() == nil {
+		return SwapResponse_ServerParameters_CurrencyCreatorValidationError{
+			field:  "MemoryAccount",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetMemoryAccount()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SwapResponse_ServerParameters_CurrencyCreatorValidationError{
+				field:  "MemoryAccount",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for MemoryIndex
+
 	return nil
 }
 

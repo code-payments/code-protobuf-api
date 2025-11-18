@@ -466,6 +466,12 @@ message SwapResponse {
             // Value provided into the Memo::Memo instruction. If the value length is 0,
             // then the instruction can be omitted.
             string memo_value = 6 [(validate.rules).string. max_len = 64];
+
+            // The memory account where the destination virtual Timelock account lives
+            common.v1.SolanaAccountId memory_account = 7 [(validate.rules).message.required = true];
+
+            // The memory index where the destination virtual Timelock account lives
+            uint32 memory_index = 8;
         }
     }
 

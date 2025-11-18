@@ -1526,6 +1526,20 @@ export class SwapResponse_ServerParameters_CurrencyCreator extends Message<SwapR
    */
   memoValue = "";
 
+  /**
+   * The memory account where the destination virtual Timelock account lives
+   *
+   * @generated from field: code.common.v1.SolanaAccountId memory_account = 7;
+   */
+  memoryAccount?: SolanaAccountId;
+
+  /**
+   * The memory index where the destination virtual Timelock account lives
+   *
+   * @generated from field: uint32 memory_index = 8;
+   */
+  memoryIndex = 0;
+
   constructor(data?: PartialMessage<SwapResponse_ServerParameters_CurrencyCreator>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1540,6 +1554,8 @@ export class SwapResponse_ServerParameters_CurrencyCreator extends Message<SwapR
     { no: 4, name: "compute_unit_limit", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
     { no: 5, name: "compute_unit_price", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
     { no: 6, name: "memo_value", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 7, name: "memory_account", kind: "message", T: SolanaAccountId },
+    { no: 8, name: "memory_index", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SwapResponse_ServerParameters_CurrencyCreator {
