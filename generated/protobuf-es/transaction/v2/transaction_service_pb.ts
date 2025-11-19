@@ -762,8 +762,8 @@ export class CanWithdrawToAccountResponse extends Message<CanWithdrawToAccountRe
   accountType = CanWithdrawToAccountResponse_AccountType.Unknown;
 
   /**
-   * ATA requires initialization before the withdrawal can occur. Server will not
-   * subsidize the account creation, so a fee is required.
+   * ATA requires initialization before the withdrawal can occur. Server may not
+   * subsidize the account creation, so a fee may be required.
    *
    * @generated from field: bool requires_initialization = 3;
    */
@@ -775,7 +775,8 @@ export class CanWithdrawToAccountResponse extends Message<CanWithdrawToAccountRe
    * send. The user must explicitly agree to this fee amount before submitting
    * the intent.
    *
-   * This will be set when requires_initialization = true
+   * This can be set when requires_initialization = true if server decides to
+   * not subsidize the token account creation.
    *
    * Note: The fee is always paid in the target mint.
    *

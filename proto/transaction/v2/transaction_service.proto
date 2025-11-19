@@ -263,8 +263,8 @@ message CanWithdrawToAccountResponse {
         OwnerAccount = 2; // Client locally derives the ATA to use in SubmitIntent
     }
 
-    // ATA requires initialization before the withdrawal can occur. Server will not
-    // subsidize the account creation, so a fee is required.
+    // ATA requires initialization before the withdrawal can occur. Server may not
+    // subsidize the account creation, so a fee may be required.
     bool requires_initialization = 3;
 
     // The CREATE_ON_SEND_WITHDRAWAL fee, in USD, that must be paid in order to
@@ -272,7 +272,8 @@ message CanWithdrawToAccountResponse {
     // send. The user must explicitly agree to this fee amount before submitting
     // the intent.
     //
-    // This will be set when requires_initialization = true
+    // This can be set when requires_initialization = true if server decides to
+    // not subsidize the token account creation.
     //
     // Note: The fee is always paid in the target mint.
     ExchangeDataWithoutRate fee_amount = 4;

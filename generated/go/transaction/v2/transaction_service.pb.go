@@ -1170,15 +1170,16 @@ type CanWithdrawToAccountResponse struct {
 	// provide precalculated addresses in this response to maintain non-custodial
 	// status.
 	AccountType CanWithdrawToAccountResponse_AccountType `protobuf:"varint,2,opt,name=account_type,json=accountType,proto3,enum=code.transaction.v2.CanWithdrawToAccountResponse_AccountType" json:"account_type,omitempty"`
-	// ATA requires initialization before the withdrawal can occur. Server will not
-	// subsidize the account creation, so a fee is required.
+	// ATA requires initialization before the withdrawal can occur. Server may not
+	// subsidize the account creation, so a fee may be required.
 	RequiresInitialization bool `protobuf:"varint,3,opt,name=requires_initialization,json=requiresInitialization,proto3" json:"requires_initialization,omitempty"`
 	// The CREATE_ON_SEND_WITHDRAWAL fee, in USD, that must be paid in order to
 	// submit a withdrawal to subsidize the creation of the account at time of
 	// send. The user must explicitly agree to this fee amount before submitting
 	// the intent.
 	//
-	// This will be set when requires_initialization = true
+	// This can be set when requires_initialization = true if server decides to
+	// not subsidize the token account creation.
 	//
 	// Note: The fee is always paid in the target mint.
 	FeeAmount *ExchangeDataWithoutRate `protobuf:"bytes,4,opt,name=fee_amount,json=feeAmount,proto3" json:"fee_amount,omitempty"`
