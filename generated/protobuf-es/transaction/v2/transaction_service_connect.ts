@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { AirdropRequest, AirdropResponse, CanWithdrawToAccountRequest, CanWithdrawToAccountResponse, GetIntentMetadataRequest, GetIntentMetadataResponse, GetLimitsRequest, GetLimitsResponse, SubmitIntentRequest, SubmitIntentResponse, SwapRequest, SwapResponse, VoidGiftCardRequest, VoidGiftCardResponse } from "./transaction_service_pb";
+import { AirdropRequest, AirdropResponse, CanWithdrawToAccountRequest, CanWithdrawToAccountResponse, GetIntentMetadataRequest, GetIntentMetadataResponse, GetLimitsRequest, GetLimitsResponse, GetPendingSwapsRequest, GetPendingSwapsResponse, GetSwapRequest, GetSwapResponse, StartSwapRequest, StartSwapResponse, SubmitIntentRequest, SubmitIntentResponse, SwapRequest, SwapResponse, VoidGiftCardRequest, VoidGiftCardResponse } from "./transaction_service_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -116,6 +116,42 @@ export const Transaction = {
       name: "VoidGiftCard",
       I: VoidGiftCardRequest,
       O: VoidGiftCardResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * StartSwap begins the process for swapping tokens by coordinating verified metadata
+     * for non-custodial state management tracking.
+     *
+     * @generated from rpc code.transaction.v2.Transaction.StartSwap
+     */
+    startSwap: {
+      name: "StartSwap",
+      I: StartSwapRequest,
+      O: StartSwapResponse,
+      kind: MethodKind.BiDiStreaming,
+    },
+    /**
+     * GetSwap gets metadata for a swap
+     *
+     * @generated from rpc code.transaction.v2.Transaction.GetSwap
+     */
+    getSwap: {
+      name: "GetSwap",
+      I: GetSwapRequest,
+      O: GetSwapResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * GetPendingSwaps get swaps that are pending client actions which include:
+     *  1. Swaps that need a call to SubmitIntent to fund the VM swap PDA (ie. in a CREATED state)
+     *  2. Swaps that need to be executed via the Swap RPC (ie. in a FUNDED state)
+     *
+     * @generated from rpc code.transaction.v2.Transaction.GetPendingSwaps
+     */
+    getPendingSwaps: {
+      name: "GetPendingSwaps",
+      I: GetPendingSwapsRequest,
+      O: GetPendingSwapsResponse,
       kind: MethodKind.Unary,
     },
     /**

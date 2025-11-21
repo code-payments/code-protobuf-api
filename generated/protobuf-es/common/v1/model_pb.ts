@@ -297,6 +297,45 @@ export class IntentId extends Message<IntentId> {
 }
 
 /**
+ * SwapId is a client-side generated ID that maps to a swap.
+ *
+ * @generated from message code.common.v1.SwapId
+ */
+export class SwapId extends Message<SwapId> {
+  /**
+   * @generated from field: bytes value = 1;
+   */
+  value = new Uint8Array(0);
+
+  constructor(data?: PartialMessage<SwapId>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "code.common.v1.SwapId";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "value", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SwapId {
+    return new SwapId().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SwapId {
+    return new SwapId().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SwapId {
+    return new SwapId().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: SwapId | PlainMessage<SwapId> | undefined, b: SwapId | PlainMessage<SwapId> | undefined): boolean {
+    return proto3.util.equals(SwapId, a, b);
+  }
+}
+
+/**
  * Hash is a raw binary 32 byte hash value
  *
  * @generated from message code.common.v1.Hash
