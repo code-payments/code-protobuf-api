@@ -4423,56 +4423,64 @@ export enum SwapMetadata_State {
   CREATED = 1,
 
   /**
+   * The VM swap PDA is in the process of being funded
+   *
+   * @generated from enum value: FUNDING = 2;
+   */
+  FUNDING = 2,
+
+  /**
    * The VM swap PDA has been funded
    *
-   * @generated from enum value: FUNDED = 2;
+   * @generated from enum value: FUNDED = 3;
    */
-  FUNDED = 2,
+  FUNDED = 3,
 
   /**
    * The swap transaction is being submitted to the blockchain
    *
-   * @generated from enum value: SUBMITTING = 3;
+   * @generated from enum value: SUBMITTING = 4;
    */
-  SUBMITTING = 3,
+  SUBMITTING = 4,
 
   /**
    * The swap transaction has been finalized on the blockchain
    *
-   * @generated from enum value: FINALIZED = 4;
+   * @generated from enum value: FINALIZED = 5;
    */
-  FINALIZED = 4,
+  FINALIZED = 5,
 
   /**
    * The swap transaction failed
    *
-   * @generated from enum value: FAILED = 5;
+   * @generated from enum value: FAILED = 6;
    */
-  FAILED = 5,
+  FAILED = 6,
 
   /**
    * The swap is in the process of being cancelled.
    *
-   * @generated from enum value: CANCELLING = 6;
+   * @generated from enum value: CANCELLING = 7;
    */
-  CANCELLING = 6,
+  CANCELLING = 7,
 
   /**
    * The swap transaction is cancelled. Funds have been deposited back into the VM
    *
-   * @generated from enum value: CANCELLED = 7;
+   * @generated from enum value: CANCELLED = 8;
    */
-  CANCELLED = 7,
+  CANCELLED = 8,
 }
 // Retrieve enum metadata with: proto3.getEnumType(SwapMetadata_State)
 proto3.util.setEnumType(SwapMetadata_State, "code.transaction.v2.SwapMetadata.State", [
   { no: 0, name: "UNKNOWN" },
   { no: 1, name: "CREATED" },
-  { no: 2, name: "FUNDED" },
-  { no: 3, name: "SUBMITTING" },
-  { no: 4, name: "FINALIZED" },
-  { no: 5, name: "FAILED" },
-  { no: 6, name: "CANCELLING" },
-  { no: 7, name: "CANCELLED" },
+  { no: 2, name: "FUNDING" },
+  { no: 3, name: "FUNDED" },
+  { no: 4, name: "SUBMITTING" },
+  { no: 5, name: "FINALIZED" },
+  { no: 6, name: "FAILED" },
+  { no: 7, name: "CANCELLING" },
+  { no: 8, name: "CANCELLED" },
 ]);
 
