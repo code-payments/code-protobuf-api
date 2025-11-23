@@ -1866,10 +1866,10 @@ export class SwapRequest extends Message<SwapRequest> {
     case: "initiate";
   } | {
     /**
-     * @generated from field: code.transaction.v2.SwapRequest.SubmitSignatures submit_signature = 2;
+     * @generated from field: code.transaction.v2.SwapRequest.SubmitSignatures submit_signatures = 2;
      */
     value: SwapRequest_SubmitSignatures;
-    case: "submitSignature";
+    case: "submitSignatures";
   } | { case: undefined; value?: undefined } = { case: undefined };
 
   constructor(data?: PartialMessage<SwapRequest>) {
@@ -1881,7 +1881,7 @@ export class SwapRequest extends Message<SwapRequest> {
   static readonly typeName = "code.transaction.v2.SwapRequest";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "initiate", kind: "message", T: SwapRequest_Initiate, oneof: "request" },
-    { no: 2, name: "submit_signature", kind: "message", T: SwapRequest_SubmitSignatures, oneof: "request" },
+    { no: 2, name: "submit_signatures", kind: "message", T: SwapRequest_SubmitSignatures, oneof: "request" },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SwapRequest {

@@ -490,8 +490,8 @@ message SwapRequest {
     oneof request {
         option (validate.required) = true;
 
-        Initiate         initiate         = 1;
-        SubmitSignatures submit_signature = 2;
+        Initiate         initiate          = 1;
+        SubmitSignatures submit_signatures = 2;
     }
 
     message Initiate {

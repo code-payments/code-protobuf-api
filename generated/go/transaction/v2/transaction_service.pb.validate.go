@@ -1798,12 +1798,12 @@ func (m *SwapRequest) Validate() error {
 			}
 		}
 
-	case *SwapRequest_SubmitSignature:
+	case *SwapRequest_SubmitSignatures_:
 
-		if v, ok := interface{}(m.GetSubmitSignature()).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(m.GetSubmitSignatures()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return SwapRequestValidationError{
-					field:  "SubmitSignature",
+					field:  "SubmitSignatures",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
