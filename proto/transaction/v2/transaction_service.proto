@@ -1218,7 +1218,8 @@ message SwapMetadata {
         SUBMITTING = 3; // The swap transaction is being submitted to the blockchain
         FINALIZED  = 4; // The swap transaction has been finalized on the blockchain
         FAILED     = 5; // The swap transaction failed
-        CANCELLED  = 6; // The swap transaction is cancelled. Funds have been deposited back into the VM
+        CANCELLING = 6; // The swap is in the process of being cancelled.
+        CANCELLED  = 7; // The swap transaction is cancelled. Funds have been deposited back into the VM
     }
 }
 

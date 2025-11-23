@@ -4433,11 +4433,18 @@ export enum SwapMetadata_State {
   FAILED = 5,
 
   /**
+   * The swap is in the process of being cancelled.
+   *
+   * @generated from enum value: CANCELLING = 6;
+   */
+  CANCELLING = 6,
+
+  /**
    * The swap transaction is cancelled. Funds have been deposited back into the VM
    *
-   * @generated from enum value: CANCELLED = 6;
+   * @generated from enum value: CANCELLED = 7;
    */
-  CANCELLED = 6,
+  CANCELLED = 7,
 }
 // Retrieve enum metadata with: proto3.getEnumType(SwapMetadata_State)
 proto3.util.setEnumType(SwapMetadata_State, "code.transaction.v2.SwapMetadata.State", [
@@ -4447,6 +4454,7 @@ proto3.util.setEnumType(SwapMetadata_State, "code.transaction.v2.SwapMetadata.St
   { no: 3, name: "SUBMITTING" },
   { no: 4, name: "FINALIZED" },
   { no: 5, name: "FAILED" },
-  { no: 6, name: "CANCELLED" },
+  { no: 6, name: "CANCELLING" },
+  { no: 7, name: "CANCELLED" },
 ]);
 
