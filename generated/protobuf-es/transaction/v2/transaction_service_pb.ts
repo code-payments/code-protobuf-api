@@ -1196,6 +1196,22 @@ export class StartSwapRequest_Start extends Message<StartSwapRequest_Start> {
     case: "currencyCreator";
   } | { case: undefined; value?: undefined } = { case: undefined };
 
+  /**
+   * The owner account starting the swap
+   *
+   * @generated from field: code.common.v1.SolanaAccountId owner = 9;
+   */
+  owner?: SolanaAccountId;
+
+  /**
+   * The signature is of serialize(StartSwapRequest.Start) without this field
+   * set using the  private key of the owner account. This provides an authentication
+   * mechanism to the RPC.
+   *
+   * @generated from field: code.common.v1.Signature signature = 10;
+   */
+  signature?: Signature;
+
   constructor(data?: PartialMessage<StartSwapRequest_Start>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1205,6 +1221,8 @@ export class StartSwapRequest_Start extends Message<StartSwapRequest_Start> {
   static readonly typeName = "code.transaction.v2.StartSwapRequest.Start";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "currency_creator", kind: "message", T: StartSwapRequest_Start_CurrencyCreator, oneof: "kind" },
+    { no: 9, name: "owner", kind: "message", T: SolanaAccountId },
+    { no: 10, name: "signature", kind: "message", T: Signature },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StartSwapRequest_Start {
@@ -1314,9 +1332,9 @@ export class StartSwapRequest_SubmitSignature extends Message<StartSwapRequest_S
   /**
    * The signature of the verified swap metadata
    *
-   * @generated from field: code.common.v1.Signature signatures = 1;
+   * @generated from field: code.common.v1.Signature signature = 1;
    */
-  signatures?: Signature;
+  signature?: Signature;
 
   constructor(data?: PartialMessage<StartSwapRequest_SubmitSignature>) {
     super();
@@ -1326,7 +1344,7 @@ export class StartSwapRequest_SubmitSignature extends Message<StartSwapRequest_S
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "code.transaction.v2.StartSwapRequest.SubmitSignature";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "signatures", kind: "message", T: Signature },
+    { no: 1, name: "signature", kind: "message", T: Signature },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StartSwapRequest_SubmitSignature {

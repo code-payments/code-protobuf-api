@@ -5243,6 +5243,40 @@ func (m *StartSwapRequest_Start) Validate() error {
 		return nil
 	}
 
+	if m.GetOwner() == nil {
+		return StartSwapRequest_StartValidationError{
+			field:  "Owner",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetOwner()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StartSwapRequest_StartValidationError{
+				field:  "Owner",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetSignature() == nil {
+		return StartSwapRequest_StartValidationError{
+			field:  "Signature",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StartSwapRequest_StartValidationError{
+				field:  "Signature",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	switch m.Kind.(type) {
 
 	case *StartSwapRequest_Start_CurrencyCreator_:
@@ -5332,17 +5366,17 @@ func (m *StartSwapRequest_SubmitSignature) Validate() error {
 		return nil
 	}
 
-	if m.GetSignatures() == nil {
+	if m.GetSignature() == nil {
 		return StartSwapRequest_SubmitSignatureValidationError{
-			field:  "Signatures",
+			field:  "Signature",
 			reason: "value is required",
 		}
 	}
 
-	if v, ok := interface{}(m.GetSignatures()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetSignature()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return StartSwapRequest_SubmitSignatureValidationError{
-				field:  "Signatures",
+				field:  "Signature",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}

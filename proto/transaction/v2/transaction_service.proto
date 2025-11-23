@@ -388,11 +388,19 @@ message StartSwapRequest {
                 max_len: 44,
             }];
         }
+
+        // The owner account starting the swap
+        common.v1.SolanaAccountId owner = 9 [(validate.rules).message.required = true];
+
+        // The signature is of serialize(StartSwapRequest.Start) without this field
+        // set using the  private key of the owner account. This provides an authentication
+        // mechanism to the RPC.
+        common.v1.Signature signature = 10 [(validate.rules).message.required = true];
     }
 
     message SubmitSignature {
         // The signature of the verified swap metadata
-        common.v1.Signature signatures = 1 [(validate.rules).message.required = true];
+        common.v1.Signature signature = 1 [(validate.rules).message.required = true];
     }
 }
 
