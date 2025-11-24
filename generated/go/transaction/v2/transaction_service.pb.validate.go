@@ -2275,16 +2275,6 @@ func (m *SendPublicPaymentMetadata) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetSwapId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SendPublicPaymentMetadataValidationError{
-				field:  "SwapId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
 	return nil
 }
 

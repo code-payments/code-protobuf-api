@@ -811,10 +811,6 @@ message SendPublicPaymentMetadata {
     // compatibility, if no mint is set, then it is assumed to be the core
     // mint.
     common.v1.SolanaAccountId mint = 7;
-
-    // If funding a VM swap PDA, the ID for the swap. This is required for withdrawals
-    // to a VM swap PDA
-    common.v1.SwapId swap_id = 8;
 }
 
 // Receive funds into a user-owned account publicly. All use cases of this intent

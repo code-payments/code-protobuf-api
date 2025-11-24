@@ -2888,14 +2888,6 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
    */
   mint?: SolanaAccountId;
 
-  /**
-   * If funding a VM swap PDA, the ID for the swap. This is required for withdrawals
-   * to a VM swap PDA
-   *
-   * @generated from field: code.common.v1.SwapId swap_id = 8;
-   */
-  swapId?: SwapId;
-
   constructor(data?: PartialMessage<SendPublicPaymentMetadata>) {
     super();
     proto3.util.initPartial(data, this);
@@ -2911,7 +2903,6 @@ export class SendPublicPaymentMetadata extends Message<SendPublicPaymentMetadata
     { no: 3, name: "is_withdrawal", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 5, name: "is_remote_send", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 7, name: "mint", kind: "message", T: SolanaAccountId },
-    { no: 8, name: "swap_id", kind: "message", T: SwapId },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SendPublicPaymentMetadata {
