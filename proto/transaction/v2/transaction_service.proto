@@ -1207,7 +1207,7 @@ message SwapMetadata {
     VerifiedSwapMetadata verified_metadata = 1 [(validate.rules).message.required = true];
 
     State state = 2 [(validate.rules).enum = {
-        in: [0] // UNKNOWN
+        not_in: [0] // UNKNOWN
     }];
 
     // The signature is of serialize(VerifiedSwapMetadata) using the private

@@ -4648,10 +4648,10 @@ func (m *SwapMetadata) Validate() error {
 		}
 	}
 
-	if _, ok := _SwapMetadata_State_InLookup[m.GetState()]; !ok {
+	if _, ok := _SwapMetadata_State_NotInLookup[m.GetState()]; ok {
 		return SwapMetadataValidationError{
 			field:  "State",
-			reason: "value must be in list [0]",
+			reason: "value must not be in list [0]",
 		}
 	}
 
@@ -4729,7 +4729,7 @@ var _ interface {
 	ErrorName() string
 } = SwapMetadataValidationError{}
 
-var _SwapMetadata_State_InLookup = map[SwapMetadata_State]struct{}{
+var _SwapMetadata_State_NotInLookup = map[SwapMetadata_State]struct{}{
 	0: {},
 }
 
